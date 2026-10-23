@@ -126,11 +126,16 @@ def centralized_optimum(
     starts: int = 3,
     inner_starts: int = 2,
     max_sweeps: int = 50,
+    seeds: list[list[Plan]] | None = None,
 ) -> tuple[list[Plan], float]:
-    """Potential descent on SC over joint plans from several starts. Returns (profile, SC)."""
+    """Potential descent on SC over joint plans from doorstep, random and seed profiles.
+
+    Returns the best (profile, SC) found; seed profiles (e.g. equilibria) are copied, not mutated.
+    """
     best_profile, best_sc = None, np.inf
-    for s in range(starts):
-        profile = doorstep_profile(inst, rng) if s == 0 else random_profile(inst, rng)
+    inits = [doorstep_profile(inst, rng)] + [random_profile(inst, rng) for _ in range(starts - 1)]
+    inits += [list(s) for s in (seeds or [])]
+    for profile in inits:
         for _ in range(max_sweeps):
             changed = False
             for i in range(inst.N):
@@ -180,12 +185,14 @@ def poa_pos(
     starts: int = 4,
 ) -> dict[str, object]:
     """Price of anarchy and stability from equilibria reached by dynamics from random starts."""
-    _, sc_opt = centralized_optimum(inst, rng)
-    sc_ne = []
+    sc_ne, ne_profiles = [], []
     for r in range(n_ne):
         init = None if r == 0 else random_profile(inst, rng)
         prof, _, _ = best_response_dynamics(inst, p, rng, init=init, starts=starts)
         sc_ne.append(social_cost(inst, prof))
+        ne_profiles.append(prof)
+    _, sc_opt = centralized_optimum(inst, rng, seeds=ne_profiles)
+    sc_opt = min(sc_opt, min(sc_ne))  # the optimum is at most the best equilibrium found
     return {
         "sc_opt": sc_opt,
         "sc_ne": sc_ne,
