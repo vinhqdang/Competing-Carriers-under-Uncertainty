@@ -224,3 +224,9 @@ data/raw/
 
 # lean build artefacts
 lean/.lake/
+
+# latex build files
+theory/*.aux
+theory/*.out
+theory/*.toc
+theory/*.log
