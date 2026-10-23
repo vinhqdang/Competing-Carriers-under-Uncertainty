@@ -359,10 +359,12 @@ def label_cost_final(lab: Label, P: Pricing, rule: str) -> float:
     return cost_profile(lab.S, P.w, P.loss) - lab.pi
 
 
-def espprc(P: Pricing, rule: str, time_limit: float = 120.0, max_cols: int = 50):
+def espprc(P: Pricing, rule: str, time_limit: float = 120.0, max_cols: int = 50, ng: np.ndarray | None = None):
     """Mono-directional label-setting ESPPRC; returns (best reduced cost, routes with negative rc, stats).
 
     rule: 'none' (complete enumeration), 'tau', 'pointwise', 'functional', 'scenario' (SAA objective).
+    ng: optional (n+1,) int bitmasks of ng-neighbourhoods; then `mask` is the ng-memory and routes may
+    repeat customers outside the memory (ng-route relaxation; the LP bound stays valid).
     """
     t0 = time.perf_counter()
     n = P.n
@@ -402,7 +404,8 @@ def espprc(P: Pricing, rule: str, time_limit: float = 120.0, max_cols: int = 50)
                 if lab.mask >> j & 1 or lab.load + P.dem[j] > P.cap + 1e-12:
                     continue
                 S = lab.S + arcX[i, j]
-                new = Label(j, lab.mask | (1 << j), lab.load + P.dem[j], lab.tau + P.tau[i, j], S, lab.pi + P.duals[j], w, lab)
+                nm = (lab.mask | (1 << j)) if ng is None else ((lab.mask & int(ng[j])) | (1 << j))
+                new = Label(j, nm, lab.load + P.dem[j], lab.tau + P.tau[i, j], S, lab.pi + P.duals[j], w, lab)
                 created += 1
                 if rule != "none":
                     B = buckets[j]
@@ -515,8 +518,66 @@ def testD(rng, sizes=(10, 15, 20, 25, 30), reps=2, tl=120.0):
     OUT["testD"] = rows
 
 
+def enumerate_routes(P: Pricing):
+    """All elementary routes (customer subsets up to capacity, best order) with their level profiles."""
+    best = {}
+    stack = [((), 0.0)]
+    while stack:
+        r, load = stack.pop()
+        if r:
+            S = route_profile(P, r)
+            key = frozenset(r)
+            c = cost_profile(S, P.w, P.loss)
+            if key not in best or c < best[key][0]:
+                best[key] = (c, r, S)
+        for j in range(1, P.n + 1):
+            if j not in r and load + P.dem[j] <= P.cap:
+                stack.append((r + (j,), load + P.dem[j]))
+    return best
+
+
+def sp_solve(n, routes, costs):
+    A = np.zeros((n, len(routes)))
+    for k, r in enumerate(routes):
+        for j in r:
+            A[j - 1, k] = 1
+    m = milp(np.asarray(costs), constraints=LinearConstraint(A, lb=np.ones(n), ub=np.ones(n)),
+             integrality=np.ones(len(routes)), bounds=Bounds(0, 1))
+    return m.fun, np.flatnonzero(m.x > 0.5)
+
+
+def testF(rng, trials=20):
+    """Exact robust VRP (set partitioning over all routes) vs the common-level Lagrangian / fixed-u CVaR approach."""
+    rows = []
+    for t in range(trials):
+        P = random_pricing(rng, 10, K=4, cap=4, Tfrac=float(rng.uniform(0.5, 1.3)))
+        P.loss.rho = float(rng.choice([3.0, 10.0, 30.0]))
+        best = enumerate_routes(P)
+        keys = list(best)
+        routes = [best[k][1] for k in keys]
+        exact, _ = sp_solve(P.n, routes, [best[k][0] for k in keys])
+        W = np.cumsum(P.w[::-1])[::-1]  # 1 - u_l
+        lb, best_heur = -math.inf, math.inf
+        for l in range(len(P.w)):
+            cl = []
+            for k in keys:
+                S = best[k][2]
+                H = float(P.w[l:] @ S[l:])
+                cl.append(P.loss.fixed + P.loss.gamma * float(P.w @ S) + P.loss.rho * (H - W[l] * P.loss.Tmax))
+            v, sel = sp_solve(P.n, routes, cl)
+            lb = max(lb, v)
+            # the fixed-level solution evaluated under the exact robust cost
+            best_heur = min(best_heur, sum(best[keys[k]][0] for k in sel))
+        rows.append({"exact": exact, "common_u_bound": lb, "bound_gap_pct": 100 * (exact - lb) / exact,
+                     "best_fixed_u_solution_gap_pct": 100 * (best_heur - exact) / exact, "L": int(len(P.w))})
+    OUT["testF"] = rows
+    print("testF", [(round(r["bound_gap_pct"], 2), round(r["best_fixed_u_solution_gap_pct"], 2)) for r in rows])
+
+
 if __name__ == "__main__":
-    which = sys.argv[1:] or list("ABCDE")
+    which = sys.argv[1:] or list("ABCDEF")
+    if "F" in which:
+        testF(np.random.default_rng(5))
     rng = np.random.default_rng(20261023)
     if "A" in which:
         testA(rng)

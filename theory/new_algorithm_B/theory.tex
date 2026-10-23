@@ -1,0 +1,364 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Eu}{\overline{\mathbb{E}}}
+\newcommand{\Qb}{\overline{Q}}
+\newcommand{\Fl}{\underline{F}}
+\newcommand{\Fu}{\overline{F}}
+\newcommand{\pib}{\overline{\pi}}
+\newcommand{\mub}{\overline{\mu}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\pos}[1]{\left(#1\right)^{+}}
+
+\title{Budget-Resource Labelling:\\ exact pricing for vehicle routing with p-box travel times and unknown dependence}
+\author{Quang-Vinh Dang\\ British University Vietnam, Hung Yen, Vietnam\\ \texttt{vinh.dq4@buv.edu.vn}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Each carrier in the competing-carrier model solves a vehicle routing problem whose arc travel times are described by p-boxes (lower and upper CDFs) and whose dependence is unknown. The route loss is convex piecewise linear in the route duration. We prove that the worst-case expected loss of a route is the value of a \emph{deterministic} resource allocation problem. Each arc chooses a ``deadline budget'' $d_a$ and pays a convex cost $c_a(d_a)$, and the budgets of a route must sum to at most the shift length. This is the Meilijson--N\'adas stop-loss decomposition, which we re-prove in the form we need. The algorithmic consequence is that the pricing problem of column generation is an elementary shortest path problem with $\kappa$ additional \emph{continuous decision resources}, where $\kappa$ is the number of kinks of the loss ($\kappa=1$ for the loss $\gamma T+\rho(T-T_{\max})^+$). The number of resources does not depend on the resolution of the p-boxes, the sample size or the number of levels $L$ of the quantile grid. Partial paths are compared with a \emph{functional} dominance rule that is valid only on a computable completion window. We prove that the rule is exact and that it subsumes the $L$-dimensional quantile-vector dominance and the $K$-dimensional sector dominance. We also prove an envelope version with a label bound per bucket that does not depend on $L$. Prototype results: the formula agrees with a linear program over all joint laws to $10^{-13}$; pricing is exact against complete enumeration in $52/52$ instances; the functional rule keeps $10$--$100\times$ fewer labels than quantile-vector dominance; the natural alternative (sweep a single risk level $u$, solve deterministic problems) is suboptimal in $9/20$ small VRPs by up to $6.4\%$. Section~\ref{sec:prior} separates what is known from what is new.
+\end{abstract}
+
+\tableofcontents
+
+%=====================================================================
+\section{Setting}\label{sec:setting}
+
+A \emph{route} $r$ is a depot-to-depot walk; we identify it with the finite multiset of arcs it uses. Arc $a$ has a nonnegative random travel time $X_a$ (service times at nodes can be included as deterministic parts of $X_a$). The route duration is $T_r=\sum_{a\in r}X_a$.
+
+\begin{assumption}[p-boxes with bounded support]\label{ass:pbox}
+For every arc $a$ there are CDFs $\Fl_a\le\Fu_a$ on $[0,B_a]$, $B_a<\infty$ (so $\Fl_a(B_a)=1$). The \emph{credal set} of arc $a$ is $\cM_a=\{F\ \text{CDF}:\ \Fl_a\le F\le\Fu_a\}$. The joint credal set is
+\[
+\cM=\{P\ \text{law on}\ \R_{\ge0}^{A}:\ \text{the $a$-th marginal of $P$ lies in $\cM_a$ for every $a$}\},
+\]
+that is, the marginals are imprecise and the dependence is completely unknown (Fr\'echet class of a p-box).
+\end{assumption}
+
+The bounded support is needed for $\Fl_a$ to be a proper CDF. For a Dvoretzky--Kiefer--Wolfowitz (DKW) band built from $n$ observations with confidence $1-\alpha$, $\Fl_a(x)=\max\{F_n(x)-\varepsilon,0\}$ for $x<B_a$ and $\Fl_a(B_a)=1$, with $\varepsilon=\sqrt{\ln(2/\alpha)/(2n)}$. For the imprecise Dirichlet model with parameter $s$, $\Fl_a(x)=\#\{i:x_i\le x\}/(n+s)$ for $x<B_a$, again with the remaining mass at $B_a$.
+
+\begin{definition}[Upper quantile]
+$\Qb_a(u)=\inf\{x:\Fl_a(x)\ge u\}$ for $u\in(0,1]$. It is nondecreasing and left-continuous, with $\Qb_a(1)\le B_a$. Write $\Qb_a(0^+)=\lim_{u\downarrow0}\Qb_a(u)$.
+\end{definition}
+
+\begin{assumption}[Loss]\label{ass:loss}
+The loss of a route of duration $T$ is
+\[
+\varphi(T)=c_0+\gamma T+\sum_{j=1}^{\kappa}\rho_j\pos{T-\theta_j},\qquad \gamma\ge0,\ \rho_j>0,\ 0\le\theta_1<\dots<\theta_\kappa .
+\]
+The model of the paper has $\kappa=1$, $\theta_1=T_{\max}$, $\rho_1=\rho$ (Section~2 of \texttt{main.tex} and \texttt{src/ccu/robust.py}). Every convex nondecreasing $\varphi$ on a bounded interval is a uniform limit of such functions.
+\end{assumption}
+
+The \emph{robust route cost} is the upper prevision $\Eu[\varphi(T_r)]=\sup_{P\in\cM}\E_P[\varphi(T_r)]$. For a loss, this is the $\Gamma$-minimax criterion (equivalently $\Gamma$-maximin of the payoff $-\varphi$; Lemma~3.5 of \texttt{main.tex} for the game-level role). In the game, carrier $i$ minimises $\sum_{r\in\text{plan}}\Eu[\varphi(T_r)]+\lambda^\top x(\text{plan})$, where $\lambda$ collects the zone prices and congestion charges. Column generation for this problem prices routes with reduced cost $\Eu[\varphi(T_r)]-\sum_{i\in r}\pi_i$, where $\pi_i$ absorbs the duals and the zone prices of customer $i$.
+
+Notation: for a CDF $F$ and $d\in\R$, the stop-loss transform is $\pi_F(d)=\E_F\pos{X-d}$. We write $\mub_a=\int_0^1\Qb_a(u)\,du$ and $\pib_a(d)=\E_{\Fl_a}\pos{X_a-d}=\int_0^1\pos{\Qb_a(u)-d}du$. The function $\pib_a$ is convex and nonincreasing, has slope $-1$ for $d<\Qb_a(0^+)$, and vanishes for $d\ge\Qb_a(1)$.
+
+%=====================================================================
+\section{The structural theorem}\label{sec:struct}
+
+\begin{theorem}[Upper prevision and budget decomposition]\label{thm:main}
+Under Assumptions~\ref{ass:pbox}--\ref{ass:loss}, for every route $r$,
+\begin{align}
+\Eu[\varphi(T_r)]
+&=\int_0^1\varphi\Big(\sum_{a\in r}\Qb_a(u)\Big)\,du \label{eq:comon}\\
+&=c_0+\sum_{a\in r}\gamma\mub_a+\sum_{j=1}^{\kappa}\rho_j\min\Big\{\sum_{a\in r}\pib_a(d^j_a):\ d^j\in\R^{r},\ \sum_{a\in r}d^j_a\le\theta_j\Big\}. \label{eq:budget}
+\end{align}
+The supremum over $\cM$ is attained by the comonotone coupling of the lower CDFs, $X_a=\Qb_a(U)$ with $U$ uniform. Each minimum in \eqref{eq:budget} is attained. If $\{\Qb_a(u)\}$ and $\theta_j$ are integers, it is attained at an integer vector $d^j$.
+\end{theorem}
+
+\begin{proof}
+Write $S=\sum_{a\in r}X_a$ (arcs used several times are counted with multiplicity; the argument below never needs distinct arcs). Fix $j$ and $\theta=\theta_j$.
+
+\emph{Step 1 (pointwise inequality).} For reals $x_a$ and $d_a$ with $\sum_ad_a\le\theta$,
+$\pos{\sum_ax_a-\theta}\le\pos{\sum_a(x_a-d_a)}\le\sum_a\pos{x_a-d_a}$. The first inequality holds because $t\mapsto t^+$ is nondecreasing; the second because $t\mapsto t^+$ is subadditive.
+
+\emph{Step 2 (upper bound).} Let $P\in\cM$ with marginals $F_a\in\cM_a$. Taking expectations in Step 1,
+$\E_P\pos{S-\theta}\le\sum_a\pi_{F_a}(d_a)$. Since $F_a\ge\Fl_a$ pointwise, $X_a\sim F_a$ is first-order stochastically dominated by $\Fl_a$, and $x\mapsto\pos{x-d}$ is nondecreasing, so $\pi_{F_a}(d_a)\le\pib_a(d_a)$. In the same way, $\E_{F_a}X_a\le\mub_a$. Hence for every $P\in\cM$ and every admissible $d^1,\dots,d^\kappa$,
+\[
+\E_P\varphi(S)\le c_0+\gamma\sum_a\mub_a+\sum_j\rho_j\sum_a\pib_a(d^j_a).
+\]
+So $\Eu[\varphi(S)]$ is at most the right-hand side of \eqref{eq:budget}.
+
+\emph{Step 3 (attainment).} Let $U$ be uniform on $(0,1)$, $\bar X_a=\Qb_a(U)$ and $\bar S=\sum_a\bar X_a=\Sigma(U)$ with $\Sigma(u)=\sum_a\Qb_a(u)$. Then $\bar X_a\sim\Fl_a\in\cM_a$, so the law $\bar P$ of $(\bar X_a)$ belongs to $\cM$. Fix $j$, $\theta=\theta_j$. Let $u^*=\sup\{u\in(0,1]:\Sigma(u)\le\theta\}$, with $\sup\emptyset=0$.
+If $u^*=1$, then $\bar S\le\theta$ almost surely; put $d_a=\Qb_a(1)$. Then $\sum_ad_a=\Sigma(1)\le\theta$ (left-continuity), and both sides of Step 1 vanish almost surely.
+If $u^*<1$, put $\ell_a=\Qb_a(u^*)$ (with $\ell_a=\Qb_a(0^+)$ if $u^*=0$) and $h_a=\Qb_a(u^{*+})$. By the definition of $u^*$ and left-continuity, $\sum_a\ell_a\le\theta$ when $u^*>0$, and $\sum_ah_a\ge\theta$. If $u^*=0$, choose any $d_a\le\ell_a$ with $\sum_ad_a=\theta$ (possible because $\sum_a\ell_a=\Sigma(0^+)\ge\theta$). Otherwise choose $d_a\in[\ell_a,h_a]$ with $\sum_ad_a=\theta$, which is possible by the intermediate value theorem. Then $\{U\le u^*\}$ implies $\bar X_a\le\ell_a\le d_a$ for all $a$, and $\{U>u^*\}$ implies $\bar X_a\ge h_a\ge d_a$ for all $a$. On the first event both sides of Step 1 are $0$; on the second, $\sum_a\pos{\bar X_a-d_a}=\sum_a(\bar X_a-d_a)=\bar S-\theta=\pos{\bar S-\theta}$, since the sum is nonnegative. (For $u^*=0$ the first event is null.) So Step 1 holds with equality $\bar P$-almost surely for this $d$. Taking expectations, $\E_{\bar P}\pos{\bar S-\theta}=\sum_a\pib_a(d_a)$. Doing this for each $j$ and adding $\E\bar S=\sum_a\mub_a$ shows that $\bar P$ attains the bound of Step 2 and that the minima in \eqref{eq:budget} are attained.
+
+\emph{Step 4 (formula \eqref{eq:comon}).} $\E_{\bar P}\varphi(\bar S)=\int_0^1\varphi(\Sigma(u))du$ because $\bar S=\Sigma(U)$.
+
+\emph{Step 5 (integrality).} If all $\Qb_a$ take integer values and $\theta$ is an integer, then $\ell_a$, $h_a$ and $\Qb_a(1)$ in Step~3 are integers. In each of the three cases an integer vector $d$ with the stated properties exists: $d=\Qb(1)$; an integer vector with $d\le\ell$ and $\sum d=\theta$ (when $\sum\ell\ge\theta$); or an integer vector in the box $[\ell,h]$ with sum $\theta$ (when $\sum\ell\le\theta\le\sum h$). The equality argument of Step~3 applies verbatim.
+\end{proof}
+
+\begin{remark}[What is classical]
+Equation \eqref{eq:comon} and the identity $\E\pos{S^c-\theta}=\min_{\sum d_a=\theta}\sum_a\pi_a(d_a)$ for a comonotone sum with fixed marginals are due to Meilijson and N\'adas \cite{MN79}. They also appear in actuarial science as the stop-loss decomposition of comonotone sums \cite{KDG00,DDGKV02}. The p-box step, which picks the lower CDF by first-order dominance, is standard in probability-bound analysis \cite{WD90,Ferson03}. We include the proof because the \emph{routing} statements below depend on the precise form \eqref{eq:budget} with \emph{inequality} budgets, on Step~3's choice of $d$, and on integrality.
+\end{remark}
+
+\begin{corollary}[Common level grid]\label{cor:grid}
+If all $\Qb_a$ are step functions constant on the intervals $(u_{l-1},u_l]$, $l=1,\dots,L$, with $w_l=u_l-u_{l-1}$ and values $q_{a,l}$, then with $S_l=\sum_{a\in r}q_{a,l}$,
+\[
+\Eu[\varphi(T_r)]=\sum_{l=1}^{L}w_l\varphi(S_l),\qquad f_r(D):=\gamma\sum_lw_lS_l+\rho\sum_lw_l\pos{S_l-D}.
+\]
+For $\kappa=1$, $\Eu[\varphi(T_r)]=c_0+f_r(T_{\max})$. DKW and IDM p-boxes built from samples of a common size share a grid. In general, the union of the breakpoints is a common grid with $L\le\sum_a(\#\text{breakpoints of }\Qb_a)$.
+\end{corollary}
+
+\begin{remark}[Lower previsions are different]
+The \emph{lower} prevision $\inf_{P\in\cM}\E_P\varphi(S)$ is not given by a comonotone or any other universal coupling for three or more arcs; it is a joint-mix problem. Theorem~\ref{thm:main} is a statement about the upper prevision of a convex loss only.
+\end{remark}
+
+%---------------------------------------------------------------------
+\subsection{Consequence for routing: decision resources}
+
+\begin{theorem}[Budget-resource reformulation]\label{thm:resource}
+Let $\cR$ be the set of feasible routes (capacity, elementarity) and $\pi\in\R^n$ dual prices. With $c_a(d^1,\dots,d^\kappa)=\gamma\mub_a+\sum_j\rho_j\pib_a(d^j)$, the dependence-robust pricing problem satisfies
+\[
+\min_{r\in\cR}\Big\{\Eu[\varphi(T_r)]-\sum_{i\in r}\pi_i\Big\}
+=\min\Big\{c_0+\sum_{a\in r}c_a(d^1_a,\dots,d^\kappa_a)-\sum_{i\in r}\pi_i:\ r\in\cR,\ \sum_{a\in r}d^j_a\le\theta_j\ (j\le\kappa)\Big\}.
+\]
+This is a deterministic elementary shortest path problem with $\kappa$ additional resources. The consumption $d^j_a$ of resource $j$ on arc $a$ is a decision, paid through the separable convex arc cost $c_a$. The number of resources is $\kappa$ and does not depend on the p-box resolution $L$, on the sample size, or on the number of arcs.
+The same holds for the full routing problem: a set-partitioning (or arc-flow) model with route costs $\Eu[\varphi(T_r)]$ equals the model in which each vehicle carries $\kappa$ budget resources.
+\end{theorem}
+\begin{proof}
+Substitute \eqref{eq:budget} into the objective and merge the two minimisations.
+\end{proof}
+
+\begin{remark}[Scenario view and why it is worse]
+Corollary~\ref{cor:grid} also shows that the robust problem is a scenario problem with $L$ comonotone scenarios $q_{\cdot,l}$ and probabilities $w_l$. This is the reduction of Ghosal, Ho and Wiesemann for demand ambiguity in the CVRP \cite{GHW24}. A scenario-based labelling algorithm then needs $L$ resources (the vector $(S_l)_l$) with pointwise dominance. Theorem~\ref{thm:resource} replaces these $L$ resources by $\kappa$ decision resources. The rest of the paper turns this into a dominance rule.
+\end{remark}
+
+%=====================================================================
+\section{Labels, completion windows and functional dominance}\label{sec:dom}
+
+We work with $\kappa=1$ ($\theta=T_{\max}$) and the common grid of Corollary~\ref{cor:grid}. The extension to $\kappa>1$ is in Remark~\ref{rem:kappa}. A \emph{label} is a depot-to-$v$ path $p$. It carries its end node $v$, visited set $V(p)$, load $\ell(p)$, level profile $S_p\in\R^L$ (nondecreasing in $l$), and collected duals $\pi(p)$. Its \emph{cost function} is
+\[
+f_p(D)=\gamma\sum_lw_lS_{p,l}+\rho\sum_lw_l\pos{S_{p,l}-D},\qquad D\in\R .
+\]
+It is convex, nonincreasing and piecewise linear, with breakpoints at the values $S_{p,l}$, slope $-\rho$ for $D<S_{p,1}$, and constant for $D\ge S_{p,L}$. Write $S_p(0^+)=S_{p,1}$ and $S_p(1)=S_{p,L}$.
+
+A \emph{completion} of $p$ is a path $q$ from $v$ to the depot such that $p\oplus q\in\cR$. Its cost function $f_q$ is defined in the same way.
+
+\begin{lemma}[Concatenation is inf-convolution]\label{lem:infconv}
+For a label $p$ and a completion $q$,
+\[
+\Eu[\varphi(T_{p\oplus q})]-c_0=f_{p\oplus q}(\theta)=\min_{D\in\R}\big\{f_p(D)+f_q(\theta-D)\big\}=(f_p\,\square\,f_q)(\theta).
+\]
+\end{lemma}
+\begin{proof}
+By \eqref{eq:budget}, $\pib$-terms are separable over arcs. Split the budget vector into the arcs of $p$ and those of $q$, put $D=\sum_{a\in p}d_a$, and minimise first over the arcs of $p$ with $\sum_{a\in p}d_a\le D$ and then over those of $q$ with $\sum_{a\in q}d_a\le\theta-D$. Applying \eqref{eq:budget} to $p$ and $q$ separately (with $\theta$ replaced by $D$ and $\theta-D$) gives $f_p(D)$ and $f_q(\theta-D)$. The mean terms add.
+\end{proof}
+
+\begin{lemma}[Completion window]\label{lem:window}
+Let $C_{\min}(v)\le S_q(0^+)$ for every completion $q$ of labels ending at $v$; for example, $C_{\min}(v)$ is the shortest-path distance from $v$ to the depot with arc lengths $\Qb_a(0^+)$. Put
+\[
+h(p)=\min\{S_p(1),\ \theta-C_{\min}(v)\},\qquad \lambda(p)=\min\{S_p(0^+),h(p)\},\qquad J(p)=[\lambda(p),h(p)].
+\]
+For every completion $q$, the minimum in Lemma~\ref{lem:infconv} is attained at some $D^*\le h(p)$. If $D^*<\lambda(p)$, then $D^*\le S_p(0^+)$.
+\end{lemma}
+\begin{proof}
+Let $\Phi(D)=f_p(D)+f_q(\theta-D)$. The function $D\mapsto f_q(\theta-D)$ is convex, nondecreasing, with slope in $[0,\rho]$, and slope exactly $\rho$ when $\theta-D<S_q(0^+)$. The slope of $f_p$ lies in $[-\rho,0]$ and is $0$ for $D>S_p(1)$.
+(i) On $D>\theta-S_q(0^+)$, $\Phi$ has slope $\ge-\rho+\rho=0$, so it is nondecreasing there and a minimiser exists with $D\le\theta-S_q(0^+)\le\theta-C_{\min}(v)$.
+(ii) On $D>S_p(1)$, $\Phi$ has slope $\ge0$, so decreasing $D$ to $S_p(1)$ does not increase $\Phi$.
+Applying (i) and then (ii) gives a minimiser with $D^*\le h(p)$. The last claim is trivial: if $D^*<\lambda(p)=\min\{S_p(0^+),h(p)\}$, then $D^*<S_p(0^+)$.
+\end{proof}
+
+\begin{definition}[Functional dominance]\label{def:fdom}
+Label $p_1$ \emph{functionally dominates} $p_2$, both ending at $v$, if $V(p_1)\subseteq V(p_2)$, $\ell(p_1)\le\ell(p_2)$, and
+\[
+g(D):=\big(f_{p_1}(D)-\pi(p_1)\big)-\big(f_{p_2}(D)-\pi(p_2)\big)\le0\qquad\text{for all } D\in J(p_2).
+\]
+Since $g$ is piecewise linear with breakpoints in $\{S_{p_1,l}\}\cup\{S_{p_2,l}\}$, it suffices to check the two endpoints of $J(p_2)$ and the breakpoints inside it: at most $2L+2$ evaluations, each $O(\log L)$ with suffix sums.
+\end{definition}
+
+\begin{definition}[Completion dominance]
+$p_1$ \emph{completion-dominates} $p_2$ if every completion $q$ of $p_2$ is a completion of $p_1$ and
+$\Eu[\varphi(T_{p_1\oplus q})]-\pi(p_1\oplus q)\le\Eu[\varphi(T_{p_2\oplus q})]-\pi(p_2\oplus q)$.
+Completion dominance is a preorder (reflexive and transitive).
+\end{definition}
+
+\begin{theorem}[Validity of functional dominance]\label{thm:fdom}
+Functional dominance implies completion dominance.
+\end{theorem}
+\begin{proof}
+Let $q$ be a completion of $p_2$. Since $V(p_1)\subseteq V(p_2)$ and $\ell(p_1)\le\ell(p_2)$, $q$ is a completion of $p_1$ (elementarity and capacity). The duals of $q$ appear on both sides. By Lemma~\ref{lem:window} applied to $p_2$, there is a minimiser $D^*$ for $p_2\oplus q$ with $D^*\le h(p_2)$.
+If $D^*\in J(p_2)$, then $g(D^*)\le0$.
+Otherwise $D^*<\lambda(p_2)\le S_{p_2}(0^+)$. On $(-\infty,S_{p_2}(0^+)]$, $f_{p_2}$ has slope $-\rho$ and $f_{p_1}$ has slope $\ge-\rho$, so $g$ is nondecreasing there. Since $\lambda(p_2)\le S_{p_2}(0^+)$, $g(D^*)\le g(\lambda(p_2))\le0$.
+In both cases, by Lemma~\ref{lem:infconv},
+\[
+f_{p_1\oplus q}(\theta)-\pi(p_1)\le f_{p_1}(D^*)+f_q(\theta-D^*)-\pi(p_1)\le f_{p_2}(D^*)+f_q(\theta-D^*)-\pi(p_2)=f_{p_2\oplus q}(\theta)-\pi(p_2).\qedhere
+\]
+\end{proof}
+
+\begin{proposition}[Comparison with vector dominance]\label{prop:compare}
+Assume $V(p_1)\subseteq V(p_2)$, $\ell(p_1)\le\ell(p_2)$ and $\pi(p_1)\ge\pi(p_2)$.
+\begin{enumerate}[label=(\alph*)]
+\item (Quantile-vector dominance, $L$ resources.) If $S_{p_1}\le S_{p_2}$ componentwise, then $p_1$ functionally dominates $p_2$.
+\item (Sector dominance, $K$ resources.) In the sector model $X_a=\sum_k\tau_{a,k}\xi_k$ with p-boxes on the multipliers $\xi_k$, so that $S_{p,l}=\sum_k\tau_{p,k}\Qb_{\xi_k}(u_l)+(\text{service})$: if $\tau_{p_1}\le\tau_{p_2}$ componentwise, then $S_{p_1}\le S_{p_2}$, hence (a) applies.
+\item Neither converse holds. There are pairs with $f_{p_1}\le f_{p_2}$ on $\R$ and $S_{p_1,l}>S_{p_2,l}$ for some $l$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) $f$ is nondecreasing in each $S_l$. (b) The $\Qb_{\xi_k}$ are nonnegative and the service part is monotone in $V$.
+(c) Take $L=2$, $w=(\tfrac12,\tfrac12)$, $\gamma=0$, $\rho=1$ and equal duals.
+\emph{First example, whole line:} $S_{p_1}=(1,1)$ and $S_{p_2}=(0,2.2)$. Then $f_{p_1}(D)=\pos{1-D}$ and $f_{p_2}(D)=\tfrac12[\pos{-D}+\pos{2.2-D}]$. At the breakpoints $D=0,1,2.2$ the values are $(1,1.1)$, $(0,0.6)$ and $(0,0)$; for $D\le0$ the difference is the constant $-0.1$, and for $D\ge2.2$ both vanish. Hence $f_{p_1}\le f_{p_2}$ on $\R$, while $S_{p_1,1}=1>0=S_{p_2,1}$.
+\emph{Second example, the window matters:} $S_{p_1}=(0.5,2.5)$ and $S_{p_2}=(1.5,1.6)$, with $\theta-C_{\min}(v)=0.5$. Then $J(p_2)=\{0.5\}$, $f_{p_1}(0.5)=1<1.05=f_{p_2}(0.5)$, so $p_2$ is pruned. On the whole line, however, $f_{p_1}(2)=0.25>0=f_{p_2}(2)$, and $S_{p_1,2}>S_{p_2,2}$.
+\end{proof}
+
+\begin{remark}
+Proposition~\ref{prop:compare}(c) shows where the extra pruning comes from. On the window, the comparison only involves the part of the stop-loss transform that a completion can still reach. When $\theta-C_{\min}(v)\le S_{p_2}(0^+)$ (the route is late at every level whatever happens next), the window is the single point $\lambda=\theta-C_{\min}(v)$ and the comparison is one scalar inequality, $f_{p_1}(\lambda)-\pi(p_1)\le(\gamma+\rho)\mub_{p_2}-\rho\lambda-\pi(p_2)$. When $\theta-C_{\min}(v)\ge S_{p_2}(1)$, the window is $[S_{p_2}(0^+),S_{p_2}(1)]$, and the rule is the stop-loss (increasing-convex) order of the two worst-case route durations, shifted by the duals.
+\end{remark}
+
+\begin{remark}[Several kinks]\label{rem:kappa}
+For $\kappa>1$, a label's cost function is $f_p(D^1,\dots,D^\kappa)=\gamma\mub_p+\sum_j\rho_j\pi_{S_p}(D^j)$, which is separable in $j$. Lemma~\ref{lem:infconv} holds coordinatewise and Lemma~\ref{lem:window} holds for each $j$ with $\theta_j$. A sufficient dominance condition is
+$\gamma(\mub_{p_1}-\mub_{p_2})+\sum_j\rho_j\max_{D\in J_j(p_2)}[\pi_{S_{p_1}}-\pi_{S_{p_2}}](D)\le\pi(p_1)-\pi(p_2)$,
+where the mean term is separated out of each $f$. Each maximum is over a piecewise linear function and is computed at breakpoints; on the part of the window below $S_{p_2}(0^+)$ the same monotonicity argument applies to each term.
+\end{remark}
+
+%=====================================================================
+\section{The algorithm BRL}\label{sec:alg}
+
+\begin{algorithm}[h]
+\caption{BRL: Budget-Resource Labelling (pricing for the dependence-robust VRP)}\label{alg:brl}
+\begin{algorithmic}[1]
+\Require graph, demands, capacity $Q$; level grid $(w_l)$; arc level profiles $q_{a,\cdot}$ (Cor.~\ref{cor:grid}); $\gamma,\rho,\theta,c_0$; duals $\pi$
+\State $C_{\min}(v)\gets$ shortest path $v\to$ depot with lengths $q_{a,1}$ \Comment{Lemma~\ref{lem:window}}
+\State $\mathcal B_v\gets\emptyset$ for all $v$; queue $\gets\{(\text{depot},\emptyset,0,0\in\R^L,0)\}$
+\While{queue nonempty}
+  \State pop $p$ (FIFO by number of visited customers)
+  \State \textbf{close:} $rc\gets c_0+f_{p\oplus(v,0)}(\theta)-\pi(p)$; record if $rc<0$
+  \For{each customer $j\notin V(p)$ with $\ell(p)+d_j\le Q$}
+    \State $p'\gets(j,V(p)\cup\{j\},\ell(p)+d_j,S_p+q_{(v,j),\cdot},\pi(p)+\pi_j)$; precompute suffix sums of $w\odot S_{p'}$
+    \If{some $o\in\mathcal B_j$ functionally dominates $p'$} discard $p'$ \Comment{Def.~\ref{def:fdom}}
+    \Else\ delete from $\mathcal B_j$ the labels functionally dominated by $p'$; insert $p'$; push $p'$
+    \EndIf
+  \EndFor
+\EndWhile
+\State \Return the recorded routes sorted by $rc$ and $\min rc$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Exactness of BRL]\label{thm:exact}
+BRL returns $\min_{r\in\cR}\{\Eu[\varphi(T_r)]-\pi(r)\}$ exactly, with a route attaining it.
+\end{theorem}
+\begin{proof}
+Call a label \emph{processed} if it is popped while not deleted; processed labels are extended and closed. Let OPT be the optimum and let $\Omega$ be the set of pairs $(o,q)$ with $o$ a created label, $q$ a completion of $o$ and $\Eu[\varphi(T_{o\oplus q})]-\pi(o\oplus q)=\mathrm{OPT}$. The pair (depot label, optimal route) is in $\Omega$, and the depot label is processed. Among pairs in $\Omega$ with $o$ processed, choose one with the smallest number of arcs $|q|$.
+If $|q|=1$, then $q$ is the return arc and closing $o$ records a route of value OPT.
+If $|q|\ge2$, let $(v,j)$ be the first arc of $q$ and $q'$ the rest, and let $o_1=o\oplus(v,j)$, which is created when $o$ is processed; $(o_1,q')\in\Omega$. If $o_1$ is processed, $|q'|<|q|$ contradicts minimality. Otherwise $o_1$ was discarded at creation or deleted later, in both cases because a label $o_2$, not deleted at that moment, functionally dominates it. By Theorem~\ref{thm:fdom}, $o_2$ completion-dominates $o_1$, so $(o_2,q')\in\Omega$. If $o_2$ is not processed, it was deleted at a later moment by a label $o_3$, and transitivity of completion dominance gives $(o_3,q')\in\Omega$. The moments at which $o_1,o_2,\dots$ cease to be live strictly increase and there are finitely many labels, so the chain ends at a processed label $o_k$ with $(o_k,q')\in\Omega$ and $|q'|<|q|$. This contradicts minimality, so the case $|q|\ge2$ is impossible.
+\end{proof}
+
+\paragraph{Column generation (the method on real instances).}
+Master: $\min\{\sum_rc_rx_r:\sum_{r\ni i}x_r\ge1,\ x\ge0\}$ with exact $c_r=\Eu[\varphi(T_r)]$ from Corollary~\ref{cor:grid}. Pricing is BRL. When BRL returns $\min rc\ge0$, the master value is the exact LP bound of the dependence-robust VRP. Integer solutions come from the master restricted to the generated columns (price-and-branch) or from branching on arcs, as usual.
+
+\paragraph{Add-on: certified gap.} Because BRL is exact, the final master value is a valid lower bound, and any integer solution gives a gap that holds for the robust objective itself. The common-level alternative (Section~\ref{sec:fixedu}) gives only a weaker bound.
+
+%=====================================================================
+\section{Why one risk level is not enough}\label{sec:fixedu}
+
+A natural shortcut uses the dual form $\E\pos{S-\theta}=\max_{u\in[0,1]}\big[\int_u^1\Sigma(s)ds-(1-u)\theta\big]$, where $\Sigma$ is the quantile of $S$. This gives
+\[
+\Eu[\varphi(T_r)]=c_0+\gamma\mub_r+\rho\max_{u\in[0,1]}\Big[\sum_{a\in r}H_a(u)-(1-u)\theta\Big],\qquad H_a(u)=\int_u^1\Qb_a(s)ds .
+\]
+Fixing one $u$ gives additive arc costs $\gamma\mub_a+\rho H_a(u)$, which can be fed to a deterministic VRP. Sweeping $u$ over the grid and evaluating each solution exactly gives a heuristic and the bound $\max_u\min_{\text{plans}}$.
+
+\begin{proposition}\label{prop:fixedu}
+(a) For every $u$, the fixed-$u$ problem is a lower bound: $\min_{\text{plan}}\sum_{r}\Eu[\varphi(T_r)]\ge\max_u\min_{\text{plan}}\sum_r[c_0+\gamma\mub_r+\rho(H_r(u)-(1-u)\theta)]$.
+(b) The inequality can be strict, and the best fixed-$u$ plan need not be optimal.
+\end{proposition}
+\begin{proof}
+(a) $\max_u$ inside each route is at least its value at a common $u$, and $\min\max\ge\max\min$. (b) The numerical counterexamples in \texttt{results.md} (Test F: $9$ of $20$ instances, gap up to $6.4\%$) are exact computations by enumeration and set partitioning. Structurally, the optimal $u$ of a route is the worst-case on-time level $u^*_r=\sup\{u:\Sigma_r(u)\le\theta\}$, which differs between routes of the same plan. A single $u$ cannot match all of them.
+\end{proof}
+
+The budget resource of Theorem~\ref{thm:resource} is exactly what lets each route choose its own level inside the pricing problem.
+
+%=====================================================================
+\section{Envelope dominance and a label bound independent of $L$}\label{sec:envelope}
+
+\begin{proposition}[Envelope dominance]\label{prop:env}
+Assume integer data: all $q_{a,l}$ and $\theta$ are integer multiples of a time unit $\delta$, measured in units of $\delta$. Let $p$ and $p_1,\dots,p_m$ end at $v$, with $V(p_i)\subseteq V(p)$ and $\ell(p_i)\le\ell(p)$. If
+\[
+f_p(D)-\pi(p)\ \ge\ \min_i\big(f_{p_i}(D)-\pi(p_i)\big)\quad\text{for every integer }D\in J(p),
+\]
+then for every completion $q$ of $p$ some $p_i\oplus q$ has reduced cost at most that of $p\oplus q$. Consequently, after envelope pruning, a bucket (end node, visited set, load) holds at most $|J\cap\mathbb Z|\le\theta/\delta+1$ labels, for any $L$.
+\end{proposition}
+\begin{proof}
+$f_p$ and $f_q$ are piecewise linear with integer breakpoints, so $\Phi(D)=f_p(D)+f_q(\theta-D)$ is too. A minimiser can be taken at an integer point; Lemma~\ref{lem:window} restricts it to $D^*\le h(p)$, where $h(p)$ is an integer, and the moves in its proof keep integrality. If $D^*\in J(p)$, apply the hypothesis at $D^*$ and pick the minimising $i$. If $D^*<\lambda(p)$, every $g_i=(f_{p_i}-\pi(p_i))-(f_p-\pi(p))$ is nondecreasing on $(-\infty,S_p(0^+)]$ (proof of Theorem~\ref{thm:fdom}). So $\min_ig_i(D^*)\le\min_ig_i(\lambda(p))\le0$, and $\lambda(p)$ is an integer. For the bound, each surviving label must be the strict minimiser (after fixed tie-breaking) of $f-\pi$ at some integer of its window. All labels of a bucket share $v$. If $\theta-C_{\min}(v)\ge0$ their windows lie in $[0,\theta]$, which contains at most $\theta/\delta+1$ integers. Otherwise every window is the single common point $\theta-C_{\min}(v)$ and at most one label survives.
+\end{proof}
+
+\begin{remark}
+Pairwise dominance has no such bound: with $L$ free levels, $f$-functions can cross at many points. The prototype implements the pairwise rule only (Definition~\ref{def:fdom}), because it already keeps few labels (Section~\ref{sec:num}). Envelope dominance is stated for completeness and is \textbf{not} part of the tested method.
+\end{remark}
+
+%=====================================================================
+\section{Zones and a common traffic factor}\label{sec:factor}
+
+Arcs in different zones share a city-wide traffic factor $G$. Suppose $G$ takes finitely many values $g\in\mathcal G$ with probabilities $p_g$, that given $G=g$ arc $a$ has a p-box $[\Fl_{a|g},\Fu_{a|g}]$, and that the dependence between arcs given $G$ is unknown. Let $\cM^G$ be the corresponding set of joint laws of $(G,X)$.
+
+\begin{theorem}[Conditionally comonotone upper prevision]\label{thm:factor}
+$\sup_{P\in\cM^G}\E_P\varphi(T_r)=\sum_gp_g\int_0^1\varphi\big(\sum_{a\in r}\Qb_{a|g}(u)\big)du$. The robust pricing problem is an elementary shortest path problem with $\kappa|\mathcal G|$ budget resources, and functional dominance applies atom by atom. If the law of $G$ is itself only known to lie in a p-box, and the conditional p-boxes increase with $g$ in first-order dominance, the worst law of $G$ is its lower CDF and the same formula holds with that law.
+\end{theorem}
+\begin{proof}
+Conditioning on $G$ splits $\cM^G$ into a product over atoms of Fr\'echet classes, because a joint law is any mixture $\sum_gp_gP_g$ with $P_g$ in the conditional class. The supremum of a sum of terms that depend on separate variables $P_g$ is the sum of the suprema; apply Theorem~\ref{thm:main} to each atom. The resource statement follows by applying Theorem~\ref{thm:resource} per atom. For the last claim, $g\mapsto\int_0^1\varphi(\sum_a\Qb_{a|g})$ is nondecreasing when the $\Qb_{a|g}$ increase in $g$, and a nondecreasing function has its largest expectation under the stochastically largest law in the p-box of $G$.
+\end{proof}
+
+\begin{remark}[Hierarchy of resource counts]
+Unknown dependence needs $\kappa$ resources. Conditional comonotonicity given an $m$-atom factor needs $\kappa m$. A full empirical joint law with $S$ scenarios (the precise-probability sample-average model) needs $S$ scenario resources. Under independence with exact distributions, evaluating one route is already \#P-hard (counting knapsack solutions), so no finite resource description of fixed size exists unless \#P collapses. In the engine's sector model, $X_a=\sum_k\tau_{a,k}\xi_k$, arcs in the same sector are comonotone by construction, so Theorem~\ref{thm:main} applies with p-boxes on the $\xi_k$. Its value is also the worst case over the restricted class in which within-sector dependence is fixed, because the comonotone coupling belongs to that class.
+\end{remark}
+
+%=====================================================================
+\section{Numerical evidence (summary)}\label{sec:num}
+
+Full tables are in \texttt{results.md}; code is in \texttt{prototype.py} and \texttt{real\_instances.py}.
+\begin{itemize}[leftmargin=*]
+\item \textbf{Formula vs brute force.} $40$ random p-box instances with $2$--$3$ arcs: an LP over all joint pmfs on the product grid agrees with \eqref{eq:comon} to $4.5\cdot10^{-14}$ relative error. The factor model of Theorem~\ref{thm:factor} ($20$ instances) agrees to $2.5\cdot10^{-14}$.
+\item \textbf{Budget identity.} $60$ instances: the budget LP and the integer DP agree with \eqref{eq:comon} to $1.4\cdot10^{-14}$.
+\item \textbf{Exactness of BRL.} $52$ ESPPRC instances ($n\le9$, deadline fraction $0.3$--$2.0$, $K\in\{1,4,9\}$): the minimum reduced cost of BRL equals complete enumeration in all cases.
+\item \textbf{Pruning and scaling.} See \texttt{results.md}, Test D.
+\item \textbf{One level is not enough.} Test F: the fixed-$u$ sweep is suboptimal in $9/20$ instances (up to $6.4\%$), and its bound gap reaches $22\%$.
+\item \textbf{Metro instances.} See \texttt{results.md}, Test E.
+\end{itemize}
+
+%=====================================================================
+\section{Prior art: what is known and what is new}\label{sec:prior}
+
+\textbf{Known.} Equation~\eqref{eq:comon} and the stop-loss decomposition \eqref{eq:budget} for fixed marginals \cite{MN79,KDG00,DDGKV02}. Worst-case marginals of a p-box under monotone losses \cite{WD90,Ferson03}. The comonotone worst-case reduction of a CVRP with ambiguous demand marginals to a scenario CVRP solved by branch-and-cut \cite{GHW24}. Label-setting ESPPRC and resource extension functions \cite{FDGG04,ID05}. Second-order stochastic dominance between paths for \emph{independent} arc times \cite{NWH12}. Routing with lateness indices under independence \cite{AJ16} or moment ambiguity \cite{JQS16,ZBST19}. Worst-case CVaR additivity under unknown dependence. Distributionally robust project crashing without correlation information \cite{ANS19}.
+
+\textbf{New, as far as our searches show (snippet-level; see \texttt{algorithm.md}).}
+(i) Using the stop-loss decomposition to turn the per-arc budget into a \emph{decision resource} of the pricing problem (Theorem~\ref{thm:resource}). The pricing then has $\kappa$ resources instead of $L$ scenario resources.
+(ii) The completion-window functional dominance (Lemma~\ref{lem:window}, Theorem~\ref{thm:fdom}) and its exactness proof. The window argument uses the slope bounds $[-\rho,0]$, which are specific to the inf-convolution structure of comonotone sums. Under independence, concatenation is a convolution of laws, not an inf-convolution of stop-loss transforms, and Lemma~\ref{lem:infconv} fails.
+(iii) The factor extension with $\kappa|\mathcal G|$ resources (Theorem~\ref{thm:factor}).
+(iv) The evidence that the common-level shortcut is not exact (Proposition~\ref{prop:fixedu}).
+\textbf{Not claimed}: polynomial solvability (the pricing problem is NP-hard, since it contains the deterministic ESPPRC), novelty of \eqref{eq:comon}, and envelope dominance in the tested method.
+
+\begin{thebibliography}{99}
+\bibitem{MN79} I.~Meilijson, A.~N\'adas. Convex majorization with an application to the length of critical paths. \emph{J. Appl. Probab.} 16(3):671--677, 1979.
+\bibitem{KDG00} R.~Kaas, J.~Dhaene, M.~J.~Goovaerts. Upper and lower bounds for sums of random variables. \emph{Insurance Math. Econom.} 27(2):151--168, 2000.
+\bibitem{DDGKV02} J.~Dhaene, M.~Denuit, M.~J.~Goovaerts, R.~Kaas, D.~Vyncke. The concept of comonotonicity in actuarial science and finance: theory. \emph{Insurance Math. Econom.} 31(1):3--33, 2002.
+\bibitem{WD90} R.~C.~Williamson, T.~Downs. Probabilistic arithmetic I: numerical methods for calculating convolutions and dependency bounds. \emph{Int. J. Approx. Reason.} 4(2):89--158, 1990.
+\bibitem{Ferson03} S.~Ferson, V.~Kreinovich, L.~Ginzburg, D.~S.~Myers, K.~Sentz. Constructing probability boxes and Dempster--Shafer structures. Sandia Report SAND2002-4015, 2003.
+\bibitem{GHW24} S.~Ghosal, C.~P.~Ho, W.~Wiesemann. A unifying framework for the capacitated vehicle routing problem under risk and ambiguity. \emph{Oper. Res.} 72(2):425--443, 2024.
+\bibitem{FDGG04} D.~Feillet, P.~Dejax, M.~Gendreau, C.~Gueguen. An exact algorithm for the elementary shortest path problem with resource constraints. \emph{Networks} 44(3):216--229, 2004.
+\bibitem{ID05} S.~Irnich, G.~Desaulniers. Shortest path problems with resource constraints. In \emph{Column Generation}, Springer, 33--65, 2005.
+\bibitem{NWH12} Y.~Nie, X.~Wu, T.~Homem-de-Mello. Optimal path problems with second-order stochastic dominance constraints. \emph{Netw. Spat. Econ.} 12(4):561--587, 2012.
+\bibitem{AJ16} Y.~Adulyasak, P.~Jaillet. Models and algorithms for stochastic and robust vehicle routing with deadlines. \emph{Transp. Sci.} 50(2):608--626, 2016.
+\bibitem{JQS16} P.~Jaillet, J.~Qi, M.~Sim. Routing optimization under uncertainty. \emph{Oper. Res.} 64(1):186--200, 2016.
+\bibitem{ZBST19} Y.~Zhang, R.~Baldacci, M.~Sim, J.~Tang. Routing optimization with time windows under uncertainty. \emph{Math. Program.} 175:263--305, 2019.
+\bibitem{ANS19} S.~D.~Ahipa\c{s}ao\u{g}lu, K.~Natarajan, D.~Shi. Distributionally robust project crashing with partial or no correlation information. \emph{Networks} 74(1):23--42, 2019.
+\end{thebibliography}
+\end{document}

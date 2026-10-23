@@ -10,7 +10,7 @@ Calibration (stated assumptions, see results.md):
     1 + 2 x peak congestion;
   * loss in driver-hour units: fixed 2 per route, gamma = 1 per hour, rho = 3 per hour beyond the
     shift length (TomTom-free city parameter shift_hours, default 8.4 h);
-  * 22 customer zones drawn with probability proportional to population, 3-9 drops each,
+  * 22 customer zones drawn with probability proportional to population, 6-15 drops each,
     3 minutes per drop, vehicle capacity = drops_per_vehicle_per_day (default 70).
 """
 from __future__ import annotations
@@ -93,11 +93,11 @@ def build(city: str, ncust=22, K=9, ndays=60, seed=0):
                 t = TT[nodes[a], nodes[b]]
                 tau[a, b, lab[nodes[a]]] += t / 2
                 tau[a, b, lab[nodes[b]]] += t / 2
-    dem = np.concatenate([[0], rng.integers(3, 10, n)]).astype(float)
+    dem = np.concatenate([[0], rng.integers(6, 16, n)]).astype(float)
     svc = dem * 180.0
     loss = Loss(gamma=1 / 3600, rho=3 / 3600, Tmax=shift, fixed=2.0)
     P = Pricing(n, tau, svc, dem, float(cap), Qk, w, loss, np.zeros(n + 1), days)
-    meta = {"city": city, "depot_zone": depot, "cong": cong, "peak": peak, "shift_h": shift / 3600, "cap": cap,
+    meta = {"congestion_imputed": "tomtom_congestion_pct" not in pc, "city": city, "depot_zone": depot, "cong": cong, "peak": peak, "shift_h": shift / 3600, "cap": cap,
             "L": int(len(w)), "sigma_log": s, "total_drops": float(dem.sum())}
     return P, true, meta
 
@@ -254,8 +254,22 @@ def heuristic(P: Pricing, cost, model, rng, starts=3):
     return best_sol, best_val
 
 
-def column_generation(P: Pricing, cost, init_routes, tl_total=1200.0, tl_price=300.0):
+def ng_masks(P: Pricing, size=8):
+    D = P.tau.sum(-1)
+    ng = np.zeros(P.n + 1, dtype=object)
+    for i in range(1, P.n + 1):
+        near = [j for j in np.argsort(D[i, 1:] + D[1:, i]) + 1][:size]
+        m = 1 << i
+        for j in near:
+            m |= 1 << int(j)
+        ng[i] = m
+    ng[0] = 0
+    return ng
+
+
+def column_generation(P: Pricing, cost, init_routes, tl_total=1500.0, tl_price=400.0, ng_size=8):
     n = P.n
+    ng = ng_masks(P, ng_size) if ng_size else None
     cols = {}
     for r in init_routes:
         cols[tuple(r)] = cost(tuple(r), "pbox")
@@ -270,12 +284,12 @@ def column_generation(P: Pricing, cost, init_routes, tl_total=1200.0, tl_price=3
         A = np.zeros((n, len(R)))
         for k, r in enumerate(R):
             for j in r:
-                A[j - 1, k] = 1
+                A[j - 1, k] += 1
         res = linprog(c, A_ub=-A, b_ub=-np.ones(n), bounds=(0, None), method="highs")
         duals = np.concatenate([[0.0], -res.ineqlin.marginals])
         P.duals = duals
         tp = time.perf_counter()
-        best, new, st = espprc(P, "functional", time_limit=tl_price, max_cols=40)
+        best, new, st = espprc(P, "functional", time_limit=tl_price, max_cols=40, ng=ng)
         price_time += time.perf_counter() - tp
         lab_stats.append(st["labels_kept"])
         it += 1
@@ -292,8 +306,8 @@ def column_generation(P: Pricing, cost, init_routes, tl_total=1200.0, tl_price=3
         if added == 0 or time.perf_counter() - t0 > tl_total:
             break
     lp = float(res.fun)
-    # price-and-branch: integer set covering over generated columns
-    R = list(cols)
+    # price-and-branch: integer set covering over the generated elementary columns
+    R = [r for r in cols if len(set(r)) == len(r)]
     c = np.array([cols[r] for r in R])
     A = np.zeros((n, len(R)))
     for k, r in enumerate(R):
@@ -311,7 +325,8 @@ def column_generation(P: Pricing, cost, init_routes, tl_total=1200.0, tl_price=3
             fixed.append(rr)
     ub = sum(cost(tuple(r), "pbox") for r in fixed)
     return {"lp_bound": lp, "bound_is_exact": exact_bound, "ub": ub, "iters": it, "cols": len(cols),
-            "time": time.perf_counter() - t0, "pricing_time": price_time, "max_labels_kept": int(max(lab_stats))}, fixed
+            "time": time.perf_counter() - t0, "pricing_time": price_time, "max_labels_kept": int(max(lab_stats)),
+            "ng_size": ng_size, "nonelementary_cols": sum(len(set(r)) < len(r) for r in cols)}, fixed
 
 
 def testE(cities=None, ncust=22):
