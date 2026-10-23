@@ -1,0 +1,83 @@
+{
+  "city": "Cairo",
+  "display_name": "Cairo",
+  "continent": "Africa",
+  "bbox": {
+    "west": 31.1298,
+    "south": 29.9285,
+    "east": 31.4141,
+    "north": 30.1479
+  },
+  "block_cells": 4,
+  "block_deg": 0.03333333320130769,
+  "block_km_approx": 3.710666651969572,
+  "zone_count": 42,
+  "population_extract_total": 14926620.947466914,
+  "population_zones_total": 14926620.947466912,
+  "population_dropped_zones_total": 1.862645149230957e-09,
+  "population_epoch": 2025,
+  "population_source": "GHSL GHS-POP R2023A, epoch 2025, 30 arc-second global grid (EPSG:4326), Pesaresi M. et al., European Commission Joint Research Centre; file GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif",
+  "osm_source": "OpenStreetMap extract from BBBike (https://download.BBBike.org), OpenStreetMap contributors, ODbL 1.0",
+  "osm_replication_timestamp": "2026-10-16T23:00:00Z",
+  "build_date": "2026-10-23",
+  "road_km_all_zones": 11554.544589139203,
+  "road_km_major_zones": 2648.6766491746566,
+  "lane_km_major_zones": 4497.724628887742,
+  "road_km_all_extract": 15264.304053225456,
+  "road_km_major_graph": 3618.5017957855985,
+  "segments_outside_zones": 132635,
+  "graph_nodes": 119027,
+  "graph_edges": 123671,
+  "graph_stats": {
+    "ways_drivable_kept": 100372,
+    "ways_skipped_access_no": 196,
+    "ways_skipped_parking_driveway": 622,
+    "ways_skipped_missing_locations": 0,
+    "road_km_all_extract": 15264.304053225456,
+    "graph_parallel_edges_merged": 0,
+    "graph_nodes_before_lcc": 119447,
+    "graph_edges_before_lcc": 124088,
+    "graph_components_before_lcc": 9,
+    "graph_nodes_dropped_non_lcc": 420,
+    "graph_nodes": 119027,
+    "graph_edges": 123671
+  },
+  "scan_stats": {
+    "ways_drivable_kept": 100372,
+    "ways_skipped_access_no": 196,
+    "ways_skipped_parking_driveway": 622,
+    "ways_skipped_missing_locations": 0
+  },
+  "travel_access_s": 120.0,
+  "travel_unreachable_pairs": 0,
+  "travel_time_max_s": 2502.777099609375,
+  "free_speed_kmh": {
+    "motorway": 80.0,
+    "trunk": 60.0,
+    "primary": 45.0,
+    "secondary": 35.0,
+    "tertiary": 30.0
+  },
+  "link_speed_factor": 0.7,
+  "lane_defaults": {
+    "motorway": 3,
+    "trunk": 2,
+    "primary": 2,
+    "secondary": 1,
+    "tertiary": 1
+  },
+  "lane_default_link": 1,
+  "graph_class_names": [
+    "motorway",
+    "trunk",
+    "primary",
+    "secondary",
+    "tertiary",
+    "motorway_link",
+    "trunk_link",
+    "primary_link",
+    "secondary_link",
+    "tertiary_link"
+  ],
+  "build_seconds": 3.45
+}

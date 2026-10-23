@@ -1,0 +1,83 @@
+{
+  "city": "NewDelhi",
+  "display_name": "New Delhi",
+  "continent": "Asia",
+  "bbox": {
+    "west": 76.978,
+    "south": 28.44,
+    "east": 77.497,
+    "north": 28.738
+  },
+  "block_cells": 4,
+  "block_deg": 0.03333333320130769,
+  "block_km_approx": 3.710666651969572,
+  "zone_count": 120,
+  "population_extract_total": 25014749.92042002,
+  "population_zones_total": 25014749.920420025,
+  "population_dropped_zones_total": -3.725290298461914e-09,
+  "population_epoch": 2025,
+  "population_source": "GHSL GHS-POP R2023A, epoch 2025, 30 arc-second global grid (EPSG:4326), Pesaresi M. et al., European Commission Joint Research Centre; file GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif",
+  "osm_source": "OpenStreetMap extract from BBBike (https://download.BBBike.org), OpenStreetMap contributors, ODbL 1.0",
+  "osm_replication_timestamp": "2026-10-16T23:00:00Z",
+  "build_date": "2026-10-23",
+  "road_km_all_zones": 28033.75412074499,
+  "road_km_major_zones": 5556.199460136226,
+  "lane_km_major_zones": 8590.05699064821,
+  "road_km_all_extract": 31221.422509430653,
+  "road_km_major_graph": 6250.747236846678,
+  "segments_outside_zones": 97398,
+  "graph_nodes": 138542,
+  "graph_edges": 146876,
+  "graph_stats": {
+    "ways_drivable_kept": 197629,
+    "ways_skipped_access_no": 299,
+    "ways_skipped_parking_driveway": 1371,
+    "ways_skipped_missing_locations": 0,
+    "road_km_all_extract": 31221.422509430653,
+    "graph_parallel_edges_merged": 0,
+    "graph_nodes_before_lcc": 138967,
+    "graph_edges_before_lcc": 147293,
+    "graph_components_before_lcc": 11,
+    "graph_nodes_dropped_non_lcc": 425,
+    "graph_nodes": 138542,
+    "graph_edges": 146876
+  },
+  "scan_stats": {
+    "ways_drivable_kept": 197629,
+    "ways_skipped_access_no": 299,
+    "ways_skipped_parking_driveway": 1371,
+    "ways_skipped_missing_locations": 0
+  },
+  "travel_access_s": 120.0,
+  "travel_unreachable_pairs": 0,
+  "travel_time_max_s": 4997.20556640625,
+  "free_speed_kmh": {
+    "motorway": 80.0,
+    "trunk": 60.0,
+    "primary": 45.0,
+    "secondary": 35.0,
+    "tertiary": 30.0
+  },
+  "link_speed_factor": 0.7,
+  "lane_defaults": {
+    "motorway": 3,
+    "trunk": 2,
+    "primary": 2,
+    "secondary": 1,
+    "tertiary": 1
+  },
+  "lane_default_link": 1,
+  "graph_class_names": [
+    "motorway",
+    "trunk",
+    "primary",
+    "secondary",
+    "tertiary",
+    "motorway_link",
+    "trunk_link",
+    "primary_link",
+    "secondary_link",
+    "tertiary_link"
+  ],
+  "build_seconds": 8.51
+}
