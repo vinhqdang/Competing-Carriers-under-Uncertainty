@@ -1,0 +1,90 @@
+[
+ {
+  "dual_scale": 2.5,
+  "n": 12,
+  "deterministic_mean": [
+   0.551,
+   1371,
+   false,
+   -181.126
+  ],
+  "functional": [
+   0.015,
+   48,
+   false,
+   -14.659
+  ],
+  "pointwise": [
+   16.614,
+   14616,
+   false,
+   -14.659
+  ]
+ },
+ {
+  "dual_scale": 2.5,
+  "n": 16,
+  "deterministic_mean": [
+   4.857,
+   7349,
+   false,
+   -221.346
+  ],
+  "functional": [
+   0.018,
+   50,
+   false,
+   -2.611
+  ],
+  "pointwise": [
+   120.018,
+   48514,
+   true,
+   -2.611
+  ]
+ },
+ {
+  "dual_scale": 2.5,
+  "n": 20,
+  "deterministic_mean": [
+   67.906,
+   43692,
+   false,
+   -248.984
+  ],
+  "functional": [
+   0.16,
+   255,
+   false,
+   85.787
+  ],
+  "pointwise": [
+   120.006,
+   57540,
+   true,
+   85.787
+  ]
+ },
+ {
+  "dual_scale": 2.5,
+  "n": 25,
+  "deterministic_mean": [
+   120.013,
+   57300,
+   true,
+   -296.609
+  ],
+  "functional": [
+   1.825,
+   2349,
+   false,
+   -265.452
+  ],
+  "pointwise": [
+   120.032,
+   64100,
+   true,
+   -138.124
+  ]
+ }
+]

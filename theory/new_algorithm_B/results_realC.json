@@ -1,0 +1,200 @@
+[
+ {
+  "city": "Berlin",
+  "dual_scale": 1.0,
+  "enum": -1.7763568394002505e-15,
+  "brl": -8.881784197001252e-16,
+  "pointwise": -8.881784197001252e-16,
+  "enum_labels": 2697,
+  "brl_kept": 655,
+  "pointwise_kept": 701,
+  "match": 1.0
+ },
+ {
+  "city": "Berlin",
+  "dual_scale": 1.3,
+  "enum": -2.6987554413237937,
+  "brl": -2.6987554413237937,
+  "pointwise": -2.6987554413237937,
+  "enum_labels": 2697,
+  "brl_kept": 668,
+  "pointwise_kept": 701,
+  "match": 1.0
+ },
+ {
+  "city": "Bombay",
+  "dual_scale": 1.0,
+  "enum": 0.0,
+  "brl": 0.0,
+  "pointwise": 0.0,
+  "enum_labels": 2697,
+  "brl_kept": 618,
+  "pointwise_kept": 797,
+  "match": 1.0
+ },
+ {
+  "city": "Bombay",
+  "dual_scale": 1.3,
+  "enum": -2.961120065253171,
+  "brl": -2.961120065253171,
+  "pointwise": -2.961120065253171,
+  "enum_labels": 2697,
+  "brl_kept": 669,
+  "pointwise_kept": 797,
+  "match": 1.0
+ },
+ {
+  "city": "BuenosAires",
+  "dual_scale": 1.0,
+  "enum": -8.881784197001252e-16,
+  "brl": -8.881784197001252e-16,
+  "pointwise": -8.881784197001252e-16,
+  "enum_labels": 2697,
+  "brl_kept": 461,
+  "pointwise_kept": 747,
+  "match": 1.0
+ },
+ {
+  "city": "BuenosAires",
+  "dual_scale": 1.3,
+  "enum": -3.0104709813661668,
+  "brl": -3.0104709813661668,
+  "pointwise": -3.0104709813661668,
+  "enum_labels": 2697,
+  "brl_kept": 628,
+  "pointwise_kept": 747,
+  "match": 1.0
+ },
+ {
+  "city": "Cairo",
+  "dual_scale": 1.0,
+  "enum": -8.881784197001252e-16,
+  "brl": -8.881784197001252e-16,
+  "pointwise": -8.881784197001252e-16,
+  "enum_labels": 1953,
+  "brl_kept": 549,
+  "pointwise_kept": 610,
+  "match": 1.0
+ },
+ {
+  "city": "Cairo",
+  "dual_scale": 1.3,
+  "enum": -2.0128803559182833,
+  "brl": -2.0128803559182833,
+  "pointwise": -2.0128803559182833,
+  "enum_labels": 1953,
+  "brl_kept": 571,
+  "pointwise_kept": 610,
+  "match": 1.0
+ },
+ {
+  "city": "London",
+  "dual_scale": 1.0,
+  "enum": -1.7763568394002505e-15,
+  "brl": -1.7763568394002505e-15,
+  "pointwise": -1.7763568394002505e-15,
+  "enum_labels": 2697,
+  "brl_kept": 569,
+  "pointwise_kept": 712,
+  "match": 1.0
+ },
+ {
+  "city": "London",
+  "dual_scale": 1.3,
+  "enum": -3.3140499879117193,
+  "brl": -3.3140499879117193,
+  "pointwise": -3.3140499879117193,
+  "enum_labels": 2697,
+  "brl_kept": 660,
+  "pointwise_kept": 712,
+  "match": 1.0
+ },
+ {
+  "city": "Moscow",
+  "dual_scale": 1.0,
+  "enum": -1.7763568394002505e-15,
+  "brl": -1.7763568394002505e-15,
+  "pointwise": -1.7763568394002505e-15,
+  "enum_labels": 2697,
+  "brl_kept": 460,
+  "pointwise_kept": 696,
+  "match": 1.0
+ },
+ {
+  "city": "Moscow",
+  "dual_scale": 1.3,
+  "enum": -2.7529656755388316,
+  "brl": -2.7529656755388316,
+  "pointwise": -2.7529656755388316,
+  "enum_labels": 2697,
+  "brl_kept": 598,
+  "pointwise_kept": 696,
+  "match": 1.0
+ },
+ {
+  "city": "NewDelhi",
+  "dual_scale": 1.0,
+  "enum": -1.7763568394002505e-15,
+  "brl": -1.7763568394002505e-15,
+  "pointwise": -1.7763568394002505e-15,
+  "enum_labels": 2697,
+  "brl_kept": 461,
+  "pointwise_kept": 747,
+  "match": 1.0
+ },
+ {
+  "city": "NewDelhi",
+  "dual_scale": 1.3,
+  "enum": -4.129157468284038,
+  "brl": -4.129157468284038,
+  "pointwise": -4.129157468284038,
+  "enum_labels": 2697,
+  "brl_kept": 615,
+  "pointwise_kept": 747,
+  "match": 1.0
+ },
+ {
+  "city": "NewYork",
+  "dual_scale": 1.0,
+  "enum": -1.7763568394002505e-15,
+  "brl": -1.7763568394002505e-15,
+  "pointwise": -1.7763568394002505e-15,
+  "enum_labels": 2697,
+  "brl_kept": 646,
+  "pointwise_kept": 737,
+  "match": 1.0
+ },
+ {
+  "city": "NewYork",
+  "dual_scale": 1.3,
+  "enum": -2.5100807075842813,
+  "brl": -2.5100807075842813,
+  "pointwise": -2.5100807075842813,
+  "enum_labels": 2697,
+  "brl_kept": 679,
+  "pointwise_kept": 737,
+  "match": 1.0
+ },
+ {
+  "city": "Paris",
+  "dual_scale": 1.0,
+  "enum": -8.881784197001252e-16,
+  "brl": -8.881784197001252e-16,
+  "pointwise": -8.881784197001252e-16,
+  "enum_labels": 2697,
+  "brl_kept": 658,
+  "pointwise_kept": 706,
+  "match": 1.0
+ },
+ {
+  "city": "Paris",
+  "dual_scale": 1.3,
+  "enum": -2.3086110212325384,
+  "brl": -2.3086110212325384,
+  "pointwise": -2.3086110212325384,
+  "enum_labels": 2697,
+  "brl_kept": 671,
+  "pointwise_kept": 706,
+  "match": 1.0
+ }
+]

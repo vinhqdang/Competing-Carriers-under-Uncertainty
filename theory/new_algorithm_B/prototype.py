@@ -395,7 +395,7 @@ def espprc(P: Pricing, rule: str, time_limit: float = 120.0, max_cols: int = 50,
                 if rule == "scenario":
                     S = np.sort(S) if False else S
                 done = Label(0, lab.mask, lab.load, lab.tau + P.tau[i, 0], S, lab.pi, w, lab)
-                rc = label_cost_final(done, P, rule) + P.loss.fixed
+                rc = label_cost_final(done, P, rule)  # fixed cost is inside cost_profile
                 if rc < best:
                     best = rc
                 if rc < -1e-9:
@@ -498,7 +498,7 @@ def testC(rng, trials=12):
     print("testC ok", [(r["n"], r["enum_labels"], r["pointwise_labels"], r["functional_labels"]) for r in rows])
 
 
-def testD(rng, sizes=(10, 15, 20, 25, 30), reps=2, tl=120.0):
+def testD(rng, sizes=(10, 15, 20, 25), reps=2, tl=60.0):
     import copy
 
     rows = []
@@ -514,7 +514,9 @@ def testD(rng, sizes=(10, 15, 20, 25, 30), reps=2, tl=120.0):
                 row[rule] = {"best": b, "time": round(st["time"], 3), "kept": st["labels_kept"],
                              "created": st["labels_created"], "timeout": st["timed_out"]}
             rows.append(row)
-            print("testD", n, r, {k: (v["time"], v["kept"], v["timeout"]) for k, v in row.items() if isinstance(v, dict)})
+            with open(ROOT + "/theory/new_algorithm_B/results_D.jsonl", "a") as fh:
+                fh.write(json.dumps(row, default=float) + "\n")
+            print("testD", n, r, {k: (v["time"], v["kept"], v["timeout"]) for k, v in row.items() if isinstance(v, dict)}, flush=True)
     OUT["testD"] = rows
 
 

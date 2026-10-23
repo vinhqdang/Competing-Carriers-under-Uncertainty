@@ -44,7 +44,9 @@ Column generation uses this pricing. The master is set covering with exact route
 
 Add-on: since the pricing is exact, the final master value is a valid lower bound on the robust optimum. It turns any integer plan into a certified gap. This is a by-product and not the contribution.
 
-Several kinks (`kappa > 1`): labels carry one window per kink and the test is applied per kink (Remark 3.8). A common traffic factor with m atoms gives `kappa*m` resources (Theorem 7.1).
+Several kinks (`kappa > 1`): labels carry one window per kink and the test is applied per kink (Remark 3.8).
+
+ng-routes: replace the visited set by the ng-memory; the dominance test is unchanged and still valid (Section 4 of `theory.tex`). This is what makes the 22-zone metro instances tractable in pure Python. A common traffic factor with m atoms gives `kappa*m` resources (Theorem 7.1).
 
 ## 3. Closest prior art and what is new
 
@@ -59,7 +61,7 @@ Several kinks (`kappa > 1`): labels carry one window per kink and the test is ap
 | Mean-covariance correlated travel times in branch-price-and-cut | Known, different model | Rostami, Desaulniers, Errico & Lodi, Oper. Res. 2021 |
 | DR project crashing without correlation information | Known, different problem | Ahipasaoglu, Natarajan & Shi, Networks 2019 |
 | **Per-arc budget as a decision resource of the pricing problem, kappa resources independent of L** | **New as far as found** | Theorem 2.5 |
-| **Completion-window functional dominance and its exactness proof** | **New as far as found** | Lemma 3.2, Thm 3.4, Thm 4.1 |
+| **Completion-window functional dominance and its exactness proof** | **New as far as found** | Lemma 3.2, Thm 3.5, Thm 4.1 |
 | Envelope dominance with `Tmax/delta + 1` labels per bucket | New, proved, **not implemented or tested** | Prop. 6.1 |
 | Factor extension (kappa*m resources) | New as stated; a direct corollary | Thm 7.1 |
 | Fixed-u (single risk level) sweep is not exact | Numerical observation plus an elementary bound | Prop. 5.1, Test F |
@@ -85,9 +87,16 @@ No source found applies the stop-loss decomposition as a labelling resource, or 
 
 **What it reduces to when things degenerate.** With rho = 0 (risk-neutral) BRL is a standard ESPPRC with scalar cost. With L = 1 (a p-box collapsed to a point) the robust model is deterministic. With independent arcs the method does **not** apply (Lemma 3.1 fails).
 
-## 4. What did not survive, or was not pursued
+## 4. Outcome in numbers (details in `results.md`)
 
-- **Quantile-vector dominance (direction (b) of the brief as first stated).** It is valid but weak (Prop. 3.5). It keeps 10-100x more labels and times out where BRL finishes; it is used as the baseline.
+- Exact against enumeration in 70/70 pricing instances (52 random, 18 real metro).
+- Random pricing, n = 10-25: BRL 0.004-1.8 s. Quantile-vector, sector-vector and SAA-scenario labelling hit 60-120 s limits from n = 15, and the risk-neutral ESPPRC times out at n = 25 with large duals.
+- Nine metro instances: column generation converges in 13-680 s. Better than every heuristic in New York (-10%, proved optimal) and Buenos Aires (-1.9%); equal in 4 cities. **Worse** than an SAA-optimised heuristic in Berlin, London and Paris (0.1-1.3%), because price-and-branch without branching is not an exact integer method. Branch-and-price with BRL pricing is the obvious next step and is not implemented.
+- The robust criterion itself is conservative on these calibrations: 21-36% above the true expected cost. This is a modelling trade-off, not an algorithmic one.
+
+## 5. What did not survive, or was not pursued
+
+- **Quantile-vector dominance (direction (b) of the research plan).** It is valid but weak (Prop. 3.6). It keeps 10-100x more labels and times out where BRL finishes; it is used as the baseline.
 - **Single-level Lagrangian / fixed-u CVaR arc costs** as an exact method: refuted (Test F, 9/20 suboptimal, bound gap up to 22%). As a heuristic it is good on tiny instances (optimal in 10/10 with n=8, cap=3).
 - **Lower previsions** (best case over couplings) have no comonotone-type closed form for 3+ arcs; not pursued.
 - **Imprecise Markov / lower-prevision value iteration over zones (direction (c))**: not pursued. The zone structure here is static and enters only through prices, so a Bellman contraction adds nothing that Theorem 7.1 does not already give.

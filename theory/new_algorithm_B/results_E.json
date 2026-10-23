@@ -1,0 +1,506 @@
+[
+ {
+  "congestion_imputed": false,
+  "city": "Berlin",
+  "depot_zone": 508,
+  "cong": 0.446,
+  "peak": 1.01,
+  "shift_h": 8.4,
+  "cap": 126.0,
+  "L": 51,
+  "sigma_log": 0.21414088627455108,
+  "total_drops": 243.0,
+  "heur_pbox_time": 0.1251860810002654,
+  "heur_saa_time": 0.17663594499981627,
+  "heur_wass_time": 0.20262422199994035,
+  "cg": {
+   "lp_bound": 51.85351533627651,
+   "bound_is_exact": true,
+   "ub": 52.66584871527775,
+   "iters": 27,
+   "cols": 1026,
+   "time": 254.79490309499988,
+   "pricing_time": 253.97665362899943,
+   "max_labels_kept": 3162,
+   "ng_size": 8,
+   "nonelementary_cols": 461,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 52.77461840642257,
+   "indep_pbox": 50.03636679745031,
+   "saa": 40.03632274525356,
+   "true": 38.86585658734669
+  },
+  "pbox_routes": 4,
+  "saa_eval": {
+   "pbox": 52.54787556710338,
+   "indep_pbox": 49.767086695153935,
+   "saa": 39.73112078561514,
+   "true": 38.74644985469162
+  },
+  "saa_routes": 4,
+  "wass_eval": {
+   "pbox": 52.940098326836186,
+   "indep_pbox": 49.780288214888685,
+   "saa": 39.90795996418315,
+   "true": 38.85392858255997
+  },
+  "wass_routes": 4,
+  "brl_cg_eval": {
+   "pbox": 52.66584871527775,
+   "indep_pbox": 49.92497178926913,
+   "saa": 39.89671525453167,
+   "true": 38.805338235626145
+  },
+  "brl_cg_routes": 4
+ },
+ {
+  "congestion_imputed": false,
+  "city": "Bombay",
+  "depot_zone": 30,
+  "cong": 0.632,
+  "peak": 1.29,
+  "shift_h": 10.0,
+  "cap": 40.0,
+  "L": 51,
+  "sigma_log": 0.22073391602849224,
+  "total_drops": 258.0,
+  "heur_pbox_time": 0.011768397000196273,
+  "heur_saa_time": 0.01680346200009808,
+  "heur_wass_time": 0.0187144630003786,
+  "cg": {
+   "lp_bound": 53.339658965830616,
+   "bound_is_exact": true,
+   "ub": 54.08070561948168,
+   "iters": 13,
+   "cols": 419,
+   "time": 19.983093110000027,
+   "pricing_time": 19.85526723399971,
+   "max_labels_kept": 1684,
+   "ng_size": 8,
+   "nonelementary_cols": 87,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 54.08070561948168,
+   "indep_pbox": 54.11827386038506,
+   "saa": 48.53222281363946,
+   "true": 48.03850902388631
+  },
+  "pbox_routes": 7,
+  "saa_eval": {
+   "pbox": 54.08070561948168,
+   "indep_pbox": 54.11827386038506,
+   "saa": 48.53222281363946,
+   "true": 48.03850902388631
+  },
+  "saa_routes": 7,
+  "wass_eval": {
+   "pbox": 54.08070561948168,
+   "indep_pbox": 54.11827386038506,
+   "saa": 48.53222281363946,
+   "true": 48.03850902388631
+  },
+  "wass_routes": 7,
+  "brl_cg_eval": {
+   "pbox": 54.08070561948168,
+   "indep_pbox": 54.11827386038506,
+   "saa": 48.53222281363946,
+   "true": 48.03850902388631
+  },
+  "brl_cg_routes": 7
+ },
+ {
+  "congestion_imputed": false,
+  "city": "BuenosAires",
+  "depot_zone": 102,
+  "cong": 0.48100000000000004,
+  "peak": 1.44,
+  "shift_h": 8.4,
+  "cap": 70.0,
+  "L": 51,
+  "sigma_log": 0.3383003436286125,
+  "total_drops": 253.0,
+  "heur_pbox_time": 0.019948831999954564,
+  "heur_saa_time": 0.06090605700001106,
+  "heur_wass_time": 0.08013122200009093,
+  "cg": {
+   "lp_bound": 47.292085336271484,
+   "bound_is_exact": true,
+   "ub": 48.370759541641824,
+   "iters": 23,
+   "cols": 874,
+   "time": 149.98657031699986,
+   "pricing_time": 149.75776179899958,
+   "max_labels_kept": 2865,
+   "ng_size": 8,
+   "nonelementary_cols": 202,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 49.30075473564037,
+   "indep_pbox": 45.934085019368986,
+   "saa": 36.1146650162434,
+   "true": 34.89898238270735
+  },
+  "pbox_routes": 4,
+  "saa_eval": {
+   "pbox": 49.452594410783036,
+   "indep_pbox": 44.8254159750689,
+   "saa": 35.690486590654686,
+   "true": 34.770250441384206
+  },
+  "saa_routes": 4,
+  "wass_eval": {
+   "pbox": 49.471524163769324,
+   "indep_pbox": 44.73081303496135,
+   "saa": 35.707142890131024,
+   "true": 34.76582989193555
+  },
+  "wass_routes": 4,
+  "brl_cg_eval": {
+   "pbox": 48.370759541641824,
+   "indep_pbox": 45.17609485487851,
+   "saa": 38.194052247088955,
+   "true": 37.30590842144567
+  },
+  "brl_cg_routes": 5
+ },
+ {
+  "congestion_imputed": false,
+  "city": "Cairo",
+  "depot_zone": 8,
+  "cong": 0.405,
+  "peak": 1.22,
+  "shift_h": 8.4,
+  "cap": 40.0,
+  "L": 51,
+  "sigma_log": 0.30668568198534096,
+  "total_drops": 247.0,
+  "heur_pbox_time": 0.017095240000344347,
+  "heur_saa_time": 0.02370861099961985,
+  "heur_wass_time": 0.023170661000222026,
+  "cg": {
+   "lp_bound": 38.81064956519264,
+   "bound_is_exact": true,
+   "ub": 40.419455854534135,
+   "iters": 13,
+   "cols": 448,
+   "time": 35.74103830700005,
+   "pricing_time": 33.895148015999894,
+   "max_labels_kept": 2017,
+   "ng_size": 8,
+   "nonelementary_cols": 135,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 40.419455854534135,
+   "indep_pbox": 40.42142205941009,
+   "saa": 37.110991956986176,
+   "true": 36.583352490509924
+  },
+  "pbox_routes": 7,
+  "saa_eval": {
+   "pbox": 40.419455854534135,
+   "indep_pbox": 40.42142205941009,
+   "saa": 37.110991956986176,
+   "true": 36.583352490509924
+  },
+  "saa_routes": 7,
+  "wass_eval": {
+   "pbox": 40.43348531943519,
+   "indep_pbox": 40.43534013356773,
+   "saa": 37.12472802118124,
+   "true": 36.589139683467394
+  },
+  "wass_routes": 7,
+  "brl_cg_eval": {
+   "pbox": 40.419455854534135,
+   "indep_pbox": 40.42142205941009,
+   "saa": 37.110991956986176,
+   "true": 36.583352490509924
+  },
+  "brl_cg_routes": 7
+ },
+ {
+  "congestion_imputed": false,
+  "city": "London",
+  "depot_zone": 149,
+  "cong": 0.516,
+  "peak": 1.38,
+  "shift_h": 7.3,
+  "cap": 72.0,
+  "L": 51,
+  "sigma_log": 0.30187878466848983,
+  "total_drops": 233.0,
+  "heur_pbox_time": 0.0374406179998914,
+  "heur_saa_time": 0.0641955380001491,
+  "heur_wass_time": 0.05295273899992026,
+  "cg": {
+   "lp_bound": 51.038588411909195,
+   "bound_is_exact": true,
+   "ub": 52.03490260894314,
+   "iters": 32,
+   "cols": 1176,
+   "time": 249.54766443300014,
+   "pricing_time": 248.76317524100068,
+   "max_labels_kept": 3464,
+   "ng_size": 8,
+   "nonelementary_cols": 286,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 52.03490260894314,
+   "indep_pbox": 49.29993399490496,
+   "saa": 36.825946166111756,
+   "true": 36.01512680645655
+  },
+  "pbox_routes": 4,
+  "saa_eval": {
+   "pbox": 51.37667379690383,
+   "indep_pbox": 48.88535154032705,
+   "saa": 36.19524573459991,
+   "true": 35.52460774201036
+  },
+  "saa_routes": 4,
+  "wass_eval": {
+   "pbox": 52.445518935763786,
+   "indep_pbox": 49.65487725278548,
+   "saa": 36.96261498751668,
+   "true": 36.156429668856454
+  },
+  "wass_routes": 4,
+  "brl_cg_eval": {
+   "pbox": 52.03490260894314,
+   "indep_pbox": 49.29993399490496,
+   "saa": 36.825946166111756,
+   "true": 36.01512680645655
+  },
+  "brl_cg_routes": 4
+ },
+ {
+  "congestion_imputed": true,
+  "city": "Moscow",
+  "depot_zone": 44,
+  "cong": 0.49625,
+  "peak": 1.36125,
+  "shift_h": 8.4,
+  "cap": 70.0,
+  "L": 51,
+  "sigma_log": 0.30575891785200704,
+  "total_drops": 255.0,
+  "heur_pbox_time": 0.017053688000032707,
+  "heur_saa_time": 0.03205465399969398,
+  "heur_wass_time": 0.032505665000371664,
+  "cg": {
+   "lp_bound": 42.009346146893954,
+   "bound_is_exact": true,
+   "ub": 43.64584706315443,
+   "iters": 27,
+   "cols": 1007,
+   "time": 149.28069862699977,
+   "pricing_time": 149.06068538399995,
+   "max_labels_kept": 2575,
+   "ng_size": 8,
+   "nonelementary_cols": 286,
+   "min_rc_known_routes": -3.552713678800501e-15
+  },
+  "pbox_eval": {
+   "pbox": 43.64584706315443,
+   "indep_pbox": 40.66110220577634,
+   "saa": 33.76015114142585,
+   "true": 33.21876862503544
+  },
+  "pbox_routes": 4,
+  "saa_eval": {
+   "pbox": 43.7388543413425,
+   "indep_pbox": 40.26378323310181,
+   "saa": 33.744230064254424,
+   "true": 33.24951274795704
+  },
+  "saa_routes": 4,
+  "wass_eval": {
+   "pbox": 43.7388543413425,
+   "indep_pbox": 40.26378323310181,
+   "saa": 33.744230064254424,
+   "true": 33.24951274795704
+  },
+  "wass_routes": 4,
+  "brl_cg_eval": {
+   "pbox": 43.64584706315443,
+   "indep_pbox": 40.66110220577634,
+   "saa": 33.76015114142585,
+   "true": 33.21876862503544
+  },
+  "brl_cg_routes": 4
+ },
+ {
+  "congestion_imputed": false,
+  "city": "NewDelhi",
+  "depot_zone": 102,
+  "cong": 0.602,
+  "peak": 1.92,
+  "shift_h": 10.0,
+  "cap": 40.0,
+  "L": 51,
+  "sigma_log": 0.4180674571387577,
+  "total_drops": 258.0,
+  "heur_pbox_time": 0.009629929999846354,
+  "heur_saa_time": 0.01195028199981607,
+  "heur_wass_time": 0.012134623999827454,
+  "cg": {
+   "lp_bound": 63.025795585892354,
+   "bound_is_exact": true,
+   "ub": 63.18348065805951,
+   "iters": 15,
+   "cols": 464,
+   "time": 13.06628820700007,
+   "pricing_time": 12.985479928001041,
+   "max_labels_kept": 1136,
+   "ng_size": 8,
+   "nonelementary_cols": 61,
+   "min_rc_known_routes": 0.0
+  },
+  "pbox_eval": {
+   "pbox": 63.18348065805951,
+   "indep_pbox": 59.147834290490955,
+   "saa": 48.92017044610481,
+   "true": 47.60158354088874
+  },
+  "pbox_routes": 7,
+  "saa_eval": {
+   "pbox": 63.18348065805951,
+   "indep_pbox": 59.147834290490955,
+   "saa": 48.92017044610481,
+   "true": 47.60158354088874
+  },
+  "saa_routes": 7,
+  "wass_eval": {
+   "pbox": 63.18362873176295,
+   "indep_pbox": 59.1479290730403,
+   "saa": 48.920327349988106,
+   "true": 47.60151947742336
+  },
+  "wass_routes": 7,
+  "brl_cg_eval": {
+   "pbox": 63.18348065805951,
+   "indep_pbox": 59.147834290490955,
+   "saa": 48.92017044610481,
+   "true": 47.60158354088874
+  },
+  "brl_cg_routes": 7
+ },
+ {
+  "congestion_imputed": false,
+  "city": "NewYork",
+  "depot_zone": 122,
+  "cong": 0.488,
+  "peak": 1.47,
+  "shift_h": 8.4,
+  "cap": 120.0,
+  "L": 51,
+  "sigma_log": 0.34405627656611193,
+  "total_drops": 253.0,
+  "heur_pbox_time": 0.08061733700014884,
+  "heur_saa_time": 0.09613428700004079,
+  "heur_wass_time": 0.2424528569999893,
+  "cg": {
+   "lp_bound": 46.0987698891584,
+   "bound_is_exact": true,
+   "ub": 46.0987698891584,
+   "iters": 70,
+   "cols": 2337,
+   "time": 680.1182726710003,
+   "pricing_time": 679.1751351399989,
+   "max_labels_kept": 3365,
+   "ng_size": 8,
+   "nonelementary_cols": 723,
+   "min_rc_known_routes": 0.7913541288797319
+  },
+  "pbox_eval": {
+   "pbox": 51.22955238703296,
+   "indep_pbox": 49.33149799162816,
+   "saa": 35.78571755634513,
+   "true": 33.84619450243018
+  },
+  "pbox_routes": 3,
+  "saa_eval": {
+   "pbox": 51.70542885564533,
+   "indep_pbox": 49.69042184308295,
+   "saa": 36.021234975037586,
+   "true": 34.44329474303663
+  },
+  "saa_routes": 3,
+  "wass_eval": {
+   "pbox": 51.22955238703296,
+   "indep_pbox": 49.33149799162816,
+   "saa": 35.78571755634513,
+   "true": 33.84619450243018
+  },
+  "wass_routes": 3,
+  "brl_cg_eval": {
+   "pbox": 46.0987698891584,
+   "indep_pbox": 43.76016093441643,
+   "saa": 36.898682032480195,
+   "true": 36.08913183774769
+  },
+  "brl_cg_routes": 5
+ },
+ {
+  "congestion_imputed": false,
+  "city": "Paris",
+  "depot_zone": 164,
+  "cong": 0.4,
+  "peak": 1.16,
+  "shift_h": 8.4,
+  "cap": 70.0,
+  "L": 51,
+  "sigma_log": 0.28899372057122164,
+  "total_drops": 255.0,
+  "heur_pbox_time": 0.016826944999593252,
+  "heur_saa_time": 0.020739966000292043,
+  "heur_wass_time": 0.026804523000464542,
+  "cg": {
+   "lp_bound": 37.73168384437707,
+   "bound_is_exact": true,
+   "ub": 38.316951793171455,
+   "iters": 29,
+   "cols": 1092,
+   "time": 304.4758301939992,
+   "pricing_time": 304.2144350529943,
+   "max_labels_kept": 2981,
+   "ng_size": 8,
+   "nonelementary_cols": 454,
+   "min_rc_known_routes": -1.7763568394002505e-15
+  },
+  "pbox_eval": {
+   "pbox": 38.316951793171455,
+   "indep_pbox": 35.775113833512975,
+   "saa": 32.09079015958632,
+   "true": 31.663419410884632
+  },
+  "pbox_routes": 4,
+  "saa_eval": {
+   "pbox": 38.28546511544811,
+   "indep_pbox": 36.13284523958923,
+   "saa": 32.094879162473184,
+   "true": 31.661139012020183
+  },
+  "saa_routes": 4,
+  "wass_eval": {
+   "pbox": 38.74252032137297,
+   "indep_pbox": 36.08046702956487,
+   "saa": 32.094658279481344,
+   "true": 31.671159733877953
+  },
+  "wass_routes": 4,
+  "brl_cg_eval": {
+   "pbox": 38.316951793171455,
+   "indep_pbox": 35.775113833512975,
+   "saa": 32.09079015958632,
+   "true": 31.663419410884632
+  },
+  "brl_cg_routes": 4
+ }
+]

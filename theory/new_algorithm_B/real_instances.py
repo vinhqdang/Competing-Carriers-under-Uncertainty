@@ -343,6 +343,9 @@ def testE(cities=None, ncust=22):
             sols[model] = sol
             row[f"heur_{model}_time"] = time.perf_counter() - t0
         cg, cg_sol = column_generation(P, cost, sols["pbox"])
+        # safety check: no known route may have negative reduced cost at the final duals
+        known = [tuple(r) for sol in sols.values() for r in sol]
+        cg["min_rc_known_routes"] = min(cost(r, "pbox") - float(P.duals[list(r)].sum()) for r in known)
         sols["brl_cg"] = cg_sol
         row["cg"] = cg
         for name, sol in sols.items():
