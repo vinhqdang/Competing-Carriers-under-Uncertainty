@@ -207,3 +207,70 @@ def make_game(N=4, Z=20, seed=0, regime="D1", support=0.5, Dmax=6, local=True, s
     gc = rng.uniform(0.5, 1.5, Z)
     gmu = rng.uniform(0.5, 1.0, Z)
     return Game(Z=Z, carriers=carriers, alpha=alpha, b=b, gc=gc, gmu=gmu, regime=regime)
+
+
+# ---------------------------------------------------------------------------------------------------- real cities
+CITY_ROW = {"NewDelhi": "New Delhi", "Bombay": "Mumbai", "BuenosAires": "Buenos Aires", "NewYork": "New York"}
+
+
+def make_city_game(city: str, seed: int = 0, regime: str = "D1", support_q: float = 0.5, Dcap: int = 8,
+                   root: str = "/home/user/Competing-Carriers-under-Uncertainty") -> Game:
+    """Zone-level proxy game on a real city map (data/processed/<city>, data/parameters/city_parameters_wide.csv).
+
+    Demand per zone ~ population x parcels per capita x carrier share, in units of U parcels (U chosen per city so
+    that carrier-zone demands are at most Dcap units). Carrier i has a depot zone drawn by depot_score and serves the
+    support_q fraction of zones nearest to it by travel time. Vehicle-visit hours come from the zone travel-time
+    matrix; time is valued at the driver wage; congestion slope is inversely proportional to major lane-km.
+    This is a calibrated proxy of the routing oracle (exact DP), not a street-level VRP.
+    """
+    import csv
+    rng = np.random.default_rng(seed)
+    zf = f"{root}/data/processed/{city}/zones.csv"
+    zr = np.genfromtxt(zf, delimiter=",", names=True)
+    T = np.load(f"{root}/data/processed/{city}/travel_time_matrix.npy") / 3600.0
+    name = CITY_ROW.get(city, city)
+    with open(f"{root}/data/parameters/city_parameters_wide.csv") as fh:
+        P = {r["city"]: r for r in csv.DictReader(fh)}[name]
+    ppc = float(P["parcels_per_capita_per_day"])
+    N = int(P["n_major_carriers"])
+    van = float(P["van_capacity_parcels"])
+    drops = float(P["drops_per_vehicle_per_day"])
+    shift = float(P["shift_hours"])
+    fee = float(P["delivery_fee_usd"])
+    wage = float(P["driver_wage_usd_per_hour"])
+    cong = float(P["tomtom_congestion_pct"]) / 100.0
+    Z = len(zr)
+    pop = np.maximum(zr["pop"], 0.0)
+    share = rng.dirichlet(np.full(N, 4.0))
+    parcels = np.outer(share, pop * ppc)  # (N, Z)
+    depot_w = zr["depot_score"] + 1e-3
+    depots = rng.choice(Z, N, replace=False, p=depot_w / depot_w.sum())
+    raw = []
+    for i in range(N):
+        order = np.argsort(T[depots[i]])
+        raw.append(order[: max(2, int(support_q * Z))])
+    vals = np.concatenate([parcels[i, raw[i]] for i in range(N)])
+    U = max(1.0, float(np.quantile(vals, 0.9)) / Dcap)
+    lane = np.maximum(zr["lane_km_major"], 1.0)
+    carriers = []
+    for i in range(N):
+        S = np.sort(raw[i])
+        D = np.zeros(Z)
+        D[S] = np.minimum(Dcap, np.round(parcels[i, S] / U))
+        S = S[D[S] > 0]
+        tt = T[depots[i]] + 0.25
+        carriers.append(Carrier(
+            S=S, D=D,
+            v=np.full(Z, 0.1 * fee * U), kap=wage * 0.5 + 0.0 * tt,
+            t=tt, s=np.full(Z, U * shift / drops),
+            F=float(wage * shift), R=max(2, int(round(shift / max(0.5, float(np.median(tt[S])) if len(S) else 1.0)))),
+            cap=max(1, int(round(van / U))),
+        ))
+    totD = sum(c.D for c in carriers)
+    alpha = np.full(Z, 1.5 * fee * U)
+    b = alpha / (2.0 * np.maximum(totD, 1.0))
+    gc = wage * cong * float(np.median(lane)) / lane / 10.0
+    gmu = np.full(Z, wage * (1.0 + cong))
+    g = Game(Z=Z, carriers=carriers, alpha=alpha, b=b, gc=gc, gmu=gmu, regime=regime)
+    g.unit = U
+    return g

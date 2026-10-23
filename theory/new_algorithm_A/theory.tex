@@ -1,0 +1,254 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Abar}{\bar A}
+\newcommand{\Amax}{A^{\max}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\sd}{\partial^{+}}
+\newcommand{\ICNE}{\mathrm{ICNE}}
+
+\title{Zone-Market Clearing:\\ a dimension-free price search for pure equilibria\\ of aggregative carrier games with a routing oracle}
+\author{Quang-Vinh Dang\\ British University Vietnam, Hung Yen, Vietnam\\ \texttt{vinh.dq4@buv.edu.vn} \quad ORCID 0000-0002-3877-8024}
+\date{Theory notes, direction A}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the affine, exposure-based (D1) carrier game of \texttt{theory/main.tex}. $N$ carriers choose plans from huge finite sets through an NP-hard routing oracle, and they interact only through $d=2Z$ zone aggregates. Each oracle call is one routing solve. We propose \emph{Zone-Market Clearing} (ZMC). All carriers are priced at one common vector $\lambda\in\R^d$, the shadow price of the zone aggregates in the dual of the convexified potential. Each round costs $N$ independent (parallel) routing solves and returns, for \emph{every} zone at once, the signed clearing residual $s_k=A_k(\lambda)-\lambda_k/M_k$. Each coordinate keeps its own bracket and moves by safeguarded secant steps. Two structural results support the method. First, a \emph{clearing identity} (Theorem~\ref{thm:clear}): for any price and any profile of pricing-optimal plans, the potential gap to the convexified optimum is exactly $\tfrac12\|e\|_M^2$, where $e=M^{-1}\lambda-A$ is the market-clearing error, and each carrier's Nash regret is at most $\tfrac12\|e\|^2_M$ restricted to its own zones. The own-contribution term, which appears in the Shapley--Folkman bounds and cannot be removed there, cancels exactly. Second, a \emph{diagonal monotonicity} theorem (Theorem~\ref{thm:bracket}): the coordinatewise sign of the residual localises the optimal price coordinate up to $M_k\kappa_k$, where $\kappa_k$ is the cross-zone variation of the response. Hence $T$ rounds, that is $NT$ oracle calls, give every coordinate to accuracy $M_k\Amax_k2^{-\lceil T/2\rceil}+M_k\kappa_k$, independently of $Z$. Black-box methods on the same dual pay either $1/\varepsilon$ calls (Frank--Wolfe, subgradient) or a factor $d$ (cutting planes). The pure equilibrium is then obtained by oracle-free rounding over the collected plans and a best-response polish whose length is bounded by the clearing error. In prototypes ($Z\le250$, $N\le6$) ZMC needs a constant number of rounds as $Z$ grows. At an equal budget of about $60$ oracle calls, its pure equilibria have a smaller potential gap than those of Frank--Wolfe and column generation in $17$ of $20$ instances. They come within $20\%$ of full column generation, which needs $3$ to $13$ times more calls. On nine real city maps with a zone-level proxy oracle, the advantage is clear only on the largest map (Berlin, $593$ zones). On the others all methods, plain best response included, are within a few percent of each other. Section~\ref{sec:limits} lists the limits: the floor $M_k\kappa_k$, the restriction to D1 (and to $\Gamma$-maximin through the surcharge), and the proxy oracle used for the city maps.
+\end{abstract}
+
+\section{Setting}\label{sec:setting}
+
+\begin{assumption}[D1 affine aggregative game]\label{ass:game}
+There are $N$ carriers and $d$ aggregate coordinates. Carrier $i$ has a finite plan set $\cP_i$. Each plan $p\in\cP_i$ has a contribution $a_i(p)\in\R^d_{\ge0}$ and a private cost $c_i(p)\in\R$; the private cost includes the carrier's own-term and any charges $\ip{t}{a_i(p)}$ posted by the city. The coupling matrix is $M=\operatorname{diag}(M_1,\dots,M_d)$ with $M_k>0$. At a pure profile $\sigma$, with $A(\sigma)=\sum_ia_i(\sigma_i)$ and $A_{-i}=A-a_i(\sigma_i)$, carrier $i$ pays
+\[J_i(p;\sigma_{-i})=c_i(p)+\ip{a_i(p)}{MA_{-i}(\sigma)}.\]
+\end{assumption}
+
+This is Example~2.2 of \texttt{main.tex} under D1 with costs instead of profits, with $a=(q,\tau)$ and $M=\operatorname{diag}(b,\gamma c)$. Coordinates with $M_k=0$ carry no interaction and are dropped. By Lemma~3.6 of \texttt{main.tex}, $\Gamma$-maximin equilibria under credal boxes are the pure Nash equilibria of the same game with the surcharge $\delta\ip{a_i(p)}{Mw}+\gamma\ip{t_i(p)}{\bar\mu}$ added to $c_i$. Everything below therefore applies verbatim to the $\Gamma$-maximin problem.
+
+Put $\tilde c_i(p)=c_i(p)-\tfrac12\|a_i(p)\|_M^2$, where $\|v\|_M^2=\ip{v}{Mv}$ and $\|v\|^2_{M^{-1}}=\ip{v}{M^{-1}v}$. The function
+\[\Phi(\sigma)=\sum_i\tilde c_i(\sigma_i)+\tfrac12\|A(\sigma)\|_M^2\]
+is an exact potential: $\Phi(p',\sigma_{-i})-\Phi(\sigma)=J_i(p';\sigma_{-i})-J_i(\sigma_i;\sigma_{-i})$. This is Proposition~7.5 of \texttt{main.tex} with $\Phi=-\Psi$; the check is two lines, since $\tfrac12\|R+a'\|^2_M-\tfrac12\|R+a\|^2_M-\tfrac12\|a'\|^2_M+\tfrac12\|a\|_M^2=\ip{a'-a}{MR}$.
+
+\begin{assumption}[Pricing oracle]\label{ass:oracle}
+For every $\lambda\in\R^d$ and every $i$, an oracle returns some $p\in O_i(\lambda):=\arg\min_{p\in\cP_i}\{\tilde c_i(p)+\ip{\lambda}{a_i(p)}\}$.
+\end{assumption}
+
+This is the oracle $\mathcal O_i$ of \texttt{main.tex} (Assumption~2.5) with $Q=M$: a prize-collecting routing problem with zone prices and a separable quadratic per-zone term. The best-response oracle is the special case $\tilde c_i\to c_i$ and $\lambda=MA_{-i}$.
+
+\paragraph{Value functions and the price dual.} Let $V_i(\lambda)=\min_{p\in\cP_i}\{\tilde c_i(p)+\ip{\lambda}{a_i(p)}\}$, $V=\sum_iV_i$ and
+\[G(\lambda)=V(\lambda)-\tfrac12\|\lambda\|^2_{M^{-1}}.\]
+$V_i$ is a minimum of finitely many affine functions of $\lambda$, hence concave and piecewise linear. For $p\in O_i(\lambda)$ and all $\lambda'$, $V_i(\lambda')\le\tilde c_i(p)+\ip{\lambda'}{a_i(p)}=V_i(\lambda)+\ip{a_i(p)}{\lambda'-\lambda}$. So $a_i(p)\in\sd V_i(\lambda)$, the superdifferential. Write $R(\lambda)=\sd V(\lambda)$. By the sum rule for finite concave functions on $\R^d$ (Rockafellar, \emph{Convex Analysis}, Thm.~23.8), $R(\lambda)=\sum_i\sd V_i(\lambda)$. In particular, for any oracle answers $\sigma_i\in O_i(\lambda)$, the observed aggregate $A(\sigma)$ lies in $R(\lambda)$.
+
+The convexified potential is $\bar\Phi(x)=\sum_i\sum_px_i(p)\tilde c_i(p)+\tfrac12\|\Abar(x)\|_M^2$ on $X=\prod_i\Delta(\cP_i)$, with $\Abar(x)=\sum_i\sum_px_i(p)a_i(p)$. Let $\bar\Phi^*=\min_X\bar\Phi$ and $\Amax_k=\sum_i\max_{p\in\cP_i}a_{ik}(p)$. Let $B=\prod_k[0,M_k\Amax_k]$.
+
+\begin{lemma}[Price duality]\label{lem:dual}
+\begin{enumerate}[label=(\alph*)]
+\item $G$ is strongly concave and has a unique maximiser $\lambda^*$; moreover $\max G=\bar\Phi^*\le\min_\sigma\Phi(\sigma)$.
+\item All minimisers of $\bar\Phi$ have the same aggregate $\Abar^*$, and $\lambda^*=M\Abar^*\in B$.
+\item $0\in R(\lambda^*)-M^{-1}\lambda^*$; that is, $M^{-1}\lambda^*\in R(\lambda^*)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) $V$ is concave and finite, and $\tfrac12\|\lambda\|^2_{M^{-1}}$ is strongly convex, so $G$ is strongly concave and continuous. It is bounded above and coercive to $-\infty$ because $V$ grows at most linearly. Hence a unique maximiser exists. Let $L(x,\lambda)=\sum_i\ip{x_i}{\tilde c_i}+\ip{\lambda}{\Abar(x)}-\tfrac12\|\lambda\|^2_{M^{-1}}$. It is affine in $x$ on the compact convex set $X$ and concave and continuous in $\lambda$. By Sion's minimax theorem, $\min_x\sup_\lambda L=\sup_\lambda\min_xL$. For fixed $x$, $\sup_\lambda L$ is attained at $\lambda=M\Abar(x)$ with value $\bar\Phi(x)$. For fixed $\lambda$, $\min_xL=\sum_iV_i(\lambda)-\tfrac12\|\lambda\|^2_{M^{-1}}=G(\lambda)$, because a linear function on a product of simplices is minimised at a vertex, carrier by carrier. Hence $\bar\Phi^*=\max G$. Pure profiles are vertices of $X$, where $\bar\Phi=\Phi$, so $\bar\Phi^*\le\min\Phi$.
+
+(b) If $x,x'$ are minimisers with $\Abar(x)\ne\Abar(x')$, then $\bar\Phi((x+x')/2)<\tfrac12\bar\Phi(x)+\tfrac12\bar\Phi(x')$, because the linear part is affine and $\tfrac12\|\cdot\|_M^2$ is strictly convex. This contradicts minimality. Let $x^*$ be a minimiser. Since both sides of the minimax equality are attained, $(x^*,\lambda^*)$ is a saddle point: $L(x^*,\lambda^*)\ge L(x^*,\lambda)$ for all $\lambda$. Indeed $\bar\Phi^*=\sup_\lambda L(x^*,\lambda)\ge L(x^*,\lambda^*)\ge\min_xL(x,\lambda^*)=G(\lambda^*)=\bar\Phi^*$. The unique maximiser of $L(x^*,\cdot)$ is $M\Abar(x^*)$, so $\lambda^*=M\Abar^*$. Finally $0\le\Abar^*_k\le\Amax_k$ because each $\Abar_k$ is a sum over carriers of convex combinations of the numbers $a_{ik}(p)\in[0,\max_pa_{ik}(p)]$.
+
+(c) This is the optimality condition $0\in\sd G(\lambda^*)=\sd V(\lambda^*)-M^{-1}\lambda^*$. The sum rule applies because the quadratic is differentiable.
+\end{proof}
+
+\section{The clearing identity}\label{sec:clear}
+
+For a price $\lambda$ and a pure profile $\sigma$, the \emph{clearing error} is $e(\lambda,\sigma)=M^{-1}\lambda-A(\sigma)$, supply minus demand at price $\lambda$. Let $K_i=\{k:\ a_{ik}(p)\ne a_{ik}(p')\text{ for some }p,p'\in\cP_i\}$ be the coordinates in which carrier $i$'s plans differ (its zones). Write $\|v\|^2_{M,K}=\sum_{k\in K}M_kv_k^2$.
+
+\begin{theorem}[Clearing identity]\label{thm:clear}
+Let $\lambda\in\R^d$ and let $\sigma$ be any pure profile with $\sigma_i\in O_i(\lambda)$ for all $i$. Put $e=e(\lambda,\sigma)$.
+\begin{enumerate}[label=(\alph*)]
+\item $\Phi(\sigma)-G(\lambda)=\tfrac12\|e\|_M^2$. Hence
+$\Phi(\sigma)-\min_{\sigma'}\Phi(\sigma')\le\Phi(\sigma)-\bar\Phi^*\le\tfrac12\|e\|^2_M$ and $G(\lambda^*)-G(\lambda)\le\tfrac12\|e\|_M^2$.
+\item For every carrier $i$, the Nash regret satisfies $J_i(\sigma_i;\sigma_{-i})-\min_pJ_i(p;\sigma_{-i})\le\tfrac12\|e\|^2_{M,K_i}$.
+\item Let $m_i=M^{-1}\lambda-a_i(\sigma_i)=A_{-i}(\sigma)+e$. Then $\sigma_i\in\arg\min_p\{c_i(p)+\ip{a_i(p)}{Mm_i}\}$: $\sigma_i$ is an exact best response to the belief $m_i$ about the rivals' aggregate. Consequently, if $m_{ik}\ge0$ for $k\in K_i$, then $\sigma_i$ is E-admissible (hence maximal and interval-undominated) for every credal box of half-width $\delta\ge\max_{k\in K_i}|e_k|/w_k$ centred at $A_{-i}(\sigma)$, in the sense of \texttt{main.tex}, Definition~3.2 and Lemma~3.3.
+\item If $e=0$, then $\sigma$ minimises $\Phi$ globally, it is a pure Nash equilibrium, $\lambda=\lambda^*$, and the convexification has no gap: $\min\Phi=\bar\Phi^*$.
+\item Conversely, if some pure profile $\sigma^\circ$ satisfies $\Phi(\sigma^\circ)=\bar\Phi^*$, then $\lambda^*=MA(\sigma^\circ)$ and $\sigma^\circ_i\in O_i(\lambda^*)$ for all $i$. In words, exact market clearing is attainable if and only if the convexification of the potential is tight at a pure profile.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+First an identity valid for \emph{every} pure $\sigma$ and every $\lambda$. Let $A=A(\sigma)$ and $e=M^{-1}\lambda-A$, so that $\lambda=M(A+e)$. Then
+\begin{align*}
+\sum_i\big[\tilde c_i(\sigma_i)+\ip{\lambda}{a_i(\sigma_i)}\big]-\tfrac12\|\lambda\|^2_{M^{-1}}
+&=\sum_i\tilde c_i(\sigma_i)+\ip{M(A+e)}{A}-\tfrac12\|A+e\|_M^2\\
+&=\sum_i\tilde c_i(\sigma_i)+\tfrac12\|A\|_M^2-\tfrac12\|e\|_M^2=\Phi(\sigma)-\tfrac12\|e\|_M^2.\tag{$\ast$}
+\end{align*}
+
+(a) If $\sigma_i\in O_i(\lambda)$, the left side of $(\ast)$ equals $G(\lambda)$, which gives the identity. By Lemma~\ref{lem:dual}(a), $G(\lambda)\le G(\lambda^*)=\bar\Phi^*\le\min\Phi$. So $\Phi(\sigma)-\min\Phi\le\Phi(\sigma)-\bar\Phi^*\le\Phi(\sigma)-G(\lambda)=\tfrac12\|e\|^2_M$. Likewise $G(\lambda^*)-G(\lambda)=\bar\Phi^*-G(\lambda)\le\Phi(\sigma)-G(\lambda)$.
+
+(b) Fix $i$, write $a=a_i(\sigma_i)$ and, for a plan $p$, $a'=a_i(p)$ and $\Delta=a'-a$. Then $\Delta_k=0$ for $k\notin K_i$. Since $MA_{-i}=\lambda-M(a+e)$,
+\begin{align*}
+J_i(p)-J_i(\sigma_i)&=c_i(p)-c_i(\sigma_i)+\ip{\Delta}{\lambda-Ma-Me}\\
+&=\big[\tilde c_i(p)+\ip{\lambda}{a'}\big]-\big[\tilde c_i(\sigma_i)+\ip{\lambda}{a}\big]+\tfrac12\|a'\|^2_M-\tfrac12\|a\|^2_M-\ip{\Delta}{Ma}-\ip{\Delta}{Me}\\
+&\ge\tfrac12\|\Delta\|_M^2-\ip{\Delta}{Me}\ \ge\ -\tfrac12\|e\|^2_{M,K_i}.
+\end{align*}
+The bracket difference is $\ge0$ because $\sigma_i\in O_i(\lambda)$. We used $\tfrac12\|a'\|^2-\tfrac12\|a\|^2-\ip{a'-a}{Ma}=\tfrac12\|\Delta\|^2_M$, and the last step minimises $\tfrac12\sum_{k\in K_i}M_k\Delta_k^2-\sum_{k\in K_i}M_k\Delta_ke_k$ coordinatewise, at $\Delta_k=e_k$.
+
+(c) For any $p$, with $a,a'$ as in (b),
+\[c_i(p)+\ip{a'}{Mm_i}=\big[\tilde c_i(p)+\ip{\lambda}{a'}\big]+\tfrac12\|a'\|^2_M-\ip{a'}{Ma}=\big[\tilde c_i(p)+\ip{\lambda}{a'}\big]+\tfrac12\|a'-a\|^2_M-\tfrac12\|a\|^2_M.\]
+The bracket is minimised by $\sigma_i$, and the middle term is $\ge0$ with equality at $p=\sigma_i$. Hence $\sigma_i$ minimises the left side. For the credal statement, $J_i(p;m)$ depends on $m$ only through the coordinates in $K_i$ up to a constant independent of $p$, because $a_{ik}(p)$ is constant in $p$ for $k\notin K_i$. So we may replace $m_i$ by $\tilde m_i$ with $\tilde m_{ik}=m_{ik}$ for $k\in K_i$ and $\tilde m_{ik}=A_{-i,k}(\sigma)$ otherwise, without changing the argmin. Then $\tilde m_i\ge0$ and $|\tilde m_{ik}-A_{-i,k}|=|e_k|\le\delta w_k$, so $\tilde m_i$ lies in the clipped box $K^\delta(A_{-i}(\sigma))$. Under D1 the exposure equals the contribution, so by Lemma~3.3 of \texttt{main.tex} the Dirac law at $(\tilde m_i,\hat\xi)$ is in the credal set (traffic is held at $\hat\xi$, which enters $c_i$ as a constant price), and $\sigma_i$ is optimal under it. That is E-admissibility, and Lemma~3.4 of \texttt{main.tex} gives maximality and interval dominance.
+
+(d) If $e=0$, (a) gives $\Phi(\sigma)=G(\lambda)\le\bar\Phi^*\le\min\Phi\le\Phi(\sigma)$, so all are equal. A global minimiser of an exact potential is a pure Nash equilibrium. $G(\lambda)=\max G$ and uniqueness give $\lambda=\lambda^*$.
+
+(e) The vertex of $X$ given by $\sigma^\circ$ minimises $\bar\Phi$. By Lemma~\ref{lem:dual}(b), $\lambda^*=MA(\sigma^\circ)$, so $e(\lambda^*,\sigma^\circ)=0$. By $(\ast)$, $\sum_i[\tilde c_i(\sigma^\circ_i)+\ip{\lambda^*}{a_i(\sigma^\circ_i)}]-\tfrac12\|\lambda^*\|^2_{M^{-1}}=\Phi(\sigma^\circ)=\bar\Phi^*=G(\lambda^*)$. Subtracting $G(\lambda^*)$ gives $\sum_i\{\tilde c_i(\sigma^\circ_i)+\ip{\lambda^*}{a_i(\sigma^\circ_i)}-V_i(\lambda^*)\}=0$, a sum of nonnegative terms. So each term is $0$, that is, $\sigma^\circ_i\in O_i(\lambda^*)$.
+\end{proof}
+
+\begin{remark}[What is new in Theorem~\ref{thm:clear}]\label{rem:own}
+Identity $(\ast)$ is Fenchel--Young equality for $\tfrac12\|\cdot\|^2_M$, and (a) is an instance of the familiar fact that a Lagrangian dual gap at a primal-feasible point measures suboptimality. The content specific to the game is in (b) and (c). The Nash regret and the credal width are controlled by the \emph{total} clearing error $e$. The own-contribution term $a_i(\sigma_i)-\bar a_i$, which appears in the absorption bound of \texttt{main.tex} (Theorem~6.1(b); Remark~6.3(2) shows it cannot be removed there) and in the $(\sqrt q+1)$ of Liu--Oudjane--Wan, cancels exactly. The anchor $m_i=M^{-1}\lambda-a_i(\sigma_i)$ depends on the carrier's own plan. This is possible only because, under D1, the own quadratic term turns a pricing-optimal plan into a best response to that anchor (proof of (c)). The bound in (b) is local: carrier $i$ is affected only by clearing errors in its own zones.
+\end{remark}
+
+Theorem~\ref{thm:clear} turns the search for a good pure equilibrium into a \emph{price search}: find one common $\lambda$ at which the carriers' pricing answers nearly clear every zone. The next section shows that this search can be done one zone at a time, with all zones in parallel.
+
+\section{Diagonal monotonicity and a dimension-free bracket}\label{sec:bracket}
+
+\begin{definition}[Cross-zone variation]\label{def:kappa}
+For $k\in[d]$ let
+\[\kappa_k=\sup\Big\{\ \sup_{r\in R(\lambda)}\ \inf_{r'\in R(\lambda')}|r_k-r'_k|\ :\ \lambda,\lambda'\in B,\ \lambda_k=\lambda'_k\Big\}.\]
+$\kappa_k$ measures how far the total response in coordinate $k$ can be moved by the prices of the \emph{other} coordinates at a fixed own price. Always $\kappa_k\le\Amax_k$.
+\end{definition}
+
+\begin{proposition}[Separable plan sets]\label{prop:sep}
+If every $\cP_i$ is a product $\prod_k\cP_{ik}$, with $a_{ik}(p)=\alpha_{ik}(p_k)$ and $\tilde c_i(p)=\sum_k\gamma_{ik}(p_k)$, then $\kappa_k=0$ for all $k$.
+\end{proposition}
+\begin{proof}
+$V_i(\lambda)=\sum_kv_{ik}(\lambda_k)$ with $v_{ik}(x)=\min_{p_k}\{\gamma_{ik}(p_k)+x\alpha_{ik}(p_k)\}$. The superdifferential of a separable concave function is the product of the one-dimensional superdifferentials, and $R(\lambda)=\sum_i\sd V_i(\lambda)$ is again a product. Its projection on coordinate $k$ is $\sum_i\sd v_{ik}(\lambda_k)$, which depends on $\lambda_k$ only. For $\lambda_k=\lambda'_k$ the projections coincide, so every inner infimum is $0$.
+\end{proof}
+
+In the routing application, separability holds when every vehicle stays in one zone and zone fleets are independent, and the coordinates are deliveries only. Fleet sharing across zones, routes crossing zones, and the coupling between deliveries and vehicle-hours in a zone all make $\kappa_k>0$. Example~\ref{ex:kappa} shows that the floor below is then genuine.
+
+\begin{theorem}[Bracket invariant]\label{thm:bracket}
+Start from $l=0$ and $u=(M_k\Amax_k)_k$. In each round, query any $\lambda\in\prod_k[l_k,u_k]$, obtain oracle answers $\sigma_i\in O_i(\lambda)$, and set $s=A(\sigma)-M^{-1}\lambda$ (which equals $-e$). For each $k$: if $s_k>0$ set $l_k\gets\lambda_k$; if $s_k<0$ set $u_k\gets\lambda_k$; if $s_k=0$ set $l_k=u_k\gets\lambda_k$. Then, after every round and for every $k$,
+\[\operatorname{dist}\big(\lambda^*_k,[l_k,u_k]\big)\le M_k\kappa_k .\]
+\end{theorem}
+
+\begin{proof}
+\emph{Key inequality.} Let $\lambda\in B$ be a query with $\lambda_k=\mu$ and observed $r=A(\sigma)\in R(\lambda)$. We claim:
+\[\text{(i) } s_k>0\Rightarrow\lambda^*_k\ge\mu-M_k\kappa_k;\qquad\text{(ii) } s_k<0\Rightarrow\lambda^*_k\le\mu+M_k\kappa_k;\qquad\text{(iii) } s_k=0\Rightarrow|\lambda^*_k-\mu|\le M_k\kappa_k.\]
+For (i), suppose $\mu-\lambda^*_k>M_k\kappa_k$. Let $\lambda'$ agree with $\lambda^*$ except $\lambda'_k=\mu$. Then $\lambda'\in B$, because $\lambda^*\in B$ (Lemma~\ref{lem:dual}(b)) and $\mu\in[0,M_k\Amax_k]$. By Lemma~\ref{lem:dual}(c) pick $r^*\in R(\lambda^*)$ with $r^*=M^{-1}\lambda^*$. Since $V$ is concave, $R$ is antitone: $\ip{r'-r^*}{\lambda'-\lambda^*}\le0$ for every $r'\in R(\lambda')$. Here $\lambda'-\lambda^*=(\mu-\lambda^*_k)e_k$ with $\mu-\lambda^*_k>0$, so $r'_k\le r^*_k=\lambda^*_k/M_k$ for every $r'\in R(\lambda')$. Because $\lambda_k=\lambda'_k$, the definition of $\kappa_k$ gives, for every $\eta>0$, some $r'\in R(\lambda')$ with $r_k\le r'_k+\kappa_k+\eta$. Hence
+\[s_k=r_k-\mu/M_k\le\lambda^*_k/M_k+\kappa_k+\eta-\mu/M_k=-(\mu-\lambda^*_k-M_k\kappa_k)/M_k+\eta.\]
+This is negative for small $\eta$, contradicting $s_k>0$. Statement (ii) is symmetric. For (iii), if $\mu-\lambda^*_k>M_k\kappa_k$ the same computation gives $s_k<0$, and if $\lambda^*_k-\mu>M_k\kappa_k$ the symmetric one gives $s_k>0$.
+
+\emph{Induction.} Initially $\lambda^*_k\in[0,M_k\Amax_k]$, so the distance is $0$. Suppose $\operatorname{dist}(\lambda^*_k,[l_k,u_k])\le M_k\kappa_k$ and a round queries $\mu=\lambda_k\in[l_k,u_k]$. If $s_k>0$, the new bracket is $[\mu,u_k]$. If $\lambda^*_k\ge\mu$, its distance to $[\mu,u_k]$ is $\max(0,\lambda^*_k-u_k)$, which is the old distance. If $\lambda^*_k<\mu$, the distance is $\mu-\lambda^*_k\le M_k\kappa_k$ by (i). The case $s_k<0$ is symmetric with (ii). If $s_k=0$, the new bracket is $\{\mu\}$ and (iii) applies.
+\end{proof}
+
+\begin{corollary}[Dimension-free oracle bound]\label{cor:rate}
+Run Theorem~\ref{thm:bracket} for $T$ rounds and query the bracket midpoint at least every other round (other rounds may use any point of the bracket, for example a secant step). Then every point $\lambda$ of the final bracket satisfies, for all $k$,
+\[|\lambda_k-\lambda^*_k|\le M_k\Amax_k\,2^{-\lceil T/2\rceil}+M_k\kappa_k,\]
+and
+\[G(\lambda^*)-G(\lambda)\le 2\sum_kM_k(\Amax_k)^2\,2^{-\lceil T/2\rceil}+2\sum_kM_k\Amax_k\kappa_k.\]
+The number of oracle calls is $NT$, independent of $d$. The $N$ calls of a round are independent and can run in parallel. With $\kappa=0$ (Proposition~\ref{prop:sep}), $\lambda\to\lambda^*$ geometrically in every coordinate.
+\end{corollary}
+\begin{proof}
+Midpoint rounds halve the width of every bracket, or reduce it to a point. Other rounds never increase it, since the new bracket is a sub-interval. With midpoints in at least $\lceil T/2\rceil$ of the rounds, the final width is at most $M_k\Amax_k2^{-\lceil T/2\rceil}$. Adding the distance bound of Theorem~\ref{thm:bracket} gives the first claim. For the second, take any $g\in\sd G(\lambda)=R(\lambda)-M^{-1}\lambda$. Concavity gives $G(\lambda^*)-G(\lambda)\le\ip{g}{\lambda^*-\lambda}\le\sum_k|g_k||\lambda^*_k-\lambda_k|$. Since $0\le r_k\le\Amax_k$ and $0\le\lambda_k/M_k\le\Amax_k$ on $B$, $|g_k|\le\Amax_k$; the factor $2$ is a safe rounding of this bound. Substitute the first claim.
+\end{proof}
+
+\begin{remark}[Why this beats black-box methods on the same dual]
+$G$ is strongly concave but nonsmooth, and it is available only through the oracle. Frank--Wolfe on $\bar\Phi$ (\texttt{main.tex}, Theorem~8.4) and the subgradient method need $\Theta(1/\varepsilon)$ rounds in the worst case. Cutting-plane and column-generation methods (Kelley, simplicial decomposition, bundle) need a number of rounds that grows with $d$: a cutting-plane model is accurate only after about $d$ cuts. Corollary~\ref{cor:rate} exploits two facts that a black-box method ignores. The coupling is diagonal (one supply line per coordinate), and every oracle answer reveals a full $d$-dimensional supergradient, which is \emph{one sample for each of the $d$ one-dimensional root-finding problems simultaneously}. The price of this is the floor $M_k\kappa_k$.
+\end{remark}
+
+\begin{example}[The floor is genuine]\label{ex:kappa}
+Let $d=2$, $M=I$ and one carrier with two plans: $0$ ($\tilde c=0$, $a=(0,0)$) and a bundle $b$ ($\tilde c=-1.5$, $a=(1,1)$), for instance one vehicle that must visit both zones. Then $\Amax=(1,1)$, $B=[0,1]^2$ and $V(\lambda)=\min\{0,\,-1.5+\lambda_1+\lambda_2\}$. The maximiser of $G$ lies on the kink line $\lambda_1+\lambda_2=1.5$ (off the line, $G$ is $-\frac12|\lambda|^2$ or $-1.5+\lambda_1+\lambda_2-\frac12|\lambda|^2$, whose unconstrained maximisers $(0,0)$ and $(1,1)$ lie on the wrong side). Hence $\lambda^*=(0.75,0.75)$, with $R(\lambda^*)=\conv\{(0,0),(1,1)\}\ni\lambda^*$. For own price $\lambda_1=x\in[0.5,1]$ the response in coordinate $1$ is $1$ or $0$ depending on whether $\lambda_2<1.5-x$, so $\kappa_1=\kappa_2=1$. The queries $\lambda=(0.7,0.9)$, $(0.6,1)$ and $(0.5,1)$ (with the tie at the last one resolved towards plan $0$) all return plan $0$, so $s_1=-\lambda_1<0$ and the bracket update sets $u_1=0.5$. The bracket then excludes $\lambda^*_1=0.75$ by $0.25$, which is within the floor $M_1\kappa_1=1$ of Theorem~\ref{thm:bracket} but positive. With complementary coordinates, the sign of one zone's residual depends on the other zone's price, and no rule that looks at one coordinate at a time can avoid this.
+\end{example}
+
+\section{The algorithm}\label{sec:alg}
+
+\begin{algorithm}[h]
+\caption{ZMC: Zone-Market Clearing}\label{alg:zmc}
+\begin{algorithmic}[1]
+\Require pricing oracles $O_i$ (Assumption~\ref{ass:oracle}); best-response oracles; rounds $T$
+\State $l\gets0$, $u\gets M\Amax$, $\lambda\gets(l+u)/2$; pools $\mathcal Q_i\gets\emptyset$; samples $\mathcal S\gets\emptyset$
+\For{$t=0,\dots,T-1$}
+ \State for all $i$ \textbf{in parallel}: $\sigma^t_i\gets O_i(\lambda)$; $\mathcal Q_i\gets\mathcal Q_i\cup\{\sigma^t_i\}$ \Comment{$N$ routing solves}
+ \State $A^t\gets\sum_ia_i(\sigma^t_i)$, $s\gets A^t-M^{-1}\lambda$, $G^t\gets\sum_i[\tilde c_i(\sigma^t_i)+\ip{\lambda}{a_i(\sigma^t_i)}]-\tfrac12\|\lambda\|^2_{M^{-1}}$
+ \State update every bracket $[l_k,u_k]$ by the sign of $s_k$ (Theorem~\ref{thm:bracket}); $\mathcal S\gets\mathcal S\cup\{(\lambda,A^t)\}$
+ \If{$t$ odd} $\lambda\gets(l+u)/2$
+ \Else\ for each $k$: fit a nonincreasing (isotonic) piecewise-linear $\hat r_k$ to the pairs $(\lambda_k,A_k)\in\mathcal S$;
+ \State \hspace{1.5em} $\lambda_k\gets$ the crossing of $\hat r_k$ with $x\mapsto x/M_k$, clipped to $[l_k,u_k]$ \Comment{secant step}
+ \EndIf
+\EndFor
+\State $\sigma^{\rm price}\gets\sigma^{t^\star}$ with $t^\star=\arg\min_t\tfrac12\|e^t\|_M^2$ (equivalently, by Theorem~\ref{thm:clear}(a), the best $\Phi(\sigma^t)$)
+\State $x\gets\arg\min\{\bar\Phi(x):x_i\in\Delta(\mathcal Q_i)\}$ (restricted master, no oracle); $\sigma^{\rm round}\gets$ derandomised rounding of $x$ (\texttt{main.tex}, eq.~(8.1))
+\State $\sigma\gets\arg\min\{\Phi(\sigma^{\rm price}),\Phi(\sigma^{\rm round})\}$; run sequential best responses from $\sigma$ until no carrier improves
+\State \Return $\sigma$ (a pure Nash equilibrium; optionally the add-on certificate of Section~\ref{sec:addon})
+\end{algorithmic}
+\end{algorithm}
+
+The secant step implements the learning idea of direction (a) in its simplest provable form. Each coordinate's total response is a nonincreasing function of its own price up to the cross-variation, and the isotonic fit keeps a monotone surrogate of it, built from all past oracle answers at once. A full concave surrogate of $V_i$ (a cutting-plane model) would be column generation; we deliberately keep only the $d$ one-dimensional monotone surrogates, because that is what makes the round count independent of $d$.
+
+\begin{theorem}[Guarantee of ZMC]\label{thm:zmc}
+Under Assumptions~\ref{ass:game}--\ref{ass:oracle}, with exact oracles:
+\begin{enumerate}[label=(\alph*)]
+\item ZMC uses $NT$ pricing calls before the polish, and the polish stops after finitely many best-response calls with a pure Nash equilibrium $\sigma$.
+\item $\Phi(\sigma)\le\Phi(\sigma^{\rm price})=G(\lambda^{t^\star})+\tfrac12\|e^{t^\star}\|_M^2\le\bar\Phi^*+\tfrac12\min_t\|e^t\|^2_M$.
+\item If the minimal positive potential improvement of a unilateral deviation is $\nu>0$, the polish makes at most $\tfrac12\min_t\|e^t\|_M^2/\nu$ plan changes, and hence at most $N(1+\tfrac12\min_t\|e^t\|^2_M/\nu)$ best-response calls.
+\item $\sigma$ is an exact pure equilibrium, so $\sigma\in\ICNE_C(\delta)$ for all $\delta\ge0$ and $C\in\{E,M,ID\}$. If ZMC is run on the surcharged game of \texttt{main.tex}, Lemma~3.6, $\sigma$ is an exact $\Gamma$-maximin equilibrium at width $\delta$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Each round makes one pricing call per carrier. The polish is sequential best-response dynamics in a finite exact-potential game. Every accepted change strictly decreases $\Phi$, which takes finitely many values, so it stops. At the stop, no carrier has a strictly improving deviation, which is a pure Nash equilibrium.
+(b) The polish does not increase $\Phi$, and the start has $\Phi\le\Phi(\sigma^{\rm price})$. The equality is Theorem~\ref{thm:clear}(a) applied to $\lambda^{t^\star}$ and $\sigma^{t^\star}$, and $G\le\bar\Phi^*$ by Lemma~\ref{lem:dual}(a).
+(c) Each change decreases $\Phi$ by at least $\nu$, and $\Phi$ starts at most $\tfrac12\min_t\|e^t\|^2_M$ above $\bar\Phi^*\le\min\Phi$. Between changes, at most $N$ calls are made without a change, and $N$ more certify the end.
+(d) An exact pure Nash equilibrium makes each plan optimal at the centre belief, which lies in every credal box (\texttt{main.tex}, Proposition~7.5). The $\Gamma$ case is Lemma~3.6 of \texttt{main.tex}.
+\end{proof}
+
+\begin{remark}[Heuristic oracles]
+With a heuristic routing oracle, (b) still holds with $G$ replaced by the computed value, which is then only an upper estimate of $V$. The equilibrium claim of (a) becomes ``no improvement found by the oracle''. A lower bound $\mathcal U_i$ on $V_i$ (column-generation LP) restores a valid bound as in \texttt{main.tex}, Theorem~8.5(c).
+\end{remark}
+
+\section{Charges: warm-started sweeps for the leader}\label{sec:charges}
+
+With charges $t\in\R^d$ on the contributions, $\tilde c_i$ becomes $\tilde c_i+\ip{t}{a_i}$, so $V^t(\lambda)=V(\lambda+t)$. With the substitution $\mu=\lambda+t$, the equilibrium condition (Lemma~\ref{lem:dual}(c)) reads $M^{-1}(\mu-t)\in R(\mu)$, where $R$ does not depend on $t$. Charges translate the supply line.
+
+\begin{proposition}[Lipschitz dependence on charges]\label{prop:charges}
+Let $\mu^*(t)=\lambda^*(t)+t$ be the equilibrium gross price under charges $t$. Then $\|\mu^*(t)-\mu^*(t')\|_{M^{-1}}\le\|t-t'\|_{M^{-1}}$, and the convexified equilibrium aggregate $\Abar^*(t)=M^{-1}(\mu^*(t)-t)$ satisfies $\ip{\Abar^*(t)-\Abar^*(t')}{t-t'}\le0$. That is, aggregates respond monotonically to charges.
+\end{proposition}
+\begin{proof}
+Let $r=M^{-1}(\mu-t)\in R(\mu)$ and $r'=M^{-1}(\mu'-t')\in R(\mu')$ with $\mu=\mu^*(t)$ and $\mu'=\mu^*(t')$. Antitonicity gives $\ip{r-r'}{\mu-\mu'}\le0$, that is, $\|\mu-\mu'\|^2_{M^{-1}}\le\ip{M^{-1}(t-t')}{\mu-\mu'}\le\|t-t'\|_{M^{-1}}\|\mu-\mu'\|_{M^{-1}}$ by Cauchy--Schwarz in the $M^{-1}$ inner product. For the second claim, $\ip{r-r'}{t-t'}=\ip{r-r'}{(\mu-\mu')-M(r-r')}\le-\|r-r'\|^2_M\le0$.
+\end{proof}
+
+Consequently, when the leader evaluates a sequence of charge vectors, ZMC for $t'$ can start from the bracket $\mu^*_k(t)\pm\sqrt{M_k}\,\|t-t'\|_{M^{-1}}$ (then $\lambda=\mu-t'$), which by Corollary~\ref{cor:rate} saves about $\log_2(M_k\Amax_k/(\sqrt{M_k}\|t-t'\|_{M^{-1}}))$ rounds per evaluation. The plan pools $\mathcal Q_i$ are reusable across charges, because the plan sets do not depend on $t$. We do not claim an algorithm for the optimal charge (a bilevel problem with an NP-hard follower); the proposition only makes each follower solve cheaper.
+
+\section{Optional add-on: a posteriori quality statement}\label{sec:addon}
+
+The quantities computed during ZMC give, at no extra oracle cost, the bracket $\bar\Phi^*\in[\max_tG^t,\ \Phi(\sigma)]$ when the oracle is exact (Lemma~\ref{lem:dual}, Theorem~\ref{thm:clear}(a)). For each pricing profile $\sigma^t$, the clearing identity also gives explicit Nash regrets $\le\tfrac12\|e^t\|^2_{M,K_i}$ and credal widths $\max_{k\in K_i}|e^t_k|/w_k$ (Theorem~\ref{thm:clear}(b),(c)). This is a by-product; the output of ZMC is the equilibrium $\sigma$.
+
+\section{Limits and relation to prior art}\label{sec:limits}
+
+\paragraph{Limits.}
+(1) The floor $M_k\kappa_k$ is real (Example~\ref{ex:kappa}). In the prototypes the relative dual gap of ZMC stalls near $10^{-3}$ while column generation goes to $0$. This floor is below the nonconvexity (rounding) gap of the pure problem, so for pure equilibria it did not matter in our tests. It would matter if one needed the convexified optimum itself to high accuracy.
+(2) The method needs the potential structure: D1 with symmetric diagonal $M$, or $\Gamma$-maximin via the surcharge. Under D2 there is no common price at which pricing-optimality implies best response, and Theorem~\ref{thm:clear}(b),(c) fail. We have no D2 version.
+(3) Theorem~\ref{thm:zmc} does not bound $\min_t\|e^t\|_M$ a priori. Corollary~\ref{cor:rate} controls the \emph{price}, not the clearing error of pure answers. At $\lambda^*$, carriers whose response is at a kink must mix, and the irreducible error is the Shapley--Folkman/rounding scale of \texttt{main.tex}.
+(4) The city experiments use a zone-level routing proxy with an exact dynamic-programming oracle (one fleet constraint per carrier), not a street-level VRP.
+
+\paragraph{Prior art (searches of 2026-10-23; see \texttt{algorithm.md}).}
+Lagrangian or price decomposition with a pricing oracle is classical (Dantzig--Wolfe, column generation, bundle methods; Briant et al., Math.\ Program.\ 2008, compare bundle and column generation on vehicle routing). Diagonal variable-metric bundle methods exist (Karmitsa, Gaudioso and Joki, 2019). Learning separable piecewise-linear concave value functions from sampled slopes is SPAR (Powell, Ruszczy\'nski and Topaloglu, Math.\ Oper.\ Res.\ 2004). Walrasian prices with indivisible goods from aggregate demand oracles are computed by convex minimisation of a market potential (Paes Leme and Wong, 2017, $\tilde O(n)$ queries under gross substitutes, via cutting planes). Coordinate t\^atonnement is studied for Fisher markets. Duguet, Harks, Schmidt and Schwarz (2025) relate the regret of price-allocation pairs to duality and integrality gaps in combinatorial markets. What we did not find is the combination used here: the own-term cancellation that makes a common price yield best responses to anchors in a potential aggregative game (Theorem~\ref{thm:clear}(b),(c),(e)), the sign-bracket invariant with the cross-variation floor (Theorem~\ref{thm:bracket}), and its use to obtain $d$-independent round counts for pure equilibria with an NP-hard oracle. The individual tools (bisection, secant, isotonic regression, rounding, best-response polish) are standard, and we claim novelty only for the structural theorems and for the method they define.
+
+\end{document}
