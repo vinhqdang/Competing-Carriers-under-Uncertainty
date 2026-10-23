@@ -182,57 +182,108 @@ def t_sens():
     write_table("tab_sens.tex", ["City"] + [h for _, h in params], rows, "lrrrrr")
 
 
-# ---------------------------------------------------------------- E2
+# ---------------------------------------------------------------- E2 (per-seed summaries)
 def seeds_note(df, key):
-    has_sd = any(c.endswith("_sd") for c in df.columns)
-    n = int(df["n_seeds"].max()) if "n_seeds" in df.columns else (3 if has_sd else 1)
-    macro(key, f"{n} seed{'s' if n > 1 else ''}" + ("; mean with seed standard deviation in parentheses" if has_sd else ""))
+    n = int(df["seed"].nunique()) if "seed" in df.columns else 1
+    macro(key, f"{n} seed{'s' if n > 1 else ''}")
+    return n
+
+
+def mrange(x, sig=3):
+    """'mean (min--max)' over seeds, or the single value."""
+    x = pd.Series(x).dropna()
+    if not len(x):
+        return "--"
+    if len(x) == 1:
+        return fmt(x.iloc[0], sig)
+    if x.min() == x.max():
+        return fmt(x.iloc[0], sig)
+    return f"{fmt(x.mean(), sig)} [{fmt(x.min(), 2)}, {fmt(x.max(), 2)}]"
+
+
+def byseed(x, sig=3):
+    x = pd.Series(x).dropna()
+    return " / ".join(fmt(v, sig) for v in x) if len(x) else "--"
+
+
+MATERIAL = 0.5  # leader gain (% of |SC|) below which the delivery-only share is not informative
 
 
 def t_e2():
     s = read("summary_E2.csv")
     if s is None:
         return
-    seeds_note(s, "EtwoSeeds")
+    if "seed" not in s.columns:
+        s["seed"] = 0
+    n = seeds_note(s, "EtwoSeeds")
+    macro("NSeeds", str(n))
+    macro("NCases", str(n * s.city.nunique()))
     for obj, fname in (("main", "tab_e2.tex"), ("broad", "tab_e2broad.tex")):
         x = s[s.objective == obj]
         rows = []
         for c in ORDER:
-            y = x[x.city == c].set_index("config")
+            y = x[x.city == c]
             if not len(y):
                 continue
-            b = y.loc["both"]
-            row = [NAME[c]]
-            for cfg in ("congestion_only", "delivery_only", "both"):
-                v = fmt(y.loc[cfg, "gain_pct_of_abs"], 3)
-                if "gain_pct_of_abs_sd" in y.columns and not pd.isna(y.loc[cfg, "gain_pct_of_abs_sd"]):
-                    v += f" ({fmt(y.loc[cfg, 'gain_pct_of_abs_sd'], 2)})"
-                row.append(v)
-            row += [fmt(b.theta, 2), fmt(b.s_over_fee, 2), fmt(b.served_share, 2), fmt(b.revenue, 3),
-                    fmt(b.gini_access, 2)]
+            g = {cfg: y[y.config == cfg].sort_values("seed") for cfg in ("congestion_only", "delivery_only", "both")}
+            b = g["both"]
+            share = (g["delivery_only"].gain_pct_of_abs.values / np.where(b.gain_pct_of_abs.values > 0, b.gain_pct_of_abs.values, np.nan))
+            row = [NAME[c], mrange(g["congestion_only"].gain_pct_of_abs), mrange(g["delivery_only"].gain_pct_of_abs),
+                   mrange(b.gain_pct_of_abs)]
+            if obj == "main":
+                mat = b.gain_pct_of_abs.values >= MATERIAL
+                row.append(byseed([v if m else np.nan for v, m in zip(share, mat)], 2) if mat.any() else "--")
+                row += [f"{int((b.s_over_fee < 0).sum())}/{len(b)}", mrange(b.served_share, 2), mrange(b.revenue, 3)]
+            else:
+                row += [byseed(b.gain_pct_of_abs, 3), mrange(b.served_share, 2)]
             rows.append(row)
-        write_table(fname, ["City", "cong.\\ only", "deliv.\\ only", "both", "$\\vartheta$", "$s/\\text{fee}$",
-                            "served", "revenue", "Gini acc."], rows, "lrrrrrrrr")
-    m = s[s.objective == "main"].pivot(index="city", columns="config", values="gain_pct_of_abs")
-    m = m.reindex([c for c in ORDER if c in m.index])
-    macro("EtwoCongMax", fmt(m.congestion_only.max(), 2))
-    macro("EtwoBothMax", fmt(m.both.max(), 3))
-    macro("EtwoBothMaxCity", NAME[m.both.idxmax()])
-    big = m[m.both >= 1.0]
-    share = 100 * big.delivery_only / big.both
-    macro("EtwoNbig", str(len(big)))
-    macro("EtwoBigCities", ", ".join(NAME[c] for c in big.index))
-    macro("EtwoDelivShareMin", fmt(share.min(), 2))
-    macro("EtwoDelivShareMax", fmt(share.max(), 3))
-    macro("EtwoDelivShares", ", ".join(f"{NAME[c]} {share[c]:.0f}\\%" for c in big.index))
-    small = m[m.both < 1.0]
-    macro("EtwoSmallCities", ", ".join(NAME[c] for c in small.index))
-    macro("EtwoSmallMax", fmt(small.both.max(), 2) if len(small) else "--")
-    b = s[(s.objective == "main") & (s.config == "both")]
-    macro("EtwoNsubsidy", str(int((b.s_over_fee < 0).sum())))
+        if obj == "main":
+            write_table(fname, ["City", "cong.\\ only", "deliv.\\ only", "both", "deliv.\\ share by seed",
+                                "subsidy", "served", "revenue"], rows, "lrrrrrrr")
+        else:
+            write_table(fname, ["City", "cong.\\ only", "deliv.\\ only", "both", "both by seed", "served"], rows, "lrrrrr")
+    m = s[s.objective == "main"]
+    piv = m.pivot_table(index=["city", "seed"], columns="config", values="gain_pct_of_abs").reset_index()
+    i = piv.congestion_only.idxmax()
+    macro("EtwoCongMax", fmt(piv.congestion_only.max(), 3))
+    macro("EtwoCongMaxCase", f"{NAME[piv.loc[i, 'city']]}, seed {int(piv.loc[i, 'seed'])}")
+    macro("EtwoBothMax", fmt(piv.both.max(), 3))
+    mat = piv[piv.both >= MATERIAL].copy()
+    mat["share"] = mat.delivery_only / mat.both
+    macro("EtwoMaterialN", str(len(mat)))
+    macro("EtwoShareGeHalfN", str(int((mat.share >= 0.5).sum())))
+    bad = mat[mat.share < 0.5]
+    macro("EtwoShareLowCases", ", ".join(f"{NAME[r.city]} seed {int(r.seed)} ({fmt(r.share, 2)})" for _, r in bad.iterrows()) or "none")
+    parts = []
+    for c in ORDER:
+        z = mat[mat.city == c]
+        if len(z):
+            parts.append(f"{NAME[c]} {fmt(z.share.min(), 2)}--{fmt(z.share.max(), 2)}" if len(z) > 1 else f"{NAME[c]} {fmt(z.share.iloc[0], 2)}")
+    macro("EtwoShareRanges", ", ".join(parts))
+    mb = mat[mat.city == "Bombay"].sort_values("seed")
+    macro("EtwoMumbaiShares", " / ".join(fmt(v, 2) for v in mb.share))
+    small = [c for c in ORDER if c in set(piv.city) and (piv[piv.city == c].both < MATERIAL).all()]
+    macro("EtwoSmallCities", ", ".join(NAME[c] for c in small))
+    macro("EtwoSmallMax", fmt(piv[piv.city.isin(small)].both.max(), 2) if small else "--")
+    for c, key in (("London", "London"), ("NewDelhi", "Delhi"), ("BuenosAires", "BA")):
+        z = piv[piv.city == c]
+        macro(f"Etwo{key}BothMin", fmt(z.both.min(), 3))
+        macro(f"Etwo{key}BothMax", fmt(z.both.max(), 3))
+        macro(f"Etwo{key}DelMin", fmt(z.delivery_only.min(), 3))
+        macro(f"Etwo{key}DelMax", fmt(z.delivery_only.max(), 3))
+    bs = m[m.config == "both"]
+    matb = bs.merge(mat[["city", "seed"]], on=["city", "seed"])
+    macro("EtwoSubsidyMaterial", f"{int((matb.s_over_fee < 0).sum())} of {len(matb)}")
+    bys = read("summary_E2_by_seed.csv")
+    if bys is not None and "delivery_best_is_subsidy" in bys.columns:
+        mm = bys[bys.both >= MATERIAL]
+        macro("EtwoDelivSubsidyMaterial", f"{int(mm.delivery_best_is_subsidy.astype(str).str.lower().eq('true').sum())} of {len(mm)}")
     br = s[(s.objective == "broad") & (s.config == "both")]
-    macro("EtwoBroadShutdown", str(int((br.served_share <= 0.0 + 1e-9).sum())))
-    macro("EtwoBroadShutdownCities", ", ".join(NAME[c] for c in order(br[br.served_share <= 1e-9]).city))
+    shut = [c for c in ORDER if c in set(br.city) and (br[br.city == c].served_share <= 1e-9).all()]
+    macro("EtwoBroadShutdownCities", ", ".join(NAME[c] for c in shut))
+    macro("EtwoBroadBA", byseed(br[br.city == "BuenosAires"].sort_values("seed").gain_pct_of_abs, 2))
+    pa = br[br.city == "Paris"]
+    macro("EtwoBroadParisServedMax", fmt(100 * pa.served_share.max(), 2))
 
 
 # ---------------------------------------------------------------- E3
@@ -240,24 +291,47 @@ def t_e3():
     d = read("summary_E3.csv")
     if d is None:
         return
+    if "seed" not in d.columns:
+        d["seed"] = 0
     seeds_note(d, "EthreeSeeds")
-    d = order(d)
     rows = []
-    for _, r in d.iterrows():
-        rows.append([NAME[r.city], fmt(r.W_SO, 3), fmt(r.W_SO_bound, 3), fmt(r.W_NE_worst, 3), fmt(r.W_NE_best, 3),
-                     str(int(r.n_ne_distinct)), cell(r, "PoA", d, 3), cell(r, "PoS", d, 3), cell(r, "PoA_priced", d, 3)])
-    write_table("tab_e3.tex", ["City", "$W_{\\rm SO}$", "bound", "$W_{\\rm NE}^{\\rm worst}$", "$W_{\\rm NE}^{\\rm best}$",
-                               "\\#NE", "PoA", "PoS", "PoA$_{\\rm priced}$"], rows, "lrrrrrrrr")
-    macro("PoAmax", fmt(d.PoA.max(), 3))
-    macro("PoAmaxCity", NAME[d.loc[d.PoA.idxmax(), "city"]])
-    macro("PoAmin", fmt(d.PoA.min(), 3))
-    low = d[d.PoA <= 1.05]
+    for c in ORDER:
+        z = d[d.city == c].sort_values("seed")
+        if not len(z):
+            continue
+        rows.append([NAME[c], mrange(z.W_SO, 3), (str(int(z.n_ne_distinct.min())) if z.n_ne_distinct.min() == z.n_ne_distinct.max() else f"{int(z.n_ne_distinct.min())}--{int(z.n_ne_distinct.max())}"),
+                     byseed(z.PoA_zmc, 3), byseed(z.PoA, 3), byseed(z.PoS, 3), byseed(z.rel_gap_priced_pct, 2)])
+    write_table("tab_e3.tex", ["City", "$W_{\\rm SO}$", "\\#NE", "PoA (ZMC eq.)", "PoA (worst NE)", "PoS",
+                               "priced gap \\%"], rows, "lrrrrrr")
+    g = d.groupby("city")
+    low = [c for c in ORDER if c in g.groups and g.get_group(c).PoA_zmc.max() <= 1.06]
+    high = [c for c in ORDER if c in g.groups and c not in low]
+    macro("PoAlowCities", ", ".join(NAME[c] for c in low))
     macro("PoAlowN", str(len(low)))
-    macro("PoAlowCities", ", ".join(NAME[c] for c in low.city))
-    macro("PoAlowMax", fmt(low.PoA.max(), 3))
-    macro("PoAhighCities", ", ".join(NAME[c] for c in d[d.PoA > 1.05].city))
+    macro("PoAlowMax", fmt(d[d.city.isin(low)].PoA_zmc.max(), 3))
+    macro("PoAhighCities", ", ".join(NAME[c] for c in high))
+    for c, key in (("London", "London"), ("BuenosAires", "BA"), ("NewDelhi", "Delhi")):
+        z = d[d.city == c]
+        macro(f"PoA{key}Min", fmt(z.PoA_zmc.min(), 3))
+        macro(f"PoA{key}Max", fmt(z.PoA_zmc.max(), 3))
+    macro("PoAmax", fmt(d.PoA_zmc.max(), 3))
+    macro("PoAworstMax", fmt(d.PoA.max(), 3))
+    macro("PoAmaxCity", NAME[d.loc[d.PoA_zmc.idxmax(), "city"]])
+    i = d.rel_gap_priced_pct.idxmax()
+    macro("PricedGapMax", fmt(d.rel_gap_priced_pct.max(), 2))
+    macro("PricedGapMaxCase", f"{NAME[d.loc[i, 'city']]}, seed {int(d.loc[i, 'seed'])}")
     macro("PoApricedMax", fmt(d.PoA_priced.max(), 3))
-    macro("PoSPoAmaxdiff", fmt((d.PoA - d.PoS).max(), 2))
+    zd = d[d.city == "NewDelhi"]
+    macro("PricedGapDelhiMax", fmt(zd.rel_gap_priced_pct.max(), 2))
+    macro("PricedGapDelhiSeed", str(int(zd.loc[zd.rel_gap_priced_pct.idxmax(), "seed"])))
+    smallgap = [c for c in ORDER if c in g.groups and g.get_group(c).rel_gap_priced_pct.max() <= 0.4]
+    macro("PricedSmallN", str(len(smallgap)))
+    macro("PricedSmallCities", ", ".join(NAME[c] for c in smallgap))
+    diff = d.PoA - d.PoS
+    big = d[diff > 0.05]
+    macro("PoSgapN", str(len(big)))
+    macro("PoSgapTotal", str(len(d)))
+    macro("PoSgapCases", ", ".join(f"{NAME[r.city]} seed {int(r.seed)} (PoS {fmt(r.PoS, 3)}, worst {fmt(r.PoA, 3)})" for _, r in big.iterrows()))
     macro("SObound", fmt(100 * (d.W_SO_bound / d.W_SO - 1).max(), 2))
     macro("SOboundCity", NAME[d.loc[(d.W_SO_bound / d.W_SO).idxmax(), "city"]])
     macro("NEmin", str(int(d.n_ne_distinct.min())))
@@ -269,21 +343,25 @@ def t_e4():
     s = read("summary_E4.csv")
     if s is None:
         return
+    if "seed" not in s.columns:
+        s["seed"] = 0
     seeds_note(s, "EfourSeeds")
-    pb = s[s.kind == "pbox"].sort_values("eps").groupby("city").tail(1)
-    ga = s[s.kind == "gamma"].sort_values("delta").groupby("city").tail(1)
+    pb = s[s.kind == "pbox"].sort_values("eps").groupby(["city", "seed"]).tail(1)
+    ga = s[s.kind == "gamma"].sort_values("delta").groupby(["city", "seed"]).tail(1)
+    mono = read("summary_E4_monotone.csv")
     rows = []
     for c in ORDER:
-        a = pb[pb.city == c]
-        g = ga[ga.city == c]
+        a, g = pb[pb.city == c], ga[ga.city == c]
         if not len(a) or not len(g):
             continue
-        a, g = a.iloc[0], g.iloc[0]
-        rows.append([NAME[c], cell(a, "d_deliveries_pct", pb, 3), cell(a, "d_welfare_pct", pb, 3),
-                     cell(g, "d_deliveries_pct", ga, 3), cell(g, "d_welfare_pct", ga, 3), fmt(g.slowdown_pct, 2),
-                     fmt(max(a.max_regret, g.max_regret))])
+        mcount = "--"
+        if mono is not None:
+            z = mono[mono.city == c]
+            mcount = f"{int(z.monotone.astype(str).str.lower().eq('true').sum())}/{len(z)}"
+        rows.append([NAME[c], mrange(a.d_deliveries_pct, 3), mrange(a.d_welfare_pct, 3), mrange(g.d_deliveries_pct, 3),
+                     mrange(g.d_welfare_pct, 3), mcount])
     write_table("tab_e4.tex", ["City", "$\\Delta$deliv.\\ \\%", "$\\Delta W$ \\%", "$\\Delta$deliv.\\ \\%",
-                               "$\\Delta W$ \\%", "slowdown \\%", "max regret"], rows, "lrrrrrr")
+                               "$\\Delta W$ \\%", "monotone series"], rows, "lrrrrr")
     macro("EfourEps", fmt(pb.eps.max(), 2))
     macro("EfourDelta", fmt(ga.delta.max(), 2))
     macro("EfourPbDelMin", fmt(-pb.d_deliveries_pct.max(), 2))
@@ -294,16 +372,16 @@ def t_e4():
     macro("EfourGaDelMax", fmt(-ga.d_deliveries_pct.min(), 3))
     macro("EfourGaWMin", fmt(-ga.d_welfare_pct.max(), 2))
     macro("EfourGaWMax", fmt(-ga.d_welfare_pct.min(), 3))
-    # monotonicity of deliveries in delta, per city
-    mono, nonmono = 0, []
-    for c, g in s[s.kind == "gamma"].groupby("city"):
-        v = g.sort_values("delta").d_deliveries_pct.values
-        if np.all(np.diff(v) <= 1e-9):
-            mono += 1
-        else:
-            nonmono.append(NAME[c])
-    macro("EfourMono", str(mono))
-    macro("EfourNonMonoCities", ", ".join(nonmono) if nonmono else "none")
+    lo = pb[pb.city == "London"].sort_values("seed")
+    macro("EfourLondonPb", " / ".join(fmt(v, 3) for v in lo.d_deliveries_pct))
+    if mono is not None:
+        ok = mono.monotone.astype(str).str.lower().eq("true")
+        macro("EfourNonMonoN", str(int((~ok).sum())))
+        macro("EfourSeries", str(len(mono)))
+        allok = [c for c in ORDER if c in set(mono.city) and ok[mono.city == c].all()]
+        macro("EfourMonoCitiesN", str(len(allok)))
+        macro("EfourNonMonoCities", ", ".join(NAME[c] for c in ORDER if c in set(mono.city) and c not in allok))
+        macro("EfourMaxRise", str(int(mono.max_increase.max())))
     macro("EfourAllConverged", "all" if bool(s.converged.astype(str).str.lower().eq("true").all()) else "not all")
     macro("EfourRegretMax", fmt(s.max_regret.max()))
 

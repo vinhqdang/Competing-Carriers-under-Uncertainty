@@ -2,6 +2,8 @@
 (style of experiments/plot_cities.py).  Needs results/zones_<city>.csv from run_equilibria.py.
 
   python experiments/plot_equilibria.py [city ...]   -> figures/eq_<city>.png and figures/overview_equilibria.png
+  python experiments/plot_equilibria.py --light      -> same figures on a white background, file names with suffix _light
+                                                       (print versions; the data are identical)
 """
 import sys
 
@@ -18,6 +20,14 @@ from common import FIG, RES, zb  # noqa: E402
 from plot_cities import BG, FG, load_city, projector, to_km  # noqa: E402
 
 IDLE = "#1f2638"
+SPINE = "#3a4150"
+SUFFIX = ""
+
+
+def use_light():
+    """Switch to a print style: white background, dark text, light grey for zones without deliveries."""
+    global BG, FG, IDLE, SPINE, SUFFIX
+    BG, FG, IDLE, SPINE, SUFFIX = "white", "black", "#e3e3e3", "#999999", "_light"
 
 
 def rects(data, tr):
@@ -38,7 +48,7 @@ def draw(ax, verts, vals, cmap, norm, title, data):
     ax.set_facecolor(BG)
     ax.tick_params(colors=FG, labelsize=7)
     for sp in ax.spines.values():
-        sp.set_color("#3a4150")
+        sp.set_color(SPINE)
     ax.set_title(title, color=FG, fontsize=9)
     return pc
 
@@ -47,7 +57,7 @@ def cbar(fig, pc, ax, label):
     cb = fig.colorbar(pc, ax=ax, fraction=0.04, pad=0.02)
     cb.set_label(label, color=FG, fontsize=8)
     cb.ax.tick_params(colors=FG, labelsize=7)
-    cb.outline.set_edgecolor("#3a4150")
+    cb.outline.set_edgecolor(SPINE)
 
 
 def main(cities):
@@ -72,7 +82,7 @@ def main(cities):
                    "added travel-time slowdown from delivery vehicles (%)", data)
         cbar(fig, pc2, axes[1], "percent")
         fig.tight_layout()
-        fig.savefig(FIG / f"eq_{c}.png", facecolor=BG)
+        fig.savefig(FIG / f"eq_{c}{SUFFIX}.png", facecolor=BG)
         plt.close(fig)
         allp[c] = (verts, price / fee, data)
         alls[c] = (verts, slow, data)
@@ -92,9 +102,13 @@ def main(cities):
             cb.set_label(label, color=FG)
             cb.ax.tick_params(colors=FG)
             fig.subplots_adjust(left=0.03, right=0.91, top=0.96, bottom=0.03, wspace=0.12, hspace=0.12)
-            fig.savefig(FIG / fname, facecolor=BG)
+            fig.savefig(FIG / fname.replace(".png", f"{SUFFIX}.png"), facecolor=BG)
             plt.close(fig)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:] or zb.CITIES)
+    args = sys.argv[1:]
+    if "--light" in args:
+        args.remove("--light")
+        use_light()
+    main(args or zb.CITIES)
