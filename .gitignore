@@ -234,3 +234,9 @@ theory/**/*.aux
 theory/**/*.out
 theory/**/*.toc
 theory/**/*.log
+paper/*.aux
+paper/*.out
+paper/*.log
+paper/*.blg
+paper/*.spl
+paper/*.toc

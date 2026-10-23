@@ -1,0 +1,857 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{microtype}
+\usepackage[export]{adjustbox}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{xurl}
+\usepackage{orcidlink}
+
+\graphicspath{{../figures/}}
+\setlength{\tabcolsep}{4pt}
+
+% ------------------------------------------------------------- theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\renewcommand{\theassumption}{A\arabic{assumption}}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ------------------------------------------------------------- notation
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\ub}{\bar u}
+\newcommand{\abar}{\bar a}
+\newcommand{\Abar}{\bar A}
+\newcommand{\Amax}{A^{\max}}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\ICNE}{\mathrm{ICNE}}
+\newcommand{\Eu}{\overline{\mathbb{E}}}
+\newcommand{\Qb}{\overline{Q}}
+\newcommand{\Fl}{\underline{F}}
+\newcommand{\Fu}{\overline{F}}
+\newcommand{\Pib}{\overline{\Pi}}
+\newcommand{\xb}{\bar x}
+\newcommand{\pos}[1]{\left(#1\right)^{+}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\sd}{\partial^{+}}
+\newcommand{\Dl}{\underline{D}}
+\newcommand{\Dh}{\overline{D}}
+
+\input{tables/macros}
+
+\journal{Omega}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Imprecise beliefs, pure equilibria and city charges for competing delivery carriers}
+
+\author{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
+\ead{vinh.dq4@buv.edu.vn}
+\address{British University Vietnam, Hung Yen, Vietnam}
+
+\begin{abstract}
+Competing parcel carriers share a city's streets and customers while planning with travel-time data too thin to identify a probability law. We model them as players of a Cournot--congestion game: each carrier chooses a routing plan, interacts with rivals through zone aggregates of deliveries and vehicle-hours, and holds a credal set of beliefs about traffic and rivals. Under exposure-based congestion the game has an exact potential and pure imprecise equilibria exist at every belief width. Under vehicle-count congestion, deciding whether a pure imprecise equilibrium exists is strongly NP-complete below an explicit width; above a width that does not grow with the number of carriers, every mixed equilibrium rounds to an exact pure E-admissible equilibrium, and this bound is attained. For computation we give an exact column-generation pricing algorithm for routes whose arc times are probability boxes with unknown dependence, using one resource per kink of the route loss and a completion-window dominance rule, and a zone-market clearing search whose routing calls per round do not depend on the number of zones. On nine cities calibrated from OpenStreetMap, gridded population and published operating parameters, the empirical price of anarchy is close to one where carriers serve almost all demand and reaches \PoAmax{} where service is partial. A per-delivery subsidy captures most of a city leader's attainable gain, while a congestion charge alone captures little. Wider imprecision lowers deliveries, congestion and welfare together. The zone-market search was not better than plain best response on the city games.
+\end{abstract}
+
+\begin{keyword}
+last-mile delivery \sep game theory \sep imprecise probabilities \sep vehicle routing \sep column generation \sep price of anarchy \sep smart cities
+\end{keyword}
+
+\end{frontmatter}
+
+%======================================================================
+\section{Introduction}\label{sec:intro}
+
+Urban parcel delivery is carried out by several firms at once. Postal operators, integrators, retailer fleets and platforms send vans into the same neighbourhoods, sell to overlapping customers and slow one another down on the same streets. City authorities respond with instruments that act on all of them together: congestion and low-emission zones, kerbside and loading rules, and charges or subsidies per delivery \citep{Quak2009,HolguinVeras2016,Dey2019,XuSun2024}. Designing such instruments requires a model of how competing carriers react to them, and the reaction is a routing decision taken under uncertainty about travel times and about what the rivals will do.
+
+Operations research has mature tools for each part of this problem in isolation. Stochastic, robust and distributionally robust vehicle routing treats one decision maker facing uncertain demand or travel times \citep{Gendreau2016,GhosalWiesemann2020,Zhang2021,GhosalHoWiesemann2024}. Collaborative routing studies carriers who agree to exchange requests or share resources \citep{GanstererHartl2018,Cleophas2019,Los2025}. Platform economics studies competition through prices, wages and congestion, with routing reduced to queues \citep{Taylor2018,Bernstein2021,Benjaafar2022}. Bilevel last-mile models put a platform or a public authority above carriers that do not interact with one another \citep{Catalano2014,Cerulli2024}. The structured literature survey that preceded this work found four gaps where these streams fail to meet: no routing-level equilibrium model of competing parcel carriers under uncertainty (G1); no leader-follower model in which a public leader faces interacting carriers (G2); no data-driven or ambiguity-aware equilibrium computation for routing games (G5); and no public multi-carrier instances or protocol for reporting equilibrium quality (G6). We address parts of each, and we state below which parts.
+
+Two features of the setting shape the model. First, a carrier rarely knows the probability law of travel times; it has a few weeks of observations and published congestion indices, which support bounds on distribution functions (probability boxes) and say nothing about the dependence between road segments. Second, a carrier's expectation about its rivals' activity in a zone is itself imprecise. Imprecise probability theory \citep{Walley1991,Troffaes2007} offers decision criteria for such credal beliefs, from the cautious $\Gamma$-maximin to the permissive E-admissibility. In a game these criteria lead to equilibrium notions whose existence and computation behave very differently, and that difference matters for a regulator who wants to predict the outcome of a charge.
+
+\paragraph{Contributions} We claim the following, with the caveats on prior art given in Sections~\ref{sec:related} and~\ref{sec:theory}.
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+\item \emph{Model.} A Cournot--congestion game among carriers who choose routing plans from finite, nonconvex sets and interact through zone aggregates, with credal beliefs about traffic and rivals, four decision criteria, and two congestion regimes: exposure-based (D1) and vehicle-count (D2) (Section~\ref{sec:model}).
+\item \emph{Theory.} A credal absorption theorem: any mixed equilibrium can be rounded to a pure profile that is an exact E-admissible (hence maximal and interval-undominated) equilibrium once the belief width reaches an explicit radius whose bound does not grow with the number of carriers; the bound is attained. Below an explicit width, existence of pure imprecise equilibria is strongly NP-complete under D2 for all four criteria, while under D1 they exist at every width. The $\Gamma$-maximin equilibria form the equilibrium set of a precise game with a computable surcharge. These results, with tightness examples and price-of-anarchy transfers, are in Section~\ref{sec:theory}; full proofs are in \ref{app:proofs}. Parts of the combinatorial core are machine-checked in Lean~4; two statements still contain unfinished proofs (Section~\ref{sec:lean}).
+\item \emph{Algorithms.} Budget-resource labelling (BRL), an exact pricing algorithm for routes whose arc times are given by probability boxes with unknown dependence: the worst-case expected convex piecewise-linear route loss becomes a shortest-path problem with one decision resource per kink, and labels are compared by a dominance rule restricted to a computable completion window. Zone-market clearing (ZMC), a price search for good pure equilibria of the D1 game whose rounds cost one routing call per carrier, independently of the number of zones. Both are integrated into one equilibrium engine (Section~\ref{sec:algo}).
+\item \emph{Evidence.} Nine city instances built from OpenStreetMap road networks, gridded population and web-sourced operating parameters, with every weak parameter flagged, and experiments on equilibria, city charges, empirical price of anarchy and stability, imprecision and algorithm performance, including negative findings (Sections~\ref{sec:data} and~\ref{sec:results}).
+\end{enumerate}
+We do not claim a forecast for any city. The instances describe a representative slice of each city with proxy demand and several weak parameters, and the price-of-anarchy values are empirical, computed from the few equilibria the methods found.
+
+%======================================================================
+\section{Related work}\label{sec:related}
+
+\paragraph{Competing carriers and platforms} Figliozzi, Mahmassani and Jaillet studied carriers competing in sequential auctions for truckload requests, with routing-level opportunity costs and dynamic arrivals \citep{Figliozzi2004,Figliozzi2007}. Their setting has deterministic travel times and is evaluated by simulation, not equilibrium computation. Shared infrastructure among competing parcel firms has been analysed with stylised games: sharing of collection-delivery points between two express companies \citep{Li2024} and cooperative placement of parcel lockers \citep{Mercurio2026}. Ride-hailing and on-demand platforms supply most of the equilibrium evidence on competition for workers and customers \citep{Taylor2018,Bernstein2021,Benjaafar2022}, but these models use queues rather than routes. Crowdsourced delivery has been reviewed and modelled in this journal \citep{Alnaggar2021,Alnaggar2024,Mancini2022,DiPuglia2023}, mostly from the platform's side.
+
+\paragraph{Leaders above carriers} \citet{Cerulli2024} model a platform that assigns requests and sets compensation while each carrier solves its own profitable tour problem; the carriers do not interact, so the lower level is not a game. \citet{Catalano2014} cast terminal design as a Stackelberg game with a public designer above a carrier equilibrium. Curb management supplies the most direct foundations for a public pricing leader: \citet{XuSun2024} analyse on-street parking with delivery vehicles and find that calibrated parking prices reduce the need for dedicated delivery bays, and \citet{LiuMaQian2023} optimise curbside prices for ride-hailing pick-ups. Policy-oriented work documents the restrictions cities use in practice \citep{Quak2009,HolguinVeras2016,Dey2019}. None of these embeds interacting carriers with routing-level best responses.
+
+\paragraph{Collaboration as a benchmark} Collaborative vehicle routing, with auctions, request exchange and cost allocation, is surveyed by \citet{GanstererHartl2018}, \citet{Guajardo2016} and \citet{Cleophas2019}; auction-based collaboration was reviewed in this journal \citep{GanstererHartl2020omega}, and large-scale decentralised versions are studied by \citet{Los2020,Los2025}. The savings reported there bound what cooperation could recover; they are not a price of anarchy, because the baseline carriers plan independently without competing for the same customers.
+
+\paragraph{Uncertainty in routing} Robust and distributionally robust routing keeps the combinatorial structure of the deterministic problem when the ambiguity set has suitable structure \citep{Gounaris2013,GhosalWiesemann2020,Zhang2021,Jaillet2016,Adulyasak2016}. Closest to our pricing algorithm, \citet{GhosalHoWiesemann2024} show that a CVRP with ambiguous demand marginals and unknown dependence reduces, through a comonotone worst case, to a scenario CVRP solved by branch-and-cut. The comonotone worst case and the stop-loss decomposition of comonotone sums go back to \citet{Meilijson1979} and are standard in actuarial science \citep{Kaas2000,Dhaene2002}; worst-case marginals of a probability box under monotone losses are standard in probability-bound analysis \citep{Williamson1990}. Branch-price-and-cut with correlated travel times under a mean-covariance model \citep{Rostami2021} and path dominance by second-order stochastic dominance for independent arc times \citep{Nie2012} address different dependence models. Dynamic and learning-based routing is reviewed by \citet{Soeffker2022}, \citet{Ulmer2020} and \citet{Hildebrandt2023}; data-driven distributionally robust optimisation is developed by \citet{MohajerinEsfahani2018}, with urban applications in this journal such as \citet{Wang2023omega}. None of these papers adds competition among carriers.
+
+\paragraph{Games, aggregation and ambiguity} Congestion and potential games guarantee pure equilibria in classes of finite games \citep{Rosenthal1973,Monderer1996}, and selfish-routing theory bounds the inefficiency of nonatomic and atomic splittable flows and of competing congestible providers \citep{Wardrop1952,Orda1993,Roughgarden2002,Acemoglu2007,Cominetti2009}, and generalized Nash problems model shared capacities \citep{Facchinei2010}. A carrier, however, chooses tours, which makes its strategy set finite and nonconvex. \citet{Liu2023} prove, with a Shapley--Folkman argument in the tradition of \citet{Starr1969}, that nonconvex aggregative games have approximate pure equilibria whose error does not grow with the number of players; the optimisation counterpart with Frank--Wolfe and rounding is in \citet{Aubin1976}, \citet{Udell2016} and \citet{Bonnans2023}. Approximate pure equilibria in large games go back to \citet{Kalai2004} and \citet{Azrieli2013}, and finding them is PPAD-complete in Lipschitz games \citep{Goldberg2023}. Equilibrium under ambiguous beliefs has been studied as equilibrium in beliefs \citep{Lo1996,Marinacci2000}, as pure equilibrium in beliefs with ambiguous payoffs \citep{Beauchene2016}, as Knightian robustness \citep{Stauber2011} and as robust-optimisation equilibrium \citep{Aghassi2006,Crespi2025}; \citet{Crespi2025} show that robust equilibria are approximate equilibria of the nominal game, which is the converse direction of our absorption theorem. \citet{Feik2026} study convex aggregative games with an optimal-transport ambiguity ball around the aggregate and report the price of anarchy as a function of the radius; their strategy sets are convex and their criterion is worst-case. \citet{Christodoulou2011} bound the price of anarchy of approximate equilibria as a function of the slack, and \citet{Bhaskar2019} compute tolls that implement target equilibria using best-response queries. Deciding existence of pure equilibria is NP-complete in polymatrix and integer programming games \citep{Apt2022,Carvalho2022}, and integer-programming methods select among pure equilibria \citep{Dragotto2023}.
+
+\paragraph{Position of this paper} Relative to these streams, our model is an atomic, routing-level game with a public leader and credal beliefs. Its theory combines known ingredients (Shapley--Folkman rounding, kernel reductions, potential games) into statements about imprecise equilibria that we did not find in the literature, and its algorithms adapt known machinery (labelling, column generation, price decomposition) to the structure of this game. Our searches were web and index searches with snippet-level reading for several neighbours; we list the closest neighbours of each result where it is stated.
+
+%======================================================================
+\section{Model}\label{sec:model}
+
+Throughout, $[n]=\{1,\dots,n\}$, $\Delta(S)$ is the probability simplex over a finite set $S$, and for $v\in\R^d$ and $w\in\R^d_{>0}$, $\|v\|_{w,\infty}=\max_k|v_k|/w_k$ and $\|v\|_M^2=\ip{v}{Mv}$.
+
+\subsection{Carriers, plans and coupling}
+
+\begin{assumption}[Finite plans]\label{ass:plans}
+There are $N\ge1$ carriers. Carrier $i$ has a finite nonempty plan set $\cP_i$. Each plan $p\in\cP_i$ has a contribution $a_i(p)\in\R^d_{\ge0}$ to the aggregate, an exposure $\varphi_i(p)\in\R^d_{\ge0}$ to the aggregate, an exposure to traffic $t_i(p)\in\R^Z_{\ge0}$, and a private profit $\pi_i(p)\in\R$. At a pure profile $\sigma$, $A(\sigma)=\sum_ia_i(\sigma_i)$ and $A_{-i}(\sigma)=A(\sigma)-a_i(\sigma_i)$.
+\end{assumption}
+
+\begin{assumption}[Affine coupling]\label{ass:affine}
+There are a diagonal $M=\operatorname{diag}(M_1,\dots,M_d)\ge0$ and $\gamma>0$ such that, for a realised rival aggregate $m\in\R^d_{\ge0}$ and traffic factor $\xi\in\R^Z_{\ge0}$, carrier $i$'s payoff from plan $p$ is
+$u_i(p;m,\xi)=\pi_i(p)-\ip{\varphi_i(p)}{Mm}-\gamma\ip{t_i(p)}{\xi}$.
+\end{assumption}
+
+The application is the following instantiation. The city is divided into zones $z\in[Z]$, and $d=2Z$ coordinates are indexed $(z,Q)$ and $(z,X)$. A routing plan of carrier $i$ determines deliveries $q_{iz}$, vehicles $n_{iz}$, vehicle-hours $\tau_{iz}$ and a routing cost $C_i(p)$. Inverse demand in zone $z$ is $\alpha_z-b_zQ_z$ with $b_z>0$, and a vehicle-hour costs $\gamma(\xi_z+c_zX_z)$ with $c_z>0$. The city charges $s_z$ per delivery and $\theta_z$ per unit of the congestion variable. Carrier $i$'s profit is
+\begin{equation}\label{eq:profit}
+u_i=\sum_z\big[q_{iz}(\alpha_z-b_zQ_z)-\gamma\tau_{iz}(\xi_z+c_zX_z)-s_zq_{iz}-\theta_zx_{iz}\big]-C_i(p).
+\end{equation}
+Two congestion regimes are distinguished:
+\begin{itemize}[leftmargin=*]
+\item \textbf{D1 (exposure-based congestion):} $x_{iz}=\tau_{iz}$ and $X_z=\sum_i\tau_{iz}$;
+\item \textbf{D2 (vehicle-count congestion):} $x_{iz}=n_{iz}$ and $X_z=\sum_in_{iz}$.
+\end{itemize}
+Equation \eqref{eq:profit} has the form of Assumption~\ref{ass:affine} with $a_{i,(z,Q)}=\varphi_{i,(z,Q)}=q_{iz}$, $M_{(z,Q)}=b_z$, $a_{i,(z,X)}=x_{iz}$, $\varphi_{i,(z,X)}=\tau_{iz}$, $M_{(z,X)}=\gamma c_z$, $t_{iz}=\tau_{iz}$ and $\pi_i(p)=\sum_z[\alpha_zq_{iz}-b_zq_{iz}^2-\gamma c_z\tau_{iz}x_{iz}-s_zq_{iz}-\theta_zx_{iz}]-C_i(p)$. The game is \emph{of type D1} if $\varphi_i=a_i$ for all carriers and plans, and \emph{of type D2} otherwise. Welfare at the true mean traffic $\mu$ is
+\begin{equation}\label{eq:welfare}
+W(\sigma)=\sum_z\big[\alpha_zQ_z-\tfrac{b_z}{2}Q_z^2-\gamma\mu_zT_z-\gamma c_zT_zX_z\big]-\sum_iC_i(\sigma_i),\qquad T_z=\textstyle\sum_i\tau_{iz},
+\end{equation}
+with charges treated as transfers. It counts consumer surplus, the congestion cost the carriers impose on each other and routing costs; Section~\ref{sec:data} adds a proxy for the delay imposed on background traffic.
+
+\subsection{Imprecise beliefs}
+
+\begin{assumption}[Traffic box]\label{ass:traffic}
+$\Xi=\prod_z[\underline\mu_z,\overline\mu_z]\subset\R^Z_{\ge0}$ with widths $\kappa_z=\overline\mu_z-\underline\mu_z$; a nominal mean $\hat\mu\in\Xi$ is fixed and the true mean $\mu$ lies in $\Xi$.
+\end{assumption}
+
+\begin{assumption}[Credal sets, clipped and consistent]\label{ass:credal}
+Fix weights $w\in\R^d_{>0}$ and a width $\delta\ge0$. For $c\in\R^d_{\ge0}$ let $K^\delta(c)=\{m\in\R^d_{\ge0}:|m_k-c_k|\le\delta w_k\ \forall k\}$. At a pure profile $\sigma$, carrier $i$'s credal set $\cM_i^\delta(\sigma)$ is the set of Borel probability laws $P$ on $\R^d_{\ge0}\times\R^Z_{\ge0}$ with finite first moments such that $\E_P[m]\in K^\delta(A_{-i}(\sigma))$ and $\E_P[\xi]\in\Xi$.
+\end{assumption}
+
+The box is centred at the realised rival aggregate, which is the consistency requirement of equilibrium in beliefs \citep{Lo1996}, and it is clipped at zero, so every belief is a feasible aggregate. The width $\delta$ measures how much a carrier is unsure about its rivals' activity, in units $w_k$.
+
+\begin{definition}[Decision criteria; \citealp{Troffaes2007}]\label{def:criteria}
+For a finite option set $\cP$ and a set $\cM$ of laws, with $\underline\E=\inf_{P\in\cM}\E_P$ and $\overline\E=\sup_{P\in\cM}\E_P$, an option $p$ is \emph{E-admissible} if it maximises $\E_P[u(\cdot)]$ for some $P\in\cM$; \emph{maximal} if no $p'$ has $\underline\E[u(p')-u(p)]>0$; \emph{interval-undominated} (ID) if $\overline\E[u(p)]\ge\max_{p'}\underline\E[u(p')]$; and \emph{$\Gamma$-maximin} if $\underline\E[u(p)]=\max_{p'}\underline\E[u(p')]$.
+\end{definition}
+
+\begin{definition}[Imprecise credal Nash equilibrium]\label{def:icne}
+For $C\in\{E,M,ID,\Gamma\}$ and $\delta\ge0$, $\ICNE_C(\delta)$ is the set of pure profiles $\sigma$ in which every $\sigma_i$ is $C$-admissible for $(\cP_i,\cM_i^\delta(\sigma))$ with payoff $u_i$. The existence threshold is $\delta_0^C=\inf\{\delta\ge0:\ICNE_C(\delta)\neq\emptyset\}$.
+\end{definition}
+
+\subsection{The routing layer}
+
+A plan of carrier $i$ is a set of depot-to-depot routes over its customer zones. Arc travel times are random. For every arc $a$ the carrier knows only a probability box: CDFs $\Fl_a\le\Fu_a$ on a bounded support $[0,B_a]$, for example a Dvoretzky--Kiefer--Wolfowitz (DKW) band around the empirical CDF of $n$ observed days, $\Fl_a(x)=\max\{F_n(x)-\varepsilon,0\}$ with $\varepsilon=\sqrt{\ln(2/\alpha)/(2n)}$ \citep{DKW1956,Massart1990}. The dependence between arcs is unknown. The joint credal set is the Fr\'echet class $\cM=\{P:\text{the $a$-th marginal of $P$ lies between }\Fl_a\text{ and }\Fu_a\text{ for all }a\}$. A route of duration $T_r=\sum_{a\in r}X_a$ incurs the convex piecewise-linear loss
+\begin{equation}\label{eq:loss}
+\phi(T)=c_0+\gamma T+\textstyle\sum_{j=1}^{H}\rho_j\pos{T-\Theta_j},\qquad \gamma\ge0,\ \rho_j>0,\ 0\le\Theta_1<\dots<\Theta_H,
+\end{equation}
+which in the experiments is $H=1$: a fixed cost, an hourly cost and an overtime penalty after the shift length $\Theta_1=T_{\max}$. The robust route cost is the upper prevision $\Eu[\phi(T_r)]=\sup_{P\in\cM}\E_P\phi(T_r)$, the $\Gamma$-minimax criterion for a loss, and it enters $C_i(p)=\sum_{r\in p}\Eu[\phi(T_r)]$. The plan-level game of the previous subsections therefore contains a robust routing problem inside every best response, and the oracle of the next assumption is the interface between the two layers.
+
+\begin{assumption}[Oracles]\label{ass:oracle}
+For each $i$ there is an oracle that, for price vectors $\lambda^a,\lambda^\varphi\in\R^d$, $\nu\in\R^Z$ and a diagonal $Q\succeq0$, returns a plan in $\arg\max_{p\in\cP_i}\{\pi_i(p)+\tfrac12\ip{a_i(p)}{Qa_i(p)}-\ip{\lambda^a}{a_i(p)}-\ip{\lambda^\varphi}{\varphi_i(p)}-\ip{\nu}{t_i(p)}\}$.
+\end{assumption}
+
+A best response at belief $(m,\xi)$ is the call $(0,Mm,\gamma\xi,0)$. In the application the oracle is a prize-collecting robust routing problem with zone prices; Section~\ref{sec:algo} solves it by column generation with the BRL pricing algorithm.
+
+\paragraph{Assumptions stated plainly} The coupling is affine in the aggregates (a BPR-type power congestion term would break the exact credal statements below; Remark~\ref{rem:nonaffine}). Charges are zone-specific and linear. Beliefs about rivals are boxes centred at the realised aggregate. The traffic factor $\xi$ enters only through its mean, and in the experiments its uncertainty is carried by the probability boxes of the routing layer.
+
+%======================================================================
+\section{Theory}\label{sec:theory}
+
+This section states the results and sketches the proofs; complete proofs are in \ref{app:proofs}. Results labelled \emph{classical} are known and cited.
+
+\subsection{Reduction to mean boxes and the criteria}
+
+Write $\ub_i(p;m,\xi)$ for the payoff of Assumption~\ref{ass:affine} evaluated at the means $(m,\xi)$ and $K_i^\delta(\sigma)=K^\delta(A_{-i}(\sigma))\times\Xi$.
+
+\begin{lemma}[Reduction of the credal set to its mean box]\label{lem:reduction}
+Under Assumptions~\ref{ass:plans}--\ref{ass:credal}: (a) for every $P\in\cM_i^\delta(\sigma)$ and every $p$, $\E_P[u_i(p)]=\ub_i(p;\E_Pm,\E_P\xi)$; (b) $P\mapsto(\E_Pm,\E_P\xi)$ maps $\cM_i^\delta(\sigma)$ onto $K_i^\delta(\sigma)$; (c) hence each criterion of Definition~\ref{def:criteria} coincides with the same criterion evaluated over the compact box $K_i^\delta(\sigma)$, and infima and suprema are attained.
+\end{lemma}
+
+\begin{lemma}[Nesting and monotonicity]\label{lem:nesting}
+For every $\delta\ge0$, \[\ICNE_E(\delta)\subseteq\ICNE_M(\delta)\subseteq\ICNE_{ID}(\delta)\quad\text{and}\quad\ICNE_\Gamma(\delta)\subseteq\ICNE_M(\delta).\] For $C\in\{E,M,ID\}$ and $\delta\le\delta'$, $\ICNE_C(\delta)\subseteq\ICNE_C(\delta')$. For $C=\Gamma$ the monotonicity fails (Example~\ref{ex:gamma} in \ref{app:proofs}).
+\end{lemma}
+
+The inclusions between criteria are due to \citet{Troffaes2007}. Monotonicity in $\delta$ says that more imprecision can only enlarge the set of E-admissible, maximal or interval-undominated equilibria; $\Gamma$-maximin behaves differently because the worst case moves with $\delta$.
+
+\begin{lemma}[$\Gamma$-maximin surcharge]\label{lem:gamma}
+If $\varphi_i(p),t_i(p)\ge0$, the lower expectation over $K^\delta(c)\times\Xi$ is attained, for every plan simultaneously, at the upper corner $(c+\delta w,\overline\mu)$ and is linear in mixtures. Consequently $\ICNE_\Gamma(\delta)$ is the set of pure Nash equilibria of the precise game $G^\Gamma_\delta$ with private profits
+\[
+\pi_i^\Gamma(p)=\pi_i(p)-\delta\ip{\varphi_i(p)}{Mw}-\gamma\ip{t_i(p)}{\overline\mu},
+\]
+the same coupling, and traffic set to zero.
+\end{lemma}
+
+The surcharge $\delta\ip{\varphi_i(p)}{Mw}$ is what a cautious carrier adds to the cost of activity in zone $k$ because it fears up to $\delta w_k$ more rival activity than it observes. Section~\ref{sec:results} uses it to compute $\Gamma$-maximin equilibria of the city games.
+
+\subsection{Existence under exposure-based congestion}
+
+\begin{proposition}[Existence under D1 at every width]\label{prop:D1}
+Under D1, for every $\hat\xi\in\Xi$,
+\[
+\Psi_{\hat\xi}(\sigma)=\textstyle\sum_i\big[\pi_i(\sigma_i)+\tfrac12\|a_i(\sigma_i)\|_M^2-\gamma\ip{t_i(\sigma_i)}{\hat\xi}\big]-\tfrac12\|A(\sigma)\|_M^2
+\]
+is an exact potential of the precise game at traffic $\hat\xi$. Every maximiser lies in $\ICNE_E(\delta)$ for all $\delta\ge0$, so $\delta_0^E=\delta_0^M=\delta_0^{ID}=0$, and $\ICNE_\Gamma(\delta)\neq\emptyset$ for all $\delta\ge0$.
+\end{proposition}
+
+\emph{Sketch.} For a unilateral change of carrier $i$ from contribution $a$ to $a'$ with rival aggregate $R$, the quadratic terms give $\tfrac12\|a'\|_M^2-\tfrac12\|a\|_M^2-\tfrac12\|R+a'\|_M^2+\tfrac12\|R+a\|_M^2=-\ip{a'-a}{MR}$, which equals the change of the coupling term when $\varphi_i=a_i$. A maximiser of an exact potential is a pure equilibrium \citep{Monderer1996}, and the centre of every credal box is the realised aggregate. For $\Gamma$, $G^\Gamma_\delta$ is again of type D1.
+
+\subsection{Credal absorption}
+
+Let $x^*$ be a mixed equilibrium of the precise game at traffic $\hat\xi\in\Xi$ (it exists by \citealp{Nash1951}; under affine coupling, mixed equilibria are exactly the profiles in which every plan in the support is a best response to the mean rival aggregate, Proposition~\ref{prop:relaxed}). Write $B_j$ for carrier $j$'s best-response set at $x^*$, $\abar_j=\sum_px^*_j(p)a_j(p)$, $\Abar^*_{-i}=\sum_{j\ne i}\abar_j$, and define the spreads $s_{jk}=\max_{p,p'\in B_j}|a_{jk}(p)-a_{jk}(p')|$ and $r_{jk}=\max_{p\in B_j}|a_{jk}(p)-\abar_{jk}|$, with $\bar\sigma=\max_{j,k}s_{jk}/w_k$, $\bar\rho=\max_{j,k}r_{jk}/w_k$, $d_L=\dim\spn\bigcup_j(a_j(B_j)-a_j(B_j))$ and $k^\sharp=\min\{N,d_L\}$. Let $\sigma_{\max}=\max_{i,k}\operatorname{range}_{p\in\cP_i}a_{ik}(p)/w_k$, so that $\bar\rho\le\bar\sigma\le\sigma_{\max}$. The \emph{anchored radius} of a pure profile $p\in\prod_jB_j$ is $\hat\delta(p)=\max_i\|A_{-i}(p)-\Abar^*_{-i}\|_{w,\infty}$.
+
+\begin{theorem}[Credal absorption]\label{thm:main}
+Assume \ref{ass:plans}--\ref{ass:credal} and let $x^*$ be a mixed equilibrium at $\hat\xi\in\Xi$.
+\begin{enumerate}[label=(\alph*),leftmargin=*]
+\item \emph{Absorption.} For every $p\in\prod_jB_j$ and every $\delta\ge\hat\delta(p)$, $p\in\ICNE_E(\delta)\subseteq\ICNE_M(\delta)\subseteq\ICNE_{ID}(\delta)$.
+\item \emph{Radius.} $\min_{p\in\prod_jB_j}\hat\delta(p)\le\min\big\{\max_i\max_k\sum_{j\ne i}r_{jk}/w_k,\ k^\sharp\bar\sigma+\bar\rho,\ \bar\sigma\sqrt{k^\sharp\ln(2d)/2}+\bar\rho\big\}$.
+\item \emph{Uniform existence.} $\delta_0^{ID}\le\delta_0^M\le\delta_0^E\le\sigma_{\max}\min\{N-1,\ d+1,\ 1+\sqrt{d\ln(2d)/2}\}$.
+\item \emph{Construction.} A profile achieving the second bound is obtained from $x^*$ by one linear program (a vertex of the polytope of Shapley--Folkman decompositions) followed by an arbitrary choice for at most $k^\sharp$ carriers; one achieving the third bound by independent sampling of these carriers, with success probability at least $1-2d\exp(-2t^2/(k^\sharp\bar\sigma^2))$ per draw for target $t+\bar\rho$; one achieving the first bound is any $p\in\prod_jB_j$.
+\end{enumerate}
+\end{theorem}
+
+\emph{Sketch.} Every carrier in $p\in\prod_jB_j$ plays a best response to the \emph{anchor} $\Abar^*_{-i}$, which is nonnegative. If $\delta\ge\hat\delta(p)$, the anchor lies in the clipped box around the realised aggregate $A_{-i}(p)$, so the Dirac law at the anchor belongs to the credal set and witnesses E-admissibility. The radius bounds follow from the decomposition $A_{-i}(p)-\Abar^*_{-i}=\sum_{j\in J}(a_j(p_j)-y_j)-(a_i(p_i)-\abar_i)$, where $J$ is the set of at most $k^\sharp$ carriers left mixed at a vertex of the Shapley--Folkman polytope (Theorem~\ref{thm:sf}); the sum is bounded deterministically by $k^\sharp\bar\sigma$ or, after independent sampling, by Hoeffding's inequality \citep{Hoeffding1963} and a union bound. The own term $a_i(p_i)-\abar_i$ cannot be removed (it is the ``$+1$'' in the bound of \citealp{Liu2023}).
+
+\begin{corollary}[$\varepsilon$-Nash in the precise game; cf.\ \citealp{Liu2023}]\label{cor:eps}
+A profile $p$ as in Theorem~\ref{thm:main}(a) is an $\varepsilon$-Nash equilibrium of the precise game at any $\mu\in\Xi$ with $\varepsilon_i\le\hat\delta(p)L_i(p)+\gamma\sum_z\kappa_zT_{iz}(p)$, where $L_i(p)=\max_{p'}\sum_kw_kM_k|\varphi_{ik}(p')-\varphi_{ik}(p_i)|$ and $T_{iz}(p)=\max_{p'}|t_{iz}(p')-t_{iz}(p_i)|$.
+\end{corollary}
+
+\begin{remark}[Novelty and regime]\label{rem:regime}
+Corollary~\ref{cor:eps} restates, in our notation, the $N$-independent approximate equilibrium of \citet{Liu2023}, who also use a Shapley--Folkman argument on the generators of a convexified equilibrium; we claim no novelty for it. What Theorem~\ref{thm:main} adds is that under E-admissibility the rounding error is \emph{absorbed} by the belief width: the rounded profile is an \emph{exact} imprecise equilibrium, not an approximate one. The proof of part (a) is short; the content of the result lies in the bound, its attainment (Proposition~\ref{prop:tight}), its failure for $\Gamma$-maximin (Remark~\ref{rem:gamma-abs}), and the contrast with the complexity result below. In the city instances $N\le6$ and $d=2Z\ge84$, so $k^\sharp=N$, the Shapley--Folkman step selects nothing, and the operative bound is the support-selection bound $(N-1)\bar\rho$. Shapley--Folkman matters only when the number of players exceeds the dimension, for example with per-vehicle or crowdsourced players.
+\end{remark}
+
+\begin{remark}[$\Gamma$-maximin]\label{rem:gamma-abs}
+By Lemma~\ref{lem:gamma}, $\ICNE_\Gamma(\delta)$ is the pure-equilibrium set of a \emph{precise} game, so absorption does not apply to it, and under D2 that set can be empty (Proposition~\ref{prop:tight} at $\delta=0$).
+\end{remark}
+
+\subsection{Tightness}
+
+\begin{proposition}[The support-selection bound is attained]\label{prop:tight}
+Let $N=2$, one zone, D2, $M=\gamma c=1$ and weight $w>0$. Carrier 1 has plans $A_1:(n,\tau,\pi)=(1,4,6)$ and $B_1:(3,1,0)$; carrier 2 has $X:(1,1,0)$ and $Y:(3,4,6)$; payoffs are $\pi-\tau\cdot n_{\rm rival}$. Then the game has no pure Nash equilibrium, $\delta_0^E=\delta_0^M=1/w$, and the bound $(N-1)\bar\rho$ of Theorem~\ref{thm:main}(b) equals $1/w$.
+\end{proposition}
+
+In each of the four pure profiles exactly one carrier has a strict incentive to deviate at the realised count, and it becomes indifferent only at a belief that differs from the realised count by one vehicle.
+
+\begin{proposition}[Linear dependence on the number of zones is necessary]\label{prop:cycles}
+For every $Z\ge1$ and $N\ge2$ there is a D2 game with $Z$ zones in which every pure profile has $\max_i\varepsilon_i\ge3\lceil Z/2\rceil$, while every profile of Theorem~\ref{thm:main}(a) satisfies $\hat\delta(p)L_i(p)\le3Z$ ($w=1$).
+\end{proposition}
+
+\subsection{Complexity under vehicle-count congestion}
+
+\begin{theorem}[NP-completeness under D2]\label{thm:np}
+Consider the problem of deciding $\ICNE_C(\delta)\neq\emptyset$ for a game given by explicit plan lists with rational data, $M$, $w$, a degenerate traffic box and a rational $\delta\ge0$. For each $C\in\{E,M,ID,\Gamma\}$ the problem is in NP. For every digraph $D$ with maximum out-degree $\Delta^+\ge1$ one constructs in polynomial time a D2 instance with two plans per carrier and one zone per arc such that, for all $\delta\in[0,1/(2\Delta^++1))$, $\ICNE_E(\delta)=\ICNE_M(\delta)=\ICNE_{ID}(\delta)=\ICNE_\Gamma(\delta)$ is the set of profiles that play ``in'' exactly on a kernel of $D$. Hence the problem is strongly NP-complete for each criterion, already at $\delta=0$, and for every fixed $\delta\in[0,1/5)$.
+\end{theorem}
+
+\emph{Sketch.} Deciding whether a digraph has a kernel (an independent set that absorbs every other vertex) is NP-complete \citep{Chvatal1973}, also for planar digraphs with in- and out-degree at most two \citep{Fraenkel1981}. Each vertex becomes a carrier with an ``out'' plan of zero data and an ``in'' plan that puts one vehicle on each out-arc zone and two vehicles on each in-arc zone, with exposure one on out-arcs and a small exposure on in-arcs. The gain of ``in'' is positive if no out-neighbour plays ``in'' and at most $-1$ otherwise, and the sign is constant on every credal box of width below $1/(2\Delta^++1)$, so all four criteria select the realised strict best response.
+
+\begin{corollary}[Inapproximability of the existence threshold]\label{cor:inapprox}
+Unless $\mathrm P=\mathrm{NP}$, no polynomial algorithm approximates $\delta_0^E$ of a D2 instance within any fixed factor, or within an additive error below $1/5$.
+\end{corollary}
+
+Pure-equilibrium existence is known to be NP-complete in polymatrix games and integer programming games \citep{Apt2022,Carvalho2022}; Theorem~\ref{thm:np} is a direct kernel reduction specialised to the rank-one D2 structure and extended to four credal criteria and a range of widths. Together with Proposition~\ref{prop:D1} it gives a complexity split between the two congestion regimes: charging or modelling congestion by exposure (vehicle-hours in a zone) yields a potential game with guaranteed pure imprecise equilibria, while counting vehicles does not. Under D2 the mixed equilibrium that Theorem~\ref{thm:main} rounds is itself hard to compute: every bimatrix game embeds as a D2 instance with $N=2$, so the step is PPAD-hard \citep{Chen2009,Daskalakis2009} (Proposition~\ref{prop:ppad}).
+
+\subsection{Efficiency}
+
+\begin{lemma}[Imprecise equilibria are approximate equilibria]\label{lem:transfer}
+If $\sigma\in\ICNE_C(\delta)$ and $\mu\in\Xi$, then $\sigma$ is an $\varepsilon$-Nash equilibrium of the precise game with $\varepsilon_i\le\delta L_i(\sigma)+\gamma\sum_z\kappa_zT_{iz}(\sigma)$ for $C\in\{E,M\}$ and $\varepsilon_i\le2\delta H_i+2\gamma\Theta_i$ for $C=ID$, with $H_i=\max_p\sum_kw_kM_k\varphi_{ik}(p)$ and $\Theta_i=\max_p\sum_z\kappa_zt_{iz}(p)$.
+\end{lemma}
+
+\begin{proposition}[Monotone efficiency curves]\label{prop:cs}
+For $C\in\{E,M,ID\}$ and $W>0$, $\mathrm{PoA}_C(\delta)=W^*/\min_{\ICNE_C(\delta)}W$ is nondecreasing and $\mathrm{PoS}_C(\delta)=W^*/\max_{\ICNE_C(\delta)}W$ nonincreasing in $\delta$, and both are step functions with at most $\prod_i|\cP_i|$ steps. For $C=\Gamma$ neither monotonicity holds in general.
+\end{proposition}
+
+\begin{proposition}[Price of stability via the potential, D1]\label{prop:pos}
+Under D1 with zero charges and $\mu=\hat\mu$, let $\sigma^*$ maximise $W$. Every profile $\sigma$ with $\Psi_{\hat\mu}(\sigma)\ge\max\Psi_{\hat\mu}-\eta$ satisfies
+$W(\sigma)\ge W^*-\sum_z\big[\tfrac{b_z}{2}\sum_iq_{iz}^{*2}+\tfrac{\gamma c_z}{2}(1-\tfrac1N)T_z(\sigma)^2\big]-\eta$. In particular a potential maximiser, which lies in every $\ICNE_E(\delta)$, bounds $\mathrm{PoS}_C(\delta)$ for all $\delta$ and $C\in\{E,M,ID\}$.
+\end{proposition}
+
+A smoothness-based price-of-anarchy bound also transfers to imprecise equilibria through Lemma~\ref{lem:transfer} (Proposition~\ref{prop:smooth}), but it is conditional: we do not have smoothness constants for the Cournot--congestion game with arbitrary private routing costs. The price-of-anarchy values in Section~\ref{sec:results} are therefore empirical.
+
+\subsection{Certificates and the rounding algorithm}\label{sec:cert}
+
+For any pure profile $p$, the exact E-threshold of carrier $i$,\[A^E_i(p)=\min\{\delta: p_i\text{ is E-admissible at width }\delta\},\]is the value of a linear program over the box, so $p\in\ICNE_E(\delta)$ if and only if $\delta\ge\max_iA^E_i(p)$ (Theorem~\ref{thm:cert}). Theorem~\ref{thm:main} and this certificate define an algorithm with four phases: relax (a mixed equilibrium by Frank--Wolfe on the concave relaxed potential under D1, or by a double oracle under D2; \citealp{McMahan2003}), sparsify (a vertex of the Shapley--Folkman polytope), round, and certify. Under D2 its output satisfies the bounds of Theorem~\ref{thm:main}(b) (Theorem~\ref{thm:D2}), but its relaxation phase is PPAD-hard in general. Under D1 the relaxation-and-rounding technique is classical \citep{Aubin1976,Udell2016,Bonnans2023}. This certification phase was not part of the city experiments of Section~\ref{sec:results}, which use the D1 engine of Section~\ref{sec:algo}.
+
+\begin{remark}[Nonaffine congestion]\label{rem:nonaffine}
+With a power congestion term the expected payoff under mixed rival strategies is no longer a function of the mean aggregate; Lemma~\ref{lem:reduction} and the exact credal statements fail, although relaxed equilibria still exist. We do not treat this case.
+\end{remark}
+
+\subsection{What is machine-checked}\label{sec:lean}
+
+A Lean~4 file with Mathlib (\texttt{lean/CCU/LeanTargets.lean} in the repository) formalises the finite aggregative game with clipped credal boxes and E-admissibility. The following are proved there without gaps: E-admissibility implies maximality and the monotonicity of $\ICNE_E(\delta)$ in $\delta$ (Lemma~\ref{lem:nesting}, case E); the core of Theorem~\ref{thm:main}(a) (a profile whose plans are best responses to nonnegative anchors within the box is in $\ICNE_E(\delta)$); the combinatorial core of Theorem~\ref{thm:np} (with integer-scaled gains, the equilibrium conditions hold exactly on kernels); the lower-bound core of Proposition~\ref{prop:tight}; and the counting core of Proposition~\ref{prop:cycles}. Two statements compile with unfinished proofs (\texttt{sorry}): the Shapley--Folkman lemma (Theorem~\ref{thm:sf}) and the exact potential identity (Proposition~\ref{prop:D1}). The NP-completeness statement itself, the radius bounds and the algorithmic results are not formalised.
+
+%======================================================================
+\section{Algorithms}\label{sec:algo}
+
+The equilibrium engine has two layers: an outer search over carriers' plans at common zone prices (ZMC) and, inside every oracle call, a robust routing problem solved by column generation with an exact pricing algorithm (BRL). Both are designed for the D1 instance of Section~\ref{sec:model}, which is the regime with guaranteed existence.
+
+\subsection{Budget-resource labelling (BRL)}\label{sec:brl}
+
+Let $\Qb_a(u)=\inf\{x:\Fl_a(x)\ge u\}$ be the upper quantile of arc $a$, $\xb_a=\int_0^1\Qb_a(u)\,du$ and $\Pib_a(d)=\int_0^1\pos{\Qb_a(u)-d}du$, the stop-loss transform of the lower CDF; $\Pib_a$ is convex and nonincreasing with slopes in $[-1,0]$.
+
+\begin{theorem}[Upper prevision and budget decomposition]\label{thm:brl-main}
+For every route $r$,
+\[
+\Eu[\phi(T_r)]=\int_0^1\phi\Big(\sum_{a\in r}\Qb_a(u)\Big)du
+=c_0+\sum_{a\in r}\gamma\xb_a+\sum_{j=1}^{H}\rho_j\min\Big\{\sum_{a\in r}\Pib_a(d^j_a):\ \sum_{a\in r}d^j_a\le\Theta_j\Big\}.
+\]
+The supremum is attained by the comonotone coupling of the lower CDFs; each minimum is attained, at an integer vector when quantiles and thresholds are integers.
+\end{theorem}
+
+The first equality and the stop-loss identity for comonotone sums with fixed marginals are due to \citet{Meilijson1979} (see also \citealp{Kaas2000,Dhaene2002}), and the choice of the lower CDF as worst marginal is standard \citep{Williamson1990}. We re-prove the statement in \ref{app:brl} because the algorithm relies on the inequality-budget form and on integrality. With a common quantile grid of $L$ levels (weights $\omega_l$), the route profile $S_{r,l}=\sum_{a\in r}q_{a,l}$ gives $\Eu[\phi(T_r)]=c_0+f_r(T_{\max})$ for $H=1$, where $f_r(D)=\gamma\sum_l\omega_lS_{r,l}+\rho\sum_l\omega_l\pos{S_{r,l}-D}$.
+
+\begin{theorem}[Budget-resource reformulation]\label{thm:resource}
+Let $y$ be dual prices and define the arc costs \[c_a(d^1,\dots,d^H)=\gamma\xb_a+\sum_j\rho_j\Pib_a(d^j).\] The dependence-robust pricing problem \[\min_{r\in\cR}\Big\{\Eu[\phi(T_r)]-\sum_{i\in r}y_i\Big\}\] equals an elementary shortest path problem in which every arc chooses a consumption $d^j_a$ of each of $H$ budget resources, paid through the separable convex cost $c_a$ and subject to the budget constraints $\sum_{a\in r}d^j_a\le\Theta_j$, $j\le H$. The number of resources is $H$; it does not depend on $L$, the sample size or the number of arcs.
+\end{theorem}
+
+A scenario view of the same problem, which is what the comonotone reduction of \citet{GhosalHoWiesemann2024} gives, needs the $L$ level sums $(S_{p,l})_l$ as resources and compares labels pointwise. BRL instead compares labels through their cost functions, but only where a completion can still reach. For a partial path (label) $p$ ending at $v$ with level profile $S_p$, collected duals $y(p)$, visited set $\mathcal V(p)$ and load $\ell(p)$, concatenation with a completion $q$ is an inf-convolution, $f_{p\oplus q}(T_{\max})=\min_D\{f_p(D)+f_q(T_{\max}-D)\}$ (Lemma~\ref{lem:infconv}). Let $C_{\min}(v)$ be a lower bound on the duration of any completion from $v$ and define the completion window $\mathcal W(p)=[\Dl(p),\Dh(p)]$ with $\Dh(p)=\min\{S_{p,L},T_{\max}-C_{\min}(v)\}$ and $\Dl(p)=\min\{S_{p,1},\Dh(p)\}$.
+
+\begin{definition}[Functional dominance]\label{def:fdom}
+Label $p_1$ functionally dominates $p_2$, both ending at $v$, if $\mathcal V(p_1)\subseteq\mathcal V(p_2)$, $\ell(p_1)\le\ell(p_2)$ and $(f_{p_1}(D)-y(p_1))-(f_{p_2}(D)-y(p_2))\le0$ for all $D\in\mathcal W(p_2)$.
+\end{definition}
+
+The difference is piecewise linear with breakpoints at the level sums, so the test needs at most $2L+2$ evaluations.
+
+\begin{theorem}[Validity and exactness]\label{thm:fdom}
+Functional dominance implies that every completion of $p_2$ is a completion of $p_1$ with no larger reduced cost. The labelling algorithm that discards dominated labels (Algorithm~\ref{alg:brl}) returns the minimum reduced cost exactly, with a route attaining it.
+\end{theorem}
+
+The window is what makes the rule exact and strong at the same time. The slope of $f_p$ lies in $[-\rho,0]$ and that of $D\mapsto f_q(T_{\max}-D)$ in $[0,\rho]$, so an optimal split never lies above $\Dh(p)$, and below $S_{p,1}$ the difference of two label functions is nondecreasing (Lemma~\ref{lem:window}). Quantile-vector dominance and sector dominance are special cases of functional dominance, and neither converse holds (Proposition~\ref{prop:compare}). Under independent arc times concatenation is a convolution of laws rather than an inf-convolution and the method does not apply. The natural shortcut of fixing a single risk level for all routes gives a lower bound but is not exact (Proposition~\ref{prop:fixedu}).
+
+\begin{algorithm}[t]
+\caption{BRL pricing for the dependence-robust routing problem ($H=1$)}\label{alg:brl}
+\begin{algorithmic}[1]
+\Require graph, demands, capacity; level weights $\omega$; arc level profiles $q_{a,\cdot}$; $\gamma,\rho,T_{\max},c_0$; duals $y$
+\State $C_{\min}(v)\gets$ shortest path from $v$ to the depot with arc lengths $q_{a,1}$
+\State buckets $\mathcal B_v\gets\emptyset$; queue $\gets\{$depot label$\}$
+\While{queue nonempty}
+  \State pop $p$; record the closed route $p\oplus(v,0)$ with reduced cost $c_0+f_{p\oplus(v,0)}(T_{\max})-y(p)$
+  \For{each customer $j\notin\mathcal V(p)$ that fits the capacity}
+    \State $p'\gets$ extension of $p$ to $j$ ($S_{p'}=S_p+q_{(v,j),\cdot}$, $y(p')=y(p)+y_j$)
+    \If{some $o\in\mathcal B_j$ functionally dominates $p'$} discard $p'$
+    \Else\ delete the labels of $\mathcal B_j$ dominated by $p'$; insert and push $p'$
+    \EndIf
+  \EndFor
+\EndWhile
+\State \Return recorded routes sorted by reduced cost
+\end{algorithmic}
+\end{algorithm}
+
+On the city instances the pricing runs over ng-routes \citep{Baldacci2011}: the visited set is replaced by the ng-memory, and Theorem~\ref{thm:fdom} holds verbatim, with the weaker ng-relaxation bound. Column generation \citep{Feillet2004,Irnich2005} with BRL pricing returns the exact LP bound of the dependence-robust routing problem when no negative reduced cost remains; integer plans come from an integer program over the generated columns (price-and-branch), which is not an exact integer method.
+
+\paragraph{Prior art and the claim} The upper-prevision formula is Meilijson--N\'adas; labelling with resources is standard; the comonotone scenario reduction for ambiguous marginals is in \citet{GhosalHoWiesemann2024}. What we did not find in the literature is the per-arc budget used as a \emph{decision resource} of the pricing problem (Theorem~\ref{thm:resource}) and the completion-window functional dominance with its exactness proof (Theorem~\ref{thm:fdom}). A referee may reasonably describe BRL as Meilijson--N\'adas plus resource-constrained labelling; our answer is that the speed of the method comes from the dominance rule (Section~\ref{sec:res-algo}).
+
+\subsection{Zone-market clearing (ZMC)}\label{sec:zmc}
+
+ZMC targets the D1 game in cost form. Let $c_i(p)=-\pi_i(p)+\gamma\ip{t_i(p)}{\hat\xi}$ (charges included), $\tilde c_i=c_i-\tfrac12\|a_i\|_M^2$, and assume $M_k>0$ on the active coordinates. Then $\Phi(\sigma)=\sum_i\tilde c_i(\sigma_i)+\tfrac12\|A(\sigma)\|_M^2=-\Psi_{\hat\xi}(\sigma)$ is an exact potential (Proposition~\ref{prop:D1}). For a common price $\lambda\in\R^d$, the pricing oracle returns $O_i(\lambda)=\arg\min_p\{\tilde c_i(p)+\ip{\lambda}{a_i(p)}\}$, which is the oracle of Assumption~\ref{ass:oracle} with $Q=M$. Let $V_i(\lambda)$ be its value, $\mathcal D(\lambda)=\sum_iV_i(\lambda)-\tfrac12\|\lambda\|^2_{M^{-1}}$ the price dual of the convexified potential, $\lambda^*$ its unique maximiser, and $\bar\Phi^*=\max\mathcal D\le\min\Phi$ (Lemma~\ref{lem:dual}).
+
+\begin{theorem}[Clearing identity]\label{thm:clear}
+Let $\sigma_i\in O_i(\lambda)$ for all $i$ and let $e=M^{-1}\lambda-A(\sigma)$ be the clearing error (supply minus demand at price $\lambda$). Then
+(a) $\Phi(\sigma)-\mathcal D(\lambda)=\tfrac12\|e\|_M^2$, so $\Phi(\sigma)-\min\Phi\le\tfrac12\|e\|_M^2$;
+(b) carrier $i$'s Nash regret is at most $\tfrac12\sum_{k\in\mathcal Z_i}M_ke_k^2$, where $\mathcal Z_i$ is the set of coordinates in which its plans differ;
+(c) $\sigma_i$ is an exact best response to the belief $m_i=M^{-1}\lambda-a_i(\sigma_i)=A_{-i}(\sigma)+e$, hence E-admissible at every width $\delta\ge\max_{k\in\mathcal Z_i}|e_k|/w_k$ (if $m_{ik}\ge0$ on $\mathcal Z_i$);
+(d) $e=0$ implies that $\sigma$ minimises $\Phi$ and is a pure Nash equilibrium;
+(e) conversely, exact clearing is attainable if and only if the convexification of the potential is tight at a pure profile.
+\end{theorem}
+
+Part (a) is Fenchel--Young equality and a standard duality-gap fact. The game-specific content is in (b) and (c): the own-contribution term of the absorption bound cancels, because under D1 the own quadratic term turns a pricing-optimal plan into a best response to the anchor $m_i$. Finding a good pure equilibrium thus becomes a price search: find one $\lambda$ at which the carriers' pricing answers nearly clear every zone. Because $\mathcal D$ is concave, the aggregate response is antitone in $\lambda$, and along each coordinate the sign of the residual $s_k=A_k(\lambda)-\lambda_k/M_k$ localises $\lambda^*_k$ up to $M_k\chi_k$, where $\chi_k$ is the cross-zone variation: how far other coordinates' prices can move the response in coordinate $k$ at a fixed own price.
+
+\begin{theorem}[Bracket invariant and dimension-free rate]\label{thm:bracket}
+Start from brackets $[0,M_k\Amax_k]$ and, after each round, move the lower (upper) end of bracket $k$ to $\lambda_k$ when $s_k>0$ ($s_k<0$). Then $\operatorname{dist}(\lambda^*_k,[l_k,u_k])\le M_k\chi_k$ after every round. If the bracket midpoint is queried at least every other round, after $T$ rounds ($NT$ oracle calls, independent of $d$) every point of the bracket satisfies $|\lambda_k-\lambda^*_k|\le M_k\Amax_k2^{-\lceil T/2\rceil}+M_k\chi_k$ for all $k$. If plan sets are separable across coordinates, $\chi=0$.
+\end{theorem}
+
+The floor $M_k\chi_k$ is genuine when zones are complementary (Example~\ref{ex:kappa}). Algorithm~\ref{alg:zmc} alternates midpoint steps (for the rate) with secant steps on isotonic fits of each coordinate's response (for speed), then rounds over the collected plans and finishes with best-response polish.
+
+\begin{algorithm}[t]
+\caption{ZMC: zone-market clearing for pure equilibria of the D1 game}\label{alg:zmc}
+\begin{algorithmic}[1]
+\Require pricing and best-response oracles; rounds $T$
+\State $l\gets0$, $u\gets M\Amax$, $\lambda\gets(l+u)/2$; plan pools $\mathcal Q_i\gets\emptyset$
+\For{$t=0,\dots,T-1$}
+ \State for all $i$ in parallel: $\sigma^t_i\gets O_i(\lambda)$; $\mathcal Q_i\gets\mathcal Q_i\cup\{\sigma^t_i\}$ \Comment{$N$ routing solves}
+ \State $s\gets A(\sigma^t)-M^{-1}\lambda$; update every bracket by the sign of $s_k$ (Theorem~\ref{thm:bracket})
+ \State \textbf{if} $t$ odd: $\lambda\gets(l+u)/2$; \textbf{else} for each $k$: secant step on an isotonic fit of $(\lambda_k,A_k)$, clipped to $[l_k,u_k]$
+\EndFor
+\State $\sigma^{\rm price}\gets$ the pricing profile with the smallest $\tfrac12\|e^t\|_M^2$
+\State $\sigma^{\rm round}\gets$ restricted master over the pools and derandomised rounding (no oracle calls)
+\State $\sigma\gets$ the better of the two; sequential best responses until no carrier improves
+\State \Return $\sigma$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Guarantee of ZMC]\label{thm:zmc}
+With exact oracles, ZMC uses $NT$ pricing calls before the polish; the polish stops after finitely many best-response calls at a pure Nash equilibrium $\sigma$ with $\Phi(\sigma)\le\bar\Phi^*+\tfrac12\min_t\|e^t\|_M^2$; and $\sigma\in\ICNE_C(\delta)$ for all $\delta\ge0$ and $C\in\{E,M,ID\}$. Run on the surcharged game of Lemma~\ref{lem:gamma}, it returns an exact $\Gamma$-maximin equilibrium at width $\delta$.
+\end{theorem}
+
+Charges translate the supply line: under charges $t$ the equilibrium gross price is 1-Lipschitz in $t$ and convexified aggregates respond monotonically (Proposition~\ref{prop:charges}), so brackets and plan pools warm-start the next evaluation when a city leader searches over charges.
+
+\paragraph{Prior art and limits} Price decomposition with a pricing oracle is classical (Dantzig--Wolfe, column generation and bundle methods; \citealp{Briant2008}); learning separable piecewise-linear concave approximations from sampled slopes is SPAR \citep{Powell2004}; Walrasian prices with indivisible goods are computed from demand oracles by \citet{PaesLeme2020}; and \citet{Duguet2025} relate the regret of price-allocation pairs to duality and integrality gaps in combinatorial markets, which is the closest conceptual neighbour of Theorem~\ref{thm:clear}(a)--(b). We claim novelty only for the own-term cancellation with credal anchors (Theorem~\ref{thm:clear}(b),(c),(e)), the sign-bracket invariant with the cross-variation floor (Theorem~\ref{thm:bracket}) and the method they define. ZMC has no D2 version, does not bound the clearing error of pure answers a priori, and spends $NT$ calls even on easy games.
+
+\subsection{Integration in the city experiments}\label{sec:integration}
+
+In the experiments, carrier $i$'s oracle at a price vector $\lambda$ (zone prices on deliveries and vehicle-hours) chooses a set of node-disjoint routes from its depot over its customer zones. Each served zone contributes its whole lot (all-or-nothing) together with the prize, the own Cournot and congestion terms, the charges and $\lambda$ as node costs; each route costs its BRL upper expectation under DKW probability boxes for nine sector multipliers. The oracle runs column generation with BRL pricing to LP convergence and then an integer packing over the generated columns. It returns the plan, its contribution $a_i(p)=(q_z,\tau_z)_z$ and the LP value as a lower bound on the oracle objective. Route costs do not depend on prices, so each carrier's column pool is reused across ZMC rounds and across the leader's charges. The approximations are: (A1) all-or-nothing lots; (A2) price-and-branch rather than branch-and-price, with the largest observed oracle gap recorded; (A3) zone exposure proportional to the lot, so that a congestion charge on hours and a delivery charge are collinear within a zone; (A4) linear (D1) congestion; (A5) oracle exactness at city scale is checked, not proved.
+
+\subsection{Optional quality statement}\label{sec:addon}
+
+Two by-products are available at no extra oracle cost. Because BRL pricing is exact, the final column-generation master value is a valid lower bound on the robust routing optimum, which turns any integer plan into a certified optimality gap. In ZMC, the dual values $\mathcal D(\lambda^t)$ bracket the convexified optimum with the potential of the returned equilibrium, which gives a certified relative potential gap $\eta_{\rm rel}$; with a heuristic routing oracle the LP bound of the oracle keeps the bracket valid. Neither is the contribution; Section~\ref{sec:results} reports both.
+
+%======================================================================
+\section{Data and calibration}\label{sec:data}
+
+\paragraph{Road networks and zones} For each of nine cities (New Delhi, Cairo, Moscow, Buenos Aires, New York, Mumbai, London, Paris, Berlin) we use an OpenStreetMap extract \citep{Haklay2008} distributed by BBBike (replication timestamp 16 October 2026). The drivable major-road network (motorway to tertiary, with links) is kept as an undirected graph with class-based free-flow speeds and lane counts (OSM \texttt{lanes} tag where present, class defaults otherwise). Population comes from the GHS-POP R2023A grid, epoch 2025, at 30 arc-seconds \citep{GHSPOP2023}. Zones are blocks of $4\times4$ raster cells (about 3.7\,km) inside the extract's bounding box with at least one inhabitant; zone-to-zone free-flow times are graph shortest paths between population-weighted centroids plus a fixed access time. Points of interest from the same extracts (warehouses, courier offices, post offices, wholesale) give a depot score per zone that is used to place carrier depots. Table~\ref{tab:cities} summarises the instances; the number of zones ranges from \Zmin{} to \Zmax.
+
+\begin{table}[t]\centering\small
+\caption{City instances. $Z$: zones; population from GHS-POP inside the zones; major road and lane kilometres inside the zones; nodes of the major-road graph; $N$: number of carriers.}\label{tab:cities}
+\adjustbox{max width=\linewidth}{\input{tables/tab_cities}}
+\end{table}
+
+\paragraph{Operating parameters} Per-city parameters were collected from public web sources on 23 October 2026 and graded A (official or primary statistic), B (industry report or country-level proxy) or C (rough estimate or proxy from elsewhere). Table~\ref{tab:params} in \ref{app:tables} lists the calibration used; the repository file \texttt{data/parameters/SOURCES.md} gives the source, URL, grade and note of each number. Congestion levels are those of the TomTom Traffic Index 2025 \citep{TomTom2025} and volume-delay curves use the BPR form with the conventional $\alpha=0.15$, $\beta=4$ \citep{BPR1964}.
+
+\paragraph{Weak numbers} Several inputs are weak and are flagged as such. Parcels per capita are country-level figures for every city. Driver wages are minimum-wage floors or job-site averages, not courier payroll data. Drops per vehicle and van capacities outside the United States are proxies from India, London or a single company survey. Delivery fees in Cairo, Moscow and Buenos Aires are consumer or reference rates, not carrier revenue per parcel, and the European fees are regulator revenue per parcel. Moscow is absent from the 2025 TomTom index and uses a 2020 value. Market shares are available only for Paris and Berlin; elsewhere carriers have equal shares. The sensitivity of the equilibria to the five weakest parameters is reported in Table~\ref{tab:sens}.
+
+\paragraph{Calibration rules} Each carrier serves 22 customer zones sampled around its depot with weight proportional to population times a gravity decay in travel time, so carriers overlap in a subset of zones; a lot is 10--50\% of a vehicle's daily drops, proportional to the zone's parcel demand. Inverse demand has intercept $\alpha_z=1.5\times$ fee and slope $b_z=\alpha_z/(2Q_z^{\rm full})$, so that the price at full service is half the intercept. The congestion slope $c_z$ is the derivative of the BPR curve at the TomTom congestion level, with capacity from lane-kilometres, and it is scaled by a representative-slice multiplicity $m_z$, the ratio of the city's real delivery vehicle-hours to the modelled ones, so that the modelled slice faces the congestion of the whole city. Travel-time multipliers of nine sectors follow a lognormal law matching the TomTom all-day and peak congestion, and each carrier observes 30 days, from which DKW probability boxes at confidence $1-\alpha$ are built. The route loss \eqref{eq:loss} uses the vehicle-hour cost (wage plus fuel) per hour, twice that as fixed cost, three times that per overtime hour, and the shift length as deadline.
+
+\paragraph{Proxies} The following are proxies and are labelled as such wherever they are used: the all-or-nothing lots, the sampled customer zones instead of whole-city demand, equal market shares in seven cities, the proportionality of vehicle-hours to deliveries within a zone, the slice multiplicity $m_z$, and a \emph{broad} social cost that adds the delay imposed on background traffic (population times vehicle ownership times one hour per day, valued at the wage, times the added slowdown, divided by $m_z$). The broad objective is reported but not used for policy conclusions (Section~\ref{sec:res-leader}).
+
+%======================================================================
+\section{Results}\label{sec:results}
+
+All numbers in this section are generated from the result files of the repository by \texttt{paper/make\_tables.py}. Base equilibria use three seeds; the number of seeds of the other experiments is stated in each table caption. Every equilibrium reported below is a pure Nash equilibrium with respect to the routing oracle; Section~\ref{sec:res-verif} reports the independent checks.
+
+\subsection{Unpriced equilibria}\label{sec:res-eq}
+
+Table~\ref{tab:e1} reports the unpriced equilibria computed by ZMC with eight rounds and best-response polish. The cities fall into two groups. In \EoneHighCities{} the carriers serve at least \EoneServedHighMin\% of customer demand. In \EoneLowCities{} they serve between \EoneServedLowMin\% and \EoneServedLowMax\%, because the delivery fee is low relative to the vehicle-hour cost or the shift is short. The added travel-time slowdown caused by delivery vehicles ranges from \EoneSlowMin\% to \EoneSlowMax\% (\EoneSlowMaxCity). Figure~\ref{fig:eq} shows the equilibrium zone prices on the city grids. The certified relative potential gap $\eta_{\rm rel}$ is below 1\% in \EoneEtaBelowOne{} cities and reaches \EoneEtaMax\% in the low-service cities, where the potential is close to zero and the dual bound is loose; a small certified gap therefore holds only where service is high.
+
+\begin{table}[t]\centering\small
+\caption{Unpriced equilibria (mean over three seeds; seed standard deviation in parentheses). Served: share of customer demand delivered; slowdown: added mean travel-time slowdown from delivery vehicles; price: mean zone price (USD per parcel); veh.-h: vehicle-hours per day; welfare $W$ in USD per day of the modelled slice; calls: oracle calls; regret$^{\rm LP}$: LP-certified upper bound on any carrier's gain from deviating (USD); $\eta_{\rm rel}$: certified relative potential gap.}\label{tab:e1}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e1}}
+\end{table}
+
+\begin{figure}[t]\centering
+\includegraphics[width=0.78\textwidth]{overview_equilibria.png}
+\caption{Unpriced equilibrium zone prices divided by the city's delivery fee, nine cities (grey: zones without deliveries; only carriers' customer zones are active).}\label{fig:eq}
+\end{figure}
+
+\subsection{The city leader's charges}\label{sec:res-leader}
+
+A city leader chooses a congestion charge per vehicle-hour, $t_z=\vartheta\gamma c_zX_z^{\rm NE}$ with multiplier $\vartheta\in\{0,0.5,1,2,4,8,16\}$, and a per-delivery charge $s$ expressed as a fraction of the fee in $\{-0.6,\dots,0.6\}$; negative values are subsidies. Each of the 63 grid points requires one warm-started equilibrium. Table~\ref{tab:e2} reports the reduction of social cost relative to no charge, as a percentage of its absolute value, for the best point using only the congestion charge, only the delivery charge, or both.
+
+\begin{table}[t]\centering\small
+\caption{City leader, main objective (\EtwoSeeds). Gain of the best charge over no charge (\% of $|$social cost$|$) with the congestion charge only, the delivery charge only, or both; and, for the best point with both instruments, the congestion multiplier $\vartheta$, the delivery charge relative to the fee, the served share, the city's revenue (USD/day; negative is a net subsidy) and the Gini coefficient of delivery access across zones.}\label{tab:e2}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e2}}
+\end{table}
+
+Three findings stand out. First, the congestion charge alone gains at most \EtwoCongMax\% of social cost in any city. Second, the per-delivery instrument does most of the work, and at the best point it is a subsidy in \EtwoNsubsidy{} of the nine cities. Where the combined gain is at least 1\% (\EtwoBigCities), the delivery charge alone achieves the following shares of the combined gain: \EtwoDelivShares. Third, the gain is large only where the unpriced equilibrium under-delivers; in \EtwoSmallCities{}, where service is nearly complete, the best gain is at most \EtwoSmallMax\%. The mechanism is visible in the model: the main inefficiency is under-provision caused by fixed route costs and market power, which a subsidy corrects, while the congestion externality among carriers is small. Within a zone the two instruments are collinear (A3), so the congestion charge adds only spatial differentiation; this is why one instrument is almost sufficient, and the second one helps where congestion differs strongly across zones and service is partial (Mumbai is the clearest case in the table). Subsidies cost the city money (negative revenue in the table); in the welfare definition charges are transfers, so this fiscal cost is not part of the social cost. At the best points, delivery access remains unequal across zones in the low-service cities, while zone prices are much more even. Figure~\ref{fig:e2} shows the gains for both objectives.
+
+With the broad objective, which adds the proxy for delay imposed on background traffic, the leader's best response in \EtwoBroadShutdownCities{} is to stop deliveries altogether, and in Paris to cut them almost entirely (Table~\ref{tab:e2broad}). This is an artifact of the proxy: when the slice is scaled by $m_z$, the imputed delay cost per delivery vehicle-hour exceeds the carriers' surplus. We report it and draw no policy conclusion from it.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{E2_instruments.png}
+\caption{Gain of the city leader's best charge over no charge, by instrument. Left: main objective. Right: broad objective with the background-delay proxy, whose shut-down optima are an artifact of the proxy.}\label{fig:e2}
+\end{figure}
+
+\subsection{Empirical price of anarchy and stability}\label{sec:res-poa}
+
+The social optimum is approximated by column generation on the convexified welfare problem followed by derandomised rounding and coordinate polish; this gives a feasible pure profile $W_{\rm SO}$ and, from the relaxation, an upper bound. The set of equilibria consists of those found by ZMC, by best response from the empty and the full-service profile, and from three random price vectors, which yields between \NEmin{} and \NEmax{} distinct equilibria per city. The price of anarchy and stability in Table~\ref{tab:e3} are therefore \emph{empirical}: ratios of $W_{\rm SO}$ to the worst and best equilibria found, not bounds over all equilibria.
+
+\begin{table}[t]\centering\small
+\caption{Empirical price of anarchy and stability, main objective (\EthreeSeeds). $W_{\rm SO}$: rounded social optimum (USD/day); bound: relaxation upper bound on welfare; $W^{\rm worst}_{\rm NE}$, $W^{\rm best}_{\rm NE}$: worst and best equilibria found; \#NE: distinct equilibria found; PoA$_{\rm priced}$: with the leader's best charges.}\label{tab:e3}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e3}}
+\end{table}
+
+In \PoAlowCities{} the empirical price of anarchy is at most \PoAlowMax. It is larger in \PoAhighCities{}, reaching \PoAmax{} in \PoAmaxCity. The price of stability is within \PoSPoAmaxdiff{} of the price of anarchy in every city, so the equilibria found differ little in welfare and the loss comes from equilibrium behaviour itself rather than from selection among equilibria. With the leader's best charges the price of anarchy falls to at most \PoApricedMax{} in every city. Two caveats bound these statements: the relaxation bound exceeds the rounded optimum by up to \SObound\% (\SOboundCity), so the true price of anarchy could be larger by that margin, and all values refer to the lumpy all-or-nothing lots of (A1). Figure~\ref{fig:e3} shows the same quantities.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{E3_poa.png}
+\caption{Welfare loss relative to the rounded social optimum. Left: main objective, worst and best equilibria found and the priced equilibrium. Right: broad objective (proxy).}\label{fig:e3}
+\end{figure}
+
+\subsection{Imprecision}\label{sec:res-imp}
+
+Two kinds of imprecision are varied (Table~\ref{tab:e4}, Figure~\ref{fig:e4}). The first is the width of the travel-time probability boxes, through the DKW confidence level, from $\varepsilon=0$ to $\varepsilon=\EfourEps$; it acts through the BRL route costs. Wider boxes raise route losses and cut service: at the widest box deliveries fall by between \EfourPbDelMin\% and \EfourPbDelMax\% and welfare by between \EfourPbWMin\% and \EfourPbWMax\%, with the largest effects in the low-service cities. The second is the credal width about rivals' aggregates under $\Gamma$-maximin, through the surcharge of Lemma~\ref{lem:gamma} with $w$ equal to the unpriced equilibrium aggregate, from $\delta=0$ to $\delta=\EfourDelta$. At the widest setting deliveries fall by between \EfourGaDelMin\% and \EfourGaDelMax\% and welfare by between \EfourGaWMin\% and \EfourGaWMax\%. Deliveries are monotone in $\delta$ in \EfourMono{} of nine cities; the exception (\EfourNonMonoCities) is consistent with Proposition~\ref{prop:cs}, which does not hold for $\Gamma$-maximin, and with a switch between equilibria reached by ZMC. In every case a pure equilibrium was found ($\Gamma$-maximin equilibria exist under D1 by Proposition~\ref{prop:D1}) and passed the regret check (largest regret \EfourRegretMax).
+
+Imprecision acts like a tax on activity: it reduces deliveries, vehicle-hours and congestion together, at the cost of welfare. Because vehicle-hours are proportional to deliveries in a zone (A3), the model cannot separate a congestion effect from a delivery effect here.
+
+\begin{table}[t]\centering\small
+\caption{Imprecision (\EfourSeeds). Left block: widest probability box ($\varepsilon=\EfourEps$) against $\varepsilon=0$, change in deliveries and welfare (\%). Right block: widest $\Gamma$-maximin width ($\delta=\EfourDelta$) against $\delta=0$, change in deliveries and welfare (\%) and remaining slowdown (\%). Max regret: largest independent-oracle regret (USD) over both sweeps' endpoints.}\label{tab:e4}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e4}}
+\end{table}
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{E4_imprecision.png}
+\caption{Imprecision. Top: probability-box half-width (route costs through BRL). Bottom: $\Gamma$-maximin credal width (surcharge on rivals' aggregates).}\label{fig:e4}
+\end{figure}
+
+\subsection{Algorithm performance}\label{sec:res-algo}
+
+\paragraph{BRL pricing} The upper-prevision formula agrees with a linear program over all joint laws on \BRLtestAn{} random instances to a relative error of \BRLtestAerr; for scale, the comonotone worst case exceeds the value under independent worst marginals by \BRLindepMean\% on average and up to \BRLindepMax\%. The pricing equals complete enumeration on every test instance, including \BRLrealCmatch{} of \BRLrealCn{} sub-instances built from the nine cities. Table~\ref{tab:brl-pricing} compares labelling rules on random instances with $L=33$ levels and nine sectors. BRL takes between \BRLtimeMin{} and \BRLtimeMax{} seconds, while sector dominance times out from the smallest size and quantile-vector and scenario labelling time out from $n=15$. With dual prices scaled by \BRLhdScale{}, BRL prices $n=\BRLhdN$ in \BRLhdTime{} s while the risk-neutral labelling \BRLhdDetTO; this reflects deadline pressure in those instances, where windows collapse to points, not a general complexity property. Fixing one risk level for all routes is suboptimal in \BRLfixeduSub{} of \BRLfixeduN{} small exact comparisons, by up to \BRLfixeduMax\%.
+
+\begin{table}[t]\centering\small
+\caption{BRL pricing on random instances (nine sectors, $L=33$ levels, capacity 6, two instances per size). Time in seconds (labels kept); TO: 60\,s limit. The risk-neutral labelling solves a different (expected-value) problem and is shown for reference; SAA scenarios optimise the sample-average objective.}\label{tab:brl-pricing}
+\adjustbox{max width=\linewidth}{\input{tables/tab_brl_pricing}}
+\end{table}
+
+On the nine metro routing instances (22 customer zones, $L=51$, ng-routes), column generation with BRL pricing converged in every city, in \BRLcgTimeMin{} to \BRLcgTimeMax{} seconds of pure Python (Table~\ref{tab:brl-metro}). The price-and-branch plan improves on the best of three heuristics in \BRLbetterCities{}, ties in \BRLequalN{} cities and is \emph{worse} in \BRLworseCities, because price-and-branch without branching is not an exact integer method. The robust criterion itself is conservative on these calibrations: the p-box worst-case cost of the BRL plan is between \BRLconsMin\% and \BRLconsMax\% above its expected cost under the simulated true law. This is a property of the model (sixty observed days in this benchmark, a support cap, unknown dependence), not of the algorithm; a user who trusts an estimated law should not adopt this criterion.
+
+\paragraph{ZMC} On synthetic D1 games with non-separable plan sets (Table~\ref{tab:zmc-synth}), ZMC's call count is flat in $Z$ and, at an equal budget of oracle calls, its pure equilibria have the smallest potential gap in \ZMCsynthWins{} of \ZMCsynthN{} instances; the advantage over Frank--Wolfe and column generation with eight rounds grows with $Z$, while full column generation reaches somewhat better equilibria with several times more calls.
+
+On the city games the picture is different (Table~\ref{tab:e5}). ZMC uses between \EfiveCallsZMCmin{} and \EfiveCallsZMCmax{} calls, about ten per carrier, and its potential gap coincides with those of Frank--Wolfe and column generation with eight rounds to three digits in most cities; the number of cities in which it is better than all of them by more than $10^{-3}$ is \EfiveZMCstrictBestN. Plain best response needs only \EfiveCallsBRmin{} to \EfiveCallsBRmax{} calls and is as good as ZMC (within $10^{-3}$ relative gap) in \EfiveBRasgoodCities; it is worse in \EfiveBRworseCities. ZMC therefore does not beat best response on these games. We see three reasons: only \EfiveDeffMin{} to \EfiveDeffMax{} coordinates are active because each carrier serves 22 zones, so the dimension that favours ZMC in the synthetic instances is absent; the calibrated games are mildly nonconvex; and carriers share few zones. The dimension-independence of ZMC is therefore not tested at city scale by these instances.
+
+\begin{table}[t]\centering\small
+\caption{Methods on the nine city games (one seed). $d_{\rm eff}$: active coordinates. Oracle calls (left block) and relative potential gap to the convexified optimum, in \% (right block), for best response (BR), ZMC with eight rounds, Frank--Wolfe and column generation with eight rounds (FW, CG8) and column generation to convergence (CG); all methods end with the same best-response polish.}\label{tab:e5}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e5}}
+\end{table}
+
+\subsection{Verification}\label{sec:res-verif}
+
+On \TinyN{} tiny games (two or three carriers, three or four customer zones) solved by exhaustive enumeration, the integrated ZMC--BRL profile is a pure equilibrium of the enumerated game in every case and reaches the global potential minimum in \TinyZMCglobal{} of \TinyN; best response reaches it in \TinyBRglobal, Frank--Wolfe with rounding in \TinyFWglobal{} and column generation in \TinyCGglobal{} (Table~\ref{tab:tiny}). These instances support correctness more than they separate the methods.
+
+At city scale, every base equilibrium has regret at most \EoneRegretMax{} against an independent oracle that starts from an empty column pool, and so do the \CertN{} certified leader best points (largest regret \CertRegretMax). This required a repair loop: a first pass found small regrets in four cities because the pooled price-and-branch oracle missed integer plans that the fresh oracle found; the fresh oracle's columns are now injected and the profile re-polished. The LP-certified regret, an upper bound on what an exact integer solver could gain, is at most \EoneRegretLPMax{} USD per carrier for the base equilibria and \CertRegretLPMax{} USD for the leader points, against plan values of hundreds to thousands of USD. The clearing identity of Theorem~\ref{thm:clear}(a) holds to \EsixResid{} in every round of every city, and its bound holds in all rounds except one round in Cairo, which lies within the oracle's integrality gap (Table~\ref{tab:e6}).
+
+%======================================================================
+\section{Managerial and policy implications}\label{sec:implications}
+
+The implications below are conditional on the model and on the proxies of Section~\ref{sec:data}; they indicate directions and magnitudes to be tested with city data, not recommendations for any particular city.
+
+\paragraph{For city authorities} First, the efficiency loss from competition among carriers is concentrated where service is incomplete. Where carriers already serve almost all demand, the empirical price of anarchy is close to one and charges change little; a city in that situation gains more from managing kerb space and background traffic than from pricing deliveries. Second, where service is partial, the lever with the largest effect in our instances is a per-delivery instrument, and its sign is that of a subsidy. A congestion charge on delivery vehicle-hours alone recovers little, because in these instances the congestion that carriers impose on each other is small relative to the under-provision caused by fixed route costs and market power. Third, a second instrument adds value only when zones differ in congestion and service is partial. Fourth, any subsidy has a fiscal cost that a welfare criterion with transfers does not count, and its distributional effect across zones is uneven: access remains unequal in the low-service cities even at the best charges. Fifth, an objective that counts delay to other road users can reverse the recommendation; in our instances it did so only because of a crude proxy, which is the strongest argument for measuring that delay rather than imputing it.
+
+\paragraph{For carriers} Imprecision is costly. Wider probability boxes on travel times and wider credal sets about rivals both reduce the volume a carrier finds worth serving. Under the dependence-robust criterion the planned cost is well above the expected cost under the simulated law, so a carrier with enough data to estimate a law, or with knowledge of the dependence between road segments, should use it. Conversely, a carrier that plans robustly behaves like one facing a tax, which lowers congestion as a side effect.
+
+\paragraph{For modelling} The theory gives a practical rule for choosing a congestion measure. Charging or modelling congestion through exposure (vehicle-hours in a zone) yields a potential game in which pure equilibria exist for every degree of imprecision and can be computed with a routing oracle. Counting vehicles instead makes the question whether any pure imprecise equilibrium exists NP-complete in general, so predictions of carriers' responses to vehicle-count rules should be treated with corresponding caution. The absorption theorem quantifies how much belief imprecision is enough to make a predicted pure outcome internally consistent.
+
+\paragraph{Human-centred smart-city management science} The call for this special issue asks how data-driven optimisation can serve the people who live in and run cities. Three features of this work bear on that question. The model places the decision-relevant uncertainty where it is experienced: carriers' dispatchers plan with short travel-time records and with guesses about competitors, and the credal formulation represents what they know rather than imposing a law they do not have. The welfare accounting separates consumer surplus, carriers' costs, the delay carriers impose on each other, the city's fiscal position and the spatial distribution of access, so that a planner can see who gains and who pays under each instrument. And the evidence is produced from open data, with every weak parameter flagged and the code public, so that a city can replace our proxies with its own counts and rerun the analysis. The limits of that evidence are set out in the next section.
+
+%======================================================================
+\section{Limitations and future work}\label{sec:limits}
+
+\paragraph{Lumpy lots} Carriers serve a customer zone entirely or not at all. The resulting Cournot game is lumpy, and part of the measured inefficiency may be an artifact of indivisibility; divisible lots or several lot sizes per zone would test this.
+
+\paragraph{Price-and-branch} The oracle's integer step runs on generated columns only. Equilibria are exact with respect to this oracle and checked by an independent oracle and by LP bounds, but not proved exact. In three cities a heuristic beat the price-and-branch plan on the routing benchmark. A full branch-and-price with BRL pricing is the obvious next step.
+
+\paragraph{Proxies and weak parameters} Demand is sampled, market shares are equal in seven cities, vehicle-hours are proportional to deliveries within a zone, and the congestion coupling is scaled by a slice multiplicity. Most operating parameters are country-level or rough estimates; over their plausible ranges, delivery fee, drops per vehicle and the number of carriers move welfare by tens of percent (Table~\ref{tab:sens}). The sign of the best per-delivery instrument depends on the fee-to-cost ratio and could change with better data.
+
+\paragraph{Vehicle-count congestion} All city experiments are in the D1 regime. Our D2 results are complexity results; computing or certifying imprecise equilibria of D2 city games, and the rounding-and-certification algorithm of Section~\ref{sec:cert}, were not tested on real data.
+
+\paragraph{Broad social cost} The background-delay proxy drives degenerate shut-down optima and is not a basis for conclusions. A measured value of the delay caused by delivery vehicles is needed.
+
+\paragraph{Scope of the evidence} Leader optima are grid optima on 63 points. Price-of-anarchy values are empirical, from at most six equilibria per city, and the social optimum is a rounded convexified solution with a relaxation bound up to \SObound\% higher. ZMC's dimension-independence was not stressed at city scale. Novelty searches were web and index searches, partly at the level of abstracts; the closest neighbours (\citealp{Liu2023,Beauchene2016,Feik2026} for the theory; \citealp{GhosalHoWiesemann2024} for BRL) should be compared in full text.
+
+\paragraph{Future work} Open theoretical questions include the complexity of finding a pure E-admissible equilibrium above the guaranteed width (we conjecture PPAD-hardness), smoothness constants for the Cournot--congestion game, and an absorption result for nonaffine congestion. On the empirical side, carrier-level data on parcel volumes, stops and travel times, and measured kerbside delay, would turn the instances from a model of a slice into a calibrated planning tool.
+
+%======================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+We modelled competing delivery carriers as players of a Cournot--congestion game with routing-level strategies and credal beliefs. Under exposure-based congestion the game has a potential and pure imprecise equilibria at every width; under vehicle-count congestion their existence is strongly NP-complete below an explicit width, while above a width that does not grow with the number of carriers any mixed equilibrium rounds to an exact E-admissible equilibrium. An exact pricing algorithm for routes under probability boxes with unknown dependence and a zone-market clearing search make the D1 game computable with a routing oracle. On nine city instances, the empirical price of anarchy is close to one where service is complete and larger where it is partial, a per-delivery subsidy captures most of what a city leader can gain, a congestion charge alone captures little, and imprecision acts like a tax. The zone-market search did not outperform best response on these instances, whereas the exact pricing algorithm outperformed scenario and quantile labelling on random pricing instances.
+
+\section*{Data and code availability}
+Code, processed data, parameter sources, result files, figures and the scripts that generate the tables of this paper are available at \url{https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty}. Raw OpenStreetMap extracts are distributed under the Open Database License; GHS-POP is distributed by the European Commission Joint Research Centre.
+
+% Author to confirm the two statements below before submission.
+\section*{Declaration of competing interest}
+The author declares no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Funding}
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
+
+\bibliographystyle{elsarticle-num-names}
+\bibliography{references}
+
+%======================================================================
+\appendix
+
+\section{Proofs of the results of Section~\ref{sec:theory}}\label{app:proofs}
+
+The proofs in this appendix are taken from the theory notes in the repository (file \texttt{theory/main.tex}), with the notation of Section~\ref{sec:model}.
+
+\subsection{Classical tools}
+
+\begin{theorem}[Shapley--Folkman, constructive vertex form; \citealp{Starr1969}]\label{thm:sf}
+Let $S_1,\dots,S_N\subset\R^d$ be finite and nonempty, $L=\spn\bigcup_i(S_i-S_i)$ and $d_L=\dim L$. Index the elements of $S_i$ by $\cP_i$ through an onto map $a_i$. For $\bar x\in\sum_i\conv S_i$, the polytope $\Lambda(\bar x)=\{\lambda\in\prod_i\Delta(\cP_i):\sum_i\sum_p\lambda_i(p)a_i(p)=\bar x\}$ is nonempty, and at every vertex $\lambda$ the set $J(\lambda)=\{i:|\supp\lambda_i|\ge2\}$ has $|J(\lambda)|\le\min\{N,d_L\}$.
+\end{theorem}
+\begin{proof}
+Nonemptiness: $\bar x=\sum_iy_i$ with $y_i\in\conv S_i$, and each $y_i$ is a convex combination of points $a_i(p)$. $\Lambda(\bar x)$ is a bounded polyhedron in standard form $\{\lambda\ge0:H\lambda=h\}$ with columns $c_{i,p}=(a_i(p),e_i)\in\R^d\times\R^N$ and $h=(\bar x,\mathbf 1)$. A feasible $\lambda$ is a vertex if and only if the columns $\{c_{i,p}:\lambda_i(p)>0\}$ are linearly independent. Fix a vertex and pick $p_i^0\in\supp\lambda_i$ for each $i$. The family $\{c_{i,p_i^0}\}_i\cup\{c_{i,p}-c_{i,p_i^0}:p\in\supp\lambda_i\setminus\{p_i^0\}\}$ is obtained from the positive columns by an invertible (unitriangular) transformation, so it is linearly independent. Its second part consists of the vectors $(a_i(p)-a_i(p_i^0),0)\in L\times\{0\}$, which number $\sum_i(|\supp\lambda_i|-1)\ge|J(\lambda)|$. Linearly independent vectors in $L\times\{0\}$ number at most $d_L$. Hence $|J|\le d_L$, and trivially $|J|\le N$.
+\end{proof}
+
+\subsection{Section 4.1}
+
+\begin{proof}[Proof of Lemma~\ref{lem:reduction}]
+(a) $u_i(p;m,\xi)$ is affine in $(m,\xi)$ with fixed coefficients, and $P$ has finite first moments; linearity of the integral gives the identity. (b) Into: by definition. Onto: for $k=(m,\xi)\in K_i^\delta(\sigma)$, the Dirac law at $(m,\xi)$ is supported in $\R^d_{\ge0}\times\R^Z_{\ge0}$ because $m\ge0$ and $\xi\in\Xi\subset\R^Z_{\ge0}$; its means are $(m,\xi)$, so it belongs to $\cM_i^\delta(\sigma)$. (c) Each criterion depends on $P$ only through the numbers $\E_P[u(p)]$ and $\E_P[u(p')-u(p)]$, which are affine functions of the mean by (a). By (b), ranging over $P$ is the same as ranging over $k\in K_i^\delta(\sigma)$, a product of compact intervals; continuous functions attain their extrema on it.
+\end{proof}
+
+\begin{proof}[Proof of Lemma~\ref{lem:nesting}]
+For a finite $\cP$ and the compact convex box $K$ with continuous affine payoffs: \emph{E $\subseteq$ M.} If $p$ is optimal at $k_0$, then for every $p'$, $\ub(p';k_0)-\ub(p;k_0)\le0$, so $\min_k[\ub(p')-\ub(p)]\le0$. \emph{M $\subseteq$ ID.} If $p$ is maximal, then for each $p'$ there is $k$ with $\ub(p;k)\ge\ub(p';k)$; hence $\max\ub(p;\cdot)\ge\ub(p;k)\ge\ub(p';k)\ge\min\ub(p';\cdot)$. \emph{$\Gamma\subseteq$ M.} If $\min_k[\ub(p';k)-\ub(p;k)]>0$, then $\min\ub(p')>\min\ub(p)$, so $p$ is not $\Gamma$-maximin. These inclusions hold carrier by carrier and give the inclusions between equilibrium sets. \emph{Monotonicity.} $K^\delta(c)\subseteq K^{\delta'}(c)$ for every $c$, and the realised centre $A_{-i}(\sigma)$ does not depend on $\delta$. E: a witness belief stays admissible. M: a dominance strict on the larger set is strict on the smaller one, so non-domination on the smaller set implies it on the larger one. ID: $\overline\E$ increases and every $\underline\E$ decreases as the set grows.
+\end{proof}
+
+\begin{example}[$\Gamma$-equilibria are not nested]\label{ex:gamma}
+Take one carrier with a fixed external aggregate $c=(1,2)$, $d=2$, $M=I$, $w=(2,1)$, no traffic term, and two plans with $\pi=0$, $\varphi(A)=(1,0)$, $\varphi(B)=(0,1)$. The lower values are $-(1+2\delta)$ for $A$ and $-(2+\delta)$ for $B$, so $\ICNE_\Gamma(0)=\{A\}$ and $\ICNE_\Gamma(2)=\{B\}$.
+\end{example}
+
+\begin{proof}[Proof of Lemma~\ref{lem:gamma}]
+A minimum of affine functions of the mixture $x$ is concave, and \[\min_k\textstyle\sum_px(p)\ub_i(p;k)\ge\sum_px(p)\min_k\ub_i(p;k)\] because the left side picks one $k$ for all $p$. With $\varphi,t\ge0$ and $M\ge0$, $\ub_i(p;m,\xi)$ is coordinatewise nonincreasing in $(m,\xi)$. The box $K^\delta(c)$ has the coordinatewise maximum $c+\delta w$, which lies in it (clipping only removes points below $0$), and $\Xi$ has the maximum $\overline\mu$. So $k^+=(c+\delta w,\overline\mu)$ minimises every $\ub_i(p;\cdot)$ and the lower expectation is linear in the mixture. Substituting $k^+$ with $c=A_{-i}(\sigma)$ gives \[\ub_i(p;k^+)=\pi^\Gamma_i(p)-\ip{\varphi_i(p)}{MA_{-i}(\sigma)},\] the payoff of $G^\Gamma_\delta$; $\Gamma$-maximin is then best response in $G^\Gamma_\delta$.
+\end{proof}
+
+\subsection{Sections 4.2 and 4.3}
+
+\begin{proposition}[Relaxed equilibria are mixed equilibria]\label{prop:relaxed}
+Under Assumption~\ref{ass:affine}, $x$ is a mixed Nash equilibrium of the finite game with payoffs $\ub_i(\sigma_i;A_{-i}(\sigma),\hat\xi)$ if and only if $\supp x_i\subseteq\arg\max_p\ub_i(p;\Abar_{-i}(x),\hat\xi)$ for all $i$. Such $x$ exist.
+\end{proposition}
+\begin{proof}
+Under the product law $x_{-i}$, the expected payoff of a pure plan $p$ is $\E[\ub_i(p;A_{-i},\hat\xi)]=\ub_i(p;\E A_{-i},\hat\xi)$ because $\ub_i$ is affine in $A_{-i}$, and $\E A_{-i}=\Abar_{-i}(x)$ by linearity. A mixed profile is a Nash equilibrium if and only if each $x_i$ is supported on pure best responses to $x_{-i}$. Existence follows from \citet{Nash1951}.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:D1}]
+For a unilateral change $p\to p'$ of carrier $i$, put $a=a_i(p)$, $a'=a_i(p')$ and $R=A_{-i}$. Then $\Psi(p')-\Psi(p)=\pi_i(p')-\pi_i(p)+\tfrac12\|a'\|_M^2-\tfrac12\|a\|^2_M-\tfrac12\|R+a'\|_M^2+\tfrac12\|R+a\|_M^2-\gamma\ip{t_i(p')-t_i(p)}{\hat\xi}$, which equals $\pi_i(p')-\pi_i(p)-\ip{a'-a}{MR}-\gamma\ip{t_i(p')-t_i(p)}{\hat\xi}=u_i(p')-u_i(p)$, using $\varphi_i=a_i$. A maximiser $\sigma$ is a pure equilibrium \citep{Monderer1996}. The point $(A_{-i}(\sigma),\hat\xi)$ lies in $K_i^\delta(\sigma)$ for every $\delta$, so $\sigma\in\ICNE_E(\delta)$. For $\Gamma$, Lemma~\ref{lem:gamma} shows that $\ICNE_\Gamma(\delta)$ is the equilibrium set of $G^\Gamma_\delta$, which is again D1 with modified private profits and therefore has a potential and a pure equilibrium.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+\emph{(a)} Fix $i$ and $\delta\ge\hat\delta(p)$. The anchor $\Abar^*_{-i}$ is a sum of convex combinations of nonnegative vectors, hence nonnegative. By definition of $\hat\delta(p)$, $|\Abar^*_{-i,k}-A_{-i,k}(p)|\le\hat\delta(p)w_k\le\delta w_k$ for all $k$, so $(\Abar^*_{-i},\hat\xi)\in K_i^\delta(p)$. By Lemma~\ref{lem:reduction}(b) the Dirac law at this point belongs to $\cM_i^\delta(p)$; under it the expected payoff is $\ub_i(\cdot;\Abar^*_{-i},\hat\xi)$, which $p_i\in B_i$ maximises. Hence $p_i$ is E-admissible for every $i$, and the inclusions follow from Lemma~\ref{lem:nesting}.
+
+\emph{(b), first term.} For any $p\in\prod_jB_j$, $A_{-i}(p)-\Abar^*_{-i}=\sum_{j\ne i}(a_j(p_j)-\abar_j)$ and $|a_{jk}(p_j)-\abar_{jk}|\le r_{jk}$.
+
+\emph{(b), second term.} $\Abar^*\in\sum_j\conv a_j(B_j)$ because $\supp x_j^*\subseteq B_j$. Apply Theorem~\ref{thm:sf} with $\cP_j$ replaced by $B_j$: a vertex $\lambda$ of $\Lambda(\Abar^*)$ exists and can be found by linear programming. Let $J=J(\lambda)$, $|J|\le k^\sharp$, and $y_j=\sum_p\lambda_j(p)a_j(p)$. For $j\notin J$, $\lambda_j$ is a point mass at some $p_j\in B_j$ and $a_j(p_j)=y_j$; for $j\in J$ choose any $p_j\in\supp\lambda_j\subseteq B_j$. Since $\sum_jy_j=\Abar^*=\sum_j\abar_j$,
+\begin{equation}\label{eq:decomp}
+A_{-i}(p)-\Abar^*_{-i}=\textstyle\sum_{j\in J}(a_j(p_j)-y_j)-(a_i(p_i)-\abar_i).
+\end{equation}
+For $j\in J$ both $a_{jk}(p_j)$ and $y_{jk}$ lie in $[\min_{B_j}a_{jk},\max_{B_j}a_{jk}]$, so the sum is at most $k^\sharp\bar\sigma w_k$ in coordinate $k$, and the last term is at most $\bar\rho w_k$.
+
+\emph{(b), third term.} If $J=\emptyset$ or $\bar\sigma=0$, the sum vanishes. Otherwise draw $p_j\sim\lambda_j$ independently for $j\in J$. For each $k$ the variables $(a_{jk}(p_j)-y_{jk})/w_k$, $j\in J$, are independent, have mean zero and range in an interval of length at most $\bar\sigma$. By Hoeffding's inequality and a union bound over $k$, $\Pr(\|E\|_{w,\infty}\ge t)\le2d\exp(-2t^2/(k^\sharp\bar\sigma^2))$, where $E$ is the sum in \eqref{eq:decomp}. This is below one for $t>t_0=\bar\sigma\sqrt{k^\sharp\ln(2d)/2}$; outcomes are finitely many, so some outcome has $\|E\|_{w,\infty}\le t_0$, and $\hat\delta(p)\le t_0+\bar\rho$ for it.
+
+\emph{(c)} Relaxed equilibria exist (Proposition~\ref{prop:relaxed}). Use $r_{jk}\le s_{jk}$, $\bar\rho\le\bar\sigma\le\sigma_{\max}$, $k^\sharp\le d$ and $\sum_{j\ne i}r_{jk}/w_k\le(N-1)\sigma_{\max}$; the order of thresholds follows from Lemma~\ref{lem:nesting}. \emph{(d)} This was shown in (b); linear programming finds a vertex in time polynomial in $\sum_j|B_j|$ and $d$.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:eps}]
+Let $m^*=\Abar^*_{-i}$ and $m=A_{-i}(p)$. For any $p'$, $\ub_i(p';m,\mu)-\ub_i(p_i;m,\mu)=[\ub_i(p';m^*,\hat\xi)-\ub_i(p_i;m^*,\hat\xi)]-\ip{\varphi_i(p')-\varphi_i(p_i)}{M(m-m^*)}-\gamma\ip{t_i(p')-t_i(p_i)}{\mu-\hat\xi}$. The bracket is nonpositive because $p_i\in B_i$; each term $|M_k(\varphi_{ik}(p')-\varphi_{ik}(p_i))(m_k-m_k^*)|$ is at most $w_kM_k|\Delta\varphi_{ik}|\hat\delta(p)$, and $|\mu_z-\hat\xi_z|\le\kappa_z$.
+\end{proof}
+
+\subsection{Sections 4.4 and 4.5}
+
+\begin{proof}[Proof of Proposition~\ref{prop:tight}]
+For carrier 1, $\ub(A_1;n)-\ub(B_1;n)=6-3n$, so $A_1$ is optimal iff $n\le2$; for carrier 2, $\ub(Y;n)-\ub(X;n)=6-3n$, so $Y$ is optimal iff $n\le2$. With two plans and a convex belief set, E-admissibility and maximality coincide: some $n$ in the box makes the plan weakly better. In $(A_1,X)$ carrier 2 sees $n=1$ and needs a belief $\ge2$; in $(A_1,Y)$ carrier 1 sees $n=3$ and needs a belief $\le2$; in $(B_1,Y)$ carrier 2 sees $n=3$ and needs $\le2$; in $(B_1,X)$ carrier 1 sees $n=1$ and needs $\ge2$. Each requirement holds iff $\delta w\ge1$, and the other carrier best-responds at the realised count. Hence $\ICNE_E(\delta)=\ICNE_M(\delta)=\emptyset$ for $\delta<1/w$ and both equal the full profile set at $\delta=1/w$; there is no pure Nash equilibrium. The unique mixed equilibrium makes each carrier indifferent, so the rival's mean count is $2$, both mix $\tfrac12$--$\tfrac12$, $r_j=1$, $\bar\rho=1/w$ and $(N-1)\bar\rho=1/w$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:cycles}]
+Take two carriers with plan sets $\{A_1,B_1\}^Z$ and $\{X,Y\}^Z$, the one-zone data of Proposition~\ref{prop:tight} in each zone and no cross-zone interaction, and $N-2$ carriers with a single null plan. Payoffs are sums over zones and plan sets are products, so a carrier's regret is the sum of its zone regrets. In each zone and each of the four zone profiles, exactly one of the two carriers has regret $3$ and the other $0$ (e.g.\ in $(A_1,X)$ carrier 2 gains $2-(-1)=3$ by switching to $Y$). So $\varepsilon_1+\varepsilon_2=3Z$ with both multiples of $3$, and $\max\ge3\lceil Z/2\rceil$. For the upper bound, the zone-wise mixed equilibrium has $\bar\rho=1$, every $p\in\prod B_j$ has $\hat\delta(p)\le1$, and $L_i(p)\le\sum_z1\cdot1\cdot|\Delta\tau_z|=3Z$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:np}]
+\emph{Membership.} The certificate is a profile $\sigma$. With $K$ the clipped box and $\Xi$ a point: E-admissibility of $\sigma_i$ is feasibility of the linear system $\{m\in K:\ub_i(\sigma_i;m)\ge\ub_i(p';m)\ \forall p'\}$; maximality requires $\max_{m\in K}[\ub_i(\sigma_i;m)-\ub_i(p';m)]\ge0$ for each $p'$, a linear function maximised over a box coordinatewise; ID and $\Gamma$ require maxima and minima of $\ub_i(p;\cdot)$ over the box, also coordinatewise.
+
+\emph{Construction.} Let $V(D)=[n]$ and $\Delta^-=\max(1,\text{max in-degree})$. Create one zone per arc $e=(u,v)$, using only its vehicle coordinate, with $M_e=\gamma c_e=1$, $w_e=1$ and no deliveries. Set $\eta=1/(2\Delta^-+2)$. Carrier $i$ has the plan \emph{out} with all data $0$, and the plan \emph{in} with $\pi_i=1$ and, for each out-arc $e=(i,j)$, vehicles $n_{ie}=1$ and exposure $\tau_{ie}=1$; for each in-arc $e=(h,i)$, vehicles $n_{ie}=2$ and exposure $\tau_{ie}=\eta$; zero elsewhere. This is D2, since $\varphi=\tau\ne a=n$.
+
+\emph{Payoff gap.} The gain of \emph{in} at belief $m$ is $D_i(m)=1-\sum_{e=(i,j)}m_e-\eta\sum_{e=(h,i)}m_e$. At the realised aggregate of $\sigma^S$, $m_e=2\cdot\mathbf 1[j\in S]$ for $e=(i,j)$ and $m_e=\mathbf 1[h\in S]$ for $e=(h,i)$, so $D_i^{\rm real}=1-2o_i-\eta h_i$ with $o_i=|N^+(i)\cap S|$ and $h_i=|N^-(i)\cap S|\le\Delta^-$. If $o_i=0$, $D_i^{\rm real}\ge1-\Delta^-/(2\Delta^-+2)>\tfrac12$; if $o_i\ge1$, $D_i^{\rm real}\le-1$.
+
+\emph{Robustness of the sign.} Over $K^\delta$, $|D_i(m)-D_i^{\rm real}|\le\delta(\deg^+(i)+\eta\deg^-(i))<\delta(\Delta^++\tfrac12)$, which is below $\tfrac12$ for $\delta<1/(2\Delta^++1)$; clipping only shrinks the box. So $D_i$ has the sign of $D_i^{\rm real}$ on the whole box.
+
+\emph{All criteria select the realised strict best response.} If $D_i>0$ on the box, \emph{in} is the unique optimum at every belief, hence the only E-admissible plan; \emph{out} is strictly dominated everywhere, so \emph{in} is the only maximal plan; and $\min_K\ub(\text{in})>0=\max_K\ub(\text{out})$, so \emph{out} is interval-dominated and \emph{in} is the unique $\Gamma$-maximin plan. The case $D_i<0$ is symmetric. So $\sigma$ is admissible under every criterion iff each carrier plays \emph{in} exactly when $o_i=0$.
+
+\emph{Equilibria are kernels.} With $S=\{i:\sigma_i=\text{in}\}$, the condition reads $i\in S\Rightarrow N^+(i)\cap S=\emptyset$ (independence) and $i\notin S\Rightarrow N^+(i)\cap S\ne\emptyset$ (absorption). NP-hardness follows from \citet{Chvatal1973}; all numbers are polynomially bounded, so hardness is strong; with $\Delta^+\le2$ \citep{Fraenkel1981} the threshold is $1/5$.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:inapprox}]
+On the instances of Theorem~\ref{thm:np}, $\delta_0^E=0$ if $D$ has a kernel; otherwise $\ICNE_E(\delta)=\emptyset$ for all $\delta<1/(2\Delta^++1)$, so $\delta_0^E\ge1/(2\Delta^++1)$. A multiplicative approximation outputs $0$ in the first case and a positive number in the second; an additive one separates the cases when its error is below $1/(2\Delta^++1)$.
+\end{proof}
+
+\begin{proposition}[The relaxation step is PPAD-hard under D2]\label{prop:ppad}
+Every bimatrix game $(R,C)\in\mathbb Q^{m\times n}\times\mathbb Q^{m\times n}$ is, in polynomial time, the precise game of a D2 instance with $N=2$ and $d=m+n$. Hence computing a mixed equilibrium under D2 is PPAD-hard.
+\end{proposition}
+\begin{proof}
+Let $M=I_{m+n}$, no traffic term, $\bar R=\max R$ and $\bar C=\max C$. Carrier 1 has plans $p\in[m]$ with $a_1(p)=e_p$, $\varphi_1(p)=\sum_q(\bar R-R_{pq})e_{m+q}\ge0$ and $\pi_1(p)=\bar R$; carrier 2 has plans $q\in[n]$ with $a_2(q)=e_{m+q}$, $\varphi_2(q)=\sum_p(\bar C-C_{pq})e_p\ge0$ and $\pi_2(q)=\bar C$. Then $u_1(p;a_2(q))=R_{pq}$ and $u_2=C_{pq}$. By Proposition~\ref{prop:relaxed}, relaxed equilibria are exactly the Nash equilibria of $(R,C)$, and computing these is PPAD-complete \citep{Chen2009,Daskalakis2009}.
+\end{proof}
+
+\subsection{Section 4.6}
+
+\begin{proof}[Proof of Lemma~\ref{lem:transfer}]
+Write $k^t=(A_{-i}(\sigma),\mu)\in K_i^\delta(\sigma)$ and $\Delta(p',k)=\ub_i(p';k)-\ub_i(\sigma_i;k)$, affine in $k$. For any $k$ in the (unclipped) box, $|\Delta(p',k)-\Delta(p',k^t)|\le\delta\sum_kw_kM_k|\Delta\varphi_{ik}|+\gamma\sum_z\kappa_z|\Delta t_{iz}|$. \emph{E:} take the witness $k$, at which $\Delta(p',k)\le0$. \emph{M:} for each $p'$, maximality and compactness give $k_{p'}$ with $\Delta(p',k_{p'})\le0$. \emph{ID:} $\ub_i(p';k^t)-\ub_i(\sigma_i;k^t)\le[\ub_i(p';k^t)-\min_K\ub_i(p')]+[\max_K\ub_i(\sigma_i)-\ub_i(\sigma_i;k^t)]$, since $\max_K\ub_i(\sigma_i)\ge\min_K\ub_i(p')$, and each bracket is at most $\delta H_i+\gamma\Theta_i$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:cs}]
+The minimum over a growing finite set does not increase and the maximum does not decrease (Lemma~\ref{lem:nesting}). Each profile enters $\ICNE_C(\delta)$ at a single threshold and never leaves, so the sets change at most at $\prod_i|\cP_i|$ values. For $\Gamma$ see Example~\ref{ex:gamma}.
+\end{proof}
+
+\begin{proposition}[Price of anarchy under smoothness; conditional]\label{prop:smooth}
+Assume $W(\sigma)\ge\sum_iU_i(\sigma)$ for all $\sigma$, $W^*>0$, and that the precise game is $(\lambda,\mu)$-smooth: $\sum_iU_i(\sigma^*_i,\sigma_{-i})\ge\lambda W(\sigma^*)-\mu W(\sigma)$ for all $\sigma$ and an optimal $\sigma^*$. For $C\in\{E,M,ID\}$ let $\mathcal E(\delta)=\max_{\sigma\in\ICNE_C(\delta)}\sum_i\varepsilon_i(\sigma)$ from Lemma~\ref{lem:transfer}. If $\lambda W^*>\mathcal E(\delta)$, then $\mathrm{PoA}_C(\delta)\le(1+\mu)/(\lambda-\mathcal E(\delta)/W^*)$.
+\end{proposition}
+\begin{proof}
+For $\sigma\in\ICNE_C(\delta)$: $W(\sigma)\ge\sum_iU_i(\sigma)\ge\sum_i[U_i(\sigma^*_i,\sigma_{-i})-\varepsilon_i]\ge\lambda W^*-\mu W(\sigma)-\mathcal E(\delta)$. Rearrange.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:pos}]
+With $\pi_i$ as in Section~\ref{sec:model} and $x=\tau$, direct expansion gives $W-\Psi_{\hat\mu}=\sum_z[\tfrac{b_z}{2}\sum_iq_{iz}^2-\tfrac{\gamma c_z}{2}(T_z^2-\sum_i\tau_{iz}^2)]$; the $\alpha$, $\hat\mu$ and $C_i$ terms cancel. By Cauchy--Schwarz, $\sum_i\tau_{iz}^2\ge T_z^2/N$, and $\sum q^2\ge0$, so $W(\sigma)\ge\Psi_{\hat\mu}(\sigma)-\sum_z\tfrac{\gamma c_z}{2}(1-\tfrac1N)T_z(\sigma)^2$. Next, $\Psi_{\hat\mu}(\sigma)\ge\Psi_{\hat\mu}(\sigma^*)-\eta$, and $\Psi_{\hat\mu}(\sigma^*)\ge W^*-\sum_z\tfrac{b_z}{2}\sum_iq_{iz}^{*2}$ because $T^2\ge\sum\tau^2$ for $\tau\ge0$. Membership of a potential maximiser in every $\ICNE_E(\delta)$ is Proposition~\ref{prop:D1}, extended to M and ID by Lemma~\ref{lem:nesting}.
+\end{proof}
+
+\subsection{Section 4.7}
+
+\begin{theorem}[A posteriori certificates]\label{thm:cert}
+Let $p$ be a pure profile. (a) The exact E-threshold of carrier $i$ is the optimal value of the linear program
+$A_i^E(p)=\min\{\delta\ge0: m\ge0,\ \xi\in\Xi,\ |m_k-A_{-i,k}(p)|\le\delta w_k\ \forall k,\ \ub_i(p_i;m,\xi)\ge\ub_i(p';m,\xi)\ \forall p'\in\cP_i\}$ ($+\infty$ if infeasible), and $p\in\ICNE_E(\delta)$ iff $\delta\ge\max_iA^E_i(p)$. With an exact oracle and implicit $\cP_i$, Kelley's cutting-plane method on this program terminates finitely. (b) For anchors $m^i\ge0$, $\xi^i\in\Xi$ with $p_i\in\arg\max\ub_i(\cdot;m^i,\xi^i)$, $A_i^E(p)\le\|A_{-i}(p)-m^i\|_{w,\infty}$. (c) For a heuristic plan $h_i$ and a valid bound $\mathcal U_i\ge\max_{p'}\ub_i(p';m,\xi)$, the regret of $p_i$ lies in $[\ub_i(h_i)-\ub_i(p_i),\ \mathcal U_i-\ub_i(p_i)]$.
+\end{theorem}
+\begin{proof}
+(a) By Lemma~\ref{lem:reduction}, $p_i$ is E-admissible at width $\delta$ iff the system with that $\delta$ is feasible; feasibility is upward closed in $\delta$ (Lemma~\ref{lem:nesting}) and the infimum of an LP is attained when finite. Kelley's method adds the oracle's best plan at the current $(m,\xi)$ as a violated constraint; a plan already present cannot be violated, so cuts are distinct and finitely many. (b) The anchor is feasible with $\delta=\|A_{-i}(p)-m^i\|_{w,\infty}$. (c) Immediate from the definitions.
+\end{proof}
+
+\begin{theorem}[Rounding guarantee under D2]\label{thm:D2}
+Under D2, if the relaxation phase returns a mixed equilibrium $x$, the sparsify phase (a feasibility LP over $\Lambda(\Abar(x))$ with plan sets $\supp x_j$) and the round phase return $p\in\prod_jB_j(x)$ with $p\in\ICNE_E(\delta)$ for all $\delta\ge\hat\delta(p)$; $\hat\delta(p)$ satisfies the second bound of Theorem~\ref{thm:main}(b) for any choice in the round phase and the third for a successful sample. Sparsify and round run in time polynomial in $\sum_j|\supp x_j|$ and $d$.
+\end{theorem}
+\begin{proof}
+The sparsify LP's vertices have $|J|\le k^\sharp$ by Theorem~\ref{thm:sf}. The rest is Theorem~\ref{thm:main}(a), (b) and (d).
+\end{proof}
+
+The double-oracle relaxation \citep{McMahan2003} stops, with exact restricted solves and exact oracles, after at most $\sum_i|\cP_i|$ rounds at a relaxed equilibrium: at termination every support plan attains the restricted maximum and no plan exceeds it, and each non-terminal round adds a new plan.
+
+\section{Proofs of the results of Section~\ref{sec:algo}}\label{app:brl}
+
+\subsection{BRL}
+
+\begin{proof}[Proof of Theorem~\ref{thm:brl-main}]
+Write $S=\sum_{a\in r}X_a$ (arcs counted with multiplicity). Fix $j$ and $\Theta=\Theta_j$.
+
+\emph{Step 1 (pointwise inequality).} For reals $x_a$, $d_a$ with $\sum_ad_a\le\Theta$, $\pos{\sum_ax_a-\Theta}\le\pos{\sum_a(x_a-d_a)}\le\sum_a\pos{x_a-d_a}$, because $t\mapsto t^+$ is nondecreasing and subadditive.
+
+\emph{Step 2 (upper bound).} Let $P\in\cM$ with marginals $F_a$. Taking expectations, $\E_P\pos{S-\Theta}\le\sum_a\E_{F_a}\pos{X_a-d_a}$. Since $F_a\ge\Fl_a$ pointwise, $F_a$ is first-order dominated by $\Fl_a$, and $x\mapsto\pos{x-d}$ is nondecreasing, so $\E_{F_a}\pos{X_a-d_a}\le\Pib_a(d_a)$; likewise $\E_{F_a}X_a\le\xb_a$. Hence $\E_P\phi(S)\le c_0+\gamma\sum_a\xb_a+\sum_j\rho_j\sum_a\Pib_a(d^j_a)$ for every $P$ and admissible $d^j$.
+
+\emph{Step 3 (attainment).} Let $U$ be uniform on $(0,1)$, $\bar X_a=\Qb_a(U)$ and $\bar S=\Sigma(U)$ with $\Sigma(u)=\sum_a\Qb_a(u)$; then $\bar X_a\sim\Fl_a$ and the law of $(\bar X_a)$ belongs to $\cM$. Let $u^*=\sup\{u\in(0,1]:\Sigma(u)\le\Theta\}$ ($\sup\emptyset=0$). If $u^*=1$, put $d_a=\Qb_a(1)$; then $\sum_ad_a\le\Theta$ and both sides of Step 1 vanish almost surely. If $u^*<1$, put $\ell_a=\Qb_a(u^*)$ (or $\Qb_a(0^+)$ if $u^*=0$) and $h_a=\Qb_a(u^{*+})$; then $\sum_a\ell_a\le\Theta$ when $u^*>0$ and $\sum_ah_a\ge\Theta$. If $u^*=0$ choose $d_a\le\ell_a$ with $\sum_ad_a=\Theta$; otherwise choose $d_a\in[\ell_a,h_a]$ with $\sum_ad_a=\Theta$. On $\{U\le u^*\}$ all $\bar X_a\le d_a$ and both sides of Step 1 are $0$; on $\{U>u^*\}$ all $\bar X_a\ge d_a$ and $\sum_a\pos{\bar X_a-d_a}=\bar S-\Theta=\pos{\bar S-\Theta}$. So Step 1 holds with equality almost surely, and the comonotone law attains the bound of Step 2; the minima are attained.
+
+\emph{Step 4.} $\E\phi(\bar S)=\int_0^1\phi(\Sigma(u))du$ because $\bar S=\Sigma(U)$.
+
+\emph{Step 5 (integrality).} With integer quantiles and $\Theta$, the numbers $\ell_a$, $h_a$, $\Qb_a(1)$ are integers and integer vectors with the required properties exist in each case of Step 3.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:resource}]
+Substitute the budget form of Theorem~\ref{thm:brl-main} into the objective and merge the two minimisations.
+\end{proof}
+
+\begin{lemma}[Concatenation is inf-convolution]\label{lem:infconv}
+For a label $p$ and a completion $q$, $\Eu[\phi(T_{p\oplus q})]-c_0=f_{p\oplus q}(T_{\max})=\min_D\{f_p(D)+f_q(T_{\max}-D)\}$.
+\end{lemma}
+\begin{proof}
+The stop-loss terms are separable over arcs. Split the budget vector into the arcs of $p$ and of $q$, put $D=\sum_{a\in p}d_a$, minimise first over the arcs of $p$ with budget $D$ and then over those of $q$ with budget $T_{\max}-D$, and apply Theorem~\ref{thm:brl-main} to each part. The mean terms add.
+\end{proof}
+
+\begin{lemma}[Completion window]\label{lem:window}
+Let $C_{\min}(v)\le S_{q,1}$ for every completion $q$ of labels ending at $v$. For every completion $q$, the minimum in Lemma~\ref{lem:infconv} is attained at some $D^*\le\Dh(p)$; if $D^*<\Dl(p)$ then $D^*\le S_{p,1}$.
+\end{lemma}
+\begin{proof}
+Let $\Phi_q(D)=f_p(D)+f_q(T_{\max}-D)$. The map $D\mapsto f_q(T_{\max}-D)$ is convex and nondecreasing with slope in $[0,\rho]$, equal to $\rho$ when $T_{\max}-D<S_{q,1}$; the slope of $f_p$ lies in $[-\rho,0]$ and is $0$ for $D>S_{p,L}$. (i) On $D>T_{\max}-S_{q,1}$, $\Phi_q$ has slope $\ge0$, so a minimiser exists with $D\le T_{\max}-S_{q,1}\le T_{\max}-C_{\min}(v)$. (ii) On $D>S_{p,L}$, $\Phi_q$ has slope $\ge0$, so decreasing $D$ to $S_{p,L}$ does not increase it. Applying (i) and then (ii) gives $D^*\le\Dh(p)$. The last claim is immediate from $\Dl(p)\le S_{p,1}$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:fdom}]
+\emph{Validity.} Let $q$ be a completion of $p_2$; since $\mathcal V(p_1)\subseteq\mathcal V(p_2)$ and $\ell(p_1)\le\ell(p_2)$, it is a completion of $p_1$. By Lemma~\ref{lem:window} there is a minimiser $D^*\le\Dh(p_2)$ for $p_2\oplus q$. Let $g$ be the difference in Definition~\ref{def:fdom}. If $D^*\in\mathcal W(p_2)$, $g(D^*)\le0$. Otherwise $D^*<\Dl(p_2)\le S_{p_2,1}$; on $(-\infty,S_{p_2,1}]$, $f_{p_2}$ has slope $-\rho$ and $f_{p_1}$ slope $\ge-\rho$, so $g$ is nondecreasing there and $g(D^*)\le g(\Dl(p_2))\le0$. In both cases, by Lemma~\ref{lem:infconv}, $f_{p_1\oplus q}(T_{\max})-y(p_1)\le f_{p_1}(D^*)+f_q(T_{\max}-D^*)-y(p_1)\le f_{p_2\oplus q}(T_{\max})-y(p_2)$.
+
+\emph{Exactness.} Call a label processed if it is popped while not deleted. Let OPT be the optimum and $\Omega$ the set of pairs $(o,q)$ with $o$ a created label, $q$ a completion of $o$ and reduced cost of $o\oplus q$ equal to OPT. The pair (depot label, optimal route) is in $\Omega$ and the depot label is processed. Among pairs in $\Omega$ with $o$ processed choose one with the fewest arcs $|q|$. If $|q|=1$, closing $o$ records a route of value OPT. If $|q|\ge2$, let $(v,j)$ be the first arc of $q$, $q'$ the rest and $o_1=o\oplus(v,j)$, which is created when $o$ is processed; $(o_1,q')\in\Omega$. If $o_1$ is processed, $|q'|<|q|$ contradicts minimality. Otherwise $o_1$ was discarded or deleted because a live label $o_2$ functionally dominates it; by validity $(o_2,q')\in\Omega$, and if $o_2$ is not processed it was deleted later by some $o_3$, with $(o_3,q')\in\Omega$ by transitivity. The moments at which these labels cease to be live strictly increase and labels are finitely many, so the chain ends at a processed label with $(o_k,q')\in\Omega$ and $|q'|<|q|$, a contradiction.
+\end{proof}
+
+\begin{proposition}[Comparison with vector dominance]\label{prop:compare}
+Assume $\mathcal V(p_1)\subseteq\mathcal V(p_2)$, $\ell(p_1)\le\ell(p_2)$ and $y(p_1)\ge y(p_2)$. (a) If $S_{p_1}\le S_{p_2}$ componentwise, $p_1$ functionally dominates $p_2$. (b) In the sector model $X_a=\sum_k\tau_{a,k}\xi_k$ with probability boxes on the multipliers, $\tau_{p_1}\le\tau_{p_2}$ componentwise implies $S_{p_1}\le S_{p_2}$. (c) Neither converse holds.
+\end{proposition}
+\begin{proof}
+(a) $f$ is nondecreasing in each $S_l$. (b) The upper quantiles of the multipliers are nonnegative. (c) With $L=2$, $\omega=(\tfrac12,\tfrac12)$, $\gamma=0$, $\rho=1$ and equal duals: $S_{p_1}=(1,1)$ and $S_{p_2}=(0,2.2)$ give $f_{p_1}\le f_{p_2}$ on $\R$ (values $(1,1.1)$, $(0,0.6)$, $(0,0)$ at $D=0,1,2.2$, constant difference $-0.1$ below $0$) although $S_{p_1,1}>S_{p_2,1}$.
+\end{proof}
+
+\begin{proposition}[A single risk level is not exact]\label{prop:fixedu}
+For every $u$, $\min_{\rm plan}\sum_r\Eu[\phi(T_r)]\ge\max_u\min_{\rm plan}\sum_r[c_0+\gamma\xb_r+\rho(\mathcal H_r(u)-(1-u)T_{\max})]$, where $\mathcal H_r(u)=\int_u^1\sum_{a\in r}\Qb_a(v)\,dv$; the inequality can be strict and the best fixed-$u$ plan need not be optimal.
+\end{proposition}
+\begin{proof}
+The maximum over $u$ inside each route is at least its value at a common $u$, and $\min\max\ge\max\min$. Strictness is shown by exact computations by enumeration and set partitioning (Section~\ref{sec:res-algo}); structurally, the optimal level of a route is its worst-case on-time level, which differs between routes of the same plan.
+\end{proof}
+
+\subsection{ZMC}
+
+\begin{lemma}[Price duality]\label{lem:dual}
+Let $\bar\Phi(x)=\sum_i\sum_px_i(p)\tilde c_i(p)+\tfrac12\|\Abar(x)\|_M^2$ on $\prod_i\Delta(\cP_i)$, $\bar\Phi^*=\min\bar\Phi$ and $\mathcal B=\prod_k[0,M_k\Amax_k]$ with $\Amax_k=\sum_i\max_pa_{ik}(p)$. (a) $\mathcal D$ is strongly concave with a unique maximiser $\lambda^*$, and $\max\mathcal D=\bar\Phi^*\le\min_\sigma\Phi(\sigma)$. (b) All minimisers of $\bar\Phi$ share the aggregate $\Abar^*$, and $\lambda^*=M\Abar^*\in\mathcal B$. (c) $M^{-1}\lambda^*\in R(\lambda^*)$, where $R(\lambda)=\sd\sum_iV_i(\lambda)$.
+\end{lemma}
+\begin{proof}
+(a) $V=\sum_iV_i$ is concave and finite and $\tfrac12\|\lambda\|^2_{M^{-1}}$ strongly convex, so $\mathcal D$ is strongly concave, continuous and coercive, with a unique maximiser. For $L(x,\lambda)=\sum_i\ip{x_i}{\tilde c_i}+\ip{\lambda}{\Abar(x)}-\tfrac12\|\lambda\|^2_{M^{-1}}$, affine in $x$ on a compact convex set and concave in $\lambda$, Sion's theorem gives $\min_x\sup_\lambda L=\sup_\lambda\min_xL$. For fixed $x$ the supremum is at $\lambda=M\Abar(x)$ with value $\bar\Phi(x)$; for fixed $\lambda$, $\min_xL=\mathcal D(\lambda)$ because a linear function on a product of simplices is minimised at a vertex carrier by carrier. Pure profiles are vertices, where $\bar\Phi=\Phi$. (b) Two minimisers with different aggregates would contradict strict convexity of $\tfrac12\|\cdot\|_M^2$. A minimiser $x^*$ and $\lambda^*$ form a saddle point, and the unique maximiser of $L(x^*,\cdot)$ is $M\Abar(x^*)$. Bounds on $\Abar^*$ follow from nonnegativity. (c) This is $0\in\sd\mathcal D(\lambda^*)=R(\lambda^*)-M^{-1}\lambda^*$, by the sum rule for concave functions \citep{Rockafellar1970}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:clear}]
+For any pure $\sigma$ and $\lambda$, with $A=A(\sigma)$ and $e=M^{-1}\lambda-A$,
+\begin{align*}
+\textstyle\sum_i[\tilde c_i(\sigma_i)+\ip{\lambda}{a_i(\sigma_i)}]-\tfrac12\|\lambda\|^2_{M^{-1}}
+&=\textstyle\sum_i\tilde c_i(\sigma_i)+\ip{M(A+e)}{A}-\tfrac12\|A+e\|_M^2\\
+&=\Phi(\sigma)-\tfrac12\|e\|_M^2.\tag{$\ast$}
+\end{align*}
+(a) If $\sigma_i\in O_i(\lambda)$ the left side is $\mathcal D(\lambda)\le\bar\Phi^*\le\min\Phi$. (b) Fix $i$, $a=a_i(\sigma_i)$, $a'=a_i(p)$, $\Delta=a'-a$ (zero outside $\mathcal Z_i$). Since $MA_{-i}=\lambda-M(a+e)$, the change in carrier $i$'s cost $c_i+\ip{a_i}{MA_{-i}}$ equals $[\tilde c_i(p)+\ip{\lambda}{a'}]-[\tilde c_i(\sigma_i)+\ip{\lambda}{a}]+\tfrac12\|\Delta\|^2_M-\ip{\Delta}{Me}\ge-\tfrac12\sum_{k\in\mathcal Z_i}M_ke_k^2$, minimising coordinatewise at $\Delta_k=e_k$. (c) For any $p$, $c_i(p)+\ip{a'}{Mm_i}=[\tilde c_i(p)+\ip{\lambda}{a'}]+\tfrac12\|a'-a\|^2_M-\tfrac12\|a\|^2_M$, minimised by $\sigma_i$. Coordinates outside $\mathcal Z_i$ shift all plans' costs equally, so the belief can be replaced by one equal to $A_{-i}$ there; within $\mathcal Z_i$ it deviates from $A_{-i}$ by $|e_k|\le\delta w_k$, and under D1 the Dirac law at it lies in the credal set (Lemma~\ref{lem:reduction}). (d) If $e=0$, $\Phi(\sigma)=\mathcal D(\lambda)\le\bar\Phi^*\le\min\Phi\le\Phi(\sigma)$; a global minimiser of an exact potential is a pure equilibrium, and uniqueness gives $\lambda=\lambda^*$. (e) If $\Phi(\sigma^\circ)=\bar\Phi^*$, Lemma~\ref{lem:dual}(b) gives $\lambda^*=MA(\sigma^\circ)$, so $e=0$, and $(\ast)$ shows that $\sum_i\{\tilde c_i(\sigma^\circ_i)+\ip{\lambda^*}{a_i(\sigma^\circ_i)}-V_i(\lambda^*)\}=0$, a sum of nonnegative terms.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:bracket}]
+Let $\chi_k=\sup\{\sup_{r\in R(\lambda)}\inf_{r'\in R(\lambda')}|r_k-r'_k|:\lambda,\lambda'\in\mathcal B,\ \lambda_k=\lambda'_k\}$. \emph{Key inequality.} Let a query $\lambda\in\mathcal B$ have $\lambda_k=\mu$ and response $r\in R(\lambda)$. Suppose $s_k>0$ but $\mu-\lambda^*_k>M_k\chi_k$. Let $\lambda'$ equal $\lambda^*$ except $\lambda'_k=\mu$; then $\lambda'\in\mathcal B$. With $r^*=M^{-1}\lambda^*\in R(\lambda^*)$, antitonicity of $R$ gives $r'_k\le\lambda^*_k/M_k$ for every $r'\in R(\lambda')$, and the definition of $\chi_k$ gives $r'\in R(\lambda')$ with $r_k\le r'_k+\chi_k+\eta$ for any $\eta>0$. Hence $s_k=r_k-\mu/M_k\le-(\mu-\lambda^*_k-M_k\chi_k)/M_k+\eta<0$ for small $\eta$, a contradiction. The case $s_k<0$ is symmetric, and $s_k=0$ combines both. \emph{Induction.} Initially $\lambda^*_k\in[0,M_k\Amax_k]$. If $s_k>0$ the new bracket is $[\mu,u_k]$; if $\lambda^*_k\ge\mu$ the distance is unchanged, and otherwise it is $\mu-\lambda^*_k\le M_k\chi_k$. The other cases are symmetric. \emph{Rate.} Midpoint rounds halve every bracket and other rounds never enlarge it, so after $T$ rounds with at least $\lceil T/2\rceil$ midpoints the width is at most $M_k\Amax_k2^{-\lceil T/2\rceil}$. If plan sets are separable, $V_i$ is separable and the projection of $R(\lambda)$ on coordinate $k$ depends on $\lambda_k$ only, so $\chi_k=0$.
+\end{proof}
+
+\begin{example}[The floor is genuine]\label{ex:kappa}
+Let $d=2$, $M=I$ and one carrier with plans $0$ ($\tilde c=0$, $a=(0,0)$) and $b$ ($\tilde c=-1.5$, $a=(1,1)$). Then $\lambda^*=(0.75,0.75)$, $\chi_1=\chi_2=1$, and the queries $(0.7,0.9)$, $(0.6,1)$, $(0.5,1)$ all return plan $0$ (tie at the last resolved towards $0$), so the bracket update sets $u_1=0.5$ and excludes $\lambda^*_1$ by $0.25$, within the floor but positive.
+\end{example}
+
+\begin{proof}[Proof of Theorem~\ref{thm:zmc}]
+Each round makes one pricing call per carrier. The polish is sequential best-response dynamics in a finite exact-potential game; every accepted change strictly decreases $\Phi$, which takes finitely many values, so it stops at a pure Nash equilibrium. The polish does not increase $\Phi$, and the start has $\Phi\le\Phi(\sigma^{\rm price})=\mathcal D(\lambda^{t^\star})+\tfrac12\|e^{t^\star}\|_M^2\le\bar\Phi^*+\tfrac12\min_t\|e^t\|_M^2$ by Theorem~\ref{thm:clear}(a) and Lemma~\ref{lem:dual}(a). An exact pure equilibrium makes each plan optimal at the centre belief, which lies in every credal box; the $\Gamma$ case is Lemma~\ref{lem:gamma}.
+\end{proof}
+
+\begin{proposition}[Lipschitz dependence on charges]\label{prop:charges}
+With charges $t$ on the contributions, let $\mu^*(t)=\lambda^*(t)+t$. Then $\|\mu^*(t)-\mu^*(t')\|_{M^{-1}}\le\|t-t'\|_{M^{-1}}$ and $\ip{\Abar^*(t)-\Abar^*(t')}{t-t'}\le0$.
+\end{proposition}
+\begin{proof}
+With charges, $V^t(\lambda)=V(\lambda+t)$, so the equilibrium condition reads $r=M^{-1}(\mu-t)\in R(\mu)$. For $r'=M^{-1}(\mu'-t')\in R(\mu')$, antitonicity gives $\ip{r-r'}{\mu-\mu'}\le0$, i.e.\ $\|\mu-\mu'\|^2_{M^{-1}}\le\ip{M^{-1}(t-t')}{\mu-\mu'}\le\|t-t'\|_{M^{-1}}\|\mu-\mu'\|_{M^{-1}}$. For the second claim, $\ip{r-r'}{t-t'}=\ip{r-r'}{(\mu-\mu')-M(r-r')}\le-\|r-r'\|^2_M\le0$.
+\end{proof}
+
+\section{Additional tables}\label{app:tables}
+
+\begin{table}[h]\centering\small
+\caption{Calibration per city (base values; ranges and sources in \texttt{data/parameters/SOURCES.md}). Parcels per capita are country-level; TomTom congestion is the 2025 city value (Moscow: 2020); drops per vehicle and van capacity are proxies outside the United States; fees and wages are graded C for most cities.}\label{tab:params}
+\adjustbox{max width=\linewidth}{\input{tables/tab_params}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{Sensitivity of unpriced welfare (\% change, low to high value of each weak parameter, one seed).}\label{tab:sens}
+\adjustbox{max width=\linewidth}{\input{tables/tab_sens}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{City leader, broad objective with the background-delay proxy (\EtwoSeeds); columns as in Table~\ref{tab:e2}. Shut-down optima (served share 0) are an artifact of the proxy.}\label{tab:e2broad}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e2broad}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{BRL column generation on the nine metro routing instances (22 customer zones, robust objective in driver-hours). LP bound: exact column-generation bound; P\&B plan: price-and-branch plan; gap: (plan $-$ bound)/plan; heuristics: Clarke--Wright with local search optimising the p-box worst case, the sample average over 60 days, or a Wasserstein closed form; all evaluated under the p-box worst case. $^*$Moscow congestion imputed.}\label{tab:brl-metro}
+\adjustbox{max width=\linewidth}{\input{tables/tab_brl_metro}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{ZMC on synthetic D1 games with non-separable plan sets (five seeds per row). Entries: mean oracle calls / mean potential gap to the convexified optimum; last column: instances in which ZMC has the smallest gap among FW8, CG8 and multi-start BR.}\label{tab:zmc-synth}
+\adjustbox{max width=\linewidth}{\input{tables/tab_zmc_synth}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{Tiny games solved by exhaustive enumeration: share of instances in which the method's profile is a Nash equilibrium of the enumerated game and reaches the global potential minimum, largest independent-oracle regret and mean excess of the potential over the global minimum.}\label{tab:tiny}
+\adjustbox{max width=\linewidth}{\input{tables/tab_tiny}}
+\end{table}
+
+\begin{table}[h]\centering\small
+\caption{Theory-to-experiment checks of ZMC on the city games: largest residual of the clearing identity (Theorem~\ref{thm:clear}(a)); share of rounds in which its bound holds; inverted brackets; active coordinates; largest relative bracket width after eight rounds; in bisection mode, share of coordinates within the bound of Theorem~\ref{thm:bracket} at $T=8$, largest normalised error and the bound $2^{-4}$.}\label{tab:e6}
+\adjustbox{max width=\linewidth}{\input{tables/tab_e6}}
+\end{table}
+
+\end{document}
