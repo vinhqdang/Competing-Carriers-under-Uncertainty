@@ -221,3 +221,6 @@ __marimo__/
 
 # raw downloads
 data/raw/
+
+# lean build artefacts
+lean/.lake/
