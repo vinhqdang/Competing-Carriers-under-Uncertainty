@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from ccu.geo import build_city_pois  # noqa: E402
 
-CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay"]
+CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay", "London", "Paris", "Berlin"]
 
 
 def main(argv=None):

@@ -28,7 +28,7 @@ from pyproj import Transformer  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 PROC = ROOT / "data" / "processed"
 FIG = ROOT / "figures"
-CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay"]
+CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay", "London", "Paris", "Berlin"]
 
 BG = "#0b0f19"
 FG = "#d9dee8"
@@ -134,16 +134,16 @@ def plot_city_maps(datasets, norm):
 
 def plot_overview(datasets, norm):
     FIG.mkdir(exist_ok=True)
-    fig, axes = plt.subplots(2, 4, figsize=(22, 11.5), dpi=130, facecolor=BG)
+    fig, axes = plt.subplots(3, 4, figsize=(22, 16), dpi=130, facecolor=BG)
     fig.subplots_adjust(left=0.04, right=0.92, top=0.95, bottom=0.07, wspace=0.25, hspace=0.25)
     flat = axes.ravel()
     last = None
-    for ax, data in zip(flat[:6], datasets):
+    for ax, data in zip(flat[:9], datasets):
         pc, _ = draw_city(ax, data, norm)
         last = pc
-    for ax in flat[:6]:
+    for ax in flat[:9]:
         ax.title.set_fontsize(8)
-    ax_t = flat[6]
+    ax_t = flat[9]
     ax_t.set_facecolor(BG)
     ax_t.axis("off")
     header = ["City", "Continent", "Pop (M)", "Zones", "Major km"]
@@ -177,7 +177,7 @@ def plot_overview(datasets, norm):
               "Population: GHSL GHS-POP R2023A, epoch 2025 (Pesaresi et al., JRC)\n"
               "Roads: OpenStreetMap contributors (ODbL), BBBike extracts",
               transform=ax_t.transAxes, ha="center", color=FG, fontsize=7.5)
-    for ax in list(flat[len(datasets):6]) + [flat[7]]:
+    for ax in list(flat[len(datasets):9]) + list(flat[10:]):
         ax.set_visible(False)
     sm = ScalarMappable(norm=norm, cmap=CMAP)
     sm.set_array([])

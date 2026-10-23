@@ -1,0 +1,109 @@
+{
+  "city": "Paris",
+  "display_name": "Paris",
+  "continent": "Europe",
+  "bbox": {
+    "west": 1.978,
+    "south": 48.673,
+    "east": 2.739,
+    "north": 49.028
+  },
+  "block_cells": 4,
+  "block_deg": 0.03333333320130769,
+  "block_km_approx": 3.710666651969572,
+  "zone_count": 198,
+  "population_extract_total": 9023488.712260207,
+  "population_zones_total": 9023488.712260207,
+  "population_dropped_zones_total": 0.0,
+  "population_epoch": 2025,
+  "population_source": "GHSL GHS-POP R2023A, epoch 2025, 30 arc-second global grid (EPSG:4326), Pesaresi M. et al., European Commission Joint Research Centre; file GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif",
+  "osm_source": "OpenStreetMap extract from BBBike (https://download.BBBike.org), OpenStreetMap contributors, ODbL 1.0",
+  "osm_replication_timestamp": "2026-10-16T23:00:00Z",
+  "build_date": "2026-10-23",
+  "road_km_all_zones": 22128.97264486313,
+  "road_km_major_zones": 5990.451044600462,
+  "lane_km_major_zones": 10853.661742272852,
+  "road_km_all_extract": 25542.57217175877,
+  "road_km_major_graph": 6901.20368658049,
+  "segments_outside_zones": 158137,
+  "graph_nodes": 309175,
+  "graph_edges": 322140,
+  "graph_stats": {
+    "ways_drivable_kept": 230720,
+    "ways_skipped_access_no": 3569,
+    "ways_skipped_parking_driveway": 43472,
+    "ways_skipped_missing_locations": 0,
+    "road_km_all_extract": 25542.57217175877,
+    "graph_parallel_edges_merged": 0,
+    "graph_nodes_before_lcc": 310019,
+    "graph_edges_before_lcc": 322983,
+    "graph_components_before_lcc": 22,
+    "graph_nodes_dropped_non_lcc": 844,
+    "graph_nodes": 309175,
+    "graph_edges": 322140
+  },
+  "scan_stats": {
+    "ways_drivable_kept": 230720,
+    "ways_skipped_access_no": 3569,
+    "ways_skipped_parking_driveway": 43472,
+    "ways_skipped_missing_locations": 0
+  },
+  "travel_access_s": 120.0,
+  "travel_unreachable_pairs": 0,
+  "travel_time_max_s": 4900.8994140625,
+  "free_speed_kmh": {
+    "motorway": 80.0,
+    "trunk": 60.0,
+    "primary": 45.0,
+    "secondary": 35.0,
+    "tertiary": 30.0
+  },
+  "link_speed_factor": 0.7,
+  "lane_defaults": {
+    "motorway": 3,
+    "trunk": 2,
+    "primary": 2,
+    "secondary": 1,
+    "tertiary": 1
+  },
+  "lane_default_link": 1,
+  "graph_class_names": [
+    "motorway",
+    "trunk",
+    "primary",
+    "secondary",
+    "tertiary",
+    "motorway_link",
+    "trunk_link",
+    "primary_link",
+    "secondary_link",
+    "tertiary_link"
+  ],
+  "build_seconds": 28.86,
+  "poi_osm_replication_timestamp": "2026-10-16T23:00:00Z",
+  "poi_counts": {
+    "extract": {
+      "shop": 56362,
+      "market": 409,
+      "depot": 573,
+      "post_office": 840,
+      "locker": 619,
+      "wholesale": 429
+    },
+    "extract_total": 59232,
+    "in_zones": {
+      "shop": 54108,
+      "market": 386,
+      "depot": 512,
+      "post_office": 775,
+      "locker": 565,
+      "wholesale": 420
+    },
+    "zones_with_any": 192,
+    "zones_with_depot": 107,
+    "zones_with_depot_score": 181,
+    "missing_locations": 0,
+    "outside_zones": 2466
+  },
+  "poi_build_seconds": 45.95
+}

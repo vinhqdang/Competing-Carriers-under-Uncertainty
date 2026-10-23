@@ -146,8 +146,8 @@ def plot_city_maps(datasets, norm):
 
 def plot_overview(datasets, norm):
     FIG.mkdir(exist_ok=True)
-    fig, axes = plt.subplots(2, 3, figsize=(18, 11.5), dpi=110, facecolor=BG)
-    fig.subplots_adjust(left=0.035, right=0.9, top=0.94, bottom=0.13, wspace=0.22, hspace=0.22)
+    fig, axes = plt.subplots(3, 3, figsize=(18, 16.5), dpi=100, facecolor=BG)
+    fig.subplots_adjust(left=0.035, right=0.9, top=0.94, bottom=0.10, wspace=0.22, hspace=0.22)
     for ax, data in zip(axes.ravel(), datasets):
         pois = load_pois(data["city"])
         draw_city_pois(ax, data, pois, norm)
