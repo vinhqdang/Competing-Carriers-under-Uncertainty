@@ -33,8 +33,26 @@ def rd(p):
     return pd.read_csv(f) if f.exists() else pd.DataFrame()
 
 
+def seeds_of(c, prefix):
+    """result files of one experiment and city over all seeds (seed 0 keeps the unsuffixed name)"""
+    fs = [RES / f"{prefix}_{c}.csv"] + sorted(RES.glob(f"{prefix}_{c}_s[0-9]*.csv"))
+    out = []
+    for f in fs:
+        if f.exists():
+            d = pd.read_csv(f)
+            d["seed"] = int(f.stem.rsplit("_s", 1)[1]) if f.stem != f"{prefix}_{c}" else 0
+            out.append(d)
+    return out
+
+
+def mean_sd(d, by, col):
+    """mean, sd (ddof 1) and min/max over seeds of `col` per value of `by`"""
+    g = d.groupby(by)[col]
+    return pd.DataFrame(dict(m=g.mean(), sd=g.std(ddof=1).fillna(0), lo=g.min(), hi=g.max()))
+
+
 def e2_heat():
-    e2 = pd.concat([rd(f"E2_{c}.csv") for c in CITIES], ignore_index=True)
+    e2 = pd.concat([x for c in CITIES for x in seeds_of(c, "E2") if len(x) == 63], ignore_index=True)
     if e2.empty:
         return
     fig, axs = plt.subplots(3, 3, figsize=(13, 10), constrained_layout=True)
@@ -43,18 +61,21 @@ def e2_heat():
         if d.empty:
             ax.axis("off")
             continue
-        none = d[d.config == "none"].iloc[0]
-        d = d.assign(g=100 * (none.social_cost - d.social_cost) / max(abs(none.social_cost), 1e-9))
-        p = d.pivot(index="theta", columns="sfrac", values="g").sort_index()
+        gs = []
+        for _, dd in d.groupby("seed"):
+            none = dd[dd.config == "none"].iloc[0]
+            gs.append(dd.assign(g=100 * (none.social_cost - dd.social_cost) / max(abs(none.social_cost), 1e-9)))
+        d = pd.concat(gs)
+        p = d.pivot_table(index="theta", columns="sfrac", values="g", aggfunc="mean").sort_index()
         im = ax.imshow(p.values, origin="lower", aspect="auto", cmap="RdBu", vmin=-max(abs(p.values).max(), 1e-6), vmax=max(abs(p.values).max(), 1e-6))
         ax.set_xticks(range(len(p.columns)), [f"{x:g}" for x in p.columns], fontsize=7)
         ax.set_yticks(range(len(p.index)), [f"{x:g}" for x in p.index], fontsize=7)
-        ax.set_title(f"{nm(c)} (max {p.values.max():.2f}%)")
+        ax.set_title(f"{nm(c)} (max {p.values.max():.2f}%, {d.seed.nunique()} seeds)")
         ax.grid(False)
         ax.set_xlabel("per-delivery charge s / fee")
         ax.set_ylabel("congestion theta")
         fig.colorbar(im, ax=ax, fraction=0.05)
-    fig.suptitle("E2: reduction of the social cost (% of |SC|, main objective) over the (theta, s) grid; red = worse than no charge")
+    fig.suptitle("E2: reduction of the social cost (% of |SC|, main objective, mean over seeds) over the (theta, s) grid; red = worse than no charge")
     fig.savefig(FIG / "E2_grid.png")
     plt.close(fig)
     s = rd("summary_E2.csv")
@@ -67,10 +88,13 @@ def e2_heat():
         d = s[s.objective == obj]
         x = np.arange(len(CITIES))
         for k, cfg in enumerate(cfgs):
-            v = [d[(d.city == c) & (d.config == cfg)].gain_pct_of_abs.values[0] if len(d[(d.city == c) & (d.config == cfg)]) else np.nan for c in CITIES]
-            ax.bar(x + (k - 1) * 0.27, v, 0.27, label=cfg.replace("_", " "), color=["#4e79a7", "#f28e2b", "#59a14f"][k])
+            ms = mean_sd(d[d.config == cfg], "city", "gain_pct_of_abs").reindex(CITIES)
+            xs = x + (k - 1) * 0.27
+            ax.bar(xs, ms.m, 0.27, yerr=ms.sd, capsize=2, label=cfg.replace("_", " "), color=["#4e79a7", "#f28e2b", "#59a14f"][k])
+            ax.plot(xs, ms.lo, "_", color="k", ms=4)
+            ax.plot(xs, ms.hi, "_", color="k", ms=4)
         ax.set_xticks(x, [nm(c) for c in CITIES], rotation=30, ha="right")
-        ax.set_ylabel("gain vs no charge (% of |social cost|)")
+        ax.set_ylabel("gain vs no charge (% of |social cost|), mean, sd bars, min/max ticks")
         ax.set_title(tt)
         ax.legend(frameon=False)
     fig.savefig(FIG / "E2_instruments.png")
@@ -81,21 +105,27 @@ def e3():
     s = rd("summary_E3.csv")
     if s.empty:
         return
+    cs = [c for c in CITIES if c in set(s.city)]
     fig, axs = plt.subplots(1, 2, figsize=(13, 4.2), constrained_layout=True)
-    x = np.arange(len(s))
-    axs[0].bar(x - 0.27, 100 * (s.PoA - 1), 0.27, label="PoA (worst NE found)", color="#e15759")
-    axs[0].bar(x, 100 * (s.PoS - 1), 0.27, label="PoS (best NE found)", color="#f28e2b")
-    axs[0].bar(x + 0.27, 100 * (s.PoA_priced - 1), 0.27, label="priced NE (best charge pair)", color="#4e79a7")
-    axs[0].set_xticks(x, [nm(c) for c in s.city], rotation=30, ha="right")
-    axs[0].set_ylabel("W_SO / W_NE - 1  (%)")
+    x = np.arange(len(cs))
+    for ax, cols, labs, cl in ((axs[0], ("PoA", "PoS", "PoA_priced"), ("PoA (worst NE found)", "PoS (best NE found)", "priced NE (best charge pair)"),
+                                ("#e15759", "#f28e2b", "#4e79a7")),
+                               (axs[1], ("gap_broad_unpriced_pct_of_W", "gap_broad_priced_pct_of_W"), ("unpriced NE", "priced NE (broad-optimal charges)"),
+                                ("#e15759", "#4e79a7"))):
+        w = 0.8 / len(cols)
+        for k, (col, lab, colr) in enumerate(zip(cols, labs, cl)):
+            t = s.assign(v=100 * (s[col] - 1) if ax is axs[0] else s[col])
+            ms = mean_sd(t, "city", "v").reindex(cs)
+            xs = x + (k - (len(cols) - 1) / 2) * w
+            ax.bar(xs, ms.m, w, yerr=ms.sd, capsize=2, label=lab, color=colr)
+            ax.plot(xs, ms.lo, "_", color="k", ms=4)
+            ax.plot(xs, ms.hi, "_", color="k", ms=4)
+        ax.set_xticks(x, [nm(c) for c in cs], rotation=30, ha="right")
+        ax.legend(frameon=False)
+    axs[0].set_ylabel("W_SO / W_NE - 1  (%), mean over seeds, sd bars, min/max ticks")
     axs[0].set_title("E3: welfare loss vs the rounded convexified social optimum (main objective)")
-    axs[0].legend(frameon=False)
-    axs[1].bar(x - 0.2, s.gap_broad_unpriced_pct_of_W, 0.4, label="unpriced NE", color="#e15759")
-    axs[1].bar(x + 0.2, s.gap_broad_priced_pct_of_W, 0.4, label="priced NE (broad-optimal charges)", color="#4e79a7")
-    axs[1].set_xticks(x, [nm(c) for c in s.city], rotation=30, ha="right")
     axs[1].set_ylabel("(Wb_SO - Wb_NE) as % of unpriced welfare")
     axs[1].set_title("same, broad objective (incl. background-traffic delay)")
-    axs[1].legend(frameon=False)
     fig.savefig(FIG / "E3_poa.png")
     plt.close(fig)
 
@@ -107,15 +137,21 @@ def e4():
     fig, axs = plt.subplots(2, 3, figsize=(15, 7.5), constrained_layout=True)
     pb = s[s.kind == "pbox"]
     ga = s[s.kind == "gamma"]
+    def band(ax, d, key, col, c, label=None):
+        d = d.assign(**{key: d[key].round(4)})
+        ms = mean_sd(d, key, col).sort_index()
+        ax.plot(ms.index, ms.m, "o-", color=CC[c], label=label, ms=3)
+        ax.fill_between(ms.index, ms.lo, ms.hi, color=CC[c], alpha=0.18, lw=0)
+
     for c in CITIES:
-        d = pb[pb.city == c].sort_values("eps")
-        axs[0, 0].plot(d.eps, d.d_deliveries_pct, "o-", color=CC[c], label=nm(c), ms=3)
-        axs[0, 1].plot(d.eps, d.d_vehicle_hours_pct, "o-", color=CC[c], ms=3)
-        axs[0, 2].plot(d.eps, d.d_welfare_pct, "o-", color=CC[c], ms=3)
-        d = ga[ga.city == c].sort_values("delta")
-        axs[1, 0].plot(d.delta, d.d_deliveries_pct, "o-", color=CC[c], ms=3)
-        axs[1, 1].plot(d.delta, d.d_vehicle_hours_pct, "o-", color=CC[c], ms=3)
-        axs[1, 2].plot(d.delta, d.slowdown_pct, "o-", color=CC[c], ms=3)
+        d = pb[pb.city == c]
+        band(axs[0, 0], d, "eps", "d_deliveries_pct", c, nm(c))
+        band(axs[0, 1], d, "eps", "d_vehicle_hours_pct", c)
+        band(axs[0, 2], d, "eps", "d_welfare_pct", c)
+        d = ga[ga.city == c]
+        band(axs[1, 0], d, "delta", "d_deliveries_pct", c)
+        band(axs[1, 1], d, "delta", "d_vehicle_hours_pct", c)
+        band(axs[1, 2], d, "delta", "slowdown_pct", c)
     for ax, t, yl in zip(axs.ravel(), ["deliveries", "vehicle-hours (congestion)", "welfare", "deliveries", "vehicle-hours (congestion)", "mean slowdown"],
                          ["% vs eps = 0", "% vs eps = 0", "% vs eps = 0", "% vs delta = 0", "% vs delta = 0", "% (level)"]):
         ax.set_title(t)
@@ -125,7 +161,7 @@ def e4():
     for ax in axs[1]:
         ax.set_xlabel("credal width delta (Gamma-maximin surcharge)")
     axs[0, 0].legend(frameon=False, fontsize=7, ncol=2)
-    fig.suptitle("E4: imprecision. Top: DKW p-box width (route costs through BRL). Bottom: Gamma-maximin surcharge on rivals' aggregates")
+    fig.suptitle("E4: imprecision (line = mean over seeds, band = min..max). Top: DKW p-box width. Bottom: Gamma-maximin surcharge on rivals' aggregates")
     fig.savefig(FIG / "E4_imprecision.png")
     plt.close(fig)
 
@@ -200,23 +236,23 @@ def overview():
     fig, axs = plt.subplots(2, 3, figsize=(16, 8), constrained_layout=True)
     x = np.arange(len(e1))
     cl = [nm(c) for c in e1.city]
-    axs[0, 0].bar(x, 100 * e1.served_share, color=[CC[c] for c in e1.city])
+    axs[0, 0].bar(x, 100 * e1.served_share, yerr=100 * e1.served_sd, capsize=2, color=[CC[c] for c in e1.city])
     axs[0, 0].set_title("unpriced NE: share of customer demand served (%)")
     axs[0, 1].bar(x, e1.slowdown_pct, color=[CC[c] for c in e1.city])
     axs[0, 1].set_title("unpriced NE: mean added slowdown (%)")
-    axs[0, 2].bar(x, e1.welfare, color=[CC[c] for c in e1.city])
+    axs[0, 2].bar(x, e1.welfare, yerr=e1.welfare_sd, capsize=2, color=[CC[c] for c in e1.city])
     axs[0, 2].set_title("unpriced NE: welfare (USD/day of the modelled slice)")
     if len(s2):
         d = s2[s2.objective == "main"]
         for k, cfg in enumerate(["congestion_only", "delivery_only", "both"]):
-            v = [d[(d.city == c) & (d.config == cfg)].gain_pct_of_abs.values[0] if len(d[(d.city == c) & (d.config == cfg)]) else np.nan for c in e1.city]
-            axs[1, 0].bar(x + (k - 1) * 0.27, v, 0.27, label=cfg.replace("_", " "))
+            ms = mean_sd(d[d.config == cfg], "city", "gain_pct_of_abs").reindex(e1.city)
+            axs[1, 0].bar(x + (k - 1) * 0.27, ms.m, 0.27, yerr=ms.sd, capsize=2, label=cfg.replace("_", " "))
         axs[1, 0].legend(frameon=False, fontsize=8)
-        axs[1, 0].set_title("leader's gain vs no charge (% of |SC|)")
+        axs[1, 0].set_title("leader's gain vs no charge (% of |SC|, mean, sd bars)")
     if len(s3):
-        s3 = s3.set_index("city").reindex(e1.city)
-        axs[1, 1].bar(x - 0.2, 100 * (s3.PoA.values - 1), 0.4, label="PoA", color="#e15759")
-        axs[1, 1].bar(x + 0.2, 100 * (s3.PoA_priced.values - 1), 0.4, label="priced", color="#4e79a7")
+        for off, col, lab, colr in ((-0.2, "PoA", "PoA", "#e15759"), (0.2, "PoA_priced", "priced", "#4e79a7")):
+            ms = mean_sd(s3.assign(v=100 * (s3[col] - 1)), "city", "v").reindex(e1.city)
+            axs[1, 1].bar(x + off, ms.m, 0.4, yerr=ms.sd, capsize=2, label=lab, color=colr)
         axs[1, 1].legend(frameon=False)
         axs[1, 1].set_title("welfare loss vs social optimum (%)")
     axs[1, 2].bar(x, e1.calls, color=[CC[c] for c in e1.city])

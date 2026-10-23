@@ -62,6 +62,27 @@ def solve_ne(g, rounds: int = 8, lam0=None, certify: str = "none") -> dict:
 
 
 def write_csv(path, rows: list[dict]):
+    """Atomic write (temp file in the same directory, then os.replace): a killed job never leaves a truncated file."""
+    import os
+
     import pandas as pd
 
-    pd.DataFrame(rows).to_csv(path, index=False, float_format="%.6g")
+    path = Path(path)
+    tmp = path.with_name(path.name + f".tmp{os.getpid()}")
+    pd.DataFrame(rows).to_csv(tmp, index=False, float_format="%.6g")
+    os.replace(tmp, path)
+
+
+def rpath(prefix: str, city: str, seed: int = 0) -> Path:
+    """Result file of one (experiment, city, seed). Seed 0 keeps the historical name <prefix>_<city>.csv."""
+    return RES / (f"{prefix}_{city}.csv" if seed == 0 else f"{prefix}_{city}_s{seed}.csv")
+
+
+def read_rows(path) -> list[dict]:
+    """Rows of a partial result file (empty list when absent or unreadable)."""
+    import pandas as pd
+
+    try:
+        return pd.read_csv(path).to_dict("records")
+    except Exception:
+        return []

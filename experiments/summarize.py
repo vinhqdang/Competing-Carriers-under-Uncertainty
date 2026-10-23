@@ -9,9 +9,35 @@ from common import RES, zb
 CITIES = zb.CITIES
 
 
-def load(prefix, cities=CITIES):
-    fs = [RES / f"{prefix}_{c}.csv" for c in cities if (RES / f"{prefix}_{c}.csv").exists()]
-    return pd.concat([pd.read_csv(f) for f in fs], ignore_index=True) if fs else pd.DataFrame()
+def load(prefix, cities=CITIES, seeds=None):
+    """all result files of one experiment: <prefix>_<city>.csv (seed 0) and <prefix>_<city>_s<k>.csv; adds a seed column.
+    Only complete files (full grid / all kinds) are read, so a partial run never leaks into the tables."""
+    full = {"E2": 63, "E3": 10, "E4": 12}
+    out = []
+    for c in cities:
+        for f in [RES / f"{prefix}_{c}.csv"] + sorted(RES.glob(f"{prefix}_{c}_s[0-9]*.csv")):
+            if not f.exists():
+                continue
+            d = pd.read_csv(f)
+            if prefix in full and len(d) != full[prefix]:
+                print("skipping incomplete", f.name, len(d))
+                continue
+            d["seed"] = int(f.stem.rsplit("_s", 1)[1]) if "_s" in f.stem.split(c)[-1] else 0
+            if seeds is None or d.seed.iloc[0] in seeds:
+                out.append(d)
+    return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
+
+
+def agg(df, by, cols):
+    """mean / sd (ddof 1) / min / max over seeds of the columns `cols`, grouped by `by`; n = number of seeds"""
+    g = df.groupby(by, sort=False)
+    out = g.size().rename("n_seeds").to_frame()
+    for c in cols:
+        out[c + "_mean"] = g[c].mean()
+        out[c + "_sd"] = g[c].std(ddof=1)
+        out[c + "_min"] = g[c].min()
+        out[c + "_max"] = g[c].max()
+    return out.reset_index()
 
 
 def md(df, floatfmt="{:.3g}"):
@@ -52,43 +78,75 @@ def main():
             piv2 = sens.pivot_table(index="city", columns="param", values="d_served_pp", aggfunc=lambda x: f"{x.min():.0f}..{x.max():.0f}")
             T.append("## E1 sensitivity: change of served share (pp)\n" + md(piv2.reset_index()))
     # ------------------------------------------------ E2
+    cfgs = ["none", "congestion_only", "delivery_only", "both"]
     e2 = load("E2")
     if len(e2):
         rows = []
-        for c, d in e2.groupby("city"):
+        for (c, sd), d in e2.groupby(["city", "seed"]):
             none = d[d.config == "none"].iloc[0]
-            for obj, W in (("main", "welfare"), ("broad", "social_cost_broad")):
+            for obj in ("main", "broad"):
                 col = "social_cost" if obj == "main" else "social_cost_broad"
-                for cfg in ("none", "congestion_only", "delivery_only", "both"):
+                for cfg in cfgs:
                     cand = d[d.config.isin([cfg, "none"])]
                     b = cand.loc[cand[col].idxmin()]
                     gain = none[col] - b[col]
-                    rows.append(dict(city=c, objective=obj, config=cfg, theta=b.theta, s_over_fee=b.sfrac,
+                    rows.append(dict(city=c, seed=sd, objective=obj, config=cfg, theta=b.theta, s_over_fee=b.sfrac,
                                      social_cost=b.social_cost, social_cost_broad=b.social_cost_broad,
                                      gain=gain, gain_pct_of_abs=100 * gain / max(abs(none[col]), 1e-9),
                                      profit=b.profit_total, revenue=b.revenue, served_share=b.served_share,
                                      slowdown_pct=100 * b.mean_slowdown, gini_access=b.gini_access,
-                                     gini_price=b.gini_price, calls=b.calls))
+                                     gini_price=b.gini_price, calls=b.calls, max_regret=d.max_regret.max(),
+                                     all_converged=bool(d.converged.all())))
         s = pd.DataFrame(rows)
         s.to_csv(RES / "summary_E2.csv", index=False, float_format="%.6g")
+        nseed = s.groupby("city").seed.nunique().min()
+        # three-seed aggregate of the gains and of the share captured by the per-delivery instrument alone
+        sm = s[s.objective == "main"].pivot(index=["city", "seed"], columns="config", values="gain_pct_of_abs").reset_index()
+        sm["share_delivery_alone"] = np.where(sm["both"] > 0.5, sm["delivery_only"] / sm["both"].where(sm["both"] > 0), np.nan)
+        sm["share_delivery_alone_raw"] = sm["delivery_only"] / sm["both"].where(sm["both"] > 1e-9)
+        sb_ = s[(s.objective == "main") & (s.config == "delivery_only")].set_index(["city", "seed"])
+        sm["delivery_best_s_over_fee"] = [sb_.loc[(c, k), "s_over_fee"] for c, k in zip(sm.city, sm.seed)]
+        sm["delivery_best_is_subsidy"] = sm.delivery_best_s_over_fee < 0
+        sm.to_csv(RES / "summary_E2_by_seed.csv", index=False, float_format="%.6g")
+        a2 = agg(sm, "city", ["none", "congestion_only", "delivery_only", "both", "share_delivery_alone_raw"])
+        a2 = a2.set_index("city").reindex([c for c in CITIES if c in set(a2.city)]).reset_index()
+        a2.to_csv(RES / "summary_E2_agg.csv", index=False, float_format="%.6g")
         for obj in ("main", "broad"):
-            p = s[s.objective == obj].pivot(index="city", columns="config", values="gain_pct_of_abs")[["none", "congestion_only", "delivery_only", "both"]]
+            d = s[s.objective == obj]
+            p = d.pivot_table(index="city", columns="config", values="gain_pct_of_abs", aggfunc=lambda x: f"{x.mean():.3g} ({x.std(ddof=1):.2g}; {x.min():.3g}..{x.max():.3g})")[cfgs]
             p = p.reindex([c for c in CITIES if c in p.index]).reset_index()
-            T.append(f"## E2 gain of the leader's best charge vs no charge, objective={obj} (percent of |SC|)\n" + md(p))
-        sb = s[(s.objective == "main") & (s.config == "both")][["city", "theta", "s_over_fee", "gain_pct_of_abs", "profit", "revenue", "served_share", "slowdown_pct", "gini_access", "gini_price"]]
-        T.append("## E2 best point with both instruments (main objective)\n" + md(sb))
-        s2 = s[(s.objective == "broad") & (s.config == "both")][["city", "theta", "s_over_fee", "gain_pct_of_abs", "profit", "revenue", "served_share", "slowdown_pct", "gini_access", "gini_price"]]
-        T.append("## E2 best point with both instruments (broad objective incl. background delay)\n" + md(s2))
+            T.append(f"## E2 gain of the leader's best charge vs no charge, objective={obj}: mean (sd; min..max) over {nseed} seeds, percent of |SC|\n" + md(p))
+        t = []
+        for c in CITIES:
+            d = sm[sm.city == c]
+            if d.empty:
+                continue
+            both = d["both"]
+            t.append(dict(city=c, both_mean=both.mean(), both_min=both.min(), both_max=both.max(),
+                          share_by_seed=" / ".join("n/a" if not np.isfinite(v) else f"{v:.2f}" for v in d.share_delivery_alone_raw),
+                          share_mean=d.share_delivery_alone_raw.mean(), share_sd=d.share_delivery_alone_raw.std(ddof=1),
+                          cong_only_max=d.congestion_only.max(), best_s_by_seed=" / ".join(f"{v:g}" for v in d.delivery_best_s_over_fee)))
+        T.append("## E2 share of the two-instrument gain captured by the per-delivery instrument alone (per seed order 0 / 1 / 2)\n" + md(pd.DataFrame(t)))
+        sbt = s[(s.objective == "main") & (s.config == "both")]
+        pb = agg(sbt, "city", ["theta", "s_over_fee", "gain_pct_of_abs", "served_share", "revenue"])
+        T.append("## E2 best point with both instruments (main objective), over seeds\n" + md(pb))
+        s2 = s[(s.objective == "broad") & (s.config == "both")][["city", "seed", "theta", "s_over_fee", "gain_pct_of_abs", "profit", "revenue", "served_share", "slowdown_pct", "gini_access", "gini_price"]]
+        T.append("## E2 best point with both instruments (broad objective incl. background delay), per seed\n" + md(s2))
+        ex = s.groupby("city").agg(max_regret_grid=("max_regret", "max"), all_converged=("all_converged", "min")).reset_index()
+        cert = pd.concat([pd.read_csv(f).assign(seed=0 if "_s" not in f.stem else int(f.stem.rsplit("_s", 1)[1])) for f in sorted(RES.glob("E2cert_*.csv"))], ignore_index=True)
+        ex = ex.merge(cert.groupby("city").agg(max_regret_fresh_best_point=("regret_fresh", "max")).reset_index(), on="city", how="left")
+        ex.to_csv(RES / "summary_E2_exactness.csv", index=False, float_format="%.6g")
+        T.append("## E2 equilibrium exactness over all seeds (max regret vs oracle in the grid; fresh-pool regret at the best point)\n" + md(ex))
     # ------------------------------------------------ E3
     e3 = load("E3")
     if len(e3):
         rows = []
-        for c, d in e3.groupby("city"):
+        for (c, sd), d in e3.groupby(["city", "seed"]):
             d = d.set_index("kind")
             so = d.loc["SO_main"]
             ne = d[d.index.str.startswith("NE_") & ~d.index.str.contains("priced")]
             wne = ne.welfare
-            r = dict(city=c, W_SO=so.welfare, W_SO_bound=-so.phi_relaxed, W_NE_zmc=d.loc["NE_zmc"].welfare,
+            r = dict(city=c, seed=sd, W_SO=so.welfare, W_SO_bound=-so.phi_relaxed, W_NE_zmc=d.loc["NE_zmc"].welfare,
                      W_NE_best=wne.max(), W_NE_worst=wne.min(), n_ne_distinct=int(1 + ne.distinct.fillna(False).sum()),
                      W_priced=d.loc["NE_priced_main"].welfare if "NE_priced_main" in d.index else np.nan)
             for k in ("zmc", "best", "worst", "priced"):
@@ -105,31 +163,64 @@ def main():
             r["gap_broad_priced_usd"] = r["Wb_SO"] - r["Wb_priced"]
             r["gap_broad_unpriced_pct_of_W"] = 100 * r["gap_broad_unpriced_usd"] / abs(r["W_NE_zmc"])
             r["gap_broad_priced_pct_of_W"] = 100 * r["gap_broad_priced_usd"] / abs(r["W_NE_zmc"])
+            r["max_regret_ne"] = float(ne.max_regret.max())
             rows.append(r)
-        s = pd.DataFrame(rows).set_index("city").reindex([c for c in CITIES if c in set(e3.city)]).reset_index()
-        s.to_csv(RES / "summary_E3.csv", index=False, float_format="%.6g")
-        T.append("## E3 price of anarchy / stability (welfare ratios; SO = convexified-CG + rounding, upper bound W_SO_bound)\n" + md(s))
+        s = pd.DataFrame(rows)
+        s.to_csv(RES / "summary_E3.csv", index=False, float_format="%.6g")  # one row per city and seed
+        a3 = agg(s, "city", ["W_SO", "W_NE_zmc", "PoA_zmc", "PoS", "PoA", "PoA_priced", "rel_gap_unpriced_pct", "rel_gap_priced_pct",
+                             "n_ne_distinct", "gap_broad_unpriced_pct_of_W", "gap_broad_priced_pct_of_W"])
+        a3 = a3.set_index("city").reindex([c for c in CITIES if c in set(a3.city)]).reset_index()
+        a3.to_csv(RES / "summary_E3_agg.csv", index=False, float_format="%.6g")
+        f = lambda x: f"{x.mean():.3g} ({x.std(ddof=1):.2g}; {x.min():.3g}..{x.max():.3g})"
+        p = s.groupby("city").agg(PoA_zmc=("PoA_zmc", f), PoS=("PoS", f), PoA_worst_NE=("PoA", f), PoA_priced=("PoA_priced", f),
+                                  priced_gap_pct=("rel_gap_priced_pct", f), max_regret_ne=("max_regret_ne", "max"))
+        p = p.reindex([c for c in CITIES if c in p.index]).reset_index()
+        T.append(f"## E3 price of anarchy / stability over seeds: mean (sd; min..max) (PoA = W_SO / W_NE, main objective; priced_gap = % of W_SO)\n" + md(p))
+        T.append("## E3 per city and seed (welfare ratios; SO = convexified-CG + rounding, upper bound W_SO_bound)\n" + md(s))
     # ------------------------------------------------ E4
     e4 = load("E4")
     if len(e4):
         rows = []
-        for (c, kind), d in e4.groupby(["city", "kind"]):
+        for (c, sd, kind), d in e4.groupby(["city", "seed", "kind"]):
             key = "eps" if kind == "pbox" else "delta"
             d = d.sort_values(key)
             r0 = d.iloc[0]
             for _, r in d.iterrows():
-                rows.append(dict(city=c, kind=kind, eps=r.eps, delta=r.delta, L=r.L, served_share=r.served_share,
+                rows.append(dict(city=c, seed=sd, kind=kind, eps=r.eps, delta=r.delta, L=r.L, served_share=r.served_share,
+                                 deliveries=r.deliveries,
                                  d_deliveries_pct=100 * (r.deliveries / max(r0.deliveries, 1e-9) - 1),
                                  d_vehicle_hours_pct=100 * (r.vehicle_hours / max(r0.vehicle_hours, 1e-9) - 1),
                                  slowdown_pct=100 * r.mean_slowdown, welfare=r.welfare,
                                  d_welfare_pct=100 * (r.welfare / r0.welfare - 1), routing_cost=r.routing_cost,
                                  converged=r.converged, max_regret=r.max_regret, calls=r.calls))
         s = pd.DataFrame(rows)
-        s.to_csv(RES / "summary_E4.csv", index=False, float_format="%.6g")
-        last = s[s.kind == "pbox"].sort_values("eps").groupby("city").tail(1)
-        last_g = s[s.kind == "gamma"].sort_values("delta").groupby("city").tail(1)
-        T.append("## E4 widest p-box vs eps=0 (change in %)\n" + md(last[["city", "eps", "L", "served_share", "d_deliveries_pct", "d_vehicle_hours_pct", "d_welfare_pct", "routing_cost", "converged", "max_regret"]]))
-        T.append("## E4 widest Gamma-maximin surcharge delta vs delta=0\n" + md(last_g[["city", "delta", "served_share", "d_deliveries_pct", "d_vehicle_hours_pct", "slowdown_pct", "d_welfare_pct", "converged", "max_regret"]]))
+        s.to_csv(RES / "summary_E4.csv", index=False, float_format="%.6g")  # one row per city, seed, width
+        s["eps"] = s.eps.round(4)
+        s["delta"] = s.delta.round(4)
+        a4 = pd.concat([agg(s[s.kind == "pbox"], ["city", "kind", "eps"], ["served_share", "d_deliveries_pct", "d_welfare_pct", "welfare"]),
+                        agg(s[s.kind == "gamma"], ["city", "kind", "delta"], ["served_share", "d_deliveries_pct", "d_welfare_pct", "welfare"])])
+        a4.to_csv(RES / "summary_E4_agg.csv", index=False, float_format="%.6g")
+        f = lambda x: f"{x.mean():.3g} ({x.std(ddof=1):.2g}; {x.min():.3g}..{x.max():.3g})"
+        for kind, key, lab in (("pbox", "eps", "widest p-box vs eps=0"), ("gamma", "delta", "widest surcharge vs delta=0")):
+            d = s[s.kind == kind]
+            last = d[d[key] == d[key].max()]
+            p = last.groupby("city").agg(width=(key, "max"), served_share=("served_share", f), d_deliveries_pct=("d_deliveries_pct", f),
+                                         d_welfare_pct=("d_welfare_pct", f))
+            p = p.reindex([c for c in CITIES if c in p.index]).reset_index()
+            T.append(f"## E4 {lab}: mean (sd; min..max) over seeds\n" + md(p))
+        # monotonicity of deliveries in the width, per city and seed
+        mono = []
+        for (c, sd, kind), d in s.groupby(["city", "seed", "kind"]):
+            key = "eps" if kind == "pbox" else "delta"
+            v = d.sort_values(key).deliveries.to_numpy()
+            mono.append(dict(city=c, seed=sd, kind=kind, monotone=bool((np.diff(v) <= 1e-9 * max(v.max(), 1)).all()),
+                             max_increase=float(np.maximum(np.diff(v), 0).max())))
+        mono = pd.DataFrame(mono)
+        mono.to_csv(RES / "summary_E4_monotone.csv", index=False, float_format="%.6g")
+        ex = s.groupby("city").agg(all_converged=("converged", "min"), max_regret=("max_regret", "max")).reset_index()
+        T.append("## E4 equilibrium exactness over all seeds and widths\n" + md(ex))
+        pm = mono.pivot_table(index="city", columns="kind", values="monotone", aggfunc=lambda x: f"{int(x.sum())}/{len(x)}").reset_index()
+        T.append("## E4 seeds in which deliveries fall monotonically with the width\n" + md(pm))
     # ------------------------------------------------ verification / E5 / E6
     vm = load("verify_methods")
     if len(vm):

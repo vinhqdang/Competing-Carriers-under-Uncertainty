@@ -18,7 +18,12 @@ def main():
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     ap.add_argument("--ncust", type=int, default=22)
     ap.add_argument("--rounds", type=int, default=8)
+    ap.add_argument("--force", action="store_true", help="recompute even if results/E1_<city>.csv is complete")
     a = ap.parse_args()
+    done = pd.read_csv(RES / f"E1_{a.city}.csv") if (RES / f"E1_{a.city}.csv").exists() else pd.DataFrame()
+    if len(done) and not a.force and set(a.seeds) <= set(done[done.scenario == "base"].seed) and (RES / f"E1_trace_{a.city}.csv").exists():
+        print(a.city, "E1 already complete, skipping (use --force)", flush=True)
+        return
     rows, traces = [], []
     ranges = zb.load_ranges()
     name = zb.WIDE_NAME.get(a.city, a.city)
