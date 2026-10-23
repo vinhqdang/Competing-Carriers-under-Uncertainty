@@ -1,0 +1,5 @@
+method,instances,mean_calls,is_ne_enum,max_regret_fresh,hits_global,hits_best_ne,mean_excess_over_global
+ZMC6,40,17.525,1,0,1,1,0
+BR,40,4.85,1,0,0.875,0.875,0.93153
+FW6,40,16.725,1,0,0.95,0.95,0.0671298
+CG,40,11.05,1,0,0.975,0.975,0.0202548

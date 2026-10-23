@@ -1,0 +1,5 @@
+city,max_abs_identity_resid,thm2_bound_holds_frac,inverted_brackets_max,n_act,width_after_8,width_med_after_8,frac_within_T4,frac_within_T8,err_max_T8,bound_T8,inverted_T12
+Bombay,4.26326e-14,1,0,110,0.0434783,0,1,1,0.00384521,0.0625,0
+BuenosAires,5.68434e-14,1,0,124,0.0434783,0.00415065,1,1,0.00384521,0.0625,0
+Moscow,8.10019e-13,1,0,142,0.0434783,0,1,1,0.00384521,0.0625,0
+NewDelhi,2.84217e-14,1,0,128,0.0434783,0,1,1,0.00384521,0.0625,0
