@@ -22,7 +22,8 @@ def load(prefix, cities=CITIES, seeds=None):
             if prefix in full and len(d) != full[prefix]:
                 print("skipping incomplete", f.name, len(d))
                 continue
-            d["seed"] = int(f.stem.rsplit("_s", 1)[1]) if "_s" in f.stem.split(c)[-1] else 0
+            if "seed" not in d.columns:
+                d["seed"] = int(f.stem.rsplit("_s", 1)[1]) if "_s" in f.stem.split(c)[-1] else 0
             if seeds is None or d.seed.iloc[0] in seeds:
                 out.append(d)
     return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
@@ -221,6 +222,46 @@ def main():
         T.append("## E4 equilibrium exactness over all seeds and widths\n" + md(ex))
         pm = mono.pivot_table(index="city", columns="kind", values="monotone", aggfunc=lambda x: f"{int(x.sum())}/{len(x)}").reset_index()
         T.append("## E4 seeds in which deliveries fall monotonically with the width\n" + md(pm))
+    # ------------------------------------------------ do the conclusions of docs/EXPERIMENTS.md hold in every seed?
+    pe2, pe3 = RES / "summary_E2_by_seed.csv", RES / "summary_E3.csv"
+    if pe2.exists() and pe3.exists():
+        a, b = pd.read_csv(pe2), pd.read_csv(pe3)
+        rows = []
+        for c in CITIES:
+            d, e = a[a.city == c].sort_values("seed"), b[b.city == c].sort_values("seed")
+            if d.empty or e.empty:
+                continue
+            mat = d["both"] >= 0.5  # the second instrument is judged only where the leader's gain is at least 0.5% of |SC|
+            c1 = [("n/a" if not m else ("yes" if sh >= 0.5 else "NO")) for m, sh in zip(mat, d.share_delivery_alone_raw)]
+            c2 = d.congestion_only.max()
+            poa = e.PoA_zmc.to_numpy()
+            poaw = e.PoA.to_numpy()
+            rows.append(dict(city=c, C1_delivery_alone_ge_half_by_seed=" / ".join(c1), C1_flips=int(sum(x == "NO" for x in c1)),
+                             C2_congestion_only_max_pct=c2, C2_holds_lt_1p7=bool(c2 < 1.7),
+                             C3_PoA_zmc_by_seed=" / ".join(f"{v:.2f}" for v in poa), C3_PoA_worstNE_by_seed=" / ".join(f"{v:.2f}" for v in poaw),
+                             C3_large_ge_1p10_seeds=int((poa >= 1.10).sum()), C3_worstNE_ge_1p10_seeds=int((poaw >= 1.10).sum())))
+        cc = pd.DataFrame(rows)
+        cc.to_csv(RES / "summary_conclusions.csv", index=False, float_format="%.6g")
+        T.append("## Conclusions by seed. C1: per-delivery instrument alone captures >= half of the two-instrument gain (n/a where that gain < 0.5% of |SC|); "
+                 "C2: congestion charge alone gains < 1.7% of |SC|; C3: PoA >= 1.10 (ZMC equilibrium, and worst equilibrium found)\n" + md(cc))
+    # ------------------------------------------------ one headline table per city (mean +- sd over seeds)
+    need = [RES / f for f in ("summary_E2_by_seed.csv", "summary_E3.csv", "summary_E4.csv")]
+    if all(p.exists() for p in need):
+        a, b, c4 = (pd.read_csv(p) for p in need)
+        ms = lambda x: f"{x.mean():.3g} +- {x.std(ddof=1):.2g}"
+        rows = []
+        for c in CITIES:
+            d, e = a[a.city == c], b[b.city == c]
+            w = c4[(c4.city == c) & (c4.kind == "pbox")]
+            w = w[w.eps == w.eps.max()]
+            if d.empty or e.empty:
+                continue
+            rows.append(dict(city=c, seeds=len(d), gain_cong_only=ms(d.congestion_only), gain_delivery_only=ms(d.delivery_only), gain_both=ms(d["both"]),
+                             share_delivery=ms(d.share_delivery_alone_raw), PoA=ms(e.PoA_zmc), PoA_worst=ms(e.PoA), PoS=ms(e.PoS),
+                             priced_gap_pct=ms(e.rel_gap_priced_pct), pbox_d_deliv_pct=ms(w.d_deliveries_pct), pbox_d_welfare_pct=ms(w.d_welfare_pct)))
+        h = pd.DataFrame(rows)
+        h.to_csv(RES / "summary_headline.csv", index=False)
+        T.append("## Headline, mean +- sd over seeds (gains in % of |SC|, main objective; priced_gap = (W_SO - W_priced)/W_SO in %; pbox = widest p-box vs eps=0)\n" + md(h))
     # ------------------------------------------------ verification / E5 / E6
     vm = load("verify_methods")
     if len(vm):
