@@ -2,7 +2,7 @@
 
 ## Raw inputs (`data/raw/`, not modified by the pipeline)
 
-- `<City>.osm.pbf`: OpenStreetMap extracts for NewDelhi, Cairo, Moscow, BuenosAires, NewYork, from BBBike (https://download.BBBike.org), replication timestamp 2026-10-16T23:00:00Z.
+- `<City>.osm.pbf`: OpenStreetMap extracts for NewDelhi, Cairo, Moscow, BuenosAires, NewYork, Bombay (Mumbai), from BBBike (https://download.BBBike.org), replication timestamp 2026-10-16T23:00:00Z.
 - `ghs/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif`: GHSL GHS-POP R2023A, epoch 2025, EPSG:4326, 30 arc-second cells (about 0.00833 deg), people per cell.
 
 ## Processed outputs (`data/processed/<city>/`)
