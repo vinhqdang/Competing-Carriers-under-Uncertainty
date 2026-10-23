@@ -1,1 +1,1 @@
-import Mathlib.Order.Basic
+import CCU.LeanTargets

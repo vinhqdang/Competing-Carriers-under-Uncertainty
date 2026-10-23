@@ -1,0 +1,18 @@
+\contentsline {paragraph}{Status labels.}{1}{section*.1}%
+\contentsline {section}{\numberline {1}Evaluation of the candidate core and summary of results}{2}{section.1}%
+\contentsline {paragraph}{Main results.}{3}{section*.3}%
+\contentsline {paragraph}{Corrections relative to the earlier proposal (v4).}{3}{section*.4}%
+\contentsline {section}{\numberline {2}Model and assumptions}{3}{section.2}%
+\contentsline {section}{\numberline {3}Criteria, imprecise equilibria and elementary structure}{5}{section.3}%
+\contentsline {section}{\numberline {4}Classical tools}{6}{section.4}%
+\contentsline {section}{\numberline {5}Relaxed equilibria}{7}{section.5}%
+\contentsline {section}{\numberline {6}Main theorem: credal Shapley--Folkman absorption}{8}{section.6}%
+\contentsline {section}{\numberline {7}Tightness, impossibility and complexity}{10}{section.7}%
+\contentsline {section}{\numberline {8}The algorithm RSRC and its guarantees}{12}{section.8}%
+\contentsline {section}{\numberline {9}Comparative statics in the imprecision width}{15}{section.9}%
+\contentsline {section}{\numberline {10}Price of anarchy and price of stability}{17}{section.10}%
+\contentsline {section}{\numberline {11}What is NOT claimed, and known prior art}{18}{section.11}%
+\contentsline {paragraph}{Not claimed.}{18}{section*.5}%
+\contentsline {paragraph}{Closest prior art and its relation to this note.}{18}{section*.6}%
+\contentsline {paragraph}{Narrowest defensible novelty claim.}{19}{section*.7}%
+\contentsline {section}{\numberline {12}Open problems}{19}{section.12}%

@@ -1,0 +1,682 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\renewcommand{\theassumption}{A\arabic{assumption}}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\ub}{\bar u}
+\newcommand{\abar}{\bar a}
+\newcommand{\Abar}{\bar A}
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\BR}{\operatorname{BR}}
+\newcommand{\ICNE}{\mathrm{ICNE}}
+\newcommand{\PROVED}{\textsf{[proved here]}}
+\newcommand{\CLASSICAL}{\textsf{[classical, cited]}}
+\newcommand{\CONJ}{\textsf{[conjecture]}}
+\newcommand{\LEAN}{\textsf{[Lean-checked]}}
+
+\title{Imprecision as Convexification:\\
+Shapley--Folkman Rounding, Credal Absorption and the Complexity of Pure Equilibria\\
+in Aggregative Carrier Games}
+\author{Quang-Vinh Dang\\ British University Vietnam, Hung Yen, Vietnam\\ \texttt{vinh.dq4@buv.edu.vn} \quad ORCID 0000-0002-3877-8024}
+\date{Theory notes, version 1}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study $N$ carriers who choose routing plans from finite, nonconvex sets and interact only through zone aggregates (deliveries, which lower the delivery price, and vehicles or vehicle-hours, which raise travel time), under imprecise beliefs (credal sets) about the traffic factor and the rivals' aggregate. The candidate core of the project, a Shapley--Folkman (Starr) rounding of the convexified game, is known (Liu, Oudjane and Wan, \emph{Math.\ Oper.\ Res.}\ 2023) and is vacuous when $N\le 2Z$, which is the regime of the city instances. We keep it as a tool and build the theory around a different statement. The main theorem (Theorem~\ref{thm:main}) is a \emph{credal absorption} result. Any mixed equilibrium of the precise game can be rounded, through a Shapley--Folkman vertex and a support selection, to a pure profile. That profile is an \emph{exact} equilibrium under E-admissibility, and hence under maximality and interval dominance, as soon as the belief width reaches an explicit radius. The radius is bounded by $\sigma_{\max}\min\{N-1,\,d+1,\,1+\sqrt{d\ln(2d)/2}\}$, uniformly in $N$. The bound is attained (Proposition~\ref{prop:tight}). Its $\varepsilon$-Nash corollary is linear in the number of zones, and that linear dependence cannot be removed (Proposition~\ref{prop:cycles}). Below an explicit width, deciding whether a pure imprecise equilibrium exists is strongly NP-complete for vehicle-count congestion (D2), for all four criteria. The reduction is from kernels in digraphs. Under exposure-based congestion (D1), existence holds at every width (Theorem~\ref{thm:np}, Proposition~\ref{prop:D1exists}). In consequence the existence threshold cannot be approximated within any factor unless $\mathrm{P}=\mathrm{NP}$. The algorithm RSRC (Relax, Sparsify, Round, Certify; Algorithm~\ref{alg:rsrc}) is the constructive content of these theorems. Under D1 it runs Frank--Wolfe on a concave relaxed potential with the routing oracle as pricing problem, and it returns a pure $\eta$-equilibrium with an a posteriori certificate. Under D2 it rounds a double-oracle mixed equilibrium; computing that mixed equilibrium is PPAD-hard (Proposition~\ref{prop:ppad}). Every statement carries a status label. Section~\ref{sec:notclaimed} lists what is not claimed and the prior art.
+\end{abstract}
+
+\paragraph{Status labels.} \PROVED: complete proof in this document. \CLASSICAL: known result, stated precisely with a reference; a proof is reproduced where it is short and needed. \CONJ: not proved. \LEAN: the statement and proof, or the combinatorial core named in the text, compile in Lean~4 with Mathlib (file \texttt{theory/LeanTargets.lean}, see \texttt{lean\_targets.md}).
+
+\tableofcontents
+
+%======================================================================
+\section{Evaluation of the candidate core and summary of results}\label{sec:summary}
+
+The candidate core was: convexify each plan set $\cP_i$, compute an equilibrium of the convexified aggregative game, and use the Shapley--Folkman lemma to round it to a pure profile that is an $\varepsilon$-Nash equilibrium with $\varepsilon\le L\,d\,\rho$, independent of $N$ and of the routing instance. Our verdict after checking it is as follows.
+\begin{enumerate}[label=(\roman*)]
+\item \emph{It is correct in substance, but it is known.} Liu, Oudjane and Wan \cite{LOW23} prove existence of $O(n^{-\gamma})$-Nash equilibria in nonconvex sum-aggregative games with the \emph{average} as aggregate, via the Shapley--Folkman lemma applied to the generators of a convexified equilibrium. Their Lemma 5.6 is the observation the candidate relies on: every generator point is a best reply to the convexified rivals. Their bound contains the term $(\sqrt q+1)$, where the ``$+1$'' is the own-contribution term we re-derive below. Rescaled from the average to the sum, their bound is $N$-independent. Bonnans, Liu, Oudjane, Pfeiffer and Wan \cite{BLOPW23} and Udell and Boyd \cite{UB16} give the optimization analogue (Frank--Wolfe on the relaxation, randomized rounding, gap independent of $N$), going back to Aubin and Ekeland \cite{AE76} and Starr \cite{Starr69}.
+\item \emph{In the city application it is vacuous.} The number of non-convexified summands is $\min\{N,d\}$ with $d=2Z\in[84,1186]$ for the nine maps, while $N\in\{3,4,5\}$. Shapley--Folkman then selects nothing, and the bound reduces to a trivial support-selection bound (Theorem~\ref{thm:main}(b), first term).
+\item \emph{Under imprecise beliefs the rounding has a sharper meaning,} and that meaning is our main theorem. Under E-admissibility, rounding errors no longer have to be paid as an $\varepsilon$: they are \emph{absorbed} by the belief width, giving \emph{exact} pure imprecise equilibria. This yields an $N$-uniform upper bound on the existence threshold $\delta_0$. The bound is attained, it contrasts with an NP-completeness result below a smaller explicit width, and it fails for $\Gamma$-maximin.
+\end{enumerate}
+
+\paragraph{Main results.} Write $\sigma_{\max}=\max_{i,k}\operatorname{range}_{p\in\cP_i}a_{ik}(p)/w_k$. This is the largest spread of a carrier's contribution to one aggregate coordinate, in belief-width units.
+\begin{itemize}
+\item \textbf{Theorem~\ref{thm:main} (credal Shapley--Folkman absorption)} \PROVED. Every mixed equilibrium $x^*$ yields, in polynomial time, a pure profile $p$ with $p\in\ICNE_E(\delta)\subseteq\ICNE_M(\delta)\subseteq\ICNE_{ID}(\delta)$ for all $\delta\ge\hat\delta(p)$. Here $\hat\delta(p)\le\min\{(N-1)\bar\rho,\;k\bar\sigma+\bar\rho,\;\bar\sigma\sqrt{k\ln(2d)/2}+\bar\rho\}$, with $k=\min\{N,d_L\}$ and $\bar\rho\le\bar\sigma\le\sigma_{\max}$. Hence $\delta_0^E\le\sigma_{\max}\min\{N-1,d+1,1+\sqrt{d\ln(2d)/2}\}$.
+\item \textbf{Proposition~\ref{prop:tight}} \PROVED: the bound $(N-1)\bar\rho$ is attained ($N=2$). \textbf{Proposition~\ref{prop:cycles}} \PROVED: the $\varepsilon$-Nash corollary is linear in the number of zones, and this dependence is tight up to a factor 2.
+\item \textbf{Theorem~\ref{thm:np}} \PROVED\ (reduction from a classical NP-complete problem): for D2 and every width $\delta<1/(2\Delta^++1)$, deciding $\ICNE_C(\delta)\neq\emptyset$ is strongly NP-complete for $C\in\{E,M,ID,\Gamma\}$, with two plans per carrier. Hence the existence threshold $\delta_0^E$ is not approximable within any factor unless $\mathrm{P}=\mathrm{NP}$. In contrast, under D1, $\ICNE_C(\delta)\neq\emptyset$ for all $\delta$ (Proposition~\ref{prop:D1exists}).
+\item \textbf{Theorem~\ref{thm:D1}} \PROVED\ (technique classical): under D1, the sparsified and rounded Frank--Wolfe solution is a pure $\eta$-Nash equilibrium. Its certified $\eta\le g(x)+\tfrac12\sum_{j\in J}V_j(x')\le g(x)+\tfrac12\min\{N,d_L\}R_M^2$, where $g$ is a computable Frank--Wolfe gap. The same holds for $\Gamma$-maximin through a surcharge. \textbf{Theorem~\ref{thm:fw}} \CLASSICAL: $O(N(\sum_iD_i)^2/\eta)$ oracle calls suffice.
+\item \textbf{Proposition~\ref{prop:ppad}} \PROVED\ (embedding) and \CLASSICAL\ (hardness): under D2, computing the mixed equilibrium used by Theorem~\ref{thm:main} is PPAD-hard already for $N=2$.
+\item Comparative statics in the width (Section~\ref{sec:cs}) and PoA/PoS (Section~\ref{sec:poa}), with the corrections required by the referee report.
+\end{itemize}
+
+\paragraph{Corrections relative to the earlier proposal (v4).} The earlier zone-product construction and its claims for interval dominance (ID), the breakpoint counts, the Dinkelbach and loss-augmented oracle claims, and the unclipped belief boxes are all \emph{dropped}. No result below factors over zones. Clipping at zero is built into the credal set (Assumption~\ref{ass:credal}). D1 and D2 are kept apart in every statement. The ``larger congestion shrinks the interval'' prediction is replaced by the correct sign condition (Proposition~\ref{prop:sym}).
+
+%======================================================================
+\section{Model and assumptions}\label{sec:model}
+
+Throughout, $[n]=\{1,\dots,n\}$. For $v\in\R^d$ and $w\in\R^d_{>0}$, $\|v\|_{w,\infty}=\max_k|v_k|/w_k$. $\Delta(S)$ denotes the probability simplex over a finite set $S$.
+
+\begin{assumption}[Finite plans and plan data]\label{ass:plans}
+There are $N\ge 1$ carriers. Carrier $i$ has a finite nonempty plan set $\cP_i$. Each plan $p\in\cP_i$ has
+a \emph{contribution} $a_i(p)\in\R^d_{\ge0}$ to the aggregate,
+an \emph{exposure} $\varphi_i(p)\in\R^d_{\ge0}$ to the aggregate,
+an \emph{exposure to traffic} $t_i(p)\in\R^Z_{\ge0}$,
+and a \emph{private profit} $\pi_i(p)\in\R$.
+The aggregate at a pure profile $\sigma=(\sigma_1,\dots,\sigma_N)$ is $A(\sigma)=\sum_i a_i(\sigma_i)$. The rival aggregate of $i$ is $A_{-i}(\sigma)=A(\sigma)-a_i(\sigma_i)$.
+\end{assumption}
+
+\begin{assumption}[Affine coupling]\label{ass:affine}
+There are a diagonal matrix $M=\operatorname{diag}(M_1,\dots,M_d)\ge 0$ and a constant $\gamma>0$ such that, if the realised rival aggregate is $m\in\R^d_{\ge0}$ and the realised traffic factor is $\xi\in\R^Z_{\ge0}$, carrier $i$'s payoff from plan $p$ is
+\[
+ u_i(p;m,\xi)=\pi_i(p)-\langle\varphi_i(p),Mm\rangle-\gamma\langle t_i(p),\xi\rangle .
+\]
+\end{assumption}
+
+\begin{example}[Cournot--congestion instantiation]\label{ex:cc}
+Zones $z\in[Z]$ and $d=2Z$ coordinates, indexed $(z,Q)$ and $(z,X)$. A routing plan $p$ of carrier $i$ determines deliveries $q_{iz}$, vehicles $n_{iz}$, vehicle-hours $\tau_{iz}$ and a routing cost $C_i(p)$. The routing cost is given by a routing model, possibly NP-hard to optimise. Inverse demand in zone $z$ is $\alpha_z-b_zQ_z$, with $b_z>0$. The cost of a vehicle-hour is $\gamma(\xi_z+c_zX_z)$, with $c_z>0$. The city charges $s_z$ per delivery and $\theta_z$ per unit of the congestion variable. Two congestion regimes are distinguished:
+\begin{itemize}
+\item \textbf{D1 (exposure-based congestion):} $x_{iz}=\tau_{iz}$ and $X_z=T_z=\sum_i\tau_{iz}$.
+\item \textbf{D2 (vehicle-count congestion):} $x_{iz}=n_{iz}$ and $X_z=\sum_in_{iz}$.
+\end{itemize}
+Carrier $i$'s profit is
+\[
+\textstyle u_i=\sum_z\big[q_{iz}(\alpha_z-b_zQ_z)-\gamma\tau_{iz}(\xi_z+c_zX_z)-s_zq_{iz}-\theta_zx_{iz}\big]-C_i(p).
+\]
+It has the form of Assumption~\ref{ass:affine} with the following data:
+\begin{itemize}
+\item $a_{i,(z,Q)}=\varphi_{i,(z,Q)}=q_{iz}$ and $M_{(z,Q)}=b_z$;
+\item $a_{i,(z,X)}=x_{iz}$, $\varphi_{i,(z,X)}=\tau_{iz}$ and $M_{(z,X)}=\gamma c_z$;
+\item $t_{iz}=\tau_{iz}$;
+\item $\pi_i(p)=\sum_z[\alpha_zq_{iz}-b_zq_{iz}^2-\gamma c_z\tau_{iz}x_{iz}-s_zq_{iz}-\theta_zx_{iz}]-C_i(p)$.
+\end{itemize}
+Under D1, $\varphi_i=a_i$. Under D2, $\varphi_i\neq a_i$ in general. The welfare at true mean traffic $\mu$ is
+\[\textstyle W(\sigma)=\sum_z\big[\alpha_zQ_z-\tfrac{b_z}{2}Q_z^2-\gamma\mu_zT_z-\gamma c_zT_zX_z\big]-\sum_iC_i(\sigma_i),\]
+with charges treated as transfers.
+\end{example}
+
+\begin{definition}[D1 and D2]\label{def:D1D2}
+The game is \emph{of type D1} if $\varphi_i(p)=a_i(p)$ for all $i$ and $p$. Otherwise it is \emph{of type D2}.
+\end{definition}
+
+\begin{assumption}[Traffic box]\label{ass:traffic}
+$\Xi=\prod_{z}[\underline\mu_z,\overline\mu_z]\subset\R^Z_{\ge0}$, with widths $\kappa_z=\overline\mu_z-\underline\mu_z$. A nominal mean $\hat\mu\in\Xi$ is fixed, and the true mean $\mu^{t}$ lies in $\Xi$.
+\end{assumption}
+
+\begin{assumption}[Credal sets, clipped and consistent]\label{ass:credal}
+Fix weights $w\in\R^d_{>0}$ and a width $\delta\ge0$. For $c\in\R^d_{\ge0}$ let
+\[K^\delta(c)=\{m\in\R^d_{\ge0}:\ |m_k-c_k|\le\delta w_k\ \forall k\}.\]
+At a pure profile $\sigma$, carrier $i$'s credal set $\cM_i^\delta(\sigma)$ is the set of Borel probability laws $P$ on $\R^d_{\ge0}\times\R^Z_{\ge0}$ with finite first moments such that $\E_P[m]\in K^\delta(A_{-i}(\sigma))$ and $\E_P[\xi]\in\Xi$. The box is centred at the realised rival aggregate; this is consistency, or equilibrium in beliefs \cite{Lo96}.
+\end{assumption}
+
+The clipping at $0$ is part of the definition. Every point of $K^\delta(c)$ is a feasible aggregate. This removes the earlier problem of beliefs with negative means.
+
+\begin{assumption}[Oracles]\label{ass:oracle}
+For each $i$ there is an oracle $\mathcal O_i$ that, given price vectors $\lambda^a,\lambda^\varphi\in\R^d$, $\nu\in\R^Z$ and a diagonal $Q\succeq0$, returns a plan in
+\[\arg\max_{p\in\cP_i}\big\{\pi_i(p)+\tfrac12\langle a_i(p),Qa_i(p)\rangle-\langle\lambda^a,a_i(p)\rangle-\langle\lambda^\varphi,\varphi_i(p)\rangle-\langle\nu,t_i(p)\rangle\big\}.\]
+A best response at belief $(m,\xi)$ is the call $(\lambda^a,\lambda^\varphi,\nu,Q)=(0,Mm,\gamma\xi,0)$. The D1 pricing problem of Section~\ref{sec:algo} is the call $(M\Abar,0,\gamma\hat\xi,M)$. A \emph{relaxation oracle} $\mathcal U_i$ returns an upper bound on the same maximum.
+\end{assumption}
+
+In the routing application, $\mathcal O_i$ is a prize-collecting routing problem with zone prices on deliveries, vehicles and vehicle-hours, and a separable concave quadratic term per zone. $\mathcal U_i$ is, for example, a column-generation LP bound.
+
+%======================================================================
+\section{Criteria, imprecise equilibria and elementary structure}\label{sec:criteria}
+
+For a finite option set $\cP$ and a set $\cM$ of laws, let $\underline\E[f]=\inf_{P\in\cM}\E_P[f]$ and $\overline\E[f]=\sup_{P\in\cM}\E_P[f]$.
+
+\begin{definition}[Decision criteria; Levi, Walley, Troffaes \cite{Troffaes07}]\label{def:criteria}
+An option $p\in\cP$ is:
+\begin{itemize}
+\item \emph{E-admissible} if there is $P\in\cM$ with $p\in\arg\max_{p'}\E_P[u(p')]$;
+\item \emph{maximal} if there is no $p'$ with $\underline\E[u(p')-u(p)]>0$;
+\item \emph{interval-undominated} (ID) if $\overline\E[u(p)]\ge\max_{p'}\underline\E[u(p')]$;
+\item \emph{$\Gamma$-maximin} if $\underline\E[u(p)]=\max_{p'}\underline\E[u(p')]$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Imprecise credal Nash equilibrium]\label{def:icne}
+For $C\in\{E,M,ID,\Gamma\}$ and $\delta\ge0$, $\ICNE_C(\delta)$ is the set of pure profiles $\sigma$ such that each $\sigma_i$ is $C$-admissible for $(\cP_i,\cM^\delta_i(\sigma))$ with payoff $u_i$. The \emph{existence threshold} is $\delta^C_0=\inf\{\delta\ge0:\ICNE_C(\delta)\neq\emptyset\}$, with $\inf\emptyset=+\infty$.
+\end{definition}
+
+Write $\ub_i(p;m,\xi)$ for the right-hand side of Assumption~\ref{ass:affine} evaluated at the \emph{means} $(m,\xi)$, and $K_i^\delta(\sigma)=K^\delta(A_{-i}(\sigma))\times\Xi$.
+
+\begin{lemma}[Reduction of the credal set to its mean box]\label{lem:reduction} \PROVED\
+Under Assumptions~\ref{ass:plans}--\ref{ass:credal}:
+\begin{enumerate}[label=(\alph*)]
+\item for every $P\in\cM_i^\delta(\sigma)$ and every $p$, $\E_P[u_i(p)]=\ub_i(p;\E_Pm,\E_P\xi)$;
+\item the map $P\mapsto(\E_Pm,\E_P\xi)$ sends $\cM_i^\delta(\sigma)$ onto $K_i^\delta(\sigma)$;
+\item consequently each criterion of Definition~\ref{def:criteria} for $(\cP_i,\cM_i^\delta(\sigma))$ coincides with the same criterion in which $\cM$ is replaced by the compact convex set $K_i^\delta(\sigma)$ and $\E_P$ by $\ub_i(\cdot;k)$, $k\in K_i^\delta(\sigma)$. Infima and suprema are attained.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) $u_i(p;m,\xi)$ is affine in $(m,\xi)$ with fixed coefficients, and $P$ has finite first moments. Linearity of the integral gives the identity.
+(b) Into: by definition. Onto: for $k=(m,\xi)\in K_i^\delta(\sigma)$, the Dirac law $\delta_{(m,\xi)}$ is supported in $\R^d_{\ge0}\times\R^Z_{\ge0}$ because $m\ge0$ and $\xi\in\Xi\subset\R^Z_{\ge0}$. Its means are $(m,\xi)$, so it belongs to $\cM_i^\delta(\sigma)$.
+(c) Each criterion depends on $P$ only through the numbers $\E_P[u(p)]$ and $\E_P[u(p')-u(p)]$. These are affine functions of the mean, by (a). By (b), ranging over $P$ is the same as ranging over $k\in K_i^\delta(\sigma)$. $K_i^\delta(\sigma)$ is a product of compact intervals, hence compact and convex. Continuous functions attain their extrema on it.
+\end{proof}
+
+\begin{lemma}[Inclusions between criteria]\label{lem:nesting} \CLASSICAL\ (\cite{Troffaes07}; proof included)
+For a finite $\cP$ and compact convex $K$ with continuous affine payoffs:
+$E\text{-adm}\subseteq\text{maximal}\subseteq ID$, and $\Gamma\text{-maximin}\subseteq\text{maximal}$. All four sets are nonempty. Consequently $\ICNE_E(\delta)\subseteq\ICNE_M(\delta)\subseteq\ICNE_{ID}(\delta)$ and $\ICNE_\Gamma(\delta)\subseteq\ICNE_M(\delta)$.
+\end{lemma}
+\begin{proof}
+\emph{E $\subseteq$ M.} If $p$ is optimal at $k_0$, then for every $p'$, $\ub(p';k_0)-\ub(p;k_0)\le0$, so $\min_k[\ub(p')-\ub(p)]\le0$.
+\emph{M $\subseteq$ ID.} If $p$ is maximal, then for each $p'$ there is $k$ with $\ub(p;k)\ge\ub(p';k)$. Hence $\max\ub(p;\cdot)\ge\ub(p;k)\ge\ub(p';k)\ge\min\ub(p';\cdot)$.
+\emph{$\Gamma\subseteq$ M.} If $\min_k[\ub(p';k)-\ub(p;k)]>0$, then $\min\ub(p')>\min\ub(p)$, so $p$ is not $\Gamma$-maximin.
+\emph{Nonemptiness.} The $\Gamma$-set is the argmax of a function on a finite set. E-admissible options include the argmax at any $k$.
+\end{proof}
+
+\begin{lemma}[Monotonicity in the width]\label{lem:mono} \PROVED\ \LEAN\ (case E)
+For $\delta\le\delta'$ and $C\in\{E,M,ID\}$, $\ICNE_C(\delta)\subseteq\ICNE_C(\delta')$. Hence $\ICNE_C(\delta)\neq\emptyset$ for all $\delta>\delta_0^C$. For $C=\Gamma$ the inclusion fails (Example~\ref{ex:gamma}).
+\end{lemma}
+\begin{proof}
+$K^\delta(c)\subseteq K^{\delta'}(c)$ for every $c$. The realised centre $A_{-i}(\sigma)$ does not depend on $\delta$. E: a witness belief stays admissible. M: a dominance strict on the larger set is strict on the smaller one, so non-domination on the smaller set implies it on the larger one; equivalently, the witnesses $k_{p'}$ remain. ID: $\overline\E$ increases and every $\underline\E$ decreases as the set grows. For $\delta>\delta_0^C$, some $\delta''\in[\delta_0^C,\delta)$ has $\ICNE_C(\delta'')\ne\emptyset$, and the inclusion gives the claim.
+\end{proof}
+
+\begin{lemma}[Lower expectations and mixtures]\label{lem:mixture} \PROVED\
+Let $x\in\Delta(\cP_i)$. The function $x\mapsto\min_{k\in K}\sum_px(p)\ub_i(p;k)$ is concave and satisfies $\min_k\sum_px(p)\ub_i(p;k)\ge\sum_px(p)\min_k\ub_i(p;k)$. If all $\varphi_i(p),t_i(p)\ge0$ (Assumption~\ref{ass:plans}) and $K=K^\delta(c)\times\Xi$, the minimum over $K$ is attained, for every $p$ simultaneously, at the upper corner $k^+=(c+\delta w,\overline\mu)$. The lower expectation is then linear in the mixture:
+\[\textstyle\min_{k}\sum_px(p)\ub_i(p;k)=\sum_px(p)\ub_i(p;k^+).\]
+Consequently $\ICNE_\Gamma(\delta)$ is the set of pure Nash equilibria of the precise game $G^\Gamma_\delta$ with private profits $\pi_i^\Gamma(p)=\pi_i(p)-\delta\langle\varphi_i(p),Mw\rangle-\gamma\langle t_i(p),\overline\mu\rangle$, the same coupling, and traffic set to $0$.
+\end{lemma}
+\begin{proof}
+A minimum of affine functions of $x$ is concave. The inequality holds because the left side picks one $k$ for all $p$. With $\varphi,t\ge0$ and $M\ge0$, $\ub_i(p;m,\xi)$ is coordinatewise nonincreasing in $(m,\xi)$. The box $K^\delta(c)$ has the coordinatewise maximum $c+\delta w$, which lies in it (clipping only removes points below $0$, and $c+\delta w\ge0$). $\Xi$ has the maximum $\overline\mu$. So $k^+$ minimises every $\ub_i(p;\cdot)$. Substituting $k^+$ with $c=A_{-i}(\sigma)$ gives $\ub_i(p;k^+)=\pi^\Gamma_i(p)-\langle\varphi_i(p),MA_{-i}(\sigma)\rangle$, which is the payoff of $G^\Gamma_\delta$. $\Gamma$-maximin is then best response in $G^\Gamma_\delta$.
+\end{proof}
+
+\begin{example}[$\Gamma$-equilibria are not nested]\label{ex:gamma} \PROVED\
+Take one carrier ($N=1$) with a fixed external aggregate $c=(1,2)$, $d=2$, $M=I$, $w=(2,1)$, no traffic term, and two plans with $\pi=0$, $\varphi(A)=(1,0)$ and $\varphi(B)=(0,1)$. The lower values are $-(1+2\delta)$ for $A$ and $-(2+\delta)$ for $B$. So $\ICNE_\Gamma(0)=\{A\}$ and $\ICNE_\Gamma(2)=\{B\}$.
+\end{example}
+
+%======================================================================
+\section{Classical tools}\label{sec:tools}
+
+\begin{theorem}[Shapley--Folkman, constructive vertex form]\label{thm:sf} \CLASSICAL\ (Starr \cite{Starr69}, appendix; see also \cite{Zhou93,UB16}). Proof included.
+Let $S_1,\dots,S_N\subset\R^d$ be finite and nonempty. Let $L=\spn\bigcup_i(S_i-S_i)$ and $d_L=\dim L\le d$. Index the elements of $S_i$ by a finite set $\cP_i$ through a map $a_i:\cP_i\to S_i$ that is onto. For $\bar x\in\sum_i\conv S_i$, the polytope
+\[\Lambda(\bar x)=\Big\{\lambda\in\textstyle\prod_i\Delta(\cP_i):\ \sum_i\sum_{p}\lambda_i(p)a_i(p)=\bar x\Big\}\]
+is nonempty. At every vertex $\lambda$ of $\Lambda(\bar x)$, the set $J(\lambda)=\{i:|\supp\lambda_i|\ge2\}$ satisfies $|J(\lambda)|\le\min\{N,d_L\}$. In particular, $\bar x=\sum_iy_i$ with $y_i\in\conv S_i$ and $y_i\in S_i$ for all $i\notin J$.
+\end{theorem}
+\begin{proof}
+Nonemptiness: $\bar x=\sum_iy_i$ with $y_i\in\conv S_i$, and each $y_i$ is a convex combination of points $a_i(p)$. $\Lambda(\bar x)$ is a bounded polyhedron in standard form $\{\lambda\ge0:H\lambda=h\}$. Its columns are $c_{i,p}=(a_i(p),e_i)\in\R^d\times\R^N$ and $h=(\bar x,\mathbf 1)$. A feasible $\lambda$ is a vertex if and only if the columns $\{c_{i,p}:\lambda_i(p)>0\}$ are linearly independent; this is the standard characterization of basic feasible solutions. Fix a vertex. For each $i$, pick $p_i^0\in\supp\lambda_i$. The family
+\[\{c_{i,p_i^0}\}_{i}\ \cup\ \{c_{i,p}-c_{i,p_i^0}:\ i\in[N],\ p\in\supp\lambda_i\setminus\{p_i^0\}\}\]
+is obtained from the positive columns by an invertible (unitriangular) transformation, so it is linearly independent. Its second part consists of the vectors $(a_i(p)-a_i(p_i^0),0)\in L\times\{0\}$, which number $\sum_i(|\supp\lambda_i|-1)\ge|J(\lambda)|$. Linearly independent vectors in $L\times\{0\}$ number at most $d_L$. Hence $|J|\le d_L$, and trivially $|J|\le N$. Finally set $y_i=\sum_p\lambda_i(p)a_i(p)$.
+\end{proof}
+
+\begin{theorem}[Hoeffding \cite{Hoeffding63}]\label{thm:hoeffding} \CLASSICAL\
+If $X_1,\dots,X_k$ are independent, $\E X_j=0$ and $X_j\in[\ell_j,\ell_j+r_j]$ almost surely, then $\Pr(|\sum_jX_j|\ge t)\le2\exp(-2t^2/\sum_jr_j^2)$ for all $t>0$.
+\end{theorem}
+
+\begin{theorem}[Nash \cite{Nash51}]\label{thm:nash} \CLASSICAL\
+Every finite game has a mixed-strategy Nash equilibrium.
+\end{theorem}
+
+\begin{theorem}[Monderer--Shapley \cite{MS96}]\label{thm:ms} \CLASSICAL\
+If $\Psi$ is an exact potential of a finite game, that is, $u_i(p',\sigma_{-i})-u_i(\sigma)=\Psi(p',\sigma_{-i})-\Psi(\sigma)$ for all $i,p',\sigma$, then every maximiser of $\Psi$ is a pure Nash equilibrium.
+\end{theorem}
+
+\begin{theorem}[Frank--Wolfe; Jaggi \cite{Jaggi13}, Theorems 1 and 2]\label{thm:jaggi} \CLASSICAL\
+Let $f$ be convex and differentiable on a compact convex $D$. Its curvature constant is
+$C_f=\sup_{x,s\in D,\gamma\in(0,1]}\frac{2}{\gamma^2}\big(f(x+\gamma(s-x))-f(x)-\gamma\langle s-x,\nabla f(x)\rangle\big)$.
+Frank--Wolfe with exact linear minimisation and step $2/(t+2)$, or line search, satisfies $f(x_t)-f^*\le 2C_f/(t+2)$. Moreover, for $K\ge2$ some $t\le K$ has duality gap $g(x_t)=\max_{s\in D}\langle x_t-s,\nabla f(x_t)\rangle\le\frac{27}{4}\,C_f/(K+2)$. Always $f(x)-f^*\le g(x)$.
+\end{theorem}
+
+\begin{theorem}[Kernels; Chvátal \cite{Chvatal73}, Fraenkel \cite{Fraenkel81}]\label{thm:kernel} \CLASSICAL\
+A \emph{kernel} of a digraph $D=(V,E)$ is a set $S\subseteq V$ that is independent (no arc between two vertices of $S$) and absorbing (every $v\notin S$ has an arc $(v,u)$ with $u\in S$). Deciding whether a digraph has a kernel is NP-complete \cite{Chvatal73}. It remains NP-complete for planar digraphs with in- and out-degrees at most $2$ and total degree at most $3$ \cite{Fraenkel81}.
+\end{theorem}
+
+\begin{theorem}[Chen--Deng--Teng \cite{CDT09}; Daskalakis--Goldberg--Papadimitriou \cite{DGP09}]\label{thm:ppad} \CLASSICAL\
+Computing a Nash equilibrium of a two-player game in normal form (bimatrix), exactly or to within $1/\mathrm{poly}$ precision, is PPAD-complete.
+\end{theorem}
+
+%======================================================================
+\section{Relaxed equilibria}\label{sec:relaxed}
+
+For $x\in X=\prod_i\Delta(\cP_i)$ write $\abar_i(x_i)=\sum_px_i(p)a_i(p)$ and $\Abar_{-i}(x)=\sum_{j\ne i}\abar_j(x_j)$.
+
+\begin{definition}\label{def:relaxed}
+$x$ is a \emph{relaxed equilibrium at traffic point $\hat\xi$} if, for all $i$,
+\[\supp x_i\subseteq B_i(x):=\arg\max_{p\in\cP_i}\ub_i(p;\Abar_{-i}(x),\hat\xi).\]
+\end{definition}
+
+\begin{proposition}[Relaxed equilibria are mixed equilibria]\label{prop:relaxed} \PROVED\
+Under Assumption~\ref{ass:affine}, $x$ is a relaxed equilibrium at $\hat\xi$ if and only if it is a mixed Nash equilibrium of the finite game $G(\hat\xi)$ with payoffs $\ub_i(\sigma_i;A_{-i}(\sigma),\hat\xi)$. Relaxed equilibria therefore exist (Theorem~\ref{thm:nash}).
+\end{proposition}
+\begin{proof}
+Under the product law $x_{-i}$, the expected payoff of a pure plan $p$ is $\E[\ub_i(p;A_{-i},\hat\xi)]=\ub_i(p;\E A_{-i},\hat\xi)$, because $\ub_i$ is affine in $A_{-i}$. Moreover $\E A_{-i}=\Abar_{-i}(x)$ by linearity; independence is not even needed. A mixed profile is a Nash equilibrium if and only if each $x_i$ is supported on pure best responses to $x_{-i}$, and these are exactly $B_i(x)$.
+\end{proof}
+
+\begin{remark}
+If the coupling is not affine (for example, a BPR power congestion term), the expected payoff under $x_{-i}$ is no longer a function of $\Abar_{-i}$. The relaxed game, with payoff $\sum_px_i(p)u_i(p;\Abar_{-i})$, still has an equilibrium by Kakutani's theorem, since the payoff is linear in $x_i$ and jointly continuous. The theory of \cite{LOW23} applies to it, but Lemma~\ref{lem:reduction} fails, and so do our exact credal statements. We do not pursue this case.
+\end{remark}
+
+%======================================================================
+\section{Main theorem: credal Shapley--Folkman absorption}\label{sec:main}
+
+Let $x^*$ be a relaxed equilibrium at $\hat\xi\in\Xi$. Write $\abar_j=\abar_j(x_j^*)$, $\Abar^*=\sum_j\abar_j$, $\Abar^*_{-i}=\Abar^*-\abar_i$ and $B_j=B_j(x^*)$. Define the spreads
+\[s_{jk}=\max_{p,p'\in B_j}|a_{jk}(p)-a_{jk}(p')|,\qquad r_{jk}=\max_{p\in B_j}|a_{jk}(p)-\abar_{jk}|,\]
+together with $\bar\sigma=\max_{j,k}s_{jk}/w_k$, $\bar\rho=\max_{j,k}r_{jk}/w_k$, $d_L=\dim\spn\bigcup_j(a_j(B_j)-a_j(B_j))$ and $k^\sharp=\min\{N,d_L\}$. Since $\abar_j\in\conv a_j(B_j)$, we have $r_{jk}\le s_{jk}$ and $\bar\rho\le\bar\sigma\le\sigma_{\max}$. The \emph{anchored radius} of a pure profile $p\in\prod_jB_j$ is
+\[\hat\delta(p)=\max_i\ \|A_{-i}(p)-\Abar^*_{-i}\|_{w,\infty}.\]
+
+\begin{theorem}[Credal Shapley--Folkman absorption]\label{thm:main} \PROVED\
+Assume \ref{ass:plans}--\ref{ass:credal}. Let $x^*$ be a relaxed equilibrium at $\hat\xi\in\Xi$.
+\begin{enumerate}[label=(\alph*)]
+\item \emph{(Absorption.)} For every $p\in\prod_jB_j$ and every $\delta\ge\hat\delta(p)$:
+$p\in\ICNE_E(\delta)\subseteq\ICNE_M(\delta)\subseteq\ICNE_{ID}(\delta)$.
+\item \emph{(Radius.)} $\min_{p\in\prod_jB_j}\hat\delta(p)\le\min\Big\{\max_i\max_k\sum_{j\ne i}\frac{r_{jk}}{w_k},\ \ k^\sharp\bar\sigma+\bar\rho,\ \ \bar\sigma\sqrt{k^\sharp\ln(2d)/2}+\bar\rho\Big\}$.
+\item \emph{(Uniform existence.)} Consequently
+\[\delta_0^{ID}\le\delta_0^M\le\delta_0^E\le\sigma_{\max}\cdot\min\Big\{N-1,\ d+1,\ 1+\sqrt{d\ln(2d)/2}\Big\}.\]
+\item \emph{(Construction.)} A profile achieving the second bound is computed from $x^*$ by one linear program over $\prod_j\Delta(B_j)$ (a vertex of $\Lambda(\Abar^*)$) followed by an arbitrary choice for at most $k^\sharp$ carriers. A profile achieving the third bound is obtained by independent sampling of these carriers. Each draw succeeds with probability at least $1-2d\exp(-2t^2/(k^\sharp\bar\sigma^2))$ for the target $t+\bar\rho$, and success is checkable. A profile achieving the first bound is any $p\in\prod_jB_j$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\emph{(a)} Fix $i$ and $\delta\ge\hat\delta(p)$. The anchor $\Abar^*_{-i}$ is a sum of convex combinations of nonnegative vectors, hence $\Abar^*_{-i}\ge0$. By definition of $\hat\delta(p)$, $|\Abar^*_{-i,k}-A_{-i,k}(p)|\le\hat\delta(p)w_k\le\delta w_k$ for all $k$. So $\Abar^*_{-i}\in K^\delta(A_{-i}(p))$, and with $\hat\xi\in\Xi$ we get $(\Abar^*_{-i},\hat\xi)\in K^\delta_i(p)$. By Lemma~\ref{lem:reduction}(b) the Dirac law at this point belongs to $\cM_i^\delta(p)$. Under it, the expected payoff is $\ub_i(\cdot;\Abar^*_{-i},\hat\xi)$ by Lemma~\ref{lem:reduction}(a), and $p_i\in B_i$ maximises it. Hence $p_i$ is E-admissible. This holds for every $i$, so $p\in\ICNE_E(\delta)$. The inclusions follow from Lemma~\ref{lem:nesting}.
+
+\emph{(b), first term.} For any $p\in\prod_jB_j$, $A_{-i}(p)-\Abar^*_{-i}=\sum_{j\ne i}(a_j(p_j)-\abar_j)$, and $|a_{jk}(p_j)-\abar_{jk}|\le r_{jk}$.
+
+\emph{(b), second term.} We have $\Abar^*\in\sum_j\conv a_j(B_j)$, because $\supp x_j^*\subseteq B_j$. Apply Theorem~\ref{thm:sf} with $\cP_j$ replaced by $B_j$. The restriction of $x^*$ is feasible for $\Lambda(\Abar^*)$, so a vertex $\lambda$ exists and can be found by linear programming. Let $J=J(\lambda)$, so $|J|\le k^\sharp$, and $y_j=\sum_p\lambda_j(p)a_j(p)$. For $j\notin J$, $\lambda_j$ is a point mass at some $p_j\in B_j$, and $a_j(p_j)=y_j$. For $j\in J$ choose any $p_j\in\supp\lambda_j\subseteq B_j$. Since $\sum_jy_j=\Abar^*=\sum_j\abar_j$,
+\begin{equation}\label{eq:decomp}
+A_{-i}(p)-\Abar^*_{-i}=\sum_j(a_j(p_j)-\abar_j)-(a_i(p_i)-\abar_i)=\underbrace{\sum_{j\in J}(a_j(p_j)-y_j)}_{=:E}-(a_i(p_i)-\abar_i).
+\end{equation}
+For each $j\in J$, both $a_{jk}(p_j)$ and $y_{jk}$ lie in $[\min_{B_j}a_{jk},\max_{B_j}a_{jk}]$, so $|E_k|\le\sum_{j\in J}s_{jk}\le k^\sharp\bar\sigma w_k$. The last term satisfies $|a_{ik}(p_i)-\abar_{ik}|\le r_{ik}\le\bar\rho w_k$. Dividing by $w_k$ and maximising over $k$ and $i$ gives the bound.
+
+\emph{(b), third term.} If $J=\emptyset$ or $\bar\sigma=0$, then $E=0$ and the bound is $\bar\rho$. Otherwise, draw $p_j\sim\lambda_j$ independently for $j\in J$, and keep the forced choices for $j\notin J$. For each coordinate $k$, the variables $X_j=(a_{jk}(p_j)-y_{jk})/w_k$, $j\in J$, are independent, have mean $0$, and take values in an interval of length $s_{jk}/w_k\le\bar\sigma$. By Theorem~\ref{thm:hoeffding}, $\Pr(|E_k|/w_k\ge t)\le2\exp(-2t^2/(|J|\bar\sigma^2))$. The union bound over $k\in[d]$ gives $\Pr(\|E\|_{w,\infty}\ge t)\le2d\exp(-2t^2/(k^\sharp\bar\sigma^2))$. This is $<1$ for every $t>t_0:=\bar\sigma\sqrt{k^\sharp\ln(2d)/2}$. So for every $t>t_0$ some outcome has $\|E\|_{w,\infty}<t$. The outcomes are finitely many, so some outcome has $\|E\|_{w,\infty}\le t_0$. By \eqref{eq:decomp}, $\hat\delta(p)\le t_0+\bar\rho$ for it.
+
+\emph{(c)} Relaxed equilibria exist (Proposition~\ref{prop:relaxed}). By (a) and (b), $\ICNE_E(\delta)\neq\emptyset$ for $\delta$ equal to the bound in (b). Use $r_{jk}\le s_{jk}$, $\bar\rho\le\bar\sigma\le\sigma_{\max}$, $k^\sharp\le d$ and $\sum_{j\ne i}r_{jk}/w_k\le(N-1)\sigma_{\max}$. The order of the three thresholds follows from Lemma~\ref{lem:nesting}.
+
+\emph{(d)} This was shown in the proof of (b). Linear programming finds a vertex in polynomial time in $\sum_j|B_j|$ and $d$.
+\end{proof}
+
+\begin{corollary}[$\varepsilon$-Nash in the precise game; cf.\ \cite{LOW23}, Prop.\ 2.4]\label{cor:eps} \PROVED\
+Let $p$ be as in Theorem~\ref{thm:main}(a) and $\mu^t\in\Xi$. Then $p$ is an $\varepsilon$-Nash equilibrium of $G(\mu^t)$ with
+\begin{gather*}\varepsilon_i\le\hat\delta(p)\,L_i(p)+\gamma\textstyle\sum_z\kappa_z\,T_{iz}(p),\quad\text{where}\\
+L_i(p)=\max_{p'\in\cP_i}\textstyle\sum_kw_kM_k|\varphi_{ik}(p')-\varphi_{ik}(p_i)|,\qquad T_{iz}(p)=\max_{p'}|t_{iz}(p')-t_{iz}(p_i)|.\end{gather*}
+If $\hat\xi=\mu^t$, the traffic term vanishes.
+\end{corollary}
+\begin{proof}
+Let $m^*=\Abar^*_{-i}$ and $m=A_{-i}(p)$. For any $p'$:
+$\ub_i(p';m,\mu^t)-\ub_i(p_i;m,\mu^t)
+=[\ub_i(p';m^*,\hat\xi)-\ub_i(p_i;m^*,\hat\xi)]
+-\langle\varphi_i(p')-\varphi_i(p_i),M(m-m^*)\rangle
+-\gamma\langle t_i(p')-t_i(p_i),\mu^t-\hat\xi\rangle$.
+The bracket is $\le0$ because $p_i\in B_i$. Each term $|M_k(\varphi_{ik}(p')-\varphi_{ik}(p_i))(m_k-m_k^*)|$ is at most $w_kM_k|\Delta\varphi_{ik}|\hat\delta(p)$, and $|\mu^t_z-\hat\xi_z|\le\kappa_z$.
+\end{proof}
+
+\begin{remark}[The questions raised about the candidate core]\label{rem:answers}
+\emph{(1) Does rounding preserve the equilibrium conditions, given that rounding changes the carriers' plans and not only the aggregate?} Yes. All carriers, switched or not, play plans in $B_j$, which are exact best responses to the \emph{anchor} $\Abar^*_{-j}$. Only the realised rival aggregate moves, by \eqref{eq:decomp}.
+\emph{(2) The own term $a_i(p_i)-\abar_i$ in \eqref{eq:decomp} cannot be avoided.} Take two identical carriers mixing $\tfrac12$--$\tfrac12$ over contributions $0$ and $1$. Any pure profile in the support moves some rival aggregate by $\tfrac12$ although $J=\emptyset$ is possible. This is the ``$+1$'' of \cite{LOW23}.
+\emph{(3) Regime.} With $N\le d_L$, the second and third terms are never below the first by more than $\bar\rho$. The operative bound in the city instances is the support-selection bound $(N-1)\bar\rho$. Shapley--Folkman matters only when $N>d$ (crowdsourced couriers, per-vehicle players). Section~\ref{sec:notclaimed} discusses this.
+\emph{(4) Credal sets and mixtures.} For E and M the mixture issue does not arise: the anchor is a single precise belief, and only pure plans are evaluated. For $\Gamma$ the lower expectation is concave, not linear, in mixtures (Lemma~\ref{lem:mixture}). It is linear under the sign condition $\varphi,t\ge0$, where the worst case is the upper corner for every plan. Even then, $\ICNE_\Gamma$ is the pure-equilibrium set of a \emph{precise} game, so absorption does not apply to $\Gamma$. Under D2 that set can be empty: at $\delta=0$, the game of Proposition~\ref{prop:tight} has none.
+\end{remark}
+
+\begin{remark}[Approximate relaxed equilibria]\label{rem:approx} \PROVED\
+If $x$ is only an $\epsilon$-well-supported relaxed equilibrium (every support plan is $\epsilon$-optimal against $\Abar_{-i}(x)$), the same construction gives a profile in which each $p_i$ is $\epsilon$-optimal at a belief in $K^{\hat\delta(p)}(A_{-i}(p))\times\Xi$. The proof is that of (a) with ``maximises'' replaced by ``$\epsilon$-maximises''. Exact E-admissibility is then not guaranteed.
+\end{remark}
+
+%======================================================================
+\section{Tightness, impossibility and complexity}\label{sec:tight}
+
+\begin{proposition}[The support-selection bound is attained]\label{prop:tight} \PROVED\ \LEAN\ (lower-bound core)
+Let $N=2$ and one zone. Under D2, the only relevant coordinate is the vehicle count, and $M=\gamma c=1$. Carrier 1 has $A_1:(n,\tau,\pi)=(1,4,6)$ and $B_1:(3,1,0)$. Carrier 2 has $X:(1,1,0)$ and $Y:(3,4,6)$. The payoffs are $\pi-\tau\cdot n_{\text{rival}}$, and the weight is $w>0$. Then $\delta_0^E=\delta_0^M=1/w$, and the bound $(N-1)\bar\rho$ of Theorem~\ref{thm:main}(b) equals $1/w$. There is no pure Nash equilibrium.
+\end{proposition}
+\begin{proof}
+For carrier 1, $\ub(A_1;n)-\ub(B_1;n)=6-3n$, so $A_1$ is optimal iff $n\le2$. For carrier 2, $\ub(Y;n)-\ub(X;n)=6-3n$, so $Y$ is optimal iff $n\le2$. With two plans and a convex belief set, E-admissibility and maximality coincide: both say that some $n$ in the box makes the plan weakly better. In each pure profile, one carrier has a strict incentive at the realised count:
+\begin{itemize}
+\item in $(A_1,X)$, carrier 2 sees $n=1$ and needs a belief $\ge2$;
+\item in $(A_1,Y)$, carrier 1 sees $n=3$ and needs a belief $\le2$;
+\item in $(B_1,Y)$, carrier 2 sees $n=3$ and needs a belief $\le2$;
+\item in $(B_1,X)$, carrier 1 sees $n=1$ and needs a belief $\ge2$.
+\end{itemize}
+Each requirement holds iff $\delta w\ge1$. The other carrier in each profile is best-responding at the realised count. Hence $\ICNE_E(\delta)=\ICNE_M(\delta)=\emptyset$ for $\delta<1/w$, and both equal the full profile set for $\delta=1/w$. So no pure Nash equilibrium exists, and $\delta_0=1/w$. The unique mixed equilibrium makes each carrier indifferent: the rival's mean count must be $2$, so both mix $\tfrac12$--$\tfrac12$ and $B_j$ is the full plan set. Then $r_j=\max|n-2|=1$, so $\bar\rho=1/w$, and $(N-1)\bar\rho=1/w$.
+\end{proof}
+
+\begin{proposition}[The linear dependence of the $\varepsilon$-bound on the number of zones is necessary]\label{prop:cycles} \PROVED\ \LEAN\ (counting core)
+For every $Z\ge1$ and $N\ge2$, there is a D2 game with $Z$ zones in which every pure profile has $\max_i\varepsilon_i\ge3\lceil Z/2\rceil$. In the same game, every profile of Theorem~\ref{thm:main}(a) satisfies $\hat\delta(p)L_i(p)\le3Z$ ($w=1$).
+\end{proposition}
+\begin{proof}
+Take two carriers whose plan sets are the products $\{A_1,B_1\}^Z$ and $\{X,Y\}^Z$, with the one-zone data of Proposition~\ref{prop:tight} in each zone and no cross-zone interaction. Add $N-2$ carriers with a single null plan. Payoffs are sums over zones and plan sets are products, so a carrier's regret is the sum of its zone regrets. In each zone and each of the four zone profiles, exactly one of the two carriers has regret $3$ and the other $0$. For example, in $(A_1,X)$ carrier 2 gains $2-(-1)=3$ by switching to $Y$. The other three cases are symmetric. So $\varepsilon_1+\varepsilon_2=3Z$ with both multiples of $3$, and $\max\ge3\lceil Z/2\rceil$. For the upper bound, the zone-wise mixed equilibrium has $\bar\rho=1$, and every $p\in\prod B_j$ has $\hat\delta(p)\le1$. Moreover $L_i(p)\le\sum_zw\cdot1\cdot|\Delta\tau_z|=3Z$.
+\end{proof}
+
+\begin{theorem}[Complexity split: NP-completeness under D2]\label{thm:np} \PROVED\ (reduction; Theorem~\ref{thm:kernel} is classical) \LEAN\ (combinatorial core)
+Consider the problem \textsc{ICNE}$_C$: given explicit plan lists with rational data, $M$, $w$, a degenerate traffic box ($\kappa=0$) and a rational $\delta\ge0$, decide whether $\ICNE_C(\delta)\neq\emptyset$. For each $C\in\{E,M,ID,\Gamma\}$ the problem is in NP. For every digraph $D$ with maximum out-degree $\Delta^+\ge1$, one constructs in polynomial time a D2 instance $G_D$ with two plans per carrier and $Z=|E(D)|$ zones such that, for all $\delta\in[0,1/(2\Delta^++1))$,
+\[\ICNE_E(\delta)=\ICNE_M(\delta)=\ICNE_{ID}(\delta)=\ICNE_\Gamma(\delta)=\{\sigma^S:\ S\text{ is a kernel of }D\}.\]
+Here $\sigma^S$ plays ``in'' on $S$ and ``out'' elsewhere. Hence \textsc{ICNE}$_C$ is strongly NP-complete for each $C$, already at $\delta=0$ (pure Nash equilibrium). By \cite{Fraenkel81}, it remains so for every fixed $\delta\in[0,1/5)$.
+\end{theorem}
+\begin{proof}
+\emph{Membership.} The certificate is a profile $\sigma$. With $K=K^\delta(A_{-i}(\sigma))$ (a box clipped at $0$) and $\Xi$ a point:
+\begin{itemize}
+\item E-admissibility of $\sigma_i$ is feasibility of the linear system $\{m\in K:\ub_i(\sigma_i;m)\ge\ub_i(p';m)\ \forall p'\}$, decidable in polynomial time by linear programming;
+\item maximality requires, for each $p'$, $\max_{m\in K}[\ub_i(\sigma_i;m)-\ub_i(p';m)]\ge0$; a linear function over a box is maximised coordinatewise in closed form;
+\item ID and $\Gamma$ require the maxima and minima of $\ub_i(p;\cdot)$ over the box, also coordinatewise.
+\end{itemize}
+\emph{Construction.} Let $V(D)=[n]$ and $\Delta^-=\max(1,\text{max in-degree})$. Create one zone per arc $e=(u,v)$, using only its vehicle coordinate, with $M_e=\gamma c_e=1$, $w_e=1$ and no deliveries. Set $\eta=1/(2\Delta^-+2)$. Carrier $i$ has the plan \emph{out} with all data $0$, and the plan \emph{in} with $\pi_i=1$ and:
+\begin{itemize}
+\item for each out-arc $e=(i,j)$: vehicles $n_{ie}=1$ and exposure $\tau_{ie}=1$;
+\item for each in-arc $e=(h,i)$: vehicles $n_{ie}=2$ and exposure $\tau_{ie}=\eta$;
+\item zero elsewhere.
+\end{itemize}
+This is D2, since $\varphi=\tau\ne a=n$. All data are polynomial in size.
+
+\emph{Payoff gap.} Since $\ub_i(\text{out};\cdot)\equiv0$, the gain of \emph{in} at belief $m$ is
+\[D_i(m)=1-\sum_{e=(i,j)}m_e-\eta\sum_{e=(h,i)}m_e.\]
+At the realised aggregate of $\sigma^S$, $m_e=2\cdot\mathbf 1[j\in S]$ for $e=(i,j)$ (carrier $j$'s in-arc vehicles) and $m_e=\mathbf 1[h\in S]$ for $e=(h,i)$ (carrier $h$'s out-arc vehicles). So $D_i^{\rm real}=1-2o_i-\eta h_i$, with $o_i=|N^+(i)\cap S|$ and $h_i=|N^-(i)\cap S|\le\Delta^-$. If $o_i=0$, then $D_i^{\rm real}\ge1-\Delta^-/(2\Delta^-+2)>\tfrac12$. If $o_i\ge1$, then $D_i^{\rm real}\le-1$.
+
+\emph{Robustness of the sign.} Over $K^\delta$, $|D_i(m)-D_i^{\rm real}|\le\delta(\deg^+(i)+\eta\deg^-(i))<\delta(\Delta^++\tfrac12)$; clipping only shrinks the box. For $\delta<1/(2\Delta^++1)$ this is $<\tfrac12$. So $D_i$ has the sign of $D_i^{\rm real}$ on the whole box, with $D_i>0$ when $o_i=0$ and $D_i<0$ when $o_i\ge1$.
+
+\emph{All criteria select the realised strict best response.} Suppose $D_i>0$ on the whole box (the case $<0$ is symmetric). Then \emph{in} is the unique optimum at every belief, so it is the only E-admissible plan. \emph{out} is strictly dominated everywhere, so \emph{in} is the only maximal plan. $\min_K\ub(\text{in})>0=\max_K\ub(\text{out})$, so \emph{out} is interval-dominated and \emph{in} is the unique $\Gamma$-maximin plan. In every criterion, therefore, $\sigma$ is admissible iff each carrier plays \emph{in} exactly when $o_i=0$.
+
+\emph{Equilibria are kernels.} Let $S=\{i:\sigma_i=\text{in}\}$. The condition says: $i\in S\Rightarrow N^+(i)\cap S=\emptyset$, and $i\notin S\Rightarrow N^+(i)\cap S\neq\emptyset$. The second part is absorption. The first part forbids arcs inside $S$, which is independence. So $S$ is a kernel, and conversely. NP-hardness follows from Theorem~\ref{thm:kernel}. All numbers are bounded by a polynomial in $n$, so hardness is strong. With $\Delta^+\le2$, the threshold is $1/5$.
+\end{proof}
+
+\begin{corollary}[Inapproximability of the existence threshold]\label{cor:inapprox} \PROVED\
+Unless $\mathrm{P}=\mathrm{NP}$, no polynomial algorithm, given a D2 instance with explicit plans, outputs $\tilde\delta$ with $\delta_0^E\le\tilde\delta\le\alpha\,\delta^E_0$ for some fixed $\alpha\ge1$. The same holds for an additive error below $1/5$.
+\end{corollary}
+\begin{proof}
+On the instances $G_D$, $\delta_0^E=0$ if $D$ has a kernel. Otherwise $\ICNE_E(\delta)=\emptyset$ for all $\delta<1/(2\Delta^++1)$, so $\delta_0^E\ge1/(2\Delta^++1)$. A multiplicative approximation outputs $0$ in the first case and a positive number in the second. An additive one separates the two cases when the error is below $1/(2\Delta^++1)$.
+\end{proof}
+
+\begin{proposition}[Existence under D1 for every width]\label{prop:D1exists} \PROVED\
+Under D1, for every traffic point $\hat\xi\in\Xi$, the function
+\[\Psi_{\hat\xi}(\sigma)=\textstyle\sum_i\big[\tilde\pi_i(\sigma_i)-\gamma\langle t_i(\sigma_i),\hat\xi\rangle\big]-\tfrac12\|A(\sigma)\|_M^2,\qquad\tilde\pi_i=\pi_i+\tfrac12\|a_i\|^2_M,\]
+is an exact potential of $G(\hat\xi)$, where $\|v\|_M^2=\langle v,Mv\rangle$. Every maximiser lies in $\ICNE_E(\delta)$ for all $\delta\ge0$. Hence $\delta^E_0=\delta^M_0=\delta^{ID}_0=0$, and $\ICNE_\Gamma(\delta)\neq\emptyset$ for all $\delta\ge0$.
+\end{proposition}
+\begin{proof}
+For a unilateral change $p\to p'$ of carrier $i$, put $a=a_i(p)$, $a'=a_i(p')$ and $R=A_{-i}$. Then
+\[\Psi(p')-\Psi(p)=\pi_i(p')-\pi_i(p)+\tfrac12\|a'\|_M^2-\tfrac12\|a\|^2_M-\tfrac12\|R+a'\|_M^2+\tfrac12\|R+a\|_M^2-\gamma\langle t_i(p')-t_i(p),\hat\xi\rangle.\]
+This equals $\pi_i(p')-\pi_i(p)-\langle a'-a,MR\rangle-\gamma\langle t_i(p')-t_i(p),\hat\xi\rangle=u_i(p')-u_i(p)$, using $\varphi_i=a_i$ (D1). By Theorem~\ref{thm:ms}, a maximiser $\sigma$ is a pure equilibrium of $G(\hat\xi)$. The point $(A_{-i}(\sigma),\hat\xi)$ lies in $K_i^\delta(\sigma)$ for every $\delta$ (it is the centre), so $\sigma\in\ICNE_E(\delta)$. For $\Gamma$, Lemma~\ref{lem:mixture} shows that $\ICNE_\Gamma(\delta)$ is the equilibrium set of $G^\Gamma_\delta$. That game is again D1 with modified private profits, so it has a potential and a pure equilibrium.
+\end{proof}
+
+\begin{proposition}[The relaxation step is PPAD-hard under D2]\label{prop:ppad} \PROVED\ (embedding) and \CLASSICAL\ (hardness)
+Every bimatrix game $(R,C)\in\mathbb Q^{m\times n}\times\mathbb Q^{m\times n}$ is, in polynomial time, the game $G(\hat\xi)$ of a D2 instance with $N=2$ and $d=m+n$. Hence computing a relaxed equilibrium under D2 is PPAD-hard (Theorem~\ref{thm:ppad}).
+\end{proposition}
+\begin{proof}
+Let $M=I_{m+n}$, with no traffic term, and $\bar R=\max R$, $\bar C=\max C$. Carrier 1 has plans $p\in[m]$ with $a_1(p)=e_p$, $\varphi_1(p)=\sum_{q}(\bar R-R_{pq})e_{m+q}\ge0$ and $\pi_1(p)=\bar R$. Carrier 2 has plans $q\in[n]$ with $a_2(q)=e_{m+q}$, $\varphi_2(q)=\sum_p(\bar C-C_{pq})e_p\ge0$ and $\pi_2(q)=\bar C$. Then $u_1(p;a_2(q))=\bar R-(\bar R-R_{pq})=R_{pq}$ and likewise $u_2=C_{pq}$. By Proposition~\ref{prop:relaxed}, relaxed equilibria are exactly the Nash equilibria of $(R,C)$.
+\end{proof}
+
+\begin{conjecture}[Witness complexity above the threshold]\label{conj:witness} \CONJ\
+For D2 instances with explicit plans and $\delta=\sigma_{\max}\min\{N-1,d+1\}$, where Theorem~\ref{thm:main} guarantees $\ICNE_E(\delta)\neq\emptyset$, finding an element of $\ICNE_E(\delta)$ is PPAD-hard. Goldberg and Katzman \cite{GK23} prove PPAD-completeness of pure approximate equilibria in Lipschitz polymatrix games; their result is an analogy, not a proof.
+\end{conjecture}
+
+%======================================================================
+\section{The algorithm RSRC and its guarantees}\label{sec:algo}
+
+Under D1, define the relaxed potential on $X=\prod_i\Delta(\cP_i)$:
+\[\bar\Psi(x)=\sum_i\sum_px_i(p)\big[\tilde\pi_i(p)-\gamma\langle t_i(p),\hat\xi\rangle\big]-\tfrac12\Big\|\sum_i\abar_i(x_i)\Big\|_M^2.\]
+Its partial gradient is $\partial\bar\Psi/\partial x_i(p)=\tilde\pi_i(p)-\gamma\langle t_i(p),\hat\xi\rangle-\langle a_i(p),M\Abar(x)\rangle$. The FW gap is $g(x)=\sum_i[\max_p\partial_{i,p}\bar\Psi(x)-\langle x_i,\partial_i\bar\Psi(x)\rangle]$. Its certified version $g^U(x)$ replaces each max by the relaxation bound $\mathcal U_i$. For a mixed $x'$ write $V_j(x'_j)=\sum_px'_j(p)\|a_j(p)-\abar_j(x'_j)\|_M^2$, and let $R_M(S)$ denote the $M$-circumradius of $S$.
+
+\begin{algorithm}[t]
+\caption{RSRC: Relax, Sparsify, Round, Certify}\label{alg:rsrc}
+\begin{algorithmic}[1]
+\Require oracles $\mathcal O_i,\mathcal U_i$; weights $w$; traffic box $\Xi$ and point $\hat\xi\in\Xi$; tolerance $\eta_{\rm FW}$; regime D1 or D2
+\State \textbf{Relax.}
+\If{D1}
+ \State $x\gets$ any pure profile. \textbf{repeat}: for each $i$, $s_i\gets\mathcal O_i(M\Abar(x),0,\gamma\hat\xi,M)$, a maximiser of $\partial_i\bar\Psi(x)$
+ \State \hspace{1em} compute $g(x)$; exact line search on $x+\gamma(s-x)$; \textbf{until} $g(x)\le\eta_{\rm FW}$ \Comment{Thm.~\ref{thm:jaggi}}
+\Else
+ \State double oracle: restricted sets $\cP_i^0$; \textbf{repeat}: $x\gets$ mixed equilibrium of the restricted game; query $\mathcal O_i(0,M\Abar_{-i}(x),\gamma\hat\xi,0)$
+ \State \hspace{1em} add improving plans; \textbf{until} no carrier has a plan better than its restricted value \Comment{Prop.~\ref{prop:do}}
+\EndIf
+\State \textbf{Sparsify.} Solve the LP $\max\ \sum_i\langle x'_i,c_i\rangle$ s.t.\ $x'\in\prod_i\Delta(\supp x_i)$, $\sum_i\abar_i(x'_i)=\Abar(x)$, with $c_i=\tilde\pi_i-\gamma\langle t_i,\hat\xi\rangle$ (D1) or $c_i=0$ (D2); return a vertex $x'$; $J\gets\{j:|\supp x'_j|\ge2\}$ \Comment{Thm.~\ref{thm:sf}}
+\State \textbf{Round.} For $j\notin J$: $p_j\gets$ the unique support plan.
+\If{D1} for $j\in J$ in any order: $p_j\gets\arg\max_{p\in\supp x'_j}\Phi(p_{\le j}=\cdot)$, where $\Phi$ is the conditional expectation \eqref{eq:condexp}
+\Else\ for $j\in J$: sample $p_j\sim x'_j$ (repeat until $\hat\delta(p)\le$ target), or take any $p_j\in\supp x'_j$
+\EndIf
+\State \textbf{Certify.} For each $i$: $A^E_i(p)\gets$ LP \eqref{eq:EthrLP} (or cutting planes with $\mathcal O_i$); $\delta_{\rm cert}\gets\max_iA^E_i(p)$;
+\State \hspace{1em} exploitability bracket $[\ub_i(\mathcal O_i\text{-plan})-\ub_i(p_i),\ \mathcal U_i-\ub_i(p_i)]$ at $(A_{-i}(p),\mu)$ for $\mu\in\{\hat\xi\}$ (and the corners of $\Xi$ for robustness);
+\State \hspace{1em} D1: $\eta_{\rm cert}\gets\bar\Psi(x)+g^U(x)-\Psi_{\hat\xi}(p)$
+\State \Return $p$, $\delta_{\rm cert}$, exploitability bracket, and $\eta_{\rm cert}$ (D1)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[D1: guarantee of RSRC]\label{thm:D1} \PROVED\ (technique classical: \cite{AE76,UB16,BLOPW23})
+Under D1, let $x\in X$ be any point returned by the relaxation phase, $x'$ the sparsified vertex and $p$ the rounded profile. Then:
+\begin{enumerate}[label=(\alph*)]
+\item $\bar\Psi$ is concave on $X$, equals $\Psi_{\hat\xi}$ at pure profiles, and $\bar\Psi^*:=\max_X\bar\Psi\ge\max_\sigma\Psi_{\hat\xi}(\sigma)$;
+\item $\bar\Psi^*\le\bar\Psi(x)+g(x)\le\bar\Psi(x)+g^U(x)$;
+\item $\bar\Psi(x')\ge\bar\Psi(x)$ and $|J|\le\min\{N,d_L\}$, where $d_L=\dim\spn\bigcup_i(a_i(\supp x_i)-a_i(\supp x_i))$;
+\item $\Psi_{\hat\xi}(p)\ge\bar\Psi(x')-\tfrac12\sum_{j\in J}V_j(x'_j)\ge\bar\Psi(x)-\tfrac12\min\{N,d_L\}\max_jR_M(a_j(\supp x_j))^2$;
+\item $p$ is an $\eta$-Nash equilibrium of $G(\hat\xi)$ with $\eta\le\eta_{\rm cert}=\bar\Psi(x)+g^U(x)-\Psi_{\hat\xi}(p)\le g^U(x)+\tfrac12\sum_{j\in J}V_j(x'_j)$. The bound $\eta_{\rm cert}$ is valid even if $\mathcal O_i$ is heuristic, provided $\mathcal U_i$ is a valid upper bound;
+\item for every $\delta\ge0$, each $p_i$ is $\eta$-optimal at the centre belief $(A_{-i}(p),\hat\xi)\in K_i^\delta(p)$; that is, $p$ is an $\eta$-relaxed element of $\ICNE_E(\delta)$;
+\item running the same procedure on $G^\Gamma_\delta$ (Lemma~\ref{lem:mixture}), which is again D1, gives an $\eta$-$\Gamma$-maximin equilibrium with the same certificate.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) $x\mapsto\Abar(x)$ is linear, and $\|\cdot\|_M^2$ is convex because $M\succeq0$; the remaining terms are linear. At a vertex, $\Abar=A(\sigma)$ and the linear term equals $\sum_i\tilde\pi_i(\sigma_i)-\gamma\langle t_i,\hat\xi\rangle$. The maximum over the larger set $X$ is at least the maximum over its vertices.
+
+(b) By concavity, $\bar\Psi(y)\le\bar\Psi(x)+\langle\nabla\bar\Psi(x),y-x\rangle\le\bar\Psi(x)+\max_{s\in X}\langle\nabla\bar\Psi(x),s-x\rangle=\bar\Psi(x)+g(x)$. The maximum of a linear function over the product of simplices is attained at a vertex and splits by carrier, and $\mathcal U_i$ bounds each carrier's term from above.
+
+(c) $x$ restricted to supports is feasible for the LP. The LP's feasible set is $\Lambda(\Abar(x))$ of Theorem~\ref{thm:sf} with $\cP_i$ replaced by $\supp x_i$. A vertex optimum exists, and its objective is at least that of $x$. The quadratic term is unchanged because $\Abar(x')=\Abar(x)$, so $\bar\Psi(x')\ge\bar\Psi(x)$. Theorem~\ref{thm:sf} bounds $|J|$.
+
+(d) Let the $p_j$, $j\in J$, be independent with laws $x'_j$, and keep the other carriers fixed. Write $e=\sum_{j\in J}(a_j(p_j)-\abar_j(x'_j))$, which has mean $0$. Then
+$\E[\Psi_{\hat\xi}(p)]=\sum_i\langle x'_i,c_i\rangle-\tfrac12\E\|\Abar(x')+e\|_M^2=\bar\Psi(x')-\tfrac12\E\|e\|_M^2$. By independence and zero means the cross terms vanish, so $\E\|e\|_M^2=\sum_{j\in J}V_j(x'_j)$. For a finite random vector $Y$ supported in $S$ and any centre $o$, $\E\|Y-\E Y\|_M^2\le\E\|Y-o\|_M^2\le R_M(S)^2$, which gives $V_j\le R_M(a_j(\supp x_j))^2$. \emph{Derandomisation.} Fix the carriers of $J$ one by one. With the first carriers fixed, the conditional expectation is
+\begin{equation}\label{eq:condexp}
+\Phi=\sum_{i\ \rm fixed}c_i(p_i)+\sum_{i\ \rm free}\langle x'_i,c_i\rangle-\tfrac12\|\mu_{\rm cur}\|_M^2-\tfrac12\sum_{i\ \rm free}V_i(x'_i),
+\end{equation}
+where $\mu_{\rm cur}$ is the aggregate with fixed carriers at their plans and free carriers at their means. This expression is exact by the same computation and independence. It is an average over the next carrier's choices, so the maximising choice does not decrease it. After $|J|$ steps the value is deterministic and at least the initial $\E[\Psi_{\hat\xi}(p)]$.
+
+(e) For every $i$ and $p'$, by the potential identity (Proposition~\ref{prop:D1exists}),
+\[u_i(p',p_{-i})-u_i(p)=\Psi_{\hat\xi}(p',p_{-i})-\Psi_{\hat\xi}(p)\le\max_\sigma\Psi_{\hat\xi}-\Psi_{\hat\xi}(p)\le\bar\Psi^*-\Psi_{\hat\xi}(p),\]
+and (b) bounds the last expression. The final inequality in (e) combines (c) and (d).
+
+(f) The centre belief is in every box, and at the centre $\ub_i=u_i$; (e) applies.
+
+(g) $G^\Gamma_\delta$ has the same coupling and private profits $\pi^\Gamma_i$. It is D1, and the argument repeats with $\hat\xi$ replaced by $\overline\mu$ inside $\pi^\Gamma$ (Lemma~\ref{lem:mixture}).
+\end{proof}
+
+\begin{theorem}[D1: oracle complexity]\label{thm:fw} \CLASSICAL\ \cite{Jaggi13}.\\ The constants are \PROVED.
+Let $D_i=\max_{p,p'\in\cP_i}\|a_i(p)-a_i(p')\|_M$. Frank--Wolfe on $-\bar\Psi$ with exact oracles reaches $g(x)\le\eta_{\rm FW}$ within $K=\max\{2,\lceil\frac{27}{4}(\sum_iD_i)^2/\eta_{\rm FW}\rceil\}$ iterations, that is, $NK$ oracle calls. With $\eta_{\rm FW}=\tfrac12\min\{N,d\}R^2$, where $R=\max_jR_M(a_j(\cP_j))$, the certified $\eta$ of Theorem~\ref{thm:D1}(e) is at most $\min\{N,d\}R^2$, after $O\big(N(\sum_iD_i)^2/(\min\{N,d\}R^2)\big)$ oracle calls.
+\end{theorem}
+\begin{proof}
+For $f=-\bar\Psi$, the expression in $C_f$ equals $\frac{2}{\gamma^2}\cdot\frac12\|\gamma\sum_i(\abar_i(s_i)-\abar_i(x_i))\|^2_M=\|\sum_i(\abar_i(s_i)-\abar_i(x_i))\|_M^2$, because the linear part cancels exactly. By the triangle inequality and $\|\abar_i(s_i)-\abar_i(x_i)\|_M\le D_i$, $C_f\le(\sum_iD_i)^2$. Theorem~\ref{thm:jaggi} gives the iteration bound. Each iteration calls each $\mathcal O_i$ once, because the linear maximisation over the product of simplices separates by carrier.
+\end{proof}
+
+\begin{proposition}[D2: correctness of the double-oracle phase]\label{prop:do} \CLASSICAL\ (McMahan, Gordon and Blum \cite{MGB03}; proof included)
+If the restricted game is solved exactly and the oracles are exact, the double-oracle phase stops after at most $\sum_i|\cP_i|$ rounds with a relaxed equilibrium of the full game.
+\end{proposition}
+\begin{proof}
+At termination, each support plan of $x_i$ attains the restricted maximum of $\ub_i(\cdot;\Abar_{-i}(x),\hat\xi)$, and no plan of $\cP_i$ exceeds it. By Proposition~\ref{prop:relaxed} this is a relaxed equilibrium. Each non-terminal round adds at least one new plan, and plan sets are finite.
+\end{proof}
+
+\begin{theorem}[D2: guarantee of RSRC]\label{thm:D2} \PROVED\
+Under D2, suppose the relaxation phase returns a relaxed equilibrium $x$. Then the Sparsify and Round phases return $p\in\prod_jB_j(x)$ with $p\in\ICNE_E(\delta)$ for all $\delta\ge\hat\delta(p)$. Moreover $\hat\delta(p)$ satisfies the second bound of Theorem~\ref{thm:main}(b) for any choice in Round, and the third bound for a successful sample. Each sample succeeds with probability at least $1-2d\exp(-2t^2/(k^\sharp\bar\sigma^2))$ for target $t+\bar\rho$. Sparsify and Round take time polynomial in $\sum_j|\supp x_j|$ and $d$. The relaxation phase cannot run in polynomial time in general unless PPAD $\subseteq$ FP (Proposition~\ref{prop:ppad}).
+\end{theorem}
+\begin{proof}
+With $c_i=0$ the Sparsify LP is a feasibility LP over $\Lambda(\Abar(x))$ with $\cP_j$ replaced by $\supp x_j\subseteq B_j(x)$. Its vertices have $|J|\le k^\sharp$. The rest is Theorem~\ref{thm:main}(a)--(b),(d).
+\end{proof}
+
+\begin{theorem}[A posteriori certificates]\label{thm:cert} \PROVED\
+Let $p$ be any pure profile.
+\begin{enumerate}[label=(\alph*)]
+\item The exact E-threshold of carrier $i$ is the optimal value of the linear program
+\begin{equation}\label{eq:EthrLP}
+\begin{aligned}A_i^E(p)=\min\{\delta\ge0:\ &m\ge0,\ \xi\in\Xi,\ |m_k-A_{-i,k}(p)|\le\delta w_k\ \forall k,\\ &\ub_i(p_i;m,\xi)\ge\ub_i(p';m,\xi)\ \forall p'\in\cP_i\},\end{aligned}
+\end{equation}
+with value $+\infty$ if infeasible. Then $p\in\ICNE_E(\delta)\iff\delta\ge\max_iA^E_i(p)$, and the minimum is attained. With an exact oracle and implicit $\cP_i$, Kelley's cutting-plane method on \eqref{eq:EthrLP} terminates finitely; each cut is a distinct plan.
+\item For any anchors $m^i\ge0$ and $\xi^i\in\Xi$ with $p_i\in\arg\max\ub_i(\cdot;m^i,\xi^i)$, $A_i^E(p)\le\|A_{-i}(p)-m^i\|_{w,\infty}$.
+\item For a heuristic plan $h_i$ and a valid bound $\mathcal U_i(m,\xi)\ge\max_{p'}\ub_i(p';m,\xi)$, the regret of $p_i$ at $(m,\xi)$ lies in $[\ub_i(h_i)-\ub_i(p_i),\ \mathcal U_i-\ub_i(p_i)]$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) By Lemma~\ref{lem:reduction}, $p_i$ is E-admissible at width $\delta$ iff the system in \eqref{eq:EthrLP} with that $\delta$ is feasible. The feasibility set in $\delta$ is upward closed by Lemma~\ref{lem:mono}. Since \eqref{eq:EthrLP} is an LP, its infimum is attained when finite. Kelley's method adds one violated constraint per iteration, given by the oracle's best plan at the current $(m,\xi)$. A plan already present cannot be violated, so new cuts are distinct and there are finitely many.
+(b) The anchor is feasible in \eqref{eq:EthrLP} with $\delta=\|A_{-i}(p)-m^i\|_{w,\infty}$.
+(c) This is immediate from the definitions.
+\end{proof}
+
+\begin{corollary}[Shared zone capacities, D1]\label{cor:cap} \PROVED\ (classical technique \cite{AE76})
+Suppose the relaxation is solved with the additional constraints $\Abar_k(x)\le C_k$ for $k\in\mathcal K$. Then the Sparsify step preserves them exactly, and the rounded profile satisfies $A_k(p)\le C_k+\sum_{j\in J}s_{jk}\le C_k+\min\{N,d_L\}\max_js_{jk}$.
+\end{corollary}
+\begin{proof}
+$\Abar(x')=\Abar(x)$, and $A(p)-\Abar(x')=\sum_{j\in J}(a_j(p_j)-\abar_j(x'_j))$ with $|a_{jk}(p_j)-\abar_{jk}(x'_j)|\le s_{jk}$.
+\end{proof}
+
+%======================================================================
+\section{Comparative statics in the imprecision width}\label{sec:cs}
+
+\begin{proposition}[Monotone consequences of nesting]\label{prop:cs} \PROVED\
+Let $C\in\{E,M,ID\}$ and let $f$ be any function of profiles (for example an aggregate coordinate $A_k$ or welfare $W$). On $\{\delta:\ICNE_C(\delta)\ne\emptyset\}$, $\underline f_C(\delta)=\min_{\ICNE_C(\delta)}f$ is nonincreasing and $\overline f_C(\delta)=\max_{\ICNE_C(\delta)}f$ is nondecreasing. If $W^*>0$ and $W>0$ on all profiles, $\mathrm{PoA}_C(\delta)=W^*/\underline W_C(\delta)$ is nondecreasing and $\mathrm{PoS}_C(\delta)=W^*/\overline W_C(\delta)$ is nonincreasing. Both are step functions of $\delta$ with at most $\prod_i|\cP_i|$ steps. For $C=\Gamma$ none of these monotonicity statements holds in general (Example~\ref{ex:gamma}).
+\end{proposition}
+\begin{proof}
+The minimum over a growing finite set does not increase, and the maximum does not decrease (Lemma~\ref{lem:mono}). Each profile $\sigma$ enters $\ICNE_C(\delta)$ at a single threshold $\Phi_C(\sigma)=\inf\{\delta:\sigma\in\ICNE_C(\delta)\}$, by monotonicity, and never leaves. So the sets change at most at $\prod_i|\cP_i|$ values.
+\end{proof}
+
+\begin{proposition}[Existence threshold sandwich]\label{prop:sandwich} \PROVED\
+Under D1, $\delta^C_0=0$ for $C\in\{E,M,ID\}$. Under D2, $0\le\delta_0^{ID}\le\delta_0^M\le\delta_0^E\le\sigma_{\max}\min\{N-1,d+1,1+\sqrt{d\ln(2d)/2}\}$. Equality $\delta_0^E=\delta_0^M=(N-1)\bar\rho$ is attained (Proposition~\ref{prop:tight}). Deciding $\delta^E_0=0$ is NP-complete (Theorem~\ref{thm:np}).
+\end{proposition}
+\begin{proof}
+This combines Proposition~\ref{prop:D1exists}, Theorem~\ref{thm:main}(c), Proposition~\ref{prop:tight} and Theorem~\ref{thm:np}.
+\end{proof}
+
+\begin{proposition}[Symmetric continuous benchmark; corrected statement]\label{prop:sym} \PROVED\
+Consider one zone, D1 and $N$ symmetric carriers with continuous $q_i\ge0$, $\tau_i=hq_i$ ($h>0$), marginal cost $f$ and payoff
+\[U_i=q_i(\alpha-b(q_i+m_Q))-\gamma hq_i(\xi+c(hq_i+m_T))-fq_i.\]
+Beliefs on $(m_Q,m_T)$ lie in the box of half-widths $\delta w_Q,\delta w_n$ around $(Q_{-i},T_{-i})$, and $\xi\in[\hat\mu-\kappa/2,\hat\mu+\kappa/2]$. Let $\beta=b+\gamma ch^2$, $a''=\alpha-f-\gamma h\hat\mu$ and $\mathcal E=\delta(bw_Q+\gamma chw_n)+\gamma h\kappa/2$. Assume $a''>(2N-1)\mathcal E$ and that clipping is not active at the profiles below, which holds if $\delta w_Q\le(N-1)q_{\min}$ and $\delta w_n\le(N-1)hq_{\min}$, with $q_{\min}=(a''-(2N-1)\mathcal E)/((N+1)\beta)$. Then the set of aggregates of E-admissible imprecise equilibria is exactly
+\[\Big[\frac{Na''-N\mathcal E}{(N+1)\beta},\ \frac{Na''+N\mathcal E}{(N+1)\beta}\Big],\]
+of width $2N\mathcal E/((N+1)\beta)$. Moreover
+\[\operatorname{sign}\frac{\partial}{\partial c}\frac{\mathcal E}{\beta}=\operatorname{sign}\Big(\delta\,b\,(w_n-hw_Q)-\gamma h^2\kappa/2\Big).\]
+So stronger congestion \emph{widens} the interval iff $\delta b(w_n-hw_Q)>\gamma h^2\kappa/2$. With $\kappa=0$ this reads $w_n>hw_Q$, which corrects the earlier unconditional claim that congestion shrinks the interval.
+\end{proposition}
+\begin{proof}
+$U_i$ is strictly concave in $q_i$ ($\partial^2U_i/\partial q_i^2=-2\beta<0$). Its unique maximiser at belief $(m_Q,m_T,\xi)$ is $q_i=\max\{0,(\alpha-f-\gamma h\xi-bm_Q-\gamma chm_T)/(2\beta)\}$. Write $m_Q=Q_{-i}+\epsilon_Q$, $m_T=hQ_{-i}+\epsilon_T$ (D1 with $\tau=hq$ gives $T_{-i}=hQ_{-i}$) and $\xi=\hat\mu+\epsilon_\xi$. Then the interior first-order condition is $2\beta q_i+\beta Q_{-i}=a''+e_i$, with $e_i=-(b\epsilon_Q+\gamma ch\epsilon_T+\gamma h\epsilon_\xi)$. As the belief ranges over the unclipped box, $e_i$ ranges over exactly $[-\mathcal E,\mathcal E]$: it is a sum of three independent intervals centred at $0$. Clipping can only shrink the set of attainable $e_i$, so in every case the attainable $e_i$ lie in $[-\mathcal E,\mathcal E]$.
+
+\emph{No equilibrium has a zero coordinate.} Suppose $\sigma\in\ICNE_E(\delta)$ with $I_0=\{i:q_i=0\}\ne\emptyset$, and let $I_1$ be the rest. For $i\in I_0$, $q_i=0$ is optimal at some admissible belief iff $a''+e_i-\beta Q_{-i}\le0$ for some attainable $e_i$, which implies $\beta Q\ge a''-\mathcal E$ (here $Q_{-i}=Q$). For $j\in I_1$, $\beta(q_j+Q)=a''+e_j\le a''+\mathcal E$, so $q_j\le2\mathcal E/\beta$ and $Q\le2(N-1)\mathcal E/\beta$. Together, $a''\le(2N-1)\mathcal E$, which contradicts the hypothesis.
+
+\emph{Only if.} Hence every $\sigma\in\ICNE_E(\delta)$ is interior: there is $e\in[-\mathcal E,\mathcal E]^N$ with $\beta(q_i+Q)=a''+e_i$ for all $i$. Summing gives $(N+1)\beta Q=Na''+\sum_ie_i$, so $Q$ lies in the stated interval.
+
+\emph{If.} For any $e$ in the cube put $Q=(Na''+\sum e)/((N+1)\beta)$ and $q_i=(a''+e_i)/\beta-Q=(a''+(N+1)e_i-\sum_je_j)/((N+1)\beta)$. The smallest such $q_i$ is at least $(a''-(2N-1)\mathcal E)/((N+1)\beta)=q_{\min}>0$, so the interior first-order condition characterises the best response. The no-clipping hypothesis makes the box unclipped at this profile: $Q_{-i}\ge(N-1)q_{\min}\ge\delta w_Q$, and likewise for $T$. So each $e_i$ is attainable, and the profile is in $\ICNE_E(\delta)$. As $\sum e$ ranges over $[-N\mathcal E,N\mathcal E]$, $Q$ fills the stated interval. For the sign: $\partial_c\mathcal E=\delta\gamma hw_n$ and $\partial_c\beta=\gamma h^2$, so $\partial_c(\mathcal E/\beta)=\gamma h[\delta w_n\beta-h\mathcal E]/\beta^2$. Substituting, $\delta w_n\beta-h\mathcal E=\delta bw_n-\delta bhw_Q-\gamma h^2\kappa/2$, because the $\gamma ch^2$ terms cancel.
+\end{proof}
+
+%======================================================================
+\section{Price of anarchy and price of stability}\label{sec:poa}
+
+\begin{lemma}[Imprecise equilibria are approximate equilibria]\label{lem:transfer} \PROVED\
+Let $\sigma\in\ICNE_C(\delta)$ and $\mu^t\in\Xi$. Then $\sigma$ is an $\varepsilon$-Nash equilibrium of $G(\mu^t)$ with
+\begin{itemize}
+\item for $C\in\{E,M\}$: $\varepsilon_i\le\delta L_i(\sigma)+\gamma\sum_z\kappa_zT_{iz}(\sigma)$ (notation of Corollary~\ref{cor:eps});
+\item for $C=ID$: $\varepsilon_i\le2\delta H_i+2\gamma\Theta_i$, where $H_i=\max_{p}\sum_kw_kM_k\varphi_{ik}(p)$ and $\Theta_i=\max_p\sum_z\kappa_zt_{iz}(p)$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+Write $k^t=(A_{-i}(\sigma),\mu^t)\in K_i^\delta(\sigma)$ and $\Delta(p',k)=\ub_i(p';k)-\ub_i(\sigma_i;k)$, which is affine in $k$. For any $k=(m,\xi)$ in the (unclipped) box, $|\Delta(p',k)-\Delta(p',k^t)|\le\delta\sum_kw_kM_k|\Delta\varphi_{ik}|+\gamma\sum_z\kappa_z|\Delta t_{iz}|$. \emph{E:} take the witness $k$, at which $\Delta(p',k)\le0$. \emph{M:} for each $p'$, maximality and compactness (Lemma~\ref{lem:reduction}) give $k_{p'}$ with $\Delta(p',k_{p'})\le0$. \emph{ID:} $\ub_i(p';k^t)-\ub_i(\sigma_i;k^t)\le[\ub_i(p';k^t)-\min_K\ub_i(p')]+[\max_K\ub_i(\sigma_i)-\ub_i(\sigma_i;k^t)]$, since $\max_K\ub_i(\sigma_i)\ge\min_K\ub_i(p')$. Each bracket is at most $\delta H_i+\gamma\Theta_i$, because $\ub$ has coefficients $-M\varphi$ and $-\gamma t$.
+\end{proof}
+
+\begin{proposition}[Robust PoA under smoothness]\label{prop:smooth} \PROVED, conditional on smoothness.
+Assume that $W(\sigma)\ge\sum_iU_i(\sigma)$ for all $\sigma$ (in Example~\ref{ex:cc} with nonnegative charges, $W-\sum_iU_i=\sum_z\frac{b_z}{2}Q_z^2+\text{revenue}\ge0$), that $W^*>0$, and that $G(\mu^t)$ is $(\lambda,\mu)$-smooth: $\sum_iU_i(\sigma^*_i,\sigma_{-i})\ge\lambda W(\sigma^*)-\mu W(\sigma)$ for all $\sigma$, for an optimal $\sigma^*$. Then for $C\in\{E,M,ID\}$ and $\mathcal E(\delta)=\max_{\sigma\in\ICNE_C(\delta)}\sum_i\varepsilon_i(\sigma)$ from Lemma~\ref{lem:transfer}, whenever $\lambda W^*>\mathcal E(\delta)$,
+\[\mathrm{PoA}_C(\delta)\le\frac{1+\mu}{\lambda-\mathcal E(\delta)/W^*}.\]
+\end{proposition}
+\begin{proof}
+For $\sigma\in\ICNE_C(\delta)$: $W(\sigma)\ge\sum_iU_i(\sigma)\ge\sum_i[U_i(\sigma^*_i,\sigma_{-i})-\varepsilon_i]\ge\lambda W^*-\mu W(\sigma)-\mathcal E(\delta)$. Rearrange.
+\end{proof}
+
+\noindent We do \emph{not} claim smoothness constants for the Cournot--congestion game with arbitrary private routing costs (Section~\ref{sec:notclaimed}).
+
+\begin{proposition}[Robust price of stability via the potential, D1]\label{prop:pos} \PROVED\
+In Example~\ref{ex:cc} under D1, with zero charges and $\mu^t=\hat\mu$, let $\sigma^*$ maximise $W$. For any profile $\sigma$ with $\Psi_{\hat\mu}(\sigma)\ge\max\Psi_{\hat\mu}-\eta$,
+\[W(\sigma)\ge W^*-\sum_z\Big[\frac{b_z}{2}\sum_iq^{*2}_{iz}+\frac{\gamma c_z}{2}\Big(1-\frac1N\Big)T_z(\sigma)^2\Big]-\eta.\]
+In particular, a potential maximiser $\sigma^\Psi$ ($\eta=0$) lies in $\ICNE_E(\delta)$ for every $\delta$, so
+\[\mathrm{PoS}_C(\delta)\le W^*/\big(W^*-B(\sigma^\Psi)\big)\quad\text{for all }\delta\ge0,\ C\in\{E,M,ID\},\]
+whenever the denominator is positive. The output $p$ of RSRC satisfies the displayed bound with $\eta=\eta_{\rm cert}$.
+\end{proposition}
+\begin{proof}
+With $\pi_i$ as in Example~\ref{ex:cc} and $x=\tau$, direct expansion gives
+\[W-\Psi_{\hat\mu}=\sum_z\Big[\frac{b_z}{2}\sum_iq_{iz}^2-\frac{\gamma c_z}{2}\Big(T_z^2-\sum_i\tau_{iz}^2\Big)\Big].\]
+The $\alpha$, $\hat\mu$ and $C_i$ terms cancel. Indeed $\Psi_{\hat\mu}=\sum_z[\alpha_zQ_z-\frac{b_z}{2}\sum_iq_{iz}^2-\frac{\gamma c_z}{2}\sum_i\tau_{iz}^2-\gamma\hat\mu_zT_z-\frac{b_z}{2}Q_z^2-\frac{\gamma c_z}{2}T_z^2]-\sum_iC_i$. By Cauchy--Schwarz, $\sum_i\tau_{iz}^2\ge T_z^2/N$, and $\sum q^2\ge0$, so $W(\sigma)\ge\Psi_{\hat\mu}(\sigma)-\sum_z\frac{\gamma c_z}{2}(1-\frac1N)T_z(\sigma)^2$. Next, $\Psi_{\hat\mu}(\sigma)\ge\Psi_{\hat\mu}(\sigma^*)-\eta$. Finally, $\Psi_{\hat\mu}(\sigma^*)=W^*-\sum_z[\frac{b_z}{2}\sum q^{*2}-\frac{\gamma c_z}{2}(T^{*2}-\sum\tau^{*2})]\ge W^*-\sum_z\frac{b_z}{2}\sum_iq_{iz}^{*2}$, because $T^2\ge\sum\tau^2$ for $\tau\ge0$. Membership of $\sigma^\Psi$ in every $\ICNE_E(\delta)$ is Proposition~\ref{prop:D1exists}, and Lemma~\ref{lem:nesting} extends it to M and ID. For RSRC, Theorem~\ref{thm:D1}(e) gives $\Psi_{\hat\mu}(p)\ge\bar\Psi^*-\eta_{\rm cert}\ge\max\Psi-\eta_{\rm cert}$.
+\end{proof}
+
+%======================================================================
+\section{What is NOT claimed, and known prior art}\label{sec:notclaimed}
+
+\paragraph{Not claimed.}
+\begin{enumerate}[label=(N\arabic*)]
+\item \emph{Novelty of Shapley--Folkman rounding for nonconvex aggregative games}, or of $N$-independent $\varepsilon$-Nash bounds from a convexified equilibrium. This is \cite{LOW23} (sum-aggregative games, Shapley--Folkman on generators, $(\sqrt q+1)$ bound, gradient-proximal algorithm with $O(n^3)$ iterations), building on Starr \cite{Starr69} and Shapley--Folkman. Corollary~\ref{cor:eps} is a restatement in our notation.
+\item \emph{Novelty of Frank--Wolfe on the relaxation with randomized or derandomized rounding and duality-gap bounds:} \cite{AE76,UB16,BLOPW23,DTdA24}, and \cite{DX26} for refined Shapley--Folkman bounds. Theorem~\ref{thm:D1} adapts this to the D1 potential with explicit constants.
+\item \emph{Novelty of NP-completeness of pure-equilibrium existence in polymatrix-type games.} This is known (Apt, Simon and Wojtczak \cite{ASW22}; Carvalho, Lodi and Pedroso \cite{CLP22} for integer programming games). Theorem~\ref{thm:np} is a direct kernel reduction specialised to our class and extended to the four credal criteria and to a range of widths.
+\item \emph{Column generation, double oracle, Cut-and-Play or ZERO Regrets as new methods} \cite{MGB03,CDLS25,DS23,CLP22}.
+\item \emph{Smoothness constants} for the Cournot--congestion game with arbitrary private routing costs. Proposition~\ref{prop:smooth} is conditional.
+\item \emph{Results for nonaffine (BPR) congestion} beyond the remark in Section~\ref{sec:relaxed}.
+\item \emph{Zone factorisation} of any equilibrium set or threshold. The earlier ``zone-product'' claims are withdrawn.
+\item \emph{Polynomial-time computation} of the D2 relaxation (impossible unless PPAD $\subseteq$ FP), or of an exact pure equilibrium under D1 with a routing oracle (NP-hard already for $N=1$).
+\item \emph{That the Shapley--Folkman step improves the bounds in the city instances.} With $N\le d$ it does not (Remark~\ref{rem:answers}(3)).
+\end{enumerate}
+
+\paragraph{Closest prior art and its relation to this note.}
+\begin{itemize}
+\item Approximate pure equilibria in large games: Kalai \cite{Kalai04} (self-purification), Azrieli and Shmaya \cite{AS13} (Lipschitz games, $\varepsilon\to0$ as $N\to\infty$), Goldberg and Katzman \cite{GK23} (PPAD-completeness of pure approximate equilibria in Lipschitz polymatrix games), Rashid \cite{Rashid83}, and Carmona and Podczeck \cite{CP09}. These concern the precise game with $\varepsilon\to0$. We use fixed $N$ and exact equilibria of the imprecise game.
+\item Ambiguity in games: Dow and Werlang, Klibanoff \cite{Klibanoff96}, Lo \cite{Lo96} (equilibrium in beliefs), Marinacci \cite{Marinacci00}, Beauchêne \cite{Beauchene16} (pure equilibrium in beliefs), Crespi, Radi and Rocca \cite{CRR20} (robust equilibria are $\varepsilon$-Nash, the converse direction of our Theorem~\ref{thm:main}), Aghassi and Bertsimas \cite{AB06}, Stauber \cite{Stauber11}. None of these gives an $N$-uniform width that guarantees pure E-admissible equilibria in nonconvex aggregative games, with a tight example, as far as our searches show (see \texttt{prior\_art.md}).
+\item Approximate equilibria and PoA as a function of slack: Christodoulou, Koutsoupias and Spirakis \cite{CKS11}. Ambiguity-radius aggregative games: Feik, Lanzetti, Bolognani, Dörfler and Paccagnan \cite{Feik26} (convex games, optimal-transport ambiguity, Wardrop-type equilibria).
+\item Implementation through tolls with best-response queries: Bhaskar, Ligett, Schulman and Swamy \cite{BLSS19}.
+\end{itemize}
+
+\paragraph{Narrowest defensible novelty claim.} For finite aggregative games with affine coupling and credal-box beliefs (E-admissibility, maximality, interval dominance), we give (i) an exact rounding (absorption) theorem with a width bound uniform in $N$, attained by an example; (ii) its contrast with $\Gamma$-maximin; (iii) strong NP-completeness of existence below an explicit width under D2, hence inapproximability of the existence threshold, against unconditional existence under D1; (iv) an algorithm whose output carries a certificate of exact imprecise-equilibrium width (D2) or of the potential gap (D1). The ingredients are classical; the combination, as far as we could find, is not published.
+
+%======================================================================
+\section{Open problems}\label{sec:open}
+\begin{enumerate}
+\item Conjecture~\ref{conj:witness} (PPAD-hardness of finding a pure $\ICNE_E$ witness above the guaranteed width).
+\item Whether the factor $\sqrt{k\ln(2d)}$ in Theorem~\ref{thm:main}(b) can be replaced by $\sqrt k$ (Spencer-type discrepancy), and a lower-bound family with $N>d$ showing growth in $d$ of $\delta_0^E$ in the $\|\cdot\|_{w,\infty}$ norm.
+\item Smoothness constants for linear Cournot with affine congestion and arbitrary private routing costs.
+\item An absorption theorem for maximality with mixed (Ellsberg) strategies, and for nonaffine congestion.
+\end{enumerate}
+
+\begin{thebibliography}{99}
+\bibitem{AB06} M.~Aghassi, D.~Bertsimas. Robust game theory. \emph{Math.\ Program.} 107 (2006) 231--273.
+\bibitem{ASW22} K.~R.~Apt, S.~Simon, D.~Wojtczak. Coordination games on weighted directed graphs. \emph{Math.\ Oper.\ Res.} 47(2) (2022) 995--1025.
+\bibitem{AE76} J.-P.~Aubin, I.~Ekeland. Estimates of the duality gap in nonconvex optimization. \emph{Math.\ Oper.\ Res.} 1(3) (1976) 225--245.
+\bibitem{AS13} I.~Azrieli, E.~Shmaya. Lipschitz games. \emph{Math.\ Oper.\ Res.} 38(2) (2013) 350--357. arXiv:1107.1520.
+\bibitem{Beauchene16} D.~Beauchêne. Solution concepts for games with ambiguous payoffs. \emph{Theory and Decision} 80(2) (2016) 245--269.
+\bibitem{BLSS19} U.~Bhaskar, K.~Ligett, L.~J.~Schulman, C.~Swamy. Achieving target equilibria in network routing games without knowing the latency functions. \emph{Games Econ.\ Behav.} 118 (2019) 533--569. arXiv:1408.1429.
+\bibitem{BLOPW23} J.~F.~Bonnans, K.~Liu, N.~Oudjane, L.~Pfeiffer, C.~Wan. Large-scale nonconvex optimization: randomization, gap estimation, and numerical resolution. \emph{SIAM J.\ Optim.} 33(4) (2023). arXiv:2204.02366.
+\bibitem{CP09} G.~Carmona, K.~Podczeck. On the existence of pure-strategy equilibria in large games. \emph{J.\ Econ.\ Theory} 144(3) (2009) 1300--1319.
+\bibitem{CLP22} M.~Carvalho, A.~Lodi, J.~P.~Pedroso. Computing equilibria for integer programming games. \emph{Eur.\ J.\ Oper.\ Res.} 303(3) (2022) 1057--1070. arXiv:2012.07082.
+\bibitem{CDLS25} M.~Carvalho, G.~Dragotto, A.~Lodi, S.~Sankaranarayanan. Integer programming games: a gentle computational overview / Cut-and-Play. arXiv:2111.05726; \emph{Oper.\ Res.} (2025).
+\bibitem{CDT09} X.~Chen, X.~Deng, S.-H.~Teng. Settling the complexity of computing two-player Nash equilibria. \emph{J.\ ACM} 56(3) (2009) 14.
+\bibitem{CKS11} G.~Christodoulou, E.~Koutsoupias, P.~G.~Spirakis. On the performance of approximate equilibria in congestion games. \emph{Algorithmica} 61 (2011) 116--140. arXiv:0804.3160.
+\bibitem{Chvatal73} V.~Chvátal. On the computational complexity of finding a kernel. Report CRM-300, Université de Montréal, 1973.
+\bibitem{CRR20} G.~P.~Crespi, D.~Radi, M.~Rocca. Insights on the theory of robust games. arXiv:2002.00225; \emph{Comput.\ Econ.} (2025).
+\bibitem{DGP09} C.~Daskalakis, P.~W.~Goldberg, C.~H.~Papadimitriou. The complexity of computing a Nash equilibrium. \emph{SIAM J.\ Comput.} 39(1) (2009) 195--259.
+\bibitem{DX26} S.~S.~Dey, J.~Xu. Asymptotically tight Lagrangian dual of smooth nonconvex problems via improved error bound of Shapley--Folkman lemma. arXiv:2601.19003 (2026).
+\bibitem{DS23} G.~Dragotto, R.~Scatamacchia. The ZERO Regrets algorithm: optimizing over pure Nash equilibria via integer programming. \emph{INFORMS J.\ Comput.} 35(5) (2023). arXiv:2111.06382.
+\bibitem{DTdA24} B.~Dubois-Taine, A.~d'Aspremont. Frank--Wolfe meets Shapley--Folkman: a systematic approach for solving nonconvex separable problems with linear constraints. arXiv:2406.18282 (2024).
+\bibitem{Feik26} M.~Feik, N.~Lanzetti, S.~Bolognani, F.~Dörfler, D.~Paccagnan. Strategically robust aggregative games. arXiv:2604.23669 (2026).
+\bibitem{Fraenkel81} A.~S.~Fraenkel. Planar kernel and Grundy with $d\le3$, $d_{out}\le2$, $d_{in}\le2$ are NP-complete. \emph{Discrete Appl.\ Math.} 3(4) (1981) 257--262.
+\bibitem{GK23} P.~W.~Goldberg, M.~J.~Katzman. PPAD-complete pure approximate Nash equilibria in Lipschitz games. arXiv:2207.09962 (SAGT 2022).
+\bibitem{Hoeffding63} W.~Hoeffding. Probability inequalities for sums of bounded random variables. \emph{J.\ Amer.\ Statist.\ Assoc.} 58 (1963) 13--30.
+\bibitem{Jaggi13} M.~Jaggi. Revisiting Frank--Wolfe: projection-free sparse convex optimization. \emph{ICML} 2013.
+\bibitem{Kalai04} E.~Kalai. Large robust games. \emph{Econometrica} 72(6) (2004) 1631--1665.
+\bibitem{Klibanoff96} P.~Klibanoff. Uncertainty, decision, and normal form games. Working paper, Northwestern University, 1996.
+\bibitem{LOW23} K.~Liu, N.~Oudjane, C.~Wan. Approximate Nash equilibria in large nonconvex aggregative games. \emph{Math.\ Oper.\ Res.} 48(3) (2023) 1791--1809. arXiv:2011.12604.
+\bibitem{Lo96} K.~C.~Lo. Equilibrium in beliefs under uncertainty. \emph{J.\ Econ.\ Theory} 71 (1996) 443--484.
+\bibitem{Marinacci00} M.~Marinacci. Ambiguous games. \emph{Games Econ.\ Behav.} 31 (2000) 191--219.
+\bibitem{MGB03} H.~B.~McMahan, G.~J.~Gordon, A.~Blum. Planning in the presence of cost functions controlled by an adversary. \emph{ICML} 2003.
+\bibitem{MS96} D.~Monderer, L.~S.~Shapley. Potential games. \emph{Games Econ.\ Behav.} 14 (1996) 124--143.
+\bibitem{Nash51} J.~Nash. Non-cooperative games. \emph{Ann.\ Math.} 54 (1951) 286--295.
+\bibitem{Rashid83} S.~Rashid. Equilibrium points of non-atomic games: asymptotic results. \emph{Econ.\ Lett.} 12 (1983) 7--10.
+\bibitem{Starr69} R.~M.~Starr. Quasi-equilibria in markets with non-convex preferences. \emph{Econometrica} 37(1) (1969) 25--38.
+\bibitem{Stauber11} R.~Stauber. Knightian games and robustness to ambiguity. \emph{J.\ Econ.\ Theory} 146(1) (2011) 248--274.
+\bibitem{Troffaes07} M.~C.~M.~Troffaes. Decision making under uncertainty using imprecise probabilities. \emph{Int.\ J.\ Approx.\ Reason.} 45 (2007) 17--29.
+\bibitem{UB16} M.~Udell, S.~Boyd. Bounding duality gap for separable problems with linear constraints. \emph{Comput.\ Optim.\ Appl.} 64(2) (2016) 355--378. arXiv:1410.4158.
+\bibitem{Zhou93} L.~Zhou. A simple proof of the Shapley--Folkman theorem. \emph{Econ.\ Theory} 3 (1993) 371--372.
+\end{thebibliography}
+
+\end{document}
