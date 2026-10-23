@@ -28,7 +28,7 @@ from pyproj import Transformer  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 PROC = ROOT / "data" / "processed"
 FIG = ROOT / "figures"
-CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork"]
+CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay"]
 
 BG = "#0b0f19"
 FG = "#d9dee8"
@@ -134,16 +134,16 @@ def plot_city_maps(datasets, norm):
 
 def plot_overview(datasets, norm):
     FIG.mkdir(exist_ok=True)
-    fig, axes = plt.subplots(2, 3, figsize=(17, 11.5), dpi=130, facecolor=BG)
-    fig.subplots_adjust(left=0.05, right=0.90, top=0.95, bottom=0.07, wspace=0.25, hspace=0.25)
+    fig, axes = plt.subplots(2, 4, figsize=(22, 11.5), dpi=130, facecolor=BG)
+    fig.subplots_adjust(left=0.04, right=0.92, top=0.95, bottom=0.07, wspace=0.25, hspace=0.25)
     flat = axes.ravel()
     last = None
-    for ax, data in zip(flat[:5], datasets):
+    for ax, data in zip(flat[:6], datasets):
         pc, _ = draw_city(ax, data, norm)
         last = pc
-    for ax in flat[:5]:
+    for ax in flat[:6]:
         ax.title.set_fontsize(8)
-    ax_t = flat[5]
+    ax_t = flat[6]
     ax_t.set_facecolor(BG)
     ax_t.axis("off")
     header = ["City", "Continent", "Pop (M)", "Zones", "Major km"]
@@ -177,11 +177,11 @@ def plot_overview(datasets, norm):
               "Population: GHSL GHS-POP R2023A, epoch 2025 (Pesaresi et al., JRC)\n"
               "Roads: OpenStreetMap contributors (ODbL), BBBike extracts",
               transform=ax_t.transAxes, ha="center", color=FG, fontsize=7.5)
-    for ax in flat[len(datasets):5]:
+    for ax in list(flat[len(datasets):6]) + [flat[7]]:
         ax.set_visible(False)
     sm = ScalarMappable(norm=norm, cmap=CMAP)
     sm.set_array([])
-    cax = fig.add_axes([0.925, 0.12, 0.012, 0.76])
+    cax = fig.add_axes([0.94, 0.12, 0.010, 0.76])
     cb = fig.colorbar(sm, cax=cax)
     cb.set_label("people per km$^2$ (log scale, shared across panels)", color=FG)
     cb.ax.tick_params(colors=FG, labelsize=8)
@@ -199,7 +199,7 @@ def main(argv=None):
     if unknown:
         parser.error(f"unknown city: {', '.join(unknown)}")
 
-    datasets = [load_city(c) for c in CITIES]          # overview always needs all five
+    datasets = [load_city(c) for c in CITIES]          # overview always needs all cities
     dens = np.concatenate([d["density"] for d in datasets])
     norm = LogNorm(vmin=max(float(dens.min()), 1.0), vmax=float(dens.max()))
     print(f"density colour scale: {norm.vmin:.1f} to {norm.vmax:.0f} people per km^2")

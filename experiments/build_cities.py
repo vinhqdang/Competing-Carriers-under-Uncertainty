@@ -24,6 +24,7 @@ CITIES = {
     "Moscow": {"display_name": "Moscow", "continent": "Europe"},
     "BuenosAires": {"display_name": "Buenos Aires", "continent": "South America"},
     "NewYork": {"display_name": "New York", "continent": "North America"},
+    "Bombay": {"display_name": "Mumbai", "continent": "Asia"},
 }
 TIF = ROOT / "data" / "raw" / "ghs" / "GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif"
 

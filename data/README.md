@@ -24,7 +24,7 @@
 ## Rebuilding
 
 ```
-python experiments/build_cities.py            # all five cities, or name cities
+python experiments/build_cities.py            # all six cities, or name cities
 python experiments/plot_cities.py             # writes figures/*.png
 python -m pytest -q                           # unit tests on synthetic data
 ```
