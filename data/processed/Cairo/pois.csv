@@ -1,0 +1,2513 @@
+lon,lat,osm_type,osm_id,name,category,subtype,zone_id
+31.3522248,30.1291182,node,344520166,مطبعة الحرمين,shop,copyshop,5
+31.2216020,30.0614849,node,366474274,سكم,shop,supermarket,15
+31.3222274,30.0892698,node,411894154,قويدر,shop,confectionery,11
+31.3221587,30.0915126,node,411894453,METRO,wholesale,wholesale,11
+31.3151549,30.0957232,node,411894482,رويال,shop,supermarket,11
+31.3133052,30.0909469,node,412050214,فودافون,shop,cellular,11
+31.3136113,30.0909259,node,412050288,ذكى للنظارات,shop,optician,11
+31.3204069,30.0900522,node,412050666,مصر للطيران,shop,travel_agency,11
+31.3149016,30.0959892,node,412050719,سمير وعلي,shop,stationery,11
+31.3488257,30.0613742,node,442272756,,shop,kiosk,19
+31.3432831,30.0658325,node,442298832,خردوات البيشبيشي,shop,stationery,19
+31.3432586,30.0658856,node,442298833,الصواف,shop,supermarket,19
+31.3432310,30.0659625,node,442298834,مكتبة محسن,shop,stationery,19
+31.3431390,30.0658219,node,442298835,,shop,bakery,19
+31.3431175,30.0659015,node,442298836,الأنوار المحمدية,shop,supermarket,19
+31.3442583,30.0659838,node,442298837,La poire,shop,confectionery,19
+31.3432248,30.0660926,node,442298909,,shop,car,19
+31.3441571,30.0664774,node,442298910,مفكو حلوان,shop,furniture,12
+31.3441357,30.0667136,node,442298913,أمريكان فرنتشر,shop,furniture,12
+31.3441173,30.0667561,node,442298915,جولي,shop,optician,12
+31.3440866,30.0669339,node,442298916,كيليم,shop,furniture,12
+31.3446151,30.0638517,node,442298917,,shop,kiosk,19
+31.3446212,30.0668402,node,442298918,,shop,kiosk,12
+31.3450260,30.0638942,node,442298919,,shop,kiosk,19
+31.3449063,30.0643454,node,442298920,,shop,kiosk,19
+31.3446223,30.0669175,node,442298922,,shop,florist,12
+31.3435988,30.0638156,node,442337942,القبطان,shop,car,19
+31.3431656,30.0675479,node,442337968,,shop,kiosk,12
+31.3441815,30.0638853,node,442337970,الخطيب,shop,hairdresser,19
+31.3432883,30.0634274,node,442337971,ماديرا,shop,confectionery,19
+31.3430660,30.0660815,node,442337972,,shop,greengrocer,19
+31.3430775,30.0659919,node,442337973,,shop,hardware,19
+31.3429165,30.0662507,node,442337974,,shop,hardware,12
+31.3410190,30.0631985,node,442338003,,shop,kiosk,19
+31.3458324,30.0599128,node,442338330,أسواق العائلة الجديد,shop,supermarket,19
+31.3451117,30.0600122,node,442349871,راديو شاك,shop,electronics,19
+31.3383619,30.0632447,node,442350005,أديداس,shop,sports,19
+31.3384723,30.0624650,node,442350006,امبير,shop,car_repair,19
+31.3333303,30.0655308,node,447795158,,shop,supermarket,19
+31.3333493,30.0653915,node,447795160,,shop,dry_cleaning,19
+31.3333620,30.0653155,node,447795162,,shop,bakery,19
+31.3333683,30.0652585,node,447795163,,shop,car_repair,19
+31.2068477,30.0315178,node,451736626,,shop,convenience,22
+31.2134157,30.0320424,node,451737947,مترو,shop,supermarket,22
+31.3330318,30.0664573,node,452399021,أمير,shop,hairdresser,12
+31.3329167,30.0664349,node,452399023,,shop,stationery,12
+31.2469466,29.9619221,node,470253330,Vodafone Intelligent Solutions (_VOIS),shop,mobile_phone,37
+31.2471377,29.9616925,node,470253334,بنده سوبرماركت,shop,supermarket,37
+31.3280654,30.0583245,node,473604483,15 اسماعيل القباني مطعم او جريل,shop,car_repair,19
+31.3033778,30.0869474,node,495506371,METRO,wholesale,wholesale,11
+31.3312722,30.0665551,node,497223696,,shop,kiosk,12
+31.2734349,29.9605873,node,526103213,سعودى,shop,supermarket,38
+31.2178624,30.0633454,node,529458981,RadioShack,shop,electronics,15
+31.2179650,30.0632994,node,529458982,,shop,hairdresser,15
+31.3180132,30.0898186,node,540560637,قصر الضيافة,post_office,post_office,11
+31.2805598,29.9961104,node,567094738,Al Awad Group Auto Nissan Service,shop,car_repair,31
+31.2392026,30.0459891,node,573794410,النخيلي,shop,mall,16
+31.3147868,30.0899537,node,586516121,لطفي,shop,shoes,11
+31.3086651,29.9861994,node,602443103,امارات مصر,shop,convenience,32
+31.2255894,30.0150047,node,660477102,شركة أتش أتش للأستيراد والتصدير والتوكيلات التجارية والتوريدات,shop,car_repair,23
+31.2249473,30.0135469,node,669225070,مترو,shop,supermarket,22
+31.2252987,30.0183211,node,670108378,خير زمان,shop,supermarket,22
+31.2277622,30.0174180,node,670108433,مكتب بريد الملك الصالح,post_office,post_office,23
+31.2710091,29.9590894,node,676002264,The Grocer,shop,convenience,38
+31.2158612,30.0370479,node,689813213,,shop,supermarket,15
+31.2178032,30.0412367,node,689813214,Alpha Market,shop,supermarket,15
+31.3413873,30.0955431,node,773447064,مكتبة ديوان,shop,books,12
+31.2606289,29.9567487,node,817061969,Distingo,shop,music,38
+31.3378785,30.0832311,node,977281239,سكم,shop,convenience,12
+31.2746348,30.0560685,node,987129728,,shop,supermarket,17
+31.3125821,30.0890215,node,1066649207,ألفا ماركت,shop,supermarket,11
+31.3972934,30.1118700,node,1098049125,,shop,convenience,-1
+31.3035792,30.0869206,node,1152514652,بسكلته,shop,bicycle,11
+31.2044719,30.0645058,node,1152519021,بسكلته,shop,bicycle,15
+31.2383611,30.0478187,node,1262216202,مكتبة مدبولى,shop,books,16
+31.2386543,30.0472337,node,1262216220,مكتبة الشروق,shop,books,16
+31.2380692,30.0476018,node,1262216226,جروبي,shop,bakery,16
+31.3975525,30.1192616,node,1356217232,رجب و أولاده,shop,supermarket,-1
+31.3366386,30.0830548,node,1357319861,أوميجا,shop,books,12
+31.3365153,30.0831167,node,1358247051,المحبه كلين,shop,laundry,12
+31.3370786,30.0825829,node,1358247052,اولاد غانم,shop,supermarket,12
+31.3397275,30.0798747,node,1371006787,SUBARU,shop,car,12
+31.3378432,30.0836535,node,1373306819,,shop,greengrocer,12
+31.3378096,30.0830661,node,1373655575,بيج بوس,shop,supermarket,12
+31.3379653,30.0823558,node,1373655586,زكي و أولاده,shop,supermarket,12
+31.3348173,30.0873098,node,1375217323,اولاد رجب,shop,supermarket,12
+31.3238459,30.0675222,node,1376032574,Lotus Flowers,shop,florist,11
+31.3344529,30.0829812,node,1379926363,جمجوم,shop,supermarket,12
+31.2622438,30.0531655,node,1444950696,سوق الليمون,market,marketplace,17
+31.2758376,30.0775656,node,1444965244,دار الملاك,post_office,post_office,10
+31.2216407,30.0626925,node,1454020496,Harley-Davidson Egypt,shop,motorcycle,15
+31.2189271,30.0661230,node,1454041383,The AUC Press Bookstores,shop,books,15
+31.2239043,30.0593185,node,1454041388,ديوان,shop,books,15
+31.2594620,29.9589220,node,1480630169,Massoud Market,shop,convenience,38
+31.2602269,29.9587355,node,1480630172,Gourmet,shop,supermarket,38
+31.3446094,30.0681386,node,1482360601,,shop,clothes,12
+31.4071502,29.9971327,node,1544105914,Gourmet,shop,convenience,-1
+31.2164835,30.0645615,node,1659499491,iSHOP,shop,hifi,15
+31.3494870,30.0657653,node,1694325198,ABA Supermarket,shop,supermarket,19
+31.3133838,29.9786331,node,1788243819,,shop,laundry,32
+31.3136332,29.9783613,node,1788243869,,shop,greengrocer,32
+31.3135823,29.9787749,node,1788243876,,shop,supermarket,32
+31.3131451,29.9839767,node,1788255091,,shop,supermarket,32
+31.3121795,29.9842160,node,1788255094,,shop,laundry,32
+31.3121071,29.9842183,node,1788255097,,shop,supermarket,32
+31.3123109,29.9841463,node,1788255100,,shop,seafood,32
+31.3124289,29.9842834,node,1788255103,,shop,laundry,32
+31.3121097,29.9844088,node,1788255116,,shop,supermarket,32
+31.3120883,29.9821925,node,1788255123,Mohamed Ramadan,shop,doityourself,32
+31.3120615,29.9843438,node,1788255127,,shop,bakery,32
+31.3130753,29.9838908,node,1788255135,,shop,bakery,32
+31.3119890,29.9843136,node,1788255152,,shop,greengrocer,32
+31.3124370,29.9842346,node,1788255154,,shop,greengrocer,32
+31.2138082,30.0406249,node,1920566710,,shop,supermarket,15
+31.1818843,30.0571398,node,1920574403,العطار فون,shop,hardware,14
+31.1854937,30.0539058,node,1920578832,محل فواكة,shop,greengrocer,14
+31.1895577,30.0496023,node,1920585578,البان الاصدقاء,shop,kiosk,14
+31.1890429,30.0495938,node,1920585579,باكين سعيد,shop,paint,14
+31.1888832,30.0496188,node,1920585580,دبور ماركت,shop,supermarket,14
+31.1895240,30.0543158,node,1920589481,عمو جمبرى,shop,seafood,14
+31.1913093,30.0487814,node,1920592949,موبيليات الزهراء,shop,furniture,14
+31.1853750,30.0545397,node,1922176937,مخبز الفاروق,shop,bakery,14
+31.2033284,30.0485582,node,1930277498,TBS,shop,bakery,15
+31.2089589,29.9930856,node,1935317408,سوق السمك المركزى,shop,seafood,29
+31.2094337,29.9949881,node,1935332304,مخبز خبز سياحى,shop,bakery,29
+31.2102517,29.9950601,node,1935333221,مخبز خبز مدعم,shop,bakery,29
+31.2258132,30.0208783,node,2061900396,حلويات الدمياطي,shop,bakery,23
+31.2032367,30.0396424,node,2111382419,Cheers,shop,florist,15
+31.2094810,30.0387509,node,2112432273,خير زمان سوبر ماركت,shop,supermarket,15
+31.2001419,30.0429859,node,2116839298,Flower Basket,shop,florist,15
+31.1997718,30.0444769,node,2116839301,Levity,shop,clothes,15
+31.1997395,30.0445835,node,2116839302,Passage shoes,shop,clothes,15
+31.1997074,30.0448670,node,2116839303,U Turn,shop,clothes,15
+31.1995625,30.0454702,node,2116839304,dixit,shop,clothes,15
+31.1995355,30.0456425,node,2116839305,RadioShack,shop,hifi,15
+31.1994338,30.0463060,node,2116839307,Choco chocola,shop,confectionery,15
+31.1993324,30.0467519,node,2116839324,The Setup,shop,gift,15
+31.2011075,30.0427583,node,2116839449,Concrete,shop,clothes,15
+31.2019229,30.0427769,node,2116839453,Femina,shop,clothes,15
+31.2025666,30.0428883,node,2116839454,Naga Homme,shop,clothes,15
+31.2625599,29.9541776,node,2183718978,Fawzy Market,shop,convenience,38
+31.2624329,29.9543594,node,2183718981,Alaa el Din,shop,dry_cleaning,38
+31.2633132,29.9537168,node,2183718985,Xerox Business Center,shop,copyshop,38
+31.2232205,30.0598077,node,2189631920,Sufi,shop,books,15
+31.2633479,29.9536896,node,2189647213,Flex Music,shop,music,38
+31.2634096,29.9536129,node,2189647214,Beta Bookstore,shop,books,38
+31.2632387,29.9542976,node,2189647215,Bikya - Second hand books and coffee,shop,books,38
+31.2633988,29.9536339,node,2189647217,Beta Bookshop,shop,books,38
+31.2607599,29.9589204,node,2189903521,The Bread Basket - German Bread & Sweets,shop,bakery,38
+31.2715379,29.9556504,node,2191588901,Bellissimo,shop,florist,38
+31.2704687,29.9553647,node,2191605515,,shop,florist,38
+31.2763169,29.9577477,node,2191620190,Butterfly,shop,hairdresser,38
+31.2678119,29.9515005,node,2195491974,,shop,kiosk,38
+31.2688468,29.9508832,node,2195491975,Sindiana,shop,convenience,38
+31.2677628,29.9563596,node,2195596900,Green House,shop,florist,38
+31.2642814,29.9524640,node,2195644526,Art's House For Antiques And Caucasian Carpets,shop,antiques,38
+31.2642341,29.9525363,node,2195644531,Elsayad Bakery,shop,bakery,38
+31.2638610,29.9529281,node,2195644535,المدينة المنورة,shop,kiosk,38
+31.2643838,29.9524186,node,2195644536,Lady Land (Said Tailor),shop,tailor,38
+31.2640515,29.9526758,node,2195644538,Ahmed El Wassime Beauty Salon,shop,hairdresser,38
+31.2621301,29.9550965,node,2195650510,Morgana,shop,antiques,38
+31.2616461,29.9553850,node,2195650512,Abu Auf,shop,nuts,38
+31.2615082,29.9555807,node,2195669848,Ismail Al Hendawi,shop,watches,38
+31.2608481,29.9569094,node,2196938412,Badran,shop,stationery,38
+31.2605593,29.9567449,node,2196938413,BookSpot,shop,books,38
+31.2608562,29.9569164,node,2196938415,Magic Kitchen Houseware & Art Gallery,shop,yes,38
+31.2605929,29.9568814,node,2196938416,Pharaonic Flowers,shop,florist,38
+31.2602861,29.9572971,node,2196966216,Hamed for drinking,shop,beverages,38
+31.2602384,29.9573583,node,2196966219,Maadi Electronics Repair & Maintenance,shop,electronics,38
+31.2602592,29.9573295,node,2196966246,Amin Pet Shop,shop,pet,38
+31.2603401,29.9572504,node,2196966257,The Tree,shop,greengrocer,38
+31.2603629,29.9576135,node,2196975469,Ayad Hardware & Tools,shop,hardware,38
+31.2604708,29.9574661,node,2196975470,Foto Fast Stationery,shop,stationery,38
+31.2605102,29.9574212,node,2196975471,Grand Optica,shop,optician,38
+31.2599273,29.9578040,node,2196975472,Joly Optics,shop,optician,38
+31.2603982,29.9575560,node,2196975474,Maadi Lights Electrician,shop,lighting,38
+31.2601472,29.9579154,node,2196975477,مدينة الأمانة,shop,greengrocer,38
+31.2604127,29.9575398,node,2196975479,Vienna,shop,clothes,38
+31.2594792,29.9583881,node,2196979751,Happy Vision,shop,optician,38
+31.2596564,29.9586012,node,2196979753,Bed & Bath,shop,bathroom_furnishing,38
+31.2597821,29.9580340,node,2196979755,Crumbs cupcakes & more,shop,confectionery,38
+31.2595197,29.9582893,node,2196979757,Focus,shop,optician,38
+31.2595871,29.9581131,node,2196979760,"Moudy Housewares, Toys & Gifts",shop,general,38
+31.2596037,29.9586756,node,2196979762,Orchidee Flower,shop,florist,38
+31.2597924,29.9584869,node,2196979763,جنة المعادي,shop,greengrocer,38
+31.2598526,29.9584330,node,2196979767,Sawy Bakery & Sweet,shop,bakery,38
+31.2594677,29.9582589,node,2196979768,Souvenir d'Egypte,shop,gift,38
+31.2587944,29.9590658,node,2196984159,Carlito's Basaar - gifts & silver,shop,gift,38
+31.2589439,29.9591125,node,2196984164,Etisalat,shop,mobile_phone,38
+31.2595128,29.9588103,node,2196984166,Food Garden,shop,greengrocer,38
+31.2595613,29.9589978,node,2196984170,New Market,shop,convenience,38
+31.2599041,29.9596549,node,2196984178,Vodafone,shop,mobile_phone,38
+31.2594886,29.9588364,node,2196984180,Orange,shop,mobile_phone,38
+31.2586822,29.9591531,node,2196984181,smart phone,shop,mobile_phone,37
+31.2842341,29.9776148,node,2199534862,بندر المعادى مول,shop,mall,31
+31.2653724,29.9525122,node,2206627528,,shop,butcher,38
+31.2654023,29.9525389,node,2206627538,نيو ماركت,shop,convenience,38
+31.2654377,29.9525631,node,2206627549,,shop,greengrocer,38
+31.2650706,29.9527975,node,2206627567,,shop,kiosk,38
+31.2650799,29.9520600,node,2206631991,Mazin Bookstore (Used Books),shop,books,38
+31.2652308,29.9517532,node,2206680082,,shop,hairdresser,38
+31.2651154,29.9518343,node,2206680085,,shop,hairdresser,38
+31.2647998,29.9520693,node,2206680098,,shop,bakery,38
+31.2647476,29.9521097,node,2206680110,,shop,bathroom_furnishing,38
+31.2613775,29.9564676,node,2207933128,OddBits,shop,gift,38
+31.2614277,29.9564919,node,2207933129,Nefertari,shop,beauty,38
+31.2599712,29.9584866,node,2207957242,Express Drycleaning - Rugs & Furniture & Carpets,shop,dry_cleaning,38
+31.2600275,29.9585155,node,2207957248,Gallery Antiques AlMasry,shop,antiques,38
+31.2607242,29.9574620,node,2207957273,,shop,pet,38
+31.2599128,29.9584559,node,2207957282,,shop,kiosk,38
+31.2605608,29.9589081,node,2207984632,Beauty Cleaning,shop,dry_cleaning,38
+31.2607107,29.9588961,node,2207984633,Dice Underwear,shop,clothes,38
+31.2606429,29.9588674,node,2207984638,Marja,shop,jewelry,38
+31.2606055,29.9588637,node,2207984641,,shop,frame,38
+31.2607019,29.9589057,node,2207984643,,shop,bathroom_furnishing,38
+31.2604597,29.9589167,node,2207995462,Touch Wood,shop,gift,38
+31.2603758,29.9589911,node,2207998089,,shop,interior_decoration,38
+31.2603921,29.9589979,node,2207998090,Media Valley,shop,electronics,38
+31.2603919,29.9589646,node,2207998091,Optique Discount,shop,optician,38
+31.2699800,29.9592916,node,2208167247,Atlantis Flower,shop,florist,38
+31.2705876,29.9561568,node,2208167249,Peace Flowers & Landscaping Ammar,shop,florist,38
+31.2697761,29.9592825,node,2208167253,Switch Plus,shop,electronics;fridge;,38
+31.2696404,29.9595830,node,2208167257,,shop,kiosk,38
+31.2704600,29.9556575,node,2208167259,Sayed Youssef,shop,kiosk,38
+31.2699079,29.9508982,node,2208208266,Dimo Stock,shop,clothes,38
+31.2692821,29.9505663,node,2208208267,,shop,airconditioning,38
+31.2697771,29.9508132,node,2208208268,,shop,stationery,38
+31.2696993,29.9514080,node,2208208269,,shop,convenience,38
+31.2696646,29.9552108,node,2208208271,SEEgypt travel,shop,travel_agency,38
+31.2708808,29.9553946,node,2208208272,Wrap N Go,shop,gift,38
+31.2685146,29.9497584,node,2208223710,,shop,kiosk,38
+31.2666535,29.9508199,node,2208254918,Fathe Cleaning,shop,dry_cleaning,38
+31.2661837,29.9514251,node,2208279223,Al Reda,shop,stationery,38
+31.2653570,29.9516607,node,2208279226,Charmaine,shop,clothes,38
+31.2654385,29.9516044,node,2208279228,Dr. Mohamed Ashour,shop,chemist,38
+31.2743614,29.9629096,node,2210914690,Volume 1,shop,books,38
+31.2818590,29.9652548,node,2210928551,Stock Zone,shop,clothes,38
+31.2790822,29.9702878,node,2211000046,KIA motors,shop,car,31
+31.2794549,29.9711143,node,2211000048,Suzana Fashion Club,shop,clothes,31
+31.2798367,29.9719505,node,2211034091,,shop,car,31
+31.2758558,29.9615120,node,2217992564,Bonjour,shop,convenience,38
+31.2756056,29.9619847,node,2217992587,Trolley,shop,supermarket,38
+31.2740835,29.9626384,node,2228432579,BTM,shop,clothes,38
+31.2737881,29.9624190,node,2228432580,مكتبة بكير,shop,stationery,38
+31.2742524,29.9628015,node,2228432582,Concrete,shop,clothes,38
+31.2711030,29.9566328,node,2228432583,Les Elites,shop,beauty,38
+31.2737231,29.9623514,node,2228432584,Mix And Match,shop,clothes,38
+31.2714854,29.9557631,node,2228432585,Mohamed Said For Flower,shop,florist,38
+31.2738757,29.9624837,node,2228432598,Textile El Patio,shop,fabric,38
+31.2727426,29.9614879,node,2228432599,Waves,shop,beauty,38
+31.2803574,29.9731002,node,2228492221,B Auto,shop,car,31
+31.2800200,29.9722818,node,2228492230,El Massoud,shop,car,31
+31.2808175,29.9741193,node,2228492233,Fabulous,shop,clothes,31
+31.2803391,29.9730406,node,2228492261,,shop,car,31
+31.2849855,29.9761985,node,2228516681,i2 stores,shop,yes,31
+31.2844116,29.9757399,node,2228558476,Motor Show,shop,car,31
+31.2597333,29.9570188,node,2228558477,Nagy Market,shop,kiosk,38
+31.2862800,29.9760624,node,2228558480,توتال,shop,convenience,31
+31.2880809,29.9773250,node,2228590371,Our kids,shop,toys,31
+31.3218285,29.9836970,node,2228709018,Factory Outlet,shop,clothes,32
+31.3289220,29.9844239,node,2228709053,Print Shop - Home Fabrics & Accessoires,shop,fabric,33
+31.3293983,29.9837524,node,2228709076,White House,shop,furniture,33
+31.3383564,29.9812943,node,2228822073,BMW Center Kattameya,shop,car,33
+31.3398575,29.9828893,node,2228822078,Baron Center,shop,furniture;interior_decoration,33
+31.3405522,29.9828264,node,2228822087,Home Centre,shop,furniture;interior_decoration,33
+31.3827792,29.9921560,node,2228844281,CNA,shop,car,34
+31.2177841,30.0267578,node,2229198580,IN2U,shop,clothes,22
+31.2199942,30.0560684,node,2229244925,,shop,kiosk,15
+31.2200633,30.0627715,node,2229263061,El Ebiary,shop,yes,15
+31.2202723,30.0644796,node,2229263064,ElFahd Spice Trade & Coffee,shop,spices,15
+31.2199561,30.0630050,node,2229263066,Gezira Travel,shop,travel_agency,15
+31.2199006,30.0625362,node,2229263085,Mandarine Koueider,shop,bakery,15
+31.2200233,30.0630938,node,2229263089,,shop,supermarket,15
+31.4132426,30.0170907,node,2287575530,اتصالات,shop,mobile_shop,-1
+31.4132360,30.0172553,node,2287575535,سمير وعلى,shop,stationery,-1
+31.4131951,30.0168136,node,2297596470,إتش آند إم,shop,clothes,-1
+31.2605367,30.0192609,node,2300909316,سوق الحمام,market,marketplace,24
+31.2577822,30.0231147,node,2300920750,سوق الجمعة لبيع الحيوانات,market,marketplace,23
+31.4122721,30.0166627,node,2302350011,Burberry,shop,clothes,-1
+31.4121043,30.0166648,node,2302350012,سالفاتورى فيراجامو,shop,clothes,-1
+31.4116767,30.0169471,node,2302350013,أباظة,shop,car,-1
+31.4127134,30.0169295,node,2303724882,داليدرس,shop,clothes,-1
+31.2802618,30.0514483,node,2319078698,شبن,shop,car_repair,17
+31.2806860,30.0518824,node,2319078741,,shop,kiosk,17
+31.2801520,30.0531454,node,2319078955,,shop,kiosk,17
+31.2814557,30.0538488,node,2319080268,,shop,kiosk,17
+31.2815846,30.0505126,node,2319082656,العيش في الأحياء الفقيرة,shop,garden_centre,17
+31.2808876,30.0493961,node,2319084650,,shop,kiosk,17
+31.2815643,30.0511699,node,2319084651,,shop,kiosk,17
+31.2800262,30.0520778,node,2319487547,عزيزة,shop,garden_centre,17
+31.2823276,30.0529461,node,2319487987,أمسة,shop,garden_centre,17
+31.2818341,30.0503319,node,2319487988,سمر,shop,garden_centre,17
+31.2821827,30.0531132,node,2319487989,مجدة,shop,garden_centre,17
+31.2436279,30.0315907,node,2382712770,Zanussi,shop,department_store,23
+31.3706064,30.1242846,node,2448356247,الونش,shop,supermarket,6
+31.3700072,30.1240846,node,2448356816,غانم و أولاده,shop,supermarket,6
+31.3695024,30.1229550,node,2448358090,مزارع دينا,shop,supermarket,6
+31.1865007,30.0512777,node,2518956244,البان مكة,shop,supermarket,14
+31.1893325,30.0545359,node,2518956245,مركز تجميل سيتى ستار للسيدات,shop,beauty,14
+31.1893440,30.0546053,node,2523455428,لؤلؤة الميدان,shop,bakery,14
+31.1892139,30.0544857,node,2523455430,مصوغات ومجوهرات فادى,shop,jewelry,14
+31.1892729,30.0545554,node,2523455431,احذية زهرة السوسن,shop,shoes,14
+31.4093709,30.0302092,node,2574275515,Marks & Spencer,shop,department_store,-1
+31.4070495,30.0273587,node,2621607783,Carrefour,shop,supermarket,-1
+31.2690377,29.9499698,node,2656794204,ميكانيكى زهران,shop,car_repair,38
+31.3279011,29.9615616,node,2656900685,مركز صيانة ابو غالى,shop,car_repair,40
+31.3269470,30.1091140,node,2689266255,Standard Tours,shop,travel_agency,5
+31.2767887,29.9739702,node,2864798671,بيوتى فلاور Beauty Flower,shop,florist,31
+31.2845101,29.9761773,node,2868745308,Pinocchio Furniture موبيليا بينوكيو,shop,furniture,31
+31.2815718,29.9737166,node,2868755127,El Gezera,shop,supermarket,31
+31.2831814,29.9760909,node,3021760833,Game,shop,supermarket,31
+31.4073380,29.9970238,node,3100248643,,shop,bakery,-1
+31.3868740,30.1028308,node,3120998013,Carrefour,shop,supermarket,6
+31.2624570,30.0451950,node,3149401829,Abdel Zaher,shop,books,17
+31.3255465,30.1058262,node,3157879891,سوبر ماركت اولاد رجب,shop,supermarket,5
+31.3438659,30.0953932,node,3157884692,,post_office,post_office,12
+31.3478142,30.0860824,node,3157884699,Tivoli,market,marketplace,12
+31.2370891,30.0451593,node,3157899661,Oum El Dounia,shop,interior_decoration,16
+31.1467168,29.9996937,node,3161186104,طارق كهربائي عربيات Tarek Car Electrician,shop,car_repair,-1
+31.2352423,30.0473434,node,3220013862,Mashrabia Gallery,shop,art,16
+31.2318151,30.0035989,node,3220062464,Art Vaoyage,shop,art,23
+31.2053140,30.0648175,node,3228322481,Fruit & Vegetable Stall,shop,greengrocer,15
+31.2047508,30.0632227,node,3228323976,عمر أفندي,shop,household_goods,15
+31.2045177,30.0635594,node,3228400442,,shop,mobile_phone,15
+31.2047914,30.0642653,node,3232197869,,shop,greengrocer,15
+31.2052279,30.0648413,node,3232726004,,shop,kiosk,15
+31.2053561,30.0642366,node,3232739960,شيكو,shop,convenience,15
+31.2054080,30.0653623,node,3232739993,,shop,kiosk,15
+31.2054012,30.0645932,node,3232741640,,shop,mobile_phone,15
+31.2051671,30.0645195,node,3232741642,,shop,kiosk,15
+31.2048934,30.0649102,node,3232746111,فرحة,shop,clothes,15
+31.2184610,30.0614309,node,3232911647,سامي,shop,pet,15
+31.2224486,30.0600069,node,3232998038,,shop,greengrocer,15
+31.2180484,30.0620020,node,3232998039,,shop,kiosk,15
+31.2232974,30.0595912,node,3232998040,Terry Optics,shop,optician,15
+31.2051011,30.0644699,node,3233009688,Dockers,shop,clothes,15
+31.2050277,30.0648446,node,3233014861,Pause,shop,clothes,15
+31.2052766,30.0646751,node,3233014862,Escapino,shop,clothes,15
+31.3500251,30.1052204,node,3296101411,ليذر هوم,shop,leather,5
+31.2246565,30.0589677,node,3311930428,New Market,shop,supermarket,15
+31.2245624,30.0589941,node,3311930430,,shop,butcher,15
+31.2243273,30.0591146,node,3311930431,,shop,optician,15
+31.2237891,30.0593753,node,3311930432,Baraka,shop,optician,15
+31.2237223,30.0594074,node,3311930433,Zamalek Pro Cam,shop,camera,15
+31.2236672,30.0594265,node,3311930434,,shop,jewelry,15
+31.2235609,30.0594870,node,3311930435,Corners,shop,clothes,15
+31.2231529,30.0596790,node,3311930436,Jumbo,shop,toys,15
+31.2078669,30.0622790,node,3311957760,Vodafone,shop,mobile_phone,15
+31.2066619,30.0629243,node,3311961444,Bernasos,shop,stationery,15
+31.2049154,30.0643020,node,3311965779,,shop,mobile_phone,15
+31.2049647,30.0643396,node,3311965780,Diesel,shop,clothes,15
+31.2049969,30.0643718,node,3311965781,,shop,dry_cleaning,15
+31.2050614,30.0644374,node,3311965782,Karim El Masry,shop,hairdresser,15
+31.2052031,30.0645788,node,3311965783,Eagle,shop,clothes,15
+31.2052392,30.0646265,node,3311965784,Purple,shop,clothes,15
+31.2049264,30.0641089,node,3313476984,,shop,garden_centre,15
+31.2063566,30.0631480,node,3323245669,Kia,shop,car,15
+31.2203281,30.0606291,node,3323245672,The Flower Kushk,shop,florist,15
+31.2237140,30.0589885,node,3323245679,Vodafone,shop,mobile_phone,15
+31.2219394,30.0599267,node,3323245680,The Body Shop,shop,cosmetics,15
+31.2189539,30.0611516,node,3323245682,The Bread Basket Bakery,shop,bakery,15
+31.2180927,30.0615801,node,3326642655,Five Stars,shop,convenience,15
+31.2052346,30.0653572,node,3328193835,Gate,shop,clothes,15
+31.2052658,30.0653915,node,3328193836,,shop,hairdresser,15
+31.2054569,30.0653399,node,3339565282,,shop,greengrocer,15
+31.2055219,30.0652940,node,3339565283,,shop,greengrocer,15
+31.2051170,30.0650763,node,3339565284,,shop,kiosk,15
+31.2423854,30.0460427,node,3358852828,Sanabel,shop,books,16
+31.2230995,30.0565184,node,3358852829,Gezira Art Centre,shop,art,15
+31.2613950,30.0165576,node,3376880854,سوق الجمعة,market,marketplace,24
+31.2619145,30.0164920,node,3395909412,سوق الجمعة,market,marketplace,24
+31.2046561,30.0656726,node,3413152231,,shop,hairdresser,15
+31.2470493,30.0600471,node,3428447492,Aboul Goukh Sports,shop,bicycle,16
+31.3062884,29.9643487,node,3441485656,مخبز قراقيش,shop,bakery,39
+31.1957617,30.0525693,node,3447104290,Metro,wholesale,wholesale,15
+31.2282293,29.9705281,node,3479069678,,shop,convenience,30
+31.2733869,29.9718372,node,3479638362,Fare from Home,shop,butcher;bakery;deli,31
+31.1587496,29.9875902,node,3538685294,أسطى عبد اللطيف,shop,car_repair,-1
+31.3218520,29.9836480,node,3563069493,Adidas outlet,shop,shoes,32
+31.3382328,30.0578048,node,3665816258,MANCARIOS,shop,car,19
+31.3381683,30.0584781,node,3665816280,UNIONAIR يونيون اير,shop,electronics,19
+31.3382167,30.0575668,node,3665822422,Orange,shop,mobile_phone,19
+31.3377679,30.0570256,node,3665833161,SAMSUNG,shop,electronics,19
+31.3378698,30.0562514,node,3665834869,CIRAMICA CLEOPATRA,shop,tiles,19
+31.3649120,30.0468875,node,3676600880,سوق السيارات,market,marketplace,20
+31.4093725,30.0288000,node,3687053258,Paul,shop,bakery,-1
+31.3377392,30.0574470,node,3730503667,PEUGEOT,shop,car,19
+31.2866890,29.9600293,node,3787758572,Offroad Traxx,shop,hardware,38
+31.3235046,30.0726253,node,3796945189,رامى 4×4,shop,car_parts,11
+31.2517925,30.0280813,node,3824503829,سوق الخليفة,market,marketplace,23
+31.3217884,30.0121290,node,3859826733,أولاد رجب,shop,supermarket,25
+31.3218403,30.0121726,node,3871121545,Ragab sons,shop,supermarket,25
+31.2852285,29.9813219,node,3933672007,بروجير,shop,motorcycle,31
+31.3965383,30.1390254,node,3938216457,دوكاتى مصر,shop,motorcycle,-1
+31.4029883,30.0512388,node,3946894245,محطة وطنية,shop,convenience,-1
+31.2816945,29.9293197,node,4053835897,كارفور,shop,supermarket,-1
+31.1477179,29.9901953,node,4100912493,البطل,shop,car,-1
+31.1479711,29.9900957,node,4106736889,موتور البطل,shop,car,-1
+31.2664852,30.0981220,node,4143334562,مكتب بريد الزاوية,post_office,post_office,10
+31.2527524,29.9633871,node,4144295590,عمارة ابو السعود,shop,convenience,37
+31.2434914,30.0388251,node,4149814996,,shop,confectionery,16
+31.3183874,30.0122257,node,4153484816,الناظر,shop,convenience,25
+31.2615397,30.0669907,node,4159755289,شركة الشريف لإلحاق العمالة بالخارج,shop,travel_agency,10
+31.3651377,30.1209223,node,4176617397,,shop,furniture,6
+31.3778889,30.0919444,node,4198303891,VFS Tasheel International - تساهيل,shop,travel_agency,13
+31.1521946,29.9648403,node,4214196243,كهربائي سيارات وشحن تكيف ***,shop,car_repair,-1
+31.2437962,30.0399772,node,4214208923,الكرنك عصائر وقنبله,shop,beverages,16
+31.2530008,30.0438329,node,4215958696,Walk to Khayameya starting here,shop,car,16
+31.1979893,30.0486240,node,4216570590,استقبال,shop,department_store,15
+31.2612028,30.0988045,node,4216572117,مكتب بريد صقر قريش,post_office,post_office,10
+31.3155571,30.1036622,node,4217834693,al batol,shop,supermarket,4
+31.2750764,29.9783089,node,4225614890,Pump store,shop,sports,31
+31.1986859,30.0350264,node,4244075091,Giza National Automotive,shop,car_repair,15
+31.2488838,29.9651535,node,4275695197,Metro market,shop,supermarket,37
+31.3392240,30.1179478,node,4278760989,تون تيم,shop,clothes,5
+31.1375084,29.9923345,node,4286785292,زين للإلكترونيات,shop,electronics,-1
+31.3103616,30.0902081,node,4302149789,دمشق,shop,supermarket,11
+31.2368025,30.0893463,node,4303706492,3alamalhadya,shop,gift,9
+31.2708482,30.0789333,node,4305618989,Peugeot Repair Agencey CDCM,shop,car_repair,10
+31.2821522,30.0704821,node,4317958955,عمر افندي,shop,mall,10
+31.3307290,30.0492282,node,4335010956,Puzzle,shop,computer,19
+31.3309706,30.0495823,node,4335010957,AlTayp,shop,supermarket,19
+31.3292982,30.0493185,node,4335013206,Family Market,shop,supermarket,19
+31.3289473,30.0492464,node,4335013207,Happy Day,shop,bakery,19
+31.3309835,30.0495000,node,4335013402,Alaa,shop,hairdresser,19
+31.3193784,30.0756757,node,4342399389,,shop,department_store,11
+31.2066202,30.0650238,node,4352289867,hamdy elgendy,shop,car,15
+31.3198031,29.9930338,node,4358882094,الحلواني للسيراميك,shop,convenience,32
+31.2030383,30.0657513,node,4358899790,كازيون,shop,supermarket,15
+31.2016850,30.0389449,node,4358902989,كازيون,shop,supermarket,15
+31.3183171,29.9949024,node,4358909689,سوبر ماركت زيدان,shop,convenience,32
+31.3110672,30.0993931,node,4359964489,سوبر ماركت الطاهرة,shop,supermarket,11
+31.1765726,30.0131929,node,4361906074,Wagdy,shop,funeral_directors,21
+31.2351009,30.0461842,node,4362838989,الخطوط الجوية السودانيه,shop,travel_agency,16
+31.2984362,30.0586207,node,4369164392,سمير ريان للسيارات,shop,car,18
+31.1620752,29.9769845,node,4373606193,اولاد رجب,shop,supermarket,28
+31.2231726,30.0591431,node,4375638394,TUYA,shop,leather,15
+31.3323762,30.0397796,node,4377769389,أولاد الحاج رجب,shop,greengrocer,19
+31.3415592,30.1156191,node,4384814405,,shop,books,5
+31.2390994,30.0460733,node,4391694894,النخيلى للكترونيات,shop,radiotechnics,16
+31.3668951,30.1218458,node,4391705493,ABB Head Office Egypt,shop,electronics,6
+31.2877269,29.9717823,node,4391740189,invensys Egypt,shop,electronics,31
+31.3097648,29.9854752,node,4396779189,,shop,computer,32
+31.2133718,30.0152733,node,4405020589,,shop,mobile_phone,22
+31.2513492,30.0538903,node,4405168890,شركة محمد سعودي للتجارة و الاستيراد و التصدير,shop,hardware,16
+31.2042881,30.0645581,node,4406277789,,shop,mobile_phone,15
+31.3065304,30.0101656,node,4422770390,,shop,shoes,25
+31.3376871,30.0654685,node,4435956292,لا بيجت,shop,bakery,19
+31.2790053,29.9748500,node,4446893389,Sedia.amin,shop,furniture,31
+31.4009656,30.1434753,node,4465565291,,shop,sports,-1
+31.2455286,30.0456307,node,4475944776,الجوادي,shop,confectionery,16
+31.2562537,30.0397251,node,4483440399,,shop,bakery,16
+31.2598215,30.0443577,node,4483440400,,shop,bakery,17
+31.2423011,30.0471925,node,4485420589,,shop,copyshop,16
+31.2606694,30.0487095,node,4506230692,,shop,jewelry,17
+31.2584027,30.0439588,node,4508724394,,shop,gift,16
+31.2430347,30.0410548,node,4517767289,معرض الحلويات الشرقية,shop,confectionery,16
+31.3521766,30.1281355,node,4520865190,,shop,photo,5
+31.3175083,30.1011872,node,4523650889,بوكسر,shop,clothes,4
+31.3515864,30.1270979,node,4524778194,التوحيد و النور,shop,clothes,5
+31.3776692,30.1032643,node,4530740288,Saudi Market,shop,supermarket,6
+31.2375169,30.0422475,node,4531486792,Blue,shop,clothes,16
+31.3051442,30.1192181,node,4537142592,Home,shop,bookmaker,4
+31.2413397,30.0516248,node,4539892094,,shop,bakery,16
+31.3947808,30.0371002,node,4555555994,,shop,cosmetics,-1
+31.3347341,30.0946880,node,4557843689,سوبرماركت السعيد,shop,supermarket,12
+31.3349560,30.0960696,node,4557888189,سوبرماركت جمجوم,shop,supermarket,12
+31.2470980,30.1088674,node,4563897689,مكتب بريد العبور,post_office,post_office,2
+31.3169598,30.0768135,node,4564624090,الخياط لصيانة الكمبيوتر,shop,electronics,11
+31.1454766,29.9693156,node,4568718692,منزل,shop,cosmetics,-1
+31.1996979,30.0203794,node,4568730291,منه اسامه,shop,cosmetics,22
+31.2972701,30.0160037,node,4586841689,,shop,car_repair,25
+31.3224182,30.0642317,node,4587258289,داتا لاب,shop,computer,18
+31.3106299,30.0774115,node,4588053289,ابو سيف للسياحه ( سلامه ),shop,ticket,11
+31.2484424,29.9806810,node,4590444541,مصنع دهب للملابس الداخلية,shop,convenience,30
+31.2492723,29.9852917,node,4590593689,مصنع دهب للملابس الداخلية,shop,convenience,30
+31.1843430,30.0527287,node,4592140590,الاسوانى (توكيل توشيبا),shop,electronics,14
+31.1842275,30.0527196,node,4592146091,المصري,shop,supermarket,14
+31.2558148,30.0815050,node,4614318294,عجل,shop,sports,9
+31.1953205,30.0624218,node,4615637293,Intersport,shop,sports,15
+31.2368307,30.0446297,node,4621995391,,shop,ticket,16
+31.2373840,30.0457580,node,4622014593,,shop,travel_agency,16
+31.2394790,30.0357070,node,4629575889,خير زمان سوبر ماركت,shop,supermarket,16
+31.3228217,30.1267550,node,4632246090,رومانى الجزار,shop,butcher,4
+31.2393712,30.0489036,node,4632676094,Adidas,shop,sports,16
+31.2214644,30.0587324,node,4632884997,Nike,shop,clothes,15
+31.2199341,30.0557907,node,4632905002,,shop,clothes,15
+31.1437278,29.9777986,node,4635873289,,shop,bakery,-1
+31.2622890,30.0478475,node,4637357769,Christmas Bazaar Mostafa,shop,yes,17
+31.3321925,30.1050935,node,4657287190,HUAWEI,shop,mobile_phone,5
+31.2246481,30.0161879,node,4657745889,الروبى,shop,supermarket,22
+31.2249680,30.0166410,node,4657745890,الاخلاص,shop,bakery,22
+31.2423124,30.0500292,node,4663341124,مكتبة الفا,shop,gift,16
+31.2511311,30.0615013,node,4675016801,,shop,books,16
+31.3181506,30.0922329,node,4675095792,حلويات الفاليرو,shop,confectionery,11
+31.3454436,30.1348179,node,4675213190,مكتبة شادى,shop,supermarket,-1
+31.3269689,30.0833892,node,4702023757,,shop,bakery,12
+31.3269713,30.0832972,node,4702023758,,shop,convenience,12
+31.3271272,30.0833690,node,4702023760,,shop,laundry,12
+31.3267275,30.0830209,node,4702023761,,shop,laundry,12
+31.3269889,30.0826272,node,4702023762,,shop,supermarket,12
+31.3289170,30.0847775,node,4702023763,Family Market,shop,supermarket,12
+31.3277935,30.0824596,node,4702023764,Kiosk,shop,convenience,12
+31.3490065,30.1280155,node,4703861492,,shop,sports,5
+31.1925384,30.0476175,node,4705432189,قصر الاليزيه,shop,confectionery,15
+31.2575032,30.1076346,node,4707054999,مرور عبود,shop,car_parts,2
+31.2822302,30.1042148,node,4711018890,,shop,cosmetics,3
+31.3938798,30.1378671,node,4714261090,السلاب,shop,department_store,-1
+31.2424461,30.0525640,node,4719191290,,shop,confectionery,16
+31.3180937,30.0916103,node,4726642690,حلويات الفاليرو,shop,confectionery,11
+31.3182142,30.0731468,node,4730376590,عطر للعطور و العود,shop,convenience,11
+31.2385395,30.0454204,node,4739448524,جراج البستان,shop,computer,16
+31.3724746,30.1245153,node,4739470637,بينجو للعب الاطفال,shop,toys,6
+31.2378777,30.0454771,node,4739480421,تكنو ساينت,shop,electronics,16
+31.2742219,29.9645453,node,4740561721,انفوكس,shop,photo,38
+31.1326579,29.9816874,node,4783831622,,shop,ticket,-1
+31.2748027,30.0481966,node,4787165827,,shop,car_repair,17
+31.3033471,30.1244656,node,4787662423,بيم,shop,supermarket,4
+31.2441079,30.0439479,node,4789201827,,shop,optician,16
+31.2342165,30.0509679,node,4796413021,Superjet Bus,shop,ticket,16
+31.2434139,30.0490608,node,4811370721,الخطوط الجوية العربية الليبية,shop,ticket,16
+31.2162950,30.0036568,node,4814031122,ئمائماد,shop,bakery,22
+31.3451740,30.0916820,node,4818333321,,shop,furniture,12
+31.2820389,29.9754152,node,4825182422,نافكو مصر لمعدات مكافحة الحريق,shop,outdoor,31
+31.1964284,30.0465767,node,4826265721,عمارة الاسواق الحرة,shop,convenience,15
+31.2818017,29.9752679,node,4828814922,رافين,shop,clothes,31
+31.1995329,30.0546298,node,4829303621,تاون تيم,shop,clothes,15
+31.1988803,30.0555262,node,4829318222,رافن,shop,clothes,15
+31.2137241,30.0515232,node,4842632822,حلواني العبد,shop,bakery,15
+31.2360386,30.0424181,node,4851045034,,shop,books,16
+31.2693574,29.9617150,node,4851045035,,shop,books,38
+31.2255255,30.0212440,node,4855821221,اتصالات,shop,mobile_phone,23
+31.2255132,30.0211877,node,4862139221,سوبر ماركت الباشا,shop,supermarket,23
+31.3488627,30.0605835,node,4876157921,مين ترافيل,shop,travel_agency,19
+31.1925112,30.0058911,node,4889973121,,shop,confectionery,22
+31.3488058,30.1185377,node,4892744721,ابتوال جسر السويس,shop,confectionery,5
+31.3232406,30.1268519,node,4892744722,ورشة بدوى إصلاح سبارات,shop,department_store,4
+31.3406003,30.1198815,node,4892744821,ابتوال جسر السويس,shop,confectionery,5
+31.3219497,30.1268419,node,4892746922,مينا للكنرونيات,shop,electronics,4
+31.3220423,30.1269185,node,4892772521,على و على الكماليات السيارات,shop,car,4
+31.3693930,30.1062684,node,4922803321,الصياد للملابس الاطفال,shop,convenience,6
+31.3278970,30.0656438,node,4929017360,سوبر ماركت البستان,shop,supermarket,19
+31.3007259,30.0853577,node,4932367622,,shop,beauty,11
+31.2423424,30.0524899,node,4949884608,Al-'Abd,shop,pastry,16
+31.2094018,29.9786049,node,4952142221,كنوز البحر,shop,seafood,29
+31.2169197,30.0464770,node,4965465421,اكاديمية ناصر,shop,sports,15
+31.2592845,29.9543832,node,4970631923,,shop,tattoo,38
+31.2109943,30.0834135,node,4983811321,مكتبة الامل,shop,convenience,8
+31.2764176,29.9994503,node,4993491024,المدابغ المدبغه,shop,shoes,31
+31.3358594,30.0769773,node,5001823723,,shop,sports,12
+31.3339844,30.0685317,node,5005643321,طيبه مول,shop,sports,12
+31.1669254,29.9986581,node,5032694923,,shop,bakery,28
+31.3752837,30.0381041,node,5033260935,سوبرماركت مرحبا,shop,supermarket,20
+31.3443631,30.1111492,node,5096251224,ديدور,shop,sports,5
+31.3027660,30.0824112,node,5096251225,نادي طلائع الجيش,shop,sports,11
+31.2420107,30.0514090,node,5108337680,Omar Afandy,shop,yes,16
+31.2950924,30.1258047,node,5108357022,مخبز افرنجي زمزم,shop,bakery,4
+31.2960959,30.1255719,node,5108363122,خردوات الحويحي,shop,convenience,4
+31.2955301,30.1264095,node,5108363221,صالون رجالي جمال و مصطفى( حلاق),shop,beauty,4
+31.3564271,30.0548692,node,5112033621,كازيون ماركت,shop,supermarket,19
+31.3370711,30.0613042,node,5113922621,,shop,beverages,19
+31.3200602,30.1026481,node,5119779825,اوتليت للملابس,shop,clothes,4
+31.2954942,30.1263759,node,5119786435,مخبز بلدي ابو حسن,shop,bakery,4
+31.2252618,29.9951088,node,5126160704,Cleaning Supplies Shop,shop,cleaning_supplies,29
+31.2246453,29.9952625,node,5126160713,,shop,convenience,29
+31.2244248,29.9952691,node,5126160714,,shop,hairdresser,29
+31.2243004,29.9952785,node,5126160715,Junks Shop,shop,junk,29
+31.2223889,29.9951864,node,5126160718,,shop,convenience,29
+31.2227006,29.9942781,node,5126194794,,shop,convenience,29
+31.3599839,30.0559702,node,5129741222,مكة سنتر,shop,clothes,20
+31.3326472,30.0529727,node,5134665940,هاي لكأس,shop,car,19
+31.3615598,30.0564658,node,5134666025,مجوهرات الماسة,shop,jewelry,20
+31.3600905,30.0579213,node,5134666146,سويت درينك,shop,beverages,20
+31.3388426,30.0540161,node,5134666148,توكيل براون,shop,electronics,19
+31.3387978,30.0535439,node,5134666527,نصر سنتر,shop,electronics,19
+31.3412983,30.0539059,node,5134666528,اكتييف,shop,sports,19
+31.3458784,30.0543223,node,5134666530,التوحيد والنور,shop,clothes,19
+31.3244675,30.0518197,node,5134666531,مول احمد السلاب,shop,convenience,18
+31.3427298,30.0544551,node,5134667328,الفهد اوتو,shop,car,19
+31.3431000,30.0540897,node,5134667329,الفاليرو,shop,confectionery,19
+31.2259574,29.9782326,node,5135459634,,market,marketplace,30
+31.2241786,29.9789666,node,5135459644,,market,marketplace,29
+31.2227802,29.9789780,node,5135459645,,market,marketplace,29
+31.3298358,30.0675325,node,5137281421,كارفور ماركت,shop,supermarket,12
+31.1953105,30.0601981,node,5139333321,دانلوپ زون - ميدان لبنان,shop,car_parts,15
+31.2211900,29.9880535,node,5143998521,,shop,kiosk,29
+31.2223255,29.9804483,node,5143998527,,shop,supermarket,29
+31.2208010,29.9797956,node,5143998528,Street Sellers_Vegs,shop,greengrocer,29
+31.2216059,29.9798775,node,5143998530,,shop,supermarket,29
+31.2236977,29.9800353,node,5143998548,,shop,kiosk,29
+31.2226856,29.9941022,node,5150788882,,shop,convenience,29
+31.2512071,30.0498212,node,5158684721,حتت,shop,sports,16
+31.2331365,30.0505244,node,5163915222,Go Bus Caïro-Tahrir office,shop,ticket,16
+31.2011708,30.0097910,node,5174518206,FIT & FiX,shop,car_repair,22
+31.2263279,30.0055149,node,5180479325,عنوان شقق القاهرة ٨٩٩ شارع كورنيش النيل مصر القديمة الدور ٨ شقة رقم ٤ الدور ٩ شقق رقم ٤،٥،٦ شققنا ٨٩٩ شارع كورنيش النيل مصر القديمة,shop,confectionery,23
+31.3464365,30.1169002,node,5180541021,حمدى المحلاوى,shop,books,5
+31.2157416,30.0657351,node,5186532755,,shop,kiosk,15
+31.2154850,30.0656846,node,5188655826,La Florista,shop,florist,15
+31.2165758,30.0663966,node,5188669766,Vintage Boutique,shop,clothes,8
+31.2165919,30.0665638,node,5188669769,Mr Tailor,shop,tailor,8
+31.2164202,30.0659695,node,5188671861,Ameely Travel,shop,travel_agency,15
+31.2162110,30.0655169,node,5188677952,,shop,pet,15
+31.2163854,30.0659254,node,5188677953,Lovely Bazaar,shop,general,15
+31.2162888,30.0658349,node,5188682765,,shop,dry_cleaning,15
+31.2167045,30.0650967,node,5188685124,American Washing,shop,dry_cleaning,15
+31.2165951,30.0664301,node,5188719326,Masa Syrian,shop,bakery,8
+31.2162432,30.0657769,node,5188723739,METRO,wholesale,wholesale,15
+31.3185213,30.1076635,node,5195676422,الباشا ماركت,shop,supermarket,4
+31.1434848,29.9848936,node,5201621424,,shop,convenience,-1
+31.3378789,30.0542830,node,5202922321,Fit & Fix,shop,car_repair,19
+31.2604003,30.0462136,node,5214893222,ضاحي القبيصي,shop,beverages,17
+31.2693985,30.0276051,node,5219621326,,shop,car_repair,24
+31.2010908,30.0129487,node,5219636022,خردوات و زراير,shop,hardware,22
+31.3152041,30.1130434,node,5219636025,,shop,department_store,4
+31.1885690,30.0093534,node,5219996721,Mamdouh Mabrouk Ghatati,shop,car_parts,21
+31.2000300,30.0551083,node,5228438621,Bershka,shop,clothes,15
+31.3647953,30.0815694,node,5240761723,,shop,supermarket,13
+31.2816378,30.0633330,node,5246516323,تويوتا,shop,car,17
+31.4123789,30.0171182,node,5249375266,Payless,shop,shoes,-1
+31.4129811,30.0173526,node,5249473169,Salem,shop,tailor,-1
+31.4128246,30.0173971,node,5249473172,Damas,shop,jewelry,-1
+31.4124230,30.0175002,node,5249473173,Salem,shop,tailor,-1
+31.4129787,30.0174537,node,5249473174,Anzio Massimo,shop,clothes,-1
+31.4120961,30.0181350,node,5249473178,أديداس,shop,clothes,-1
+31.4119560,30.0182806,node,5249473182,TATA TIO,shop,shoes,-1
+31.4120471,30.0182462,node,5249473183,La Cuisine Egypt,shop,houseware,-1
+31.4121381,30.0183130,node,5249473184,Sugar,shop,gift,-1
+31.4126098,30.0175184,node,5249473187,Concrete,shop,clothes,-1
+31.4133360,30.0173991,node,5249473188,Kaian,shop,furniture,-1
+31.4127523,30.0178620,node,5249473191,Samsonite,shop,bag,-1
+31.4129768,30.0175778,node,5249473195,Tie Shop,shop,clothes,-1
+31.1412115,29.9922765,node,5251808326,تسالي الأهرام,shop,supermarket,-1
+31.1490058,29.9943563,node,5251825321,شهد,shop,clothes,-1
+31.1500689,29.9948096,node,5251825322,شهد,shop,clothes,-1
+31.3356698,30.0845571,node,5254518422,,shop,department_store,12
+31.2614611,30.0473255,node,5293630421,,shop,department_store,17
+31.1998373,30.0038684,node,5299765124,النساجون الشرقيون,shop,carpet,22
+31.2011037,30.0045298,node,5299779822,علام ماركت,shop,supermarket,22
+31.2429112,30.0506382,node,5301186222,دار المعارف,shop,books,16
+31.2886554,30.0873323,node,5312648822,مونجينى الحلوانى,shop,confectionery,10
+31.3346224,30.1061943,node,5314819220,مكتبة الحجاز,shop,books,5
+31.3290027,30.1104638,node,5314819351,المركز النموذجى لعلاج المكفوفين,shop,charity,5
+31.3163897,30.1125360,node,5314819478,فوادفون,shop,mobile_phone,4
+31.3364511,30.1070826,node,5314819481,فودافون,shop,mobile_phone,5
+31.3216383,30.0941646,node,5314819483,اماكن خدمة لبيع قطع غيار السيارات,shop,car_parts,11
+31.3349385,30.1068659,node,5314820036,Kodak,shop,photo_studio,5
+31.3032892,30.1031787,node,5314820037,جيتال,shop,furniture,4
+31.3443398,30.1109079,node,5314820038,المكتبة القومية,shop,books,5
+31.3293242,30.1044209,node,5314820041,جمعية غار حراء الخيرية ( عيادات ),shop,charity,5
+31.3265815,30.1079692,node,5314820369,موبينيل,shop,mobile_phone,5
+31.3368454,30.1072513,node,5314820372,موبيل شوب,shop,mobile_phone,5
+31.3154918,30.1148843,node,5319588122,مكتب بريد حلميه الزيتون,post_office,post_office,4
+31.4132541,30.0181817,node,5325965308,Villa Home Accesories,shop,antiques,-1
+31.4132568,30.0182537,node,5325965309,Onix Silver,shop,jewelry,-1
+31.4132487,30.0183303,node,5325965310,Cushy Home,shop,bed,-1
+31.4132433,30.0184255,node,5325965311,Le Reve Galerie,shop,furniture,-1
+31.4131575,30.0184813,node,5325965313,Lightology,shop,furniture,-1
+31.4130636,30.0184813,node,5325965314,Carina Body Wear,shop,clothes,-1
+31.4129135,30.0184784,node,5325965316,Orange Square,shop,clothes,-1
+31.4128131,30.0184769,node,5325965317,Print Shop,shop,fabric,-1
+31.4127245,30.0184738,node,5325965318,Home Touch,shop,furniture,-1
+31.4130839,30.0181974,node,5325965320,Paul and Shark,shop,clothes,-1
+31.4129846,30.0181997,node,5325967621,English House,shop,clothes,-1
+31.4129015,30.0181974,node,5325967622,Scarpa,shop,shoes,-1
+31.4128076,30.0182044,node,5325967623,Harmont and Blaine,shop,clothes,-1
+31.4127191,30.0182044,node,5325967624,Nespresso,shop,coffee,-1
+31.4126333,30.0182113,node,5325967625,Inca & Co,shop,furniture,-1
+31.4126333,30.0182949,node,5325967626,Texmar,shop,fabric,-1
+31.4127137,30.0182973,node,5325967627,Eye Fashion Optics,shop,optician,-1
+31.4128022,30.0182949,node,5325967628,El Mawardy Jewelery,shop,jewelry,-1
+31.4128961,30.0182949,node,5325967629,Miss Roberta,shop,shoes,-1
+31.2055933,29.9937000,node,5326874324,شركة كابسي للدهانات فرع القاهرة سعدنوش,shop,variety_store,29
+31.1992784,29.9968430,node,5337844021,مخبز الشعب,shop,bakery,29
+31.1987692,29.9978818,node,5337844022,مصوغات الفيروز,shop,jewelry,29
+31.2303361,30.0213438,node,5378162822,,shop,motorcycle,23
+31.2029488,30.0378000,node,5412081621,انفورميشن تيكنولوجي اوف ايجبت,shop,wine,15
+31.2789337,29.9793852,node,5413076522,الهيئة المصريه العامة للبترول,shop,gift,31
+31.2399114,30.0495097,node,5458241922,Elabd patisserie,shop,bakery,16
+31.3411264,30.0963555,node,5461449729,,shop,mobile_phone,12
+31.2118269,30.0363139,node,5471122022,محمصات لؤلؤة الدقي,shop,nuts,15
+31.2504114,30.0288988,node,5477542168,,shop,ticket,23
+31.3474072,30.0544726,node,5478201421,ماي هوم للاثاث,shop,furniture,19
+31.2550303,30.0557808,node,5483300135,,shop,supermarket,16
+31.1769223,30.0386268,node,5483532134,كايرو,shop,supermarket,14
+31.1774062,30.0383823,node,5483532135,مقلة الروضه 2,shop,supermarket,14
+31.1779384,30.0365008,node,5483532230,ماركت,shop,supermarket,14
+31.1648485,29.9374098,node,5526278722,إبراهيم,shop,supermarket,35
+31.1444168,29.9589561,node,5526279221,طيبه,shop,supermarket,-1
+31.1458456,29.9594640,node,5526279621,أولاد النواري,shop,supermarket,-1
+31.2617600,29.9338598,node,5527658621,اسواق عمر,shop,supermarket,38
+31.2129728,29.9583273,node,5527658622,اسواق العزيزية,shop,supermarket,36
+31.2198808,30.0806218,node,5531723894,البرنس,shop,bakery,8
+31.2119068,30.0042861,node,5536274621,إجبت بيراميدس تورز - رحلات خاصة يومية,shop,travel_agency,22
+31.1941308,29.9396861,node,5539553324,اسواق العصر,shop,supermarket,36
+31.1875775,29.9406171,node,5539553325,مؤمن,shop,supermarket,35
+31.1869409,29.9433066,node,5539553326,ماركت المنصوريه,shop,supermarket,35
+31.1996479,29.9499751,node,5539553722,حسام ماركت,shop,supermarket,36
+31.1924886,29.9361442,node,5562141821,ركن الحسين,shop,supermarket,36
+31.1661233,29.9434583,node,5562142721,ماركت ام سليم,shop,supermarket,35
+31.1598507,29.9927131,node,5564041482,سوپرمارکت الراية,shop,supermarket,28
+31.2127419,30.0495496,node,5569557126,Kazyon,shop,supermarket,15
+31.2421382,30.0488325,node,5569557128,Gioia Lingerie,shop,clothes,16
+31.2131511,30.0456953,node,5582074821,,shop,supermarket,15
+31.2065998,30.0477580,node,5582855721,METRO,wholesale,wholesale,15
+31.1965933,30.0528389,node,5590796421,دانكن دونتس,shop,confectionery,15
+31.2087410,30.0394906,node,5592933821,أسواق عبد الله العثيم,shop,supermarket,15
+31.3017605,30.0112750,node,5604510723,نادي المقطم الرياضي,shop,sports,25
+31.2944270,30.0144662,node,5604510724,نادي مصر للتامين,shop,sports,25
+31.2142362,30.0457072,node,5617185821,,shop,supermarket,15
+31.3253546,29.9802712,node,5628657622,أشجار دارنا,shop,bookmaker,32
+31.3072279,30.0880934,node,5628663425,لبنان,shop,confectionery,11
+31.3087124,30.0900667,node,5628663426,عم شفيق,shop,beverages,11
+31.3092625,30.0901157,node,5628663427,عم سعيد,shop,beauty,11
+31.3090075,30.0876881,node,5628663429,مول العصر,shop,computer,11
+31.3096274,30.0903586,node,5628663622,شارب,shop,copyshop,11
+31.3070893,30.0896560,node,5628663721,بدران,shop,bakery,11
+31.3078751,30.0897067,node,5628663821,,shop,newsagent,11
+31.3135097,29.9934005,node,5648421040,منولا,shop,cosmetics,32
+31.3133551,29.9934196,node,5648421041,مركز منولا للتجميل,shop,cosmetics,32
+31.2855401,29.9823768,node,5693972258,TourFlag,shop,travel_agency,31
+31.4123814,30.0169422,node,5708732792,ماذركير,shop,clothes,-1
+31.4123814,30.0170127,node,5708732793,ذا بودي شوب The Body Shop,shop,beauty,-1
+31.1904809,30.0475680,node,5711821023,,post_office,post_office,14
+31.2049298,30.0393144,node,5721677521,اي ميديا ستورز لتجارة الاجهزه الالكترونيه,shop,mobile_phone,15
+31.2477618,30.0466805,node,5744988923,,shop,hardware,16
+31.2487691,30.0541257,node,5745004521,,shop,hardware,16
+31.2489251,30.0549609,node,5745004522,,shop,hardware,16
+31.2496807,30.0493317,node,5745004523,,shop,hardware,16
+31.2474716,30.0555700,node,5745004621,,shop,hardware,16
+31.2474037,30.0503721,node,5745004721,,shop,hardware,16
+31.2481343,30.0489362,node,5745004722,,shop,hardware,16
+31.2813186,29.9838519,node,5745463121,بوتيك سيلا,shop,clothes,31
+31.2815352,29.9846597,node,5745463221,بوتيك سيلا ملابس نسائيه - تجهيز عرائس سيلا,shop,clothes,31
+31.2524339,30.0041418,node,5749576122,ASIA,shop,stationery,23
+31.1863707,29.9986680,node,5760377021,,shop,hardware,28
+31.2154313,30.0822303,node,5764629853,,shop,clothes,8
+31.2254871,30.0077497,node,5784653133,,shop,ticket,23
+31.3415581,30.0365830,node,5799745555,كادو السفارات,shop,photo,19
+31.3101315,30.0879879,node,5824342281,Radioshack,shop,electronics,11
+31.3100425,30.0878904,node,5827654952,Joly Optics,shop,optician,11
+31.3357424,30.0431287,node,5860415669,,shop,convenience,19
+31.3372596,30.0891137,node,5860416043,,shop,convenience,12
+31.3197180,30.0760000,node,5860416046,,shop,bakery,11
+31.3201768,30.0763107,node,5860416047,,shop,convenience,11
+31.3311542,30.0939428,node,5860416098,,shop,convenience,12
+31.3383841,30.0893646,node,5860416100,7mart,shop,convenience,12
+31.3198274,30.0761022,node,5860416104,,shop,convenience,11
+31.3686429,30.0738484,node,5872909179,Jana,shop,tailor,13
+31.3900969,30.0171990,node,5910189685,,shop,travel_agency,27
+31.2081980,30.0533265,node,5953651070,الشركة الدولية للخدمات البريدية ايجى سيرف الفرع الرئيسى,post_office,post_office,15
+31.2605002,30.1006303,node,5983816985,اصلاح اجهزة اليكترونية,shop,electronics,3
+31.3180282,29.9595974,node,5989958180,Commissary,shop,supermarket,39
+31.3180091,29.9596005,node,5989958181,AAFES Exchange (PX),shop,yes,39
+31.2210093,30.0598379,node,5990013671,Sunny Supermarket,shop,supermarket,15
+31.2223045,30.0603481,node,5990013672,Gourmet Egypt,shop,supermarket,15
+31.2219509,30.0596664,node,5990550257,Vodafone,shop,mobile_phone,15
+31.2513887,29.9600930,node,5997773185,دانلوب زون - المعادي,shop,tyres,37
+31.2036092,30.0388869,node,6029987133,Dukes,shop,pastry,15
+31.2320420,30.0510282,node,6115407785,,shop,convenience,16
+31.1927803,30.0603160,node,6123272113,Printa xerox,shop,copyshop,15
+31.1439288,29.9776544,node,6165820885,,shop,beauty,-1
+31.1447985,29.9740000,node,6165843387,,shop,furniture,-1
+31.1437789,29.9852334,node,6171720689,,shop,gift,-1
+31.1439574,29.9849421,node,6174886485,,shop,gift,-1
+31.1960722,30.0912382,node,6178073091,الطيب,shop,supermarket,8
+31.1935306,30.0911927,node,6178083686,اولاد عيسي,shop,supermarket,8
+31.1926109,30.0915635,node,6178083687,السعد,shop,supermarket,8
+31.1900760,30.0892531,node,6178083688,الرحمة,shop,supermarket,7
+31.1949806,30.0912921,node,6178083886,مكه,shop,supermarket,8
+31.2638536,29.9756739,node,6178223087,السعد,shop,supermarket,31
+31.2651723,29.9806770,node,6178223088,كشك الاورمان,shop,supermarket,31
+31.2606489,29.9815174,node,6178223089,اسوق التوحيد,shop,supermarket,31
+31.1946932,29.9794654,node,6178223090,اولاد نصار,shop,supermarket,29
+31.2640245,29.9744270,node,6178246287,الاحمدي,shop,supermarket,31
+31.2636370,29.9773001,node,6178246288,الصفوة,shop,supermarket,31
+31.2637075,29.9776823,node,6178246289,المومن,shop,supermarket,31
+31.2651129,29.9787338,node,6178246290,احمد دياب,shop,supermarket,31
+31.2634631,29.9819862,node,6178246291,الفارس,shop,supermarket,31
+31.2589498,29.9812268,node,6178246292,طيبه,shop,supermarket,31
+31.2581376,29.9810743,node,6178246293,عباد الرحمن,shop,supermarket,30
+31.2043653,29.9782409,node,6178246294,الاخلاص,shop,supermarket,29
+31.2650387,29.9821882,node,6178277185,احمد التلاوي,shop,supermarket,31
+31.1367126,30.0092118,node,6178277186,اولاد خالد,shop,supermarket,-1
+31.1966023,29.9784512,node,6178277187,عباد الرحمن,shop,supermarket,29
+31.2570842,29.9802656,node,6178277285,المصطفي 2,shop,supermarket,30
+31.3986205,30.0502481,node,6180429386,القوات المسلحة,shop,supermarket,-1
+31.3982423,30.0504686,node,6180429387,يارا,shop,supermarket,-1
+31.3987579,30.0497963,node,6180501485,اولاد رياض,shop,supermarket,-1
+31.3994930,30.0493774,node,6180575785,الهدي,shop,supermarket,-1
+31.3998704,30.0457423,node,6180578089,كوتشي,shop,supermarket,-1
+31.4000120,30.0464455,node,6180581606,البركه,shop,supermarket,-1
+31.3995970,30.0477806,node,6180581863,الاسره,shop,supermarket,-1
+31.3999132,30.0476066,node,6180582286,هاني,shop,supermarket,-1
+31.3977945,30.0480369,node,6184958286,الحيايب,shop,supermarket,-1
+31.3950929,30.0449311,node,6184958287,الربيعي,shop,supermarket,-1
+31.3911032,30.0490638,node,6184958288,اولاد هارون,shop,supermarket,20
+31.3910127,30.0493985,node,6184958289,الزهراء,shop,supermarket,20
+31.3988753,30.0386632,node,6184958290,البرنس,shop,supermarket,-1
+31.3962256,30.0404367,node,6184958291,نجمة الزهراء,shop,supermarket,-1
+31.3893317,30.0475056,node,6184958292,ابو المعاطي,shop,supermarket,20
+31.3897552,30.0461975,node,6184958293,اولاد حسين,shop,supermarket,20
+31.3958129,30.0458140,node,6184959786,الزهراء,shop,supermarket,-1
+31.3989510,30.0434377,node,6184959787,التحرير,shop,supermarket,-1
+31.3931842,30.0487233,node,6184959788,ابو علي,shop,supermarket,-1
+31.3949297,30.0493787,node,6184959789,جابر,shop,supermarket,-1
+31.3949655,30.0474554,node,6184965085,اسواق فريش,shop,supermarket,-1
+31.3964427,30.0479510,node,6184965086,المهندس,shop,supermarket,-1
+31.3971514,30.0480817,node,6184965087,الحرمين,shop,supermarket,-1
+31.3958197,30.0451144,node,6184965088,شه,shop,supermarket,-1
+31.3927683,30.0469381,node,6184965089,سلطان,shop,supermarket,-1
+31.3924089,30.0468431,node,6184965090,عباد الرحمن,shop,supermarket,-1
+31.3917916,30.0466347,node,6184965091,المروة,shop,supermarket,20
+31.3976922,30.0395506,node,6184965092,اكسبرس,shop,supermarket,-1
+31.3974384,30.0396121,node,6184965093,الحمد,shop,supermarket,-1
+31.3977730,30.0405062,node,6184965094,تاج الدين,shop,supermarket,-1
+31.3968049,30.0504506,node,6184965095,الحسيني,shop,supermarket,-1
+31.3922995,30.0497908,node,6184965096,الاسراء,shop,supermarket,-1
+31.3889825,30.0483110,node,6184965097,المصطفي,shop,supermarket,20
+31.3901014,30.0453346,node,6184965098,بركه,shop,supermarket,20
+31.3963547,30.0489468,node,6184965099,مهاب,shop,supermarket,-1
+31.3974549,30.0489448,node,6184965985,تبارك,shop,supermarket,-1
+31.3973488,30.0421914,node,6184966385,الندي,shop,supermarket,-1
+31.4006719,30.0521658,node,6187318611,زهراء المدنيه,shop,supermarket,-1
+31.3975302,30.0414412,node,6187318697,الحوت,shop,supermarket,-1
+31.3979884,30.0413108,node,6187318698,الانوار المحمديه,shop,supermarket,-1
+31.3840974,30.0500230,node,6187318699,الحمزاوي,shop,supermarket,20
+31.3909040,30.0555813,node,6187318700,الرضا,shop,supermarket,20
+31.3958315,30.0538597,node,6187318701,المصريه,shop,supermarket,-1
+31.3957911,30.0530037,node,6187318702,صافي,shop,supermarket,-1
+31.3855225,30.0489338,node,6187318788,سمايل,shop,supermarket,20
+31.3968025,30.0430421,node,6187320285,العالميه 2,shop,supermarket,-1
+31.2439087,30.0383041,node,6198615086,Рынок,shop,greengrocer,16
+31.3523671,30.1119530,node,6205020185,شركة sky line,shop,wine,5
+31.3933695,30.0414787,node,6209874587,حميدو,shop,supermarket,-1
+31.3866270,30.0471167,node,6209874588,الحمد,shop,supermarket,20
+31.3876799,30.0473374,node,6209888985,بطه,shop,supermarket,20
+31.3848715,30.0452650,node,6224455686,الشبراوي,shop,supermarket,20
+31.3977791,30.0526883,node,6224483685,زهراء المدينه,shop,supermarket,-1
+31.1877925,30.0579577,node,6224483785,الزهور,shop,supermarket,14
+31.1895514,30.0542733,node,6224483786,اللواء,shop,supermarket,14
+31.3839487,30.0506062,node,6246295294,الاصدقاء,shop,supermarket,20
+31.4017083,30.0495596,node,6246295393,مكه,shop,supermarket,-1
+31.3889205,30.0541130,node,6246295586,الغوال,shop,supermarket,20
+31.3480185,30.0489710,node,6251334174,NTC MOTORCYCLES,shop,car,19
+31.2062056,30.0523070,node,6263714505,موم,shop,furniture,15
+31.2426191,30.0742315,node,6274343985,جمله,shop,supermarket,9
+31.2579551,30.0559373,node,6282951287,Masria market,shop,convenience,16
+31.3428359,30.0401390,node,6293477854,صيدلية الدكتورة مريم,shop,chemist,19
+31.2779852,29.9616591,node,6297535586,Carrefour Market,shop,supermarket,38
+31.3645719,30.0543221,node,6308202287,الانوار المحمديه,shop,supermarket,20
+31.3688900,30.0536738,node,6308216387,تبارك,shop,supermarket,20
+31.2477372,30.0541549,node,6312220385,سيارة قيس,shop,sports,16
+31.1576757,29.9928874,node,6333258585,Tienda de Papiro,shop,convenience,-1
+31.1443456,29.9757933,node,6339729398,AlAhram equestrian equipments and supplies,shop,sports,-1
+31.2608844,30.0479005,node,6350798885,Bazaar,shop,supermarket,17
+31.2442850,30.0535990,node,6364912786,النيل ستوك,shop,clothes,16
+31.1472648,29.9891803,node,6389108585,Spinneys,shop,supermarket,-1
+31.1714803,29.9982588,node,6389156085,Carrefour,shop,supermarket,28
+31.3250618,30.0463791,node,6391518085,مركز كريم رحمي لصيانة السيارات سوبارو,shop,car_repair,18
+31.1929750,30.0011773,node,6395491102,,shop,supermarket,22
+31.1383364,29.9966312,node,6398051090,اسواق المعين,shop,supermarket,-1
+31.3777455,30.0409233,node,6398112585,اولاد عبدالرحيم,shop,supermarket,20
+31.2192469,30.1045452,node,6432400985,المدينه,shop,supermarket,1
+31.2191929,30.1045241,node,6432602185,ك كتكوت,shop,supermarket,1
+31.2186366,30.1041930,node,6432602186,مقلة,shop,supermarket,1
+31.2028200,30.1120080,node,6432602187,الشروق,shop,supermarket,1
+31.2025765,30.1119229,node,6432602188,زهرة الجزيره,shop,supermarket,1
+31.2190087,30.1044614,node,6432602385,ك كتكوت,shop,supermarket,1
+31.2181968,30.1036036,node,6432602386,البان الحاج محمود,shop,supermarket,1
+31.2080783,30.1141027,node,6432602387,اولاد رفاعى,shop,supermarket,1
+31.2189174,30.1045283,node,6432602585,صلاح,shop,supermarket,1
+31.2179153,30.1034273,node,6432602586,مقلة المنصوريه,shop,supermarket,1
+31.2151655,30.0911088,node,6432602587,العمده,shop,supermarket,8
+31.1973129,30.1109284,node,6432602588,الاوائل,shop,supermarket,1
+31.2187257,30.1042444,node,6432602685,مقلة القصر,shop,supermarket,1
+31.2188036,30.1042007,node,6432602686,البان الرحمن,shop,supermarket,1
+31.2184692,30.1039806,node,6432602687,البان الحاج محمود,shop,supermarket,1
+31.2171707,30.0918053,node,6432602688,حمزاوى,shop,supermarket,8
+31.2153989,30.0918965,node,6432602689,سامح وسامى,shop,supermarket,8
+31.2158767,30.0913055,node,6432602690,بابا جدو,shop,supermarket,8
+31.2160150,30.0912703,node,6432602691,,shop,supermarket,8
+31.2152318,30.0910342,node,6432602692,البان الحرم,shop,supermarket,8
+31.2094162,30.1146594,node,6432602693,ك نجمة المرور,shop,supermarket,1
+31.2023365,30.1119393,node,6432602694,كريم,shop,supermarket,1
+31.2022296,30.1118628,node,6432602695,المدينه المنوره,shop,supermarket,1
+31.2025470,30.1111457,node,6432602696,الهدى,shop,supermarket,1
+31.2024394,30.1108529,node,6432602697,ابو علاء,shop,supermarket,1
+31.2025387,30.1098979,node,6432602698,العدوى,shop,supermarket,1
+31.2073422,30.1137691,node,6432602985,حماده,shop,supermarket,1
+31.2026451,30.1094333,node,6432602986,اولاد محمد عبد المغنى,shop,supermarket,1
+31.1842969,30.0145840,node,6455945794,اسواق العثيم,shop,department_store,21
+31.2143164,30.0748472,node,6459464388,كشك,shop,supermarket,8
+31.2151216,30.0759036,node,6459464389,الحمد,shop,supermarket,8
+31.1482182,30.0098980,node,6459464390,اولاد سيد 2,shop,supermarket,-1
+31.1482215,30.0098313,node,6459464391,سرجة التوحيد,shop,supermarket,-1
+31.2232988,30.0962480,node,6459464392,تسالي البركه,shop,supermarket,8
+31.2222619,30.0915056,node,6459464393,كشك ابو كريم,shop,supermarket,8
+31.2181198,30.0967437,node,6459464394,سارة,shop,supermarket,8
+31.2172282,30.1006280,node,6459464395,قاصد كريم,shop,supermarket,1
+31.2149507,30.1049613,node,6459464396,الصعيدي,shop,supermarket,1
+31.2087957,30.1049157,node,6459464398,ماركت,shop,supermarket,1
+31.1914380,30.0844976,node,6459464486,تسالي عمر,shop,supermarket,7
+31.1844723,30.0953245,node,6459464487,وردة الاقصر,shop,supermarket,7
+31.2071485,30.1013538,node,6459464488,الرحمه,shop,supermarket,1
+31.2076787,30.1033135,node,6459464489,ركيبة,shop,supermarket,1
+31.2178328,30.1063477,node,6459464490,محمود الصعيدي,shop,supermarket,1
+31.2180980,30.0963956,node,6459464491,نجمة السواحل,shop,supermarket,8
+31.2175009,30.1000497,node,6459464492,ميني ماركت ادم,shop,supermarket,1
+31.2151633,30.1049361,node,6459464493,شركة المصرية لتجارة الجمله,shop,supermarket,1
+31.2140205,30.0692517,node,6459464494,ماركت,shop,supermarket,8
+31.1866083,30.1042472,node,6459500487,ماركت,shop,supermarket,0
+31.2223305,30.1022652,node,6459500488,كشك سنتل,shop,supermarket,1
+31.2181181,30.0950810,node,6459500489,الحرمين,shop,supermarket,8
+31.2179808,30.0950801,node,6459500490,كشك نجم الليل,shop,supermarket,8
+31.2142176,30.1063906,node,6459500491,الأرزاق بالله,shop,supermarket,1
+31.2061348,30.0572163,node,6459500492,سميراميس,shop,supermarket,15
+31.2019968,30.0527565,node,6459500493,المدينه,shop,supermarket,15
+31.2105615,30.0903464,node,6459500494,مقلة المدينه,shop,supermarket,8
+31.1793380,30.0869377,node,6459523185,سوق الجمله,shop,supermarket,7
+31.1823135,30.1070000,node,6459523186,ماركت,shop,supermarket,0
+31.2199918,30.0932785,node,6459523187,كشك اولاد جمال,shop,supermarket,8
+31.2199037,30.0932920,node,6459523188,السوهاجي,shop,supermarket,8
+31.2130896,30.1050864,node,6459523189,شمس 3,shop,supermarket,1
+31.1820282,30.0985270,node,6459523285,عم يحيي,shop,supermarket,7
+31.2208315,30.0925544,node,6459523286,محمد جابر,shop,supermarket,8
+31.2180986,30.0981857,node,6459523287,كشك العوامي,shop,supermarket,8
+31.1480303,30.0118312,node,6459523485,العدوي,shop,supermarket,-1
+31.1479566,30.0111476,node,6459523685,التوحيد,shop,supermarket,-1
+31.1480937,30.0105848,node,6459523686,عطارة الحرمين,shop,supermarket,-1
+31.2227324,30.0983169,node,6459523687,مقلة النهر الخالد,shop,supermarket,8
+31.2215888,30.0928469,node,6459523688,اولاد زغلول,shop,supermarket,8
+31.1482526,30.0097373,node,6459523785,الاسواني بن الجنوب,shop,supermarket,-1
+31.1482995,30.0096339,node,6459523786,البان الخليل,shop,supermarket,-1
+31.2196519,30.0934793,node,6459523787,ابو حسين,shop,supermarket,8
+31.2146284,30.1057783,node,6459523788,اسواق البركه,shop,supermarket,1
+31.2051956,30.0908089,node,6459523789,الفيشاوي,shop,supermarket,8
+31.2191255,30.0939391,node,6459524285,اولاد ابو زياد,shop,supermarket,8
+31.2158068,30.0928099,node,6461643085,الوحش ١,shop,supermarket,8
+31.2167987,30.0926522,node,6461686985,الروضه,shop,supermarket,8
+31.2151722,30.0910372,node,6461865287,العمده,shop,supermarket,8
+31.2149998,30.0903382,node,6462020585,البركه,shop,supermarket,8
+31.2139382,30.0907593,node,6462020685,الرحمه,shop,supermarket,8
+31.2084116,30.0798924,node,6462927785,مالك مغركت,shop,supermarket,8
+31.2085509,30.0749433,node,6466991386,سيد كشري,shop,supermarket,8
+31.2099429,30.0697394,node,6467065185,Smoking,shop,supermarket,8
+31.1988575,30.0661316,node,6467089685,العمده,shop,supermarket,15
+31.1969266,30.0656865,node,6467115385,محلات دعبس,shop,supermarket,15
+31.1984473,30.0643391,node,6467115485,سعدوان,shop,supermarket,15
+31.1888400,30.0976892,node,6488313212,اميره,shop,supermarket,7
+31.2245082,29.9680496,node,6488313213,حدوته,shop,supermarket,29
+31.3443967,30.0713720,node,6502326285,,shop,convenience,12
+31.2079666,30.0815452,node,6505219886,عطارة اهل بيت رسول الله,shop,supermarket,8
+31.2117487,30.0844449,node,6505219887,اولاد دردير,shop,supermarket,8
+31.2167139,30.0882283,node,6505219888,فوري,shop,supermarket,8
+31.1977367,30.0775587,node,6505233585,الرحمه,shop,supermarket,8
+31.3249488,30.0453204,node,6510933786,مركز كريم رحمي سوبارو,shop,car,18
+31.1852073,30.0659569,node,6514775386,سعودي,shop,supermarket,14
+31.1382240,30.0374531,node,6539749287,جملة فتحي,shop,supermarket,-1
+31.2577493,30.0422163,node,6553526588,Mercado de fabricantes de toldos,shop,supermarket,16
+31.2615078,30.0477448,node,6553527285,Khan Al Khalili,shop,supermarket,17
+31.2393731,30.0487199,node,6557101085,El Abd,shop,bakery,16
+31.1971722,29.9897483,node,6561194586,اسواق عبدالجبار,shop,supermarket,29
+31.1956952,29.9936137,node,6561337885,البان الاصدقاء,shop,supermarket,29
+31.2076692,29.9859150,node,6561373587,جروب على الله,shop,supermarket,29
+31.3330467,30.0506088,node,6570360126,أولاد الحج رجب فرع الحديقة الدولية,shop,greengrocer,19
+31.3818241,30.0543015,node,6572447842,Bakro,shop,convenience,20
+31.3443769,30.0625375,node,6575082981,,shop,clothes,19
+31.3441449,30.0625102,node,6575082982,,shop,clothes,19
+31.3439127,30.0624829,node,6575082983,,shop,clothes,19
+31.3446282,30.0625671,node,6575082993,,shop,clothes,19
+31.3812809,30.0983489,node,6581391400,نجمة هليوبوليس,shop,supermarket,13
+31.3420082,30.0989824,node,6581746977,,shop,supermarket,12
+31.3421666,30.0989614,node,6581746978,oscar pet shop,shop,supermarket,12
+31.3433580,30.0539884,node,6583780633,اوفيس مكس Office mix,shop,furniture,19
+31.1361751,29.9905471,node,6593550989,Vodafone,shop,mobile_phone,-1
+31.2239063,30.0584017,node,6594635423,Nail Power Studio,shop,beauty,15
+31.2846556,29.9828664,node,6597000380,Golden Medic Maadi for Medical Supplies,shop,medical_supply,31
+31.3054776,30.0923779,node,6613793605,الشركة الدولية للخدمات البريدية ايجى سيرف فرع الزيتون,post_office,post_office,11
+31.3064298,30.1188442,node,6620399897,Salama Abd Elaziz,shop,travel_agency,4
+31.2585026,29.9826198,node,6620815598,الراوي | ElRawy,shop,hairdresser,30
+31.3454995,30.1013715,node,6632111207,,shop,hairdresser,5
+31.3448919,30.1010612,node,6632111208,,shop,kiosk,5
+31.3446396,30.1008940,node,6632111209,,shop,kiosk,5
+31.3448830,30.1016654,node,6632311236,,shop,supermarket,5
+31.3410290,30.1213177,node,6638135549,Maro Jeans,shop,clothes,5
+31.2379893,30.0466352,node,6641324285,الخطوط الجوية العربية الليبية,shop,ticket,16
+31.3705697,30.1008022,node,6650875085,مول فلوريدا,shop,clothes,6
+31.3375086,30.1330896,node,6658055740,NFC Egypt Store,shop,electronics,-1
+31.3845300,30.1417507,node,6684262961,لامار لوفاكه اللحوم,shop,butcher,-1
+31.3022923,30.0578309,node,6684441485,,shop,sports,18
+31.3019387,30.0632871,node,6712092285,زمزم,shop,supermarket,18
+31.3023041,30.0633619,node,6712092286,الرضا,shop,supermarket,18
+31.3038866,30.0621452,node,6712092287,النور,shop,supermarket,18
+31.3057826,30.0613753,node,6712092288,جمعيتى,shop,supermarket,18
+31.3039793,30.0591980,node,6712092289,البان تاج الدين,shop,supermarket,18
+31.3031184,30.0590652,node,6712092290,احمد,shop,supermarket,18
+31.3020973,30.0591621,node,6712092291,احمد,shop,supermarket,18
+31.3031105,30.0590717,node,6712092292,المدينه,shop,supermarket,18
+31.2979544,30.0563491,node,6712092293,الشيخ سامى,shop,supermarket,18
+31.2970029,30.0569960,node,6712092294,أسواق الصديق,shop,supermarket,18
+31.2965302,30.0566665,node,6712092295,ابو طارق,shop,supermarket,18
+31.2950952,30.0558542,node,6712092296,ك الرحمه,shop,supermarket,18
+31.2931712,30.0553821,node,6712092297,ك فايف ستار,shop,supermarket,18
+31.2926643,30.0553510,node,6712092298,ك احمد حسين كعبيش,shop,supermarket,18
+31.3024643,30.0581320,node,6712092299,ك فايف ستار,shop,supermarket,18
+31.2229474,30.0598133,node,6712092300,س م,shop,supermarket,15
+31.2230971,30.0603690,node,6712092301,جراند,shop,supermarket,15
+31.2232996,30.0610512,node,6712092302,س م,shop,supermarket,15
+31.3431696,30.0886515,node,6712092303,البان قنديل,shop,supermarket,12
+31.3422438,30.0891568,node,6712092304,الصافورى,shop,supermarket,12
+31.3417842,30.0897874,node,6712092305,عامر,shop,supermarket,12
+31.3414198,30.0876747,node,6712092306,ك الحريه,shop,supermarket,12
+31.3449300,30.0901699,node,6712092307,ك ابو بكر حسين,shop,supermarket,12
+31.3459936,30.0879271,node,6712092308,ك,shop,supermarket,12
+31.3410282,30.0901574,node,6712092309,ك الجزيره,shop,supermarket,12
+31.3383188,30.0892550,node,6712092310,كشك الله لا الله الا هو,shop,supermarket,12
+31.3372207,30.0891642,node,6712092311,الاخلاص,shop,supermarket,12
+31.3363876,30.0889190,node,6712092312,,shop,supermarket,12
+31.3351278,30.0868316,node,6712092313,كشك المرغنى,shop,supermarket,12
+31.3504666,30.0883252,node,6712092315,ك الصفا والمروه,shop,supermarket,12
+31.3308316,30.1097737,node,6712092316,الفردوس,shop,supermarket,5
+31.3327763,30.1086774,node,6712092317,المصطفى,shop,supermarket,5
+31.3354101,30.0956548,node,6712092318,كشك,shop,supermarket,12
+31.3350852,30.0964726,node,6712092319,كشك زهير عبد العاطى,shop,supermarket,12
+31.3247187,30.0937988,node,6712092320,كشك,shop,supermarket,11
+31.3757152,30.1302350,node,6712092321,المؤمن,shop,supermarket,6
+31.3746270,30.1300984,node,6712092322,كايرو ماركت,shop,supermarket,6
+31.3885328,30.1364391,node,6712092323,الصحابه,shop,supermarket,-1
+31.3885000,30.1355126,node,6712092324,,shop,supermarket,-1
+31.2192452,30.0664354,node,6712092325,فرساى,shop,supermarket,8
+31.3021791,30.0633182,node,6712092385,بنده,shop,supermarket,18
+31.2916434,30.0546285,node,6712092387,الشريف,shop,supermarket,17
+31.3035004,30.0586418,node,6712092388,محمصات النصر,shop,supermarket,18
+31.3024769,30.0883668,node,6712092389,ك المقريزي,shop,supermarket,11
+31.3215679,30.0974760,node,6712092390,ك ابو زيد,shop,supermarket,11
+31.3223947,30.0980668,node,6712092391,ك نجمة روكسي,shop,supermarket,11
+31.2230904,30.0611487,node,6712092392,الفتح,shop,supermarket,15
+31.3429801,30.0887673,node,6712092393,ثابت متركت,shop,supermarket,12
+31.3423025,30.0904892,node,6712092394,ك نصر الاسلام,shop,supermarket,12
+31.3376619,30.0888849,node,6712092395,ك نجمة المرغنى,shop,supermarket,12
+31.3463088,30.1103423,node,6712092396,الجبلى,shop,supermarket,5
+31.3351818,30.0953908,node,6712092397,كشك,shop,supermarket,12
+31.3243971,30.0934212,node,6712092398,كشك,shop,supermarket,11
+31.3882884,30.1364417,node,6712092399,دهب,shop,supermarket,-1
+31.3057440,30.0614232,node,6712092485,قشقوش,shop,supermarket,18
+31.3020331,30.0583192,node,6712092486,كشك,shop,supermarket,18
+31.3012408,30.0578969,node,6712092487,سوبر ماركت عمارات الظباط,shop,supermarket,18
+31.2988728,30.0566950,node,6712092488,ك عباد الرحمن,shop,supermarket,18
+31.3014450,30.0611427,node,6712092489,ابو عرفات,shop,supermarket,18
+31.3203869,30.0964065,node,6712092491,الحجاز إكسبرس,shop,supermarket,11
+31.2195562,30.0686372,node,6712092492,كشك,shop,supermarket,8
+31.2242893,30.0441784,node,6712092493,ك الزمالك,shop,supermarket,15
+31.3429042,30.0888197,node,6712092494,المقلة الحديثه,shop,supermarket,12
+31.3372642,30.0891055,node,6712092495,شمس,shop,supermarket,12
+31.2224139,30.0614568,node,6712092496,بقالة الاتحاد,shop,supermarket,15
+31.3034993,30.0590354,node,6712092585,مكه,shop,supermarket,18
+31.3029801,30.0592476,node,6712092586,أسواق الحسن,shop,supermarket,18
+31.2929434,30.0554726,node,6712092587,ك ان فتحنا لك فتحا مبينا,shop,supermarket,18
+31.3412591,30.0900757,node,6712092588,ك احمد مجدى,shop,supermarket,12
+31.2969082,30.0582635,node,6712092685,كشك ابو طه,shop,supermarket,18
+31.2164834,30.0646749,node,6712092686,نادر,shop,supermarket,15
+31.2175025,30.0662438,node,6712092687,كريم,shop,supermarket,15
+31.2175899,30.0663495,node,6712092688,,shop,supermarket,8
+31.2197789,30.0689292,node,6712092689,كشك,shop,supermarket,8
+31.2192904,30.0704067,node,6712092690,الجهاد,shop,supermarket,8
+31.2167451,30.0666945,node,6712092691,الباشا,shop,supermarket,8
+31.3440155,30.0886292,node,6712092692,ك نجمة الماظه,shop,supermarket,12
+31.3484992,30.0900790,node,6712092693,ك الموقف٢,shop,supermarket,12
+31.3398313,30.0972019,node,6712092695,ك مملكة الجبل,shop,supermarket,12
+31.3374236,30.0972356,node,6712092696,نجمة سفير,shop,supermarket,12
+31.3418442,30.0995106,node,6712092697,نجمة تريومف الجديده,shop,supermarket,12
+31.3437260,30.1004193,node,6712092698,اولاد الحاج على حسن,shop,supermarket,5
+31.3442659,30.0890056,node,6712092885,ك العمده,shop,supermarket,12
+31.2212746,30.0658116,node,6712110985,الجوهرة,shop,supermarket,15
+31.2201676,30.0695080,node,6712149985,أبو حسن,shop,supermarket,8
+31.2202817,30.0696180,node,6712149986,السعادة,shop,supermarket,8
+31.2342636,30.0509997,node,6718246187,كشك سوبر جيت,shop,supermarket,16
+31.2301976,30.0756093,node,6718246188,بقالة,shop,supermarket,9
+31.2301394,30.0754313,node,6718246189,بقالة,shop,supermarket,9
+31.3109993,29.9916912,node,6736163112,كريم جمعة,shop,convenience,32
+31.2261204,30.0156450,node,6780669986,التوحيد والنور,shop,clothes,23
+31.2001312,30.0494845,node,6782879947,مركز صيانة يونيون اير - Union Air,shop,repair,15
+31.2093419,30.0507637,node,6782880450,,shop,travel_agency,15
+31.3286745,30.0801800,node,6784997087,ك المروه,shop,supermarket,12
+31.3439277,30.0712093,node,6784997088,ك الارزاق بالله,shop,supermarket,12
+31.3323552,30.0807420,node,6785010386,ك مبروك,shop,supermarket,12
+31.3347271,30.0831000,node,6785010387,ك جلال,shop,supermarket,12
+31.3351480,30.0808839,node,6785010388,أسواق المدينه,shop,supermarket,12
+31.3283679,30.0795554,node,6785010389,المحبه,shop,supermarket,12
+31.3433112,30.0739016,node,6785010391,مترو اكسبرس,shop,supermarket,12
+31.3337412,30.0808785,node,6785012885,الاسوانى,shop,supermarket,12
+31.3335321,30.0811278,node,6785012985,صحافة الجولف,shop,supermarket,12
+31.3394727,30.0821957,node,6785012986,ك برشلونه,shop,supermarket,12
+31.3430482,30.0743710,node,6785012987,زيدان,shop,supermarket,12
+31.3344960,30.0811571,node,6785013085,ك زهرة الجولف,shop,supermarket,12
+31.3347914,30.0830576,node,6785013086,عمران ماركت,shop,supermarket,12
+31.3371029,30.0810195,node,6785013087,أسواق البركه,shop,supermarket,12
+31.1842552,30.0032997,node,6786114789,التوحيد والنور,shop,boutique,21
+31.2157819,30.0340834,node,6787818824,TM_HOME,shop,bed,15
+31.1630735,29.9939082,node,6797240405,Simple,shop,yes,28
+31.1804123,30.0524786,node,6798999488,تكييف سيارات عرفه,shop,car_repair,14
+31.2082154,30.0534034,node,6799916531,الشركة الدولية للخدمات البريدية ايجى سيرف الفرع الرئيسى,post_office,post_office,15
+31.2720728,29.9852319,node,6807490985,مقلة الفيومى,shop,supermarket,31
+31.3180626,29.9916736,node,6807490986,نجمة الهضبه,shop,supermarket,32
+31.2651085,29.9792314,node,6807491085,مقلة ابو سته,shop,supermarket,31
+31.2616006,30.0479539,node,6808096706,Jordi,shop,gift,17
+31.3030695,30.0088327,node,6832644686,أسواق المهر,shop,supermarket,25
+31.3038506,30.0075620,node,6832644687,المحمدى,shop,supermarket,25
+31.3029873,30.0086330,node,6832646999,مراعى سونستا,shop,supermarket,25
+31.3102790,30.0069336,node,6832647000,الطيبين,shop,supermarket,25
+31.2824520,30.0148014,node,6832647102,سمسم,shop,supermarket,24
+31.3029529,30.0085208,node,6832647103,ابو علاء,shop,supermarket,25
+31.3182664,30.0038288,node,6832647104,الامانه,shop,supermarket,25
+31.3030380,30.0087441,node,6832647288,مكتبة الفتح,shop,supermarket,25
+31.3154154,30.0074880,node,6832688085,مكه,shop,supermarket,25
+31.3164561,30.0077225,node,6832688185,عطارة الشرقاوى,shop,supermarket,25
+31.3202777,30.1179138,node,6899520587,كازيون,shop,supermarket,4
+31.3187478,29.9942486,node,6918260585,سفير,shop,supermarket,32
+31.3185270,29.9942619,node,6918260685,التوفير,shop,supermarket,32
+31.3384201,30.0588808,node,7012144840,Al Ahly Official Store A.S.C.,shop,sports,19
+31.2610322,30.0487823,node,7012144847,Philae Bazaar,shop,craft,17
+31.2652627,30.0756430,node,7014933687,مصنع العبد للحلويات,shop,confectionery,10
+31.2425228,30.0526694,node,7014986185,العبد للحلويات,shop,confectionery,16
+31.3401779,30.0561181,node,7027703385,لابوتيه بيوتي سنتر,shop,beauty,19
+31.2679569,30.0483798,node,7038850085,,shop,convenience,17
+31.2434625,30.0505441,node,7101783585,Lehnert & Landrock,shop,books,16
+31.2195991,30.0408365,node,7128415385,,shop,bakery,15
+31.2763840,29.9557721,node,7138777067,Quintessentially Egypt,shop,travel_agency,38
+31.2512031,30.0490825,node,7156815285,,shop,variety_store,16
+31.2378791,30.0472929,node,7159412645,L'Orientaliste,shop,books,16
+31.2253123,30.0573643,node,7228334554,Quick 24,shop,convenience,15
+31.2517724,30.0452775,node,7243445890,,shop,furniture,16
+31.2525633,30.0514289,node,7243445897,,shop,clothes,16
+31.2480212,30.0510322,node,7243445899,,shop,electronics,16
+31.2512895,30.0466786,node,7243445900,,shop,music,16
+31.2516350,30.0454088,node,7243445902,,shop,furniture,16
+31.2526519,30.0514123,node,7243445908,,shop,clothes,16
+31.2478750,30.0510413,node,7243445909,,shop,electronics,16
+31.2524049,30.0514726,node,7243445910,,shop,clothes,16
+31.2512415,30.0469202,node,7243445912,,shop,music,16
+31.2512654,30.0468328,node,7243445914,,shop,music,16
+31.2516965,30.0452929,node,7243445917,,shop,furniture,16
+31.2527548,30.0513881,node,7243445920,,shop,clothes,16
+31.2477576,30.0510385,node,7243445922,,shop,watches,16
+31.2524868,30.0514579,node,7243445923,,shop,clothes,16
+31.2481730,30.0510316,node,7243445925,,shop,electronics,16
+31.2512734,30.0467526,node,7243445926,,shop,music,16
+31.2552198,30.0784266,node,7305772874,الشركة الدولية للخدمات البريدية ايجى سيرف فرع شبرا,post_office,post_office,9
+31.3558639,30.1159107,node,7308879077,,post_office,post_office,5
+31.1404815,30.0011915,node,7502862788,البطل,shop,supermarket,-1
+31.1936734,30.0062057,node,7574548680,Blue Shell sporting goods,shop,supermarket,22
+31.2475270,30.1384870,node,7575559336,نور الإسلام,shop,dairy,-1
+31.2472051,30.1384963,node,7603938268,سنترال النجوم,shop,mobile_phone,-1
+31.3452913,30.0350677,node,7628632886,الندى م,shop,supermarket,19
+31.3431117,30.0366884,node,7628664586,الأقصى م,shop,supermarket,19
+31.3430481,30.0369862,node,7628703285,كايرو ماركت,shop,supermarket,19
+31.3437477,30.0370010,node,7629181788,التحرير م,shop,supermarket,19
+31.3416367,30.0364818,node,7629181789,اولاد بخيت,shop,supermarket,19
+31.3416289,30.0361435,node,7629181790,مكه,shop,supermarket,19
+31.3390130,30.0377569,node,7629181791,مقلة العوام,shop,supermarket,19
+31.3392736,30.0378912,node,7629181792,ك المنتصر بالله,shop,supermarket,19
+31.3394295,30.0377866,node,7629181793,اولاد حسان,shop,supermarket,19
+31.3399575,30.0378131,node,7629181794,البان الحصرى,shop,supermarket,19
+31.3403697,30.0379308,node,7629181795,ارزاق,shop,supermarket,19
+31.3406044,30.0380333,node,7629181796,الباشا,shop,supermarket,19
+31.3317978,30.0396269,node,7629181797,ك بغدادى,shop,supermarket,19
+31.3359544,30.0374450,node,7629181893,الاخوه,shop,supermarket,19
+31.3373498,30.0383027,node,7629181894,البنا,shop,supermarket,19
+31.3334778,30.0378991,node,7629181895,اسواق البركه,shop,supermarket,19
+31.3309714,30.0407563,node,7629181896,ك الحرية,shop,supermarket,19
+31.3314381,30.0404561,node,7629181897,القدس,shop,supermarket,19
+31.3337904,30.0402914,node,7629181898,مكتبة الاندلس,shop,supermarket,19
+31.3344421,30.0402057,node,7629181899,ك جمعية احباء مصر,shop,supermarket,19
+31.3393479,30.0359796,node,7629181986,عمر,shop,supermarket,19
+31.3340700,30.0372085,node,7629181987,الوطنيه,shop,supermarket,19
+31.3419549,30.0368585,node,7629182986,البركه,shop,supermarket,19
+31.3406033,30.0360959,node,7629182987,العالميه,shop,supermarket,19
+31.3389284,30.0361429,node,7629182988,اسواق المدينه,shop,supermarket,19
+31.3380061,30.0361502,node,7629182989,مكه المكرمه,shop,supermarket,19
+31.3406622,30.0380754,node,7629182990,ك السفارات,shop,supermarket,19
+31.3363460,30.0382445,node,7629182991,دكان,shop,supermarket,19
+31.3312645,30.0401347,node,7629182992,ك الحاج عبدالله,shop,supermarket,19
+31.3311921,30.0400859,node,7629182993,كايرو ماركت,shop,supermarket,19
+31.3423797,30.0362681,node,7629224685,اولاد بخيت,shop,supermarket,19
+31.3311046,30.0404604,node,7629224686,هانى ماركت,shop,supermarket,19
+31.3345179,30.0396796,node,7629224687,توب ماركت,shop,supermarket,19
+31.3355377,30.0373343,node,7629225185,كنزى,shop,supermarket,19
+31.3377825,30.0376032,node,7629225186,ك نجمة السفارات,shop,supermarket,19
+31.3305708,30.0408077,node,7629225187,كشك ورزقكم في السماء وما توعدون,shop,supermarket,19
+31.3347114,30.0388019,node,7629225188,نور على نور,shop,supermarket,19
+31.2677072,30.0953852,node,7632073285,جملة حجاج,shop,supermarket,10
+31.2660510,30.0890917,node,7632073286,اولاد عبدالكىيم للمواد الغذائية,shop,supermarket,10
+31.2627599,30.0960806,node,7632073385,جملة ابو حسين الدرملي,shop,supermarket,10
+31.2700061,30.0945090,node,7632073485,اولاد الغرباوي,shop,supermarket,10
+31.3008353,30.1091886,node,7632969185,الامانه,shop,supermarket,4
+31.3061300,30.1029332,node,7632993185,الباشا,shop,supermarket,4
+31.3135634,29.9812339,node,7635900879,Small Market,shop,supermarket,32
+31.3121243,29.9818653,node,7639846205,Supermarché,shop,supermarket,32
+31.3161553,29.9817085,node,7639846208,LC Waikiki,shop,clothes,32
+31.3149445,29.9811421,node,7639846210,Pet shop,shop,pet,32
+31.3161009,29.9818950,node,7639846215,Zara,shop,clothes,32
+31.3149957,29.9811444,node,7640012781,Small market,shop,supermarket,32
+31.3760812,30.0654177,node,7640426785,الحسيني,shop,supermarket,20
+31.3746423,30.0692871,node,7640426885,العامري,shop,supermarket,13
+31.3769693,30.0634878,node,7640426985,الاخلاص,shop,supermarket,20
+31.2887394,30.0516446,node,7658272385,المقولان العرب دخلة الي محلات سوبر ماركت,shop,supermarket,17
+31.2840645,29.9884580,node,7660689385,الشيمي للزيوت,shop,car_repair,31
+31.2494943,30.0585718,node,7728120189,جملة علاء,shop,supermarket,16
+31.2492160,30.0586912,node,7728120287,جملة الحمد,shop,supermarket,16
+31.3298501,30.0069886,node,7791072320,عزوز,shop,supermarket,26
+31.2332903,30.0775607,node,7803549786,العسكري,shop,supermarket,9
+31.2499281,30.0392975,node,7814474985,,shop,sports,16
+31.1956070,30.0848707,node,7834518985,جملة اولاد بخيت فواد,shop,supermarket,8
+31.3198379,30.1047184,node,7947635363,GreenHouse Compact,shop,supermarket,4
+31.2406041,30.0756400,node,7960464784,الجوهري لقطع غيار السيارات,shop,car_parts,9
+31.1945684,30.1241030,node,7968247691,بقالة,shop,supermarket,1
+31.1864013,30.1295407,node,7968331224,Tanash B-Tech Park,market,marketplace,0
+31.1934393,30.1236529,node,7968331230,بقالة ابو كريم,market,marketplace,1
+31.1932988,30.1236345,node,7968331233,سوق قرية طناش,market,marketplace,1
+31.1931848,30.1239094,node,7968331234,سنترال السقيلي,shop,electronics,1
+31.1924357,30.1248131,node,7968331235,مكتب بريد طناش,post_office,post_office,1
+31.3587493,29.9841629,node,7999283636,VW Garage,shop,car_repair,33
+31.2688675,30.1212229,node,8011058376,عالم المفروشات,shop,household_linen,3
+31.2077684,30.0683566,node,8011396292,,shop,variety_store,8
+31.2048801,30.0678610,node,8011396293,,shop,department_store,8
+31.1993960,30.0664388,node,8011410486,,shop,department_store,8
+31.3365743,30.0950136,node,8047967771,ريلاكس للتجهيزات الطبية,shop,medical_supply,12
+31.2204555,29.9654261,node,8060387557,عطور أبوعبيد,shop,perfumery,36
+31.3272830,30.1236658,node,8109856267,مصوغات ومجوهرات أنس,shop,jewelry,5
+31.2362010,29.9567769,node,8165087417,مول الجعيدي,shop,electronics,37
+31.2528645,30.0860532,node,8185129732,جولد ستور,shop,jewelry,9
+31.1842607,30.0390506,node,8188769546,إسلام,shop,jewelry,14
+31.1417562,30.0008928,node,8258567499,مركز جولدن سيرفيس لصيانة السيارات,shop,car_repair,-1
+31.3110163,29.9746602,node,8269481417,,shop,car_parts,32
+31.3071231,29.9720072,node,8269541717,,shop,car_parts,32
+31.3046460,29.9749920,node,8269631621,,shop,car_parts,32
+31.3046005,29.9750353,node,8269631622,سوبر ماركت المدينه,shop,supermarket,32
+31.3054575,29.9743830,node,8269662317,,shop,car_parts,32
+31.3047217,29.9749555,node,8269686117,,shop,car_parts,32
+31.3063220,29.9767397,node,8269748117,,shop,car_parts,32
+31.3060356,29.9768281,node,8273569417,,shop,car_parts,32
+31.2494422,30.0482095,node,8283116417,الشركة الاسلامية للمعدات الكهربائية,shop,department_store,16
+31.3073833,29.9797540,node,8296457018,,shop,car_parts,32
+31.1622624,30.0751458,node,8297204720,معرض دنيا للمفروشات والستائر,shop,furniture,7
+31.3304919,29.9721973,node,8300647317,ابو البتول عبد الواحد مصر بيتچو سيتي المعادي عمارة 49 ط 6,shop,sports,33
+31.2058720,30.0662491,node,8300818117,شقة مصر المهندسين عمارات البترول شارع احمد عرابي,shop,sports,15
+31.3033395,29.9748711,node,8305309017,,shop,car_parts,32
+31.3159350,29.9780685,node,8305699317,,shop,car_parts,32
+31.3059112,29.9710783,node,8308264517,,shop,car_parts,32
+31.3058541,29.9727579,node,8308275217,,shop,car_parts,32
+31.3034988,29.9710823,node,8308293117,,shop,car_parts,32
+31.3095252,29.9785298,node,8308609717,,shop,car_parts,32
+31.3052709,29.9707805,node,8310737821,,shop,car_parts,32
+31.3043049,29.9715658,node,8310813517,,shop,car_parts,32
+31.3032171,29.9740475,node,8310840017,,shop,car_parts,32
+31.3058377,29.9727635,node,8311005517,,shop,car_parts,32
+31.3059527,29.9726368,node,8311007317,,shop,car_parts,32
+31.3111444,29.9741677,node,8311182717,,shop,car_parts,32
+31.3136512,29.9762611,node,8311287618,,shop,car_parts,32
+31.3139802,29.9767963,node,8311299617,,shop,car_parts,32
+31.3141203,29.9749868,node,8311346117,,shop,car_parts,32
+31.3140834,29.9760457,node,8311391817,,shop,car_parts,32
+31.3158859,29.9759759,node,8311438017,,shop,car_parts,32
+31.3159098,29.9777628,node,8311491617,,shop,car_parts,32
+31.3160144,29.9782302,node,8311491618,,shop,car_parts,32
+31.3159715,29.9787501,node,8311491717,,shop,car_parts,32
+31.3025562,29.9704710,node,8314347617,,shop,car_parts,32
+31.3033984,29.9739391,node,8314430517,,shop,car_parts,32
+31.3031177,29.9739014,node,8314452918,,shop,car_parts,32
+31.3029879,29.9737843,node,8314471117,,shop,car_parts,32
+31.3146109,29.9781402,node,8315026517,,shop,car_parts,32
+31.3053376,29.9757447,node,8320829217,,shop,car_parts,32
+31.3114688,29.9741372,node,8320896917,,shop,car_parts,32
+31.3100091,29.9736640,node,8320920117,,shop,car_parts,32
+31.3097510,29.9736533,node,8320938718,,shop,car_parts,32
+31.3112752,29.9797290,node,8321148017,,shop,car_parts,32
+31.3100500,29.9813471,node,8321182317,,shop,car_parts,32
+31.2439904,30.0457455,node,8329465926,,shop,beverages,16
+31.3302810,29.9601471,node,8329475918,,shop,ticket,40
+31.2449985,30.0605360,node,8343232934,JAX,shop,clothes,16
+31.2538376,30.0435441,node,8358435317,,shop,greengrocer,16
+31.2581004,30.0365503,node,8408717347,,shop,books,16
+31.3807901,30.0669171,node,8412333127,الطيب عبدالرحمن فرغل,shop,supermarket,13
+31.1308532,29.9770688,node,8421616427,,shop,ticket,-1
+31.3673588,30.1266809,node,8501423186,Mr. Garage Auto Trade,shop,car,6
+31.3003144,30.0846923,node,8511981836,ملابس مرزوق,shop,clothes,11
+31.2849584,30.1042817,node,8551475629,مكتبة جنا,shop,party,3
+31.1648574,30.0005576,node,8564922202,واتسون,shop,clothes,21
+31.2262452,29.9595066,node,8573154496,سنتر رزق مكاوى,shop,houseware,37
+31.3409074,30.1214545,node,8603451373,Maro Jeans,shop,clothes,5
+31.3457171,30.0467097,node,8603681999,ماركت جمعة,shop,supermarket,19
+31.2337039,30.0352723,node,8612016769,النيل الأزرق,shop,supermarket,16
+31.1419094,30.0006800,node,8623639692,هايبر كينج  ماركت,shop,supermarket,-1
+31.2150828,30.0887098,node,8883858998,ديزل ستور,shop,clothes,8
+31.3982140,30.0508550,node,8929811623,Blue Shell sporting goods,shop,sporting goods store,-1
+31.3962377,30.1453219,node,8960871130,Demoz,shop,clothes,-1
+31.1899321,30.0108985,node,8963631144,شركة شعلان لزيوت السيارات المستورده,shop,car_parts,21
+31.1366665,30.0021514,node,8980177013,Volvo Egypt Boutique,shop,car_parts,-1
+31.3259781,30.0449823,node,8989187057,Nitro Car Accessories,shop,car_parts,19
+31.1422095,29.9765098,node,9013933116,Crystal Parfume,shop,cosmetics,-1
+31.3080293,30.1230468,node,9041510013,مجوهرات وديع,shop,jewelry,4
+31.1410582,29.9859937,node,9053751417,Egypt Papyrus Institute,shop,gift,-1
+31.3815182,30.0983280,node,9061228206,نجمة هليوبولس جمال سلامة,shop,supermarket,13
+31.3501441,30.0510808,node,9067695587,موبايل برو شوب - Mobile pro Shop,shop,mobile_phone,19
+31.1937448,30.0816975,node,9077775284,كوافير المشاهير للرجال,shop,hairdresser,8
+31.2663133,30.1182248,node,9080946248,امان,shop,houseware,3
+31.3332540,30.0807483,node,9100036419,ارامكس,post_office,post_office,12
+31.3343599,30.0812273,node,9100036720,على عرفة للأثاث,shop,furniture,12
+31.3199602,29.9883180,node,9120992582,دراي كلين VIP,shop,dry_cleaning,32
+31.1879707,30.0335202,node,9122649503,,shop,mobile_phone,14
+31.1882022,30.0336898,node,9122649504,,shop,mobile_phone,14
+31.1875573,30.0319495,node,9122649505,,shop,mobile_phone,21
+31.1874586,30.0320300,node,9122649507,,shop,hairdresser,21
+31.1873804,30.0319774,node,9122649508,,shop,chicken,21
+31.1875034,30.0320801,node,9122649510,,shop,cheese,21
+31.1876151,30.0320344,node,9122649511,,shop,roastery,21
+31.1876482,30.0320588,node,9122649512,,shop,yes,21
+31.1879747,30.0334701,node,9122655876,,shop,dairy,14
+31.1864155,30.0334419,node,9122655877,,shop,grocery,14
+31.1862762,30.0334080,node,9122655878,,shop,grocery,14
+31.1859661,30.0330315,node,9122655881,جزار الليثى,shop,butcher,14
+31.1865341,30.0326480,node,9122655882,,shop,convenience,21
+31.1878349,30.0324198,node,9122655883,,shop,greengrocer,21
+31.1878448,30.0324906,node,9122655884,,shop,nuts,21
+31.1878524,30.0325670,node,9122655885,,shop,bakery,21
+31.1878501,30.0325240,node,9122655886,,shop,spices,21
+31.1880531,30.0328360,node,9122671843,,shop,detergents,21
+31.1878689,30.0327075,node,9122671844,,shop,toys,21
+31.1878728,30.0327342,node,9122671845,,shop,chicken,21
+31.1878751,30.0327574,node,9122671846,,shop,bakery,21
+31.1880565,30.0328012,node,9122671848,مغسله جنه,shop,laundry,21
+31.1877884,30.0323546,node,9122671850,,shop,kiosk,21
+31.1877668,30.0323036,node,9122671852,,shop,chicken,21
+31.1875052,30.0321497,node,9122671853,,shop,electrical,21
+31.1879325,30.0323370,node,9122671854,,shop,electrical,21
+31.1874346,30.0320069,node,9122671855,,shop,butcher,21
+31.1880702,30.0329302,node,9122832275,مكتبه تبارك,shop,books,14
+31.1857869,30.0329380,node,9123362306,,shop,fashion_accessories,14
+31.1856792,30.0329444,node,9123362307,,shop,gas,14
+31.1856124,30.0328213,node,9123470608,,shop,supermarket,21
+31.1880298,30.0326952,node,9123470609,صديق للالبان,shop,dairy,21
+31.2870350,30.0887016,node,9149337868,Georgina Gallery,shop,clothes,10
+31.1865400,30.0322945,node,9152154847,مكتب تموين,shop,yes,21
+31.3093121,30.0082082,node,9156253673,عطور لا في,shop,perfumery,25
+31.2028047,30.0502219,node,9172599971,صالون رامي,shop,beauty,15
+31.1749036,29.9996902,node,9180628314,Ayman Salah Beauty Salon,shop,beauty,21
+31.2777003,30.0635409,node,9191231635,Om mariam Kiosk,shop,kiosk,17
+31.2776315,30.0637014,node,9191231636,,shop,kiosk,17
+31.2775843,30.0638423,node,9191231637,Handaset al Handasa Stationary store,shop,kiosk,17
+31.4030781,30.1113864,node,9211678918,,shop,gift,-1
+31.3187814,30.1004281,node,9239145619,غسان التركماني,shop,hairdresser_supply,4
+31.2668113,29.9561819,node,9286573807,روبافيكا,shop,art,38
+31.2285589,30.0608955,node,9306445747,نيو نورس,shop,carpet,16
+31.2371555,30.0482432,node,9312931773,Roland Travel,shop,travel_agency,16
+31.2371946,30.0482962,node,9312931776,El-Safwa,shop,dry_cleaning,16
+31.2371096,30.0481924,node,9312931779,Tharwat Market,shop,convenience,16
+31.2371339,30.0482165,node,9312931781,,shop,travel_agency,16
+31.2371938,30.0481354,node,9312931783,,shop,travel_agency,16
+31.2370930,30.0481695,node,9312931787,Smoking,shop,kiosk,16
+31.3459682,30.0538875,node,9316468097,سنتر الالماني,shop,hairdresser_supply,19
+31.2380279,30.0478721,node,9318123793,عجايبى,shop,bakery,16
+31.2379068,30.0479042,node,9318123795,Scarabe Bazar,shop,gift,16
+31.2379456,30.0478905,node,9318123796,,shop,travel_agency,16
+31.2418951,30.0463597,node,9322125958,,shop,copyshop,16
+31.2486071,30.0572087,node,9322125959,,shop,kiosk,16
+31.2633738,30.0508773,node,9322125961,,shop,convenience,17
+31.3005768,30.1196742,node,9325304015,محمصة نصر,shop,spices,4
+31.3847235,30.0491873,node,9325824199,الدكتور Ez لزجاج السيارات,shop,car_repair,20
+31.2375698,30.0471943,node,9327907659,فرح تورز,shop,travel_agency,16
+31.3609372,29.9821339,node,9347409721,رينو,shop,car,34
+31.3411559,30.0768372,node,9352154217,,shop,department_store,12
+31.3378539,30.0869967,node,9379812763,صالون وديع,shop,hairdresser,12
+31.1491213,29.9761146,node,9380196817,حلويت الإخوة,shop,confectionery,-1
+31.1511363,29.9797105,node,9382182617,سوية شيري,shop,confectionery,-1
+31.2056358,30.0579103,node,9383783718,حلواني العبد,shop,confectionery,15
+31.2452845,30.0857004,node,9383798617,حلواني العبد,shop,confectionery,9
+31.2338546,30.0468031,node,9391434667,,shop,ticket,16
+31.1444535,29.9733751,node,9391441248,,shop,convenience,-1
+31.1445455,29.9733997,node,9391447346,,shop,butcher,-1
+31.2394317,30.0450328,node,9391449077,,shop,electronics,16
+31.1447209,29.9734388,node,9391451637,,shop,butcher,-1
+31.2397156,30.0452690,node,9391454940,,shop,kiosk,16
+31.1449849,29.9735107,node,9391460123,,shop,convenience,-1
+31.2393773,30.0449528,node,9391460366,,shop,electronics,16
+31.1852167,30.0355533,node,9410332217,البيت,shop,convenience,14
+31.3593786,30.1401493,node,9464375997,كروما للزجاج و الديكور,shop,glaziery,-1
+31.1410083,29.9879026,node,9521774509,Carrefour,shop,supermarket,-1
+31.1747132,30.0162920,node,9522231368,منفذ بيع منتجات القوات المسلحة,market,marketplace,21
+31.1857218,30.0085239,node,9560543156,دريم ستور,shop,mobile_phone,21
+31.1855083,30.0100787,node,9560544337,الوطنية للانتاج الحيواني,shop,butcher,21
+31.1609333,29.9990200,node,9566021465,بى تك,shop,appliance,28
+31.1716135,30.0026497,node,9568768647,راية ميجا ستور,shop,electrical,21
+31.1881919,30.0090950,node,9570993749,التوحيد والنور,shop,department_store,21
+31.1880758,30.0090259,node,9570995425,مكتبة الرشيدي,shop,books,21
+31.1859656,30.0156927,node,9571725706,كوافير البستان للرجال,shop,hairdresser,21
+31.2105263,30.0389646,node,9584886897,أسواق الخير ٢,shop,convenience,15
+31.2096985,30.0388196,node,9584895793,صيدلية د/علاء شحاتة,shop,chemist,15
+31.1590440,29.9962130,node,9588428660,مجوهرات احمد محمود,shop,jewelry,28
+31.2126336,30.0174491,node,9590253209,بيم,shop,supermarket,22
+31.2108870,30.0554625,node,9595481857,إبن البلد,shop,greengrocer,15
+31.1854950,30.0108863,node,9606450163,مونجينى,shop,confectionery,21
+31.1855600,30.0110584,node,9606479930,اورانج,shop,electronics,21
+31.2459199,30.0637234,node,9607446210,Ernst Watania ticket office,shop,ticket,16
+31.2479999,30.0595831,node,9622287439,مكتبه الازهري,shop,stationery,16
+31.2444490,30.0264042,node,9631386526,مكتب بريد حدائق زينهم,post_office,post_office,23
+31.3146968,30.1309240,node,9650283624,النجمه المحمدية لتجاره الادوات الصحية,shop,bathroom_furnishing,4
+31.3682499,30.0335476,node,9668561925,High Rev BMW,shop,car_repair,20
+31.3167538,29.9813886,node,9677168951,Abu Auf,market,marketplace,32
+31.2029790,30.0823752,node,9700798524,السرياني لخدمات المحمول,shop,mobile_phone,8
+31.1600347,29.9945213,node,9702901089,سوبرماركت مترو,shop,supermarket,28
+31.1601030,29.9944260,node,9702924462,اميرة مول كمبيوترات,shop,computer,28
+31.2612977,30.0649749,node,9703750924,Mo’a Fruits and Vegetables,shop,grocery,17
+31.2638970,30.0467239,node,9733340018,,shop,convenience,17
+31.2438799,30.0731689,node,9737231817,,shop,convenience,9
+31.2331425,30.0482813,node,9739593840,,shop,gift,16
+31.2338608,30.0472657,node,9739594049,,shop,ticket,16
+31.1529337,29.9957539,node,9751706078,بيوتي سنتر سوسو ستايل,shop,beauty,-1
+31.3537922,30.0805626,node,9761803809,,shop,furniture,12
+31.2687569,30.0768776,node,9761871290,التوحيد والنور,shop,department_store,10
+31.2217376,30.0703609,node,9762415365,RichTour-EG,shop,travel_agency,8
+31.1863016,30.0084609,node,9809678810,محجوب للسراميك والبورسلين,shop,flooring,21
+31.1866132,30.0041068,node,9809758872,دارى,shop,department_store,21
+31.2674153,30.0281646,node,9819935629,Citadel Plaza,shop,mall,24
+31.3996418,30.0395735,node,9820187951,المنى ماركت,shop,supermarket,-1
+31.2463665,29.9627257,node,9822064995,Massage Healing Clinic,shop,massage,37
+31.4008753,30.1119615,node,9824748961,El Shams,shop,electronics,-1
+31.4017982,30.1116253,node,9824750683,Camel Book Store,shop,books,-1
+31.4011577,30.1119341,node,9824771835,La Carnaval,shop,gift,-1
+31.4008210,30.1119820,node,9824778513,Oriental sweets,shop,gift,-1
+31.3481580,30.0509552,node,9837910512,تكنولوجي مول,shop,mall,19
+31.1865799,29.9929205,node,9867032618,GeMy Center,shop,electronics,28
+31.3159006,29.9682334,node,9894898298,,shop,confectionery,32
+31.3169435,29.9685824,node,9894898301,,shop,confectionery,32
+31.2507642,29.9570186,node,9922981517,Roma,shop,outdoor,37
+31.1866986,30.0332085,node,9924692470,مخبز عيش بلدى,shop,bakery,14
+31.1860196,30.0329936,node,9924692471,,shop,plastics,14
+31.1859003,30.0330023,node,9924692473,,shop,convenience,14
+31.1858818,30.0329943,node,9924692474,,shop,convenience,14
+31.1858365,30.0329766,node,9924692475,,shop,stationery,14
+31.1860917,30.0332397,node,9924692476,,shop,yes,14
+31.1860639,30.0332326,node,9924692477,,shop,yes,14
+31.3220590,30.0941881,node,9932644163,الأصدقاء قطع غيار سيارات واكسسوارات,shop,car_parts,11
+31.3846893,30.1017023,node,9942873665,,shop,kiosk,6
+31.3783435,30.0917406,node,9942904038,,shop,car,13
+31.3163955,30.1118001,node,9945655578,Vodafone,shop,mobile_phone,4
+31.3705227,30.1107878,node,9945758476,Circle K,shop,convenience,6
+31.3704442,30.1054177,node,9945772777,Vodafone,shop,mobile_phone,6
+31.3191691,30.0488850,node,9974921541,المتخصصون ميتسوبيشي لانسر,shop,yes,18
+31.2750215,29.9552637,node,9986731519,,shop,butcher,38
+31.3609854,29.9742115,node,9986731521,,shop,travel_agency,34
+31.2634562,30.0465730,node,9986731522,,shop,clothes,17
+31.3378644,30.0090875,node,9986731524,,shop,tyres,26
+31.2787487,29.9604090,node,9986731717,,shop,supermarket,38
+31.3066275,30.0871508,node,9986731720,,shop,car,11
+31.4096562,30.0298426,node,9986731722,,shop,supermarket,-1
+31.2136620,29.9989125,node,9986731819,,shop,car_repair,29
+31.2728284,29.9720488,node,9986731824,,shop,furniture,31
+31.2561562,29.9711528,node,9986731921,,shop,car_repair,30
+31.2608153,29.9671906,node,9986732120,,shop,hardware,31
+31.2444765,30.0505581,node,9986732122,,shop,clothes,16
+31.3194563,29.9864413,node,9986732123,,shop,motorcycle,32
+31.2497120,29.9613285,node,9986732222,,shop,motorcycle,37
+31.2830306,29.9755622,node,9986732417,,shop,copyshop,31
+31.1876262,30.0328819,node,10009315618,,shop,grocery,21
+31.1865273,30.0327148,node,10009315621,,shop,grocery,21
+31.3326157,30.1116506,node,10017985460,ايجي جيت لألبواب األوتوماتيكية,shop,doors,5
+31.3334407,30.0819909,node,10022428563,برايدل فيل,shop,clothes,12
+31.2204554,30.0640425,node,10078671575,OUTS,shop,clothes,15
+31.2144624,30.1409767,node,10112267493,الفراعنه للمقاولات والتوريدات العموميه,wholesale,trade,-1
+31.3972017,30.1107103,node,10198939160,,shop,convenience,-1
+31.3401827,30.0771228,node,10210504041,شركة الإتحاد الالماني للتجاره-بي ام دبليو,shop,car,12
+31.2223230,30.0601222,node,10223800809,عبده صالح,shop,shoes,15
+31.2220943,30.0602574,node,10223800811,,shop,books,15
+31.2705133,30.0687426,node,10239769009,,shop,car_repair,10
+31.4025778,30.1470181,node,10239769109,,shop,car_repair,-1
+31.1765924,30.0106550,node,10257775660,أسواق العثيم,shop,supermarket,21
+31.1869201,30.0334976,node,10264449918,,shop,hairdresser,14
+31.1871478,30.0335363,node,10264449920,,shop,electronics,14
+31.1876620,30.0336813,node,10264449921,,shop,stationery,14
+31.1833404,30.0072203,node,10266039235,راية ميجا ستورز,shop,electrical,21
+31.1876105,30.0323568,node,10269161506,,shop,kiosk,21
+31.1865186,30.0333571,node,10269246671,,shop,electrical,14
+31.1865297,30.0327565,node,10269260819,,shop,detergents,21
+31.3423389,30.0696671,node,10280506114,سوباركت بندة,shop,supermarket,12
+31.3442373,30.0733203,node,10285771649,City Stars,shop,supermarket,12
+31.1572189,29.9883306,node,10287549010,,shop,mobile_phone,-1
+31.3834376,30.1351581,node,10288847709,كونتيشتال مطابخ,shop,furniture,-1
+31.2513715,30.0533553,node,10298573002,Sednaoui Mall,shop,mall,16
+31.1870596,30.0333045,node,10304528578,,shop,tailor,14
+31.1871386,30.0332633,node,10304528579,,shop,yes,14
+31.1872501,30.0332820,node,10304528580,,shop,motorcycle_repair,14
+31.1878076,30.0334673,node,10304528581,,shop,bag,14
+31.1879754,30.0335944,node,10304528582,,shop,jewelry,14
+31.1879549,30.0336486,node,10304528583,,shop,butcher,14
+31.1879674,30.0333794,node,10304528584,,shop,fashion_accessories,14
+31.1879569,30.0332935,node,10304528585,,shop,seafood,14
+31.1881593,30.0335180,node,10304528586,,shop,copyshop,14
+31.1881497,30.0334827,node,10304528587,,shop,mobile_phone,14
+31.1881140,30.0331492,node,10304528589,,shop,convenience,14
+31.1878784,30.0327959,node,10304528590,,shop,butcher,21
+31.1860619,30.0331192,node,10304528594,,shop,greengrocer,14
+31.1861980,30.0331965,node,10304528595,,shop,greengrocer,14
+31.1862806,30.0332350,node,10304528596,,shop,greengrocer,14
+31.1857834,30.0328396,node,10304528597,,shop,greengrocer,21
+31.1854979,30.0328364,node,10304528598,,shop,bed,21
+31.3401224,30.1147179,node,10543826135,اكسيروكس,shop,copyshop,5
+31.2390172,30.0450694,node,10571190709,,shop,variety_store,16
+31.1858299,30.0327265,node,10581613209,,shop,convenience,21
+31.1880173,30.0326307,node,10581613210,,shop,houseware,21
+31.1880066,30.0325796,node,10581613211,Dulux Paints,shop,paint,21
+31.3477130,30.0683964,node,10586931150,صالون برونزي,shop,hairdresser,12
+31.1878882,30.0328827,node,10592710105,,shop,fashion_accessories,21
+31.1881397,30.0333897,node,10592710106,,shop,mobile_phone,14
+31.2540444,30.0479399,node,10596480539,خيوط شركه الاشراف,shop,wool,16
+31.2899340,30.1071111,node,10600527905,,shop,car_repair,3
+31.1591459,29.9984159,node,10657849938,دريم ستور,shop,mobile_phone,28
+31.2098755,30.1381685,node,10665882347,السفير للكابلات,shop,electrical,-1
+31.2401751,30.0332100,node,10676137406,,shop,bakery,16
+31.2372876,30.0347949,node,10676159605,,shop,bakery,16
+31.3904098,30.0677004,node,10685212506,,shop,bakery,13
+31.3905488,30.0676989,node,10685229505,,shop,convenience,13
+31.1915582,30.0323872,node,10689076246,جملة الزغاري,wholesale,wholesale,21
+31.1866851,30.0326469,node,10692630822,,shop,tailor,21
+31.3482528,30.0511285,node,10806868882,المؤسسة الفرنسية,shop,computer,19
+31.1339004,30.0433083,node,10811710451,احمد الصعيدي لملابس الشباب,shop,clothes,-1
+31.2470351,30.0669767,node,10822770496,تومان للملابس الجاهزه,shop,clothes,9
+31.2767383,29.9618201,node,10846421305,TeePee home accessories,shop,gift,38
+31.1645302,29.9983168,node,10846995554,فسخاني السد العالي,shop,deli,28
+31.2233373,30.0604967,node,10853814362,Fair Trade Egypt,shop,gift,15
+31.4084753,30.0292478,node,10855656505,Payless,shop,shoes,-1
+31.2400322,30.1421971,node,10870925299,Be One,shop,hairdresser,-1
+31.3752973,30.1401165,node,10899689144,مينا,shop,dry_cleaning,-1
+31.3668997,30.1403684,node,10912285748,بن العثماني,shop,coffee,-1
+31.3717770,30.0450307,node,10920078346,الأمين,shop,car_repair,20
+31.1846057,30.0180473,node,10945120179,التوحيد والنور,shop,department_store,21
+31.2452107,30.0926182,node,10981641406,خير زمان شبرا مصر,shop,supermarket,9
+31.2475815,30.0722689,node,10981641407,خير زمان شبرا مصر 2,shop,supermarket,9
+31.3766611,30.1296955,node,10981641408,العثيم قباء,shop,supermarket,6
+31.2504686,30.1232368,node,10981641608,كارفور شبرا الخيمه,shop,supermarket,2
+31.3567381,30.0624514,node,10981641905,العثيم مدينه نصر,shop,supermarket,19
+31.3877187,30.1376021,node,10981641906,العثيم 2 قباء,shop,supermarket,-1
+31.1773365,30.0067884,node,10981641908,الطيب,shop,supermarket,21
+31.2479633,29.9698115,node,10981641909,خير زمان المعادى,shop,supermarket,30
+31.2393970,30.0358329,node,10981641912,خير زمان بوبار,shop,supermarket,16
+31.2293284,30.0157084,node,11015050574,المركز الفني لجنوط السيارات,shop,tyres,23
+31.3357493,30.0749774,node,11015630006,جنة ماركت,shop,supermarket,12
+31.3147220,29.9917648,node,11050222491,جملتى ماركت,shop,supermarket,32
+31.3629208,29.9691508,node,11054513584,SYLNDR,shop,car,34
+31.3274850,30.0591424,node,11073477238,Seoudi,shop,supermarket,19
+31.2461620,30.0629865,node,11099067207,,shop,electronics,16
+31.2462169,30.0630795,node,11099081507,القطن بيتكلم مصري,shop,clothes,16
+31.2467474,30.0630257,node,11099081905,,shop,convenience,16
+31.3142297,30.1222585,node,11099082105,,shop,convenience,4
+31.2544231,30.0491961,node,11104954561,التيسير,shop,fabric,16
+31.3876900,30.0689895,node,11146597841,Gardenia Mall City Walk,shop,mall,13
+31.3530850,30.1158352,node,11205940684,Auto Dimensions Mizo Gad,shop,car,5
+31.2591300,29.9588667,node,11209701611,Massoud Cleaning,shop,dry_cleaning,38
+31.2591973,29.9587682,node,11209701614,Al Thahab,shop,perfumery,38
+31.2594332,29.9584385,node,11209701616,Nola Cupcakes,shop,confectionery,38
+31.2602849,29.9562423,node,11215391460,Al Qahira Contemporary Design Gallery,shop,furniture,38
+31.2592628,29.9565305,node,11215391461,Sweet House,shop,bakery,38
+31.2586306,29.9570580,node,11215391464,Sam Product Design,shop,furniture,37
+31.2585752,29.9571239,node,11215391465,Saleh,shop,hairdresser,37
+31.2698295,29.9596328,node,11215391483,Atlantis Rose,shop,florist,38
+31.2733074,29.9555169,node,11215391490,الكتب خان,shop,books,38
+31.2609137,29.9569313,node,11215391507,Hany Foto,shop,photo,38
+31.2608802,29.9568801,node,11215391508,Abdel Rahim Koueider,shop,pastry,38
+31.2785877,29.9624939,node,11224507005,Cuddles,shop,pet,38
+31.2520988,29.9564685,node,11224510288,Mandarine Koueider,shop,confectionery,37
+31.2707108,29.9553394,node,11224510293,,shop,florist,38
+31.2632153,29.9542630,node,11225519815,سامي أمين,shop,jewelry,38
+31.2630230,29.9541094,node,11225519818,صناع السعادة,shop,confectionery,38
+31.2741979,29.9630890,node,11225519836,,shop,florist,38
+31.2732682,29.9641301,node,11225521437,Pets Office,shop,pet,38
+31.2731640,29.9641557,node,11225521438,Patchi,shop,chocolate,38
+31.2704214,29.9645535,node,11225521440,,shop,florist,38
+31.2699762,29.9644119,node,11225521441,,shop,kiosk,38
+31.2695794,29.9646915,node,11225521442,,shop,kiosk,38
+31.2695889,29.9644398,node,11225521443,,shop,florist,38
+31.2643904,29.9545485,node,11225542582,Ratios Bakery,shop,bakery,38
+31.3914932,30.0593428,node,11228293263,Kayan Market,shop,supermarket,20
+31.2605774,29.9566961,node,11234886477,1000,shop,shoes,38
+31.2136170,30.0481708,node,11235386963,MAWARD FOR NATURAL BEAUTY CARE PRODUCTS ماورد لمنتجات التجميل الطبيعية,shop,beauty,15
+31.1673762,29.9870003,node,11239620219,A.Shoeb,shop,hairdresser,28
+31.3054833,29.9628145,node,11243072915,بايك ماسترز,shop,bicycle,39
+31.2791336,29.9704047,node,11243072916,Abou el Goukh United,shop,bicycle,31
+31.3455133,30.0514959,node,11255808241,فكهاني,shop,variety_store,19
+31.2585809,29.9570786,node,11257108017,Hamada Salon,shop,hairdresser,37
+31.2812526,30.0705134,node,11261182794,Berto Store,shop,clothes,10
+31.2753241,29.9640998,node,11261718438,كلفر,shop,clothes,38
+31.2647144,30.0766486,node,11291363357,مخبز الحاج محمود الجوهري,shop,bakery,10
+31.3268636,30.0795713,node,11335566077,هايبر مصر,shop,supermarket,12
+31.3215785,30.0822198,node,11335570383,كارفور,shop,supermarket,11
+31.1489822,29.9862077,node,11339487769,,shop,beverages,-1
+31.3458918,30.0628526,node,11365962219,,shop,clothes,19
+31.3459090,30.0628543,node,11368180438,,shop,clothes,19
+31.3458982,30.0627237,node,11368180708,,shop,clothes,19
+31.3458019,30.0626123,node,11368180729,,shop,clothes,19
+31.3326531,30.1227065,node,11369753486,عرجون,shop,travel_agency,5
+31.2117776,30.0425128,node,11375365769,,shop,coffee,15
+31.1584659,30.0017179,node,11390538631,مصوغات رامى مجوهرات,shop,jewelry,-1
+31.3155864,30.1212498,node,11428852869,,shop,bookmaker,4
+31.2601448,29.9581684,node,11435629462,One World,shop,mobile_phone,38
+31.2677672,29.9539551,node,11438230762,Allam Kiosk,shop,kiosk,38
+31.2727109,29.9567249,node,11438319546,A La Mode,shop,hairdresser,38
+31.2768065,29.9607194,node,11438377543,Black Welders,shop,furniture,38
+31.2768467,29.9607882,node,11438377544,Elite Nail Salon,shop,beauty,38
+31.2768504,29.9608151,node,11438377545,Elite Hair Salon,shop,hairdresser,38
+31.2768685,29.9608886,node,11438377546,Luxor Co. Alabaster Art,shop,art,38
+31.2771694,29.9608405,node,11438377548,Bio Shop,shop,health_food,38
+31.2768594,29.9610948,node,11438377549,Nefertari,shop,cosmetics,38
+31.2541531,30.0463221,node,11443515933,Supeco,shop,supermarket,16
+31.2427209,30.0763392,node,11450077269,عادل,shop,car_repair,9
+31.2640887,29.9526423,node,11459417174,El Hag Abdo Butcher,shop,butcher,38
+31.2642959,29.9524979,node,11459417175,Bazooka Vape,shop,e-cigarette,38
+31.2643440,29.9524513,node,11459417176,Amwage Perfume and Body Store,shop,perfumery,38
+31.2645147,29.9523460,node,11459417178,Speed,shop,kiosk,38
+31.2644944,29.9523161,node,11459417179,El Beheiry Market,shop,kiosk,38
+31.2645117,29.9521217,node,11460013223,Al Sharif Houseware,shop,houseware,38
+31.2763081,29.9619391,node,11468910032,RDNA,shop,health_food,38
+31.2578619,29.9593667,node,11468910033,كشك الشريف,shop,kiosk,37
+31.2580927,29.9590818,node,11468910035,كشك نجوم المعادي,shop,kiosk,37
+31.2581937,29.9589135,node,11468910036,كشك,shop,kiosk,37
+31.2581210,29.9588616,node,11468910037,كشك الأسيوطي,shop,kiosk,37
+31.2580212,29.9586296,node,11468910038,PlayStation Store,shop,video_games,37
+31.2592211,29.9578944,node,11469056428,مكوجي,shop,laundry,38
+31.2518742,30.0447310,node,11476176069,,shop,confectionery,16
+31.2627188,30.0491642,node,11476490969,,shop,gift,17
+31.2576883,29.9582825,node,11478465954,Electric & Future Home,shop,appliance,37
+31.3673902,30.1068908,node,11478795170,النساجون الشرقيون,shop,carpet,6
+31.1734061,30.0034350,node,11500953989,خير زمان,shop,supermarket,21
+31.2155301,30.0818784,node,11506509569,,shop,clothes,8
+31.2051107,30.0410159,node,11506534548,Scuba Plus Diving Club,shop,scuba_diving,15
+31.2355859,29.9776077,node,11509607881,باسكوبيا,shop,clothes,30
+31.1915067,29.9831397,node,11519307519,مكتب بريد الكنيسة,post_office,post_office,28
+31.2410996,30.0452398,node,11524492569,,shop,coffee,16
+31.2769966,29.9615514,node,11524728706,GE,shop,clothes,38
+31.2770285,29.9612753,node,11524728709,Areej,shop,perfumery,38
+31.2768331,29.9623929,node,11524773206,Margo for Leather,shop,leather,38
+31.2767359,29.9625308,node,11524773209,Nile Stock,shop,clothes,38
+31.2765808,29.9603459,node,11524788542,Diwan,shop,books,38
+31.2614601,29.9556791,node,11524796755,Nesma Bazaar,shop,jewelry,38
+31.2737176,29.9599351,node,11524799362,ورثة محمد عبد العال,shop,kiosk,38
+31.2732372,29.9597449,node,11524799363,Barbero,shop,hairdresser,38
+31.2704249,29.9594704,node,11524815289,Victoria Flowers,shop,florist,38
+31.2704373,29.9593032,node,11524815290,Plant Shop,shop,herbalist,38
+31.2604337,29.9574994,node,11524816559,,shop,convenience,38
+31.2603692,29.9576344,node,11524816560,Imtenan,shop,health_food,38
+31.3240424,30.0906635,node,11531505669,ريفرووك,shop,clothes,11
+31.2603992,29.9589233,node,11546100938,Bike Yard,shop,bicycle,38
+31.2132898,30.0168108,node,11570557761,مكتب بريد جيزة اول,post_office,post_office,22
+31.3295606,30.0852783,node,11613294706,International San Tours,shop,travel_agency,12
+31.3453401,30.0851916,node,11622740395,Zamzam Supermarket,shop,supermarket,12
+31.2767680,29.9623953,node,11630367809,Suave Furniture and Decoration,shop,furniture,38
+31.1995708,29.9508754,node,11637974774,مكتب بريد نزلة الاشطر,post_office,post_office,36
+31.1870827,30.0317192,node,11662152575,,shop,furniture,21
+31.1863001,30.0314810,node,11662152577,,shop,supermarket,21
+31.1863834,30.0315457,node,11662152580,تموين,shop,yes,21
+31.1863856,30.0316420,node,11662152581,,shop,butcher,21
+31.1865010,30.0316373,node,11662152582,,shop,yes,21
+31.3295271,30.1043732,node,11662315071,,shop,florist,5
+31.3045008,30.0883807,node,11662343269,,shop,sports,11
+31.2336382,30.0863662,node,11684657669,العطار رز,shop,supermarket,9
+31.3391678,30.0728566,node,11731199469,,shop,bakery,12
+31.3992367,30.0453831,node,11736841669,أسواق الخير,shop,supermarket,-1
+31.3366057,30.0449317,node,11740864663,مركز الوثائق-Xerox,shop,printing,19
+31.3367758,30.0689302,node,11741297869,نيل مصر للسياحة,shop,travel_agency,12
+31.2415129,30.0486664,node,11909962069,هلا تركيا جروب للسفر والرحلات واستشارات شئون الاجانب,shop,travel_agency,16
+31.2613925,30.0473285,node,11916288473,محمد السقا للفضييات,shop,jewelry,17
+31.1937968,30.0601989,node,11919849125,الرحمة ماركت,shop,supermarket,15
+31.2549360,30.0491866,node,11931211674,خيوط ابناء اشرقيه,shop,variety_store,16
+31.1636765,29.9990015,node,11950698469,جمال السوداني  بوتيك ، بقالة للمستلزمات السودانية,shop,convenience,28
+31.2463263,30.0695390,node,11955624569,متجر كروشيه علي و حسين,shop,hardware,9
+31.1670778,29.9869525,node,11955722169,بروتين محمد,shop,butcher,28
+31.1621929,29.9901603,node,11955856169,زلزال,shop,hardware,28
+31.2432257,30.0474661,node,11983462256,,shop,kiosk,16
+31.2455791,30.0471136,node,11983462259,,shop,bicycle,16
+31.2443650,30.0473150,node,11983462261,,shop,bicycle,16
+31.2456043,30.0473584,node,11983462262,,shop,bicycle,16
+31.2529708,30.0484264,node,11993695169,الشركه المصريه لخيوط المكرميه,shop,department_store,16
+31.2358240,30.0352611,node,11994416188,BİM,shop,convenience,16
+31.2286216,30.0456838,node,12017227148,محمصة الرفاعي,shop,tea,16
+31.3465369,30.0738710,node,12017227150,محمصة الرفاعي,shop,tea,12
+31.2045456,30.0391611,node,12059903469,Cinnabon,shop,bakery,15
+31.1650492,29.9761845,node,12090558715,Golden Eagle Papyrus,shop,antiques,28
+31.2833595,29.9765307,node,12141513234,محمصة الرفاعي,shop,tea,31
+31.1836255,30.0029917,node,12156158420,ناجية سنتر,shop,variety_store,21
+31.1885028,30.0082523,node,12156165153,كازيون,shop,supermarket,21
+31.1893530,30.0065831,node,12156173598,بيم,shop,supermarket,21
+31.1884119,30.0086679,node,12156176842,اولاد رجب,shop,supermarket,21
+31.2376802,30.0492009,node,12167745103,Saqhoute,shop,clothes,16
+31.2377249,30.0491662,node,12167745104,up fuse,shop,clothes,16
+31.2376121,30.0492380,node,12167745105,La Boga,shop,fashion_accessories,16
+31.2376485,30.0492198,node,12167745106,Bulga,shop,shoes,16
+31.2373371,30.0484504,node,12169116336,,shop,kiosk,16
+31.3120579,29.9819358,node,12229227205,Tanmia Bookstore,shop,books,32
+31.3136331,29.9684241,node,12230505772,,shop,mall,32
+31.2801181,29.9660877,node,12246124002,Domanza,shop,clothes,38
+31.2240037,30.0580595,node,12272886431,Eady Craft Shop,shop,craft,15
+31.2234103,30.0627645,node,12273098070,Every Day,shop,kiosk,15
+31.2233717,30.0631663,node,12273123732,FunGun,shop,clothes,15
+31.2234098,30.0629881,node,12273123733,KFM,shop,hairdresser,15
+31.2206659,30.0561965,node,12273177880,The Bakery Shop,shop,bakery,15
+31.2206150,30.0560876,node,12273181494,La Patisserie,shop,pastry,15
+31.2191298,30.0546829,node,12273480092,Soufflé,shop,pastry,15
+31.2232442,30.0617543,node,12278505756,Pain des Rois,shop,pastry,15
+31.2197293,30.0559530,node,12278516455,,shop,kiosk,15
+31.2467167,30.0636453,node,12279045569,Foreigners Reservation Office,shop,ticket,16
+31.2172793,30.0581688,node,12287913338,,shop,kiosk,15
+31.2164419,30.0614700,node,12287918266,,shop,kiosk,15
+31.2163296,30.0619544,node,12287937937,,shop,kiosk,15
+31.2302543,30.0077939,node,12296442385,,shop,gift,23
+31.2302258,30.0077565,node,12296474449,,shop,gift,23
+31.2301652,30.0076617,node,12296474450,,shop,gift,23
+31.2301437,30.0076198,node,12296474451,,shop,gift,23
+31.2301137,30.0075762,node,12296474452,,shop,gift,23
+31.2300866,30.0075323,node,12296474453,,shop,gift,23
+31.2300484,30.0074882,node,12296474454,,shop,convenience,23
+31.2306316,30.0065988,node,12296520826,,shop,kiosk,23
+31.2307218,30.0063757,node,12296520828,,shop,gift,23
+31.2307501,30.0063512,node,12296520829,,shop,gift,23
+31.2307792,30.0063279,node,12296520830,,shop,gift,23
+31.2308051,30.0063023,node,12296520831,,shop,convenience,23
+31.2305633,30.0066513,node,12296557643,,shop,religion,23
+31.2297994,30.0070120,node,12296557828,,shop,gift,23
+31.1410234,29.9757216,node,12299672077,,shop,convenience,-1
+31.2242440,30.0591498,node,12299673754,,shop,interior_decoration,15
+31.2181210,30.0632937,node,12299940385,زوال,shop,art,15
+31.2428292,30.0440994,node,12305042101,,shop,optician,16
+31.2429652,30.0440665,node,12305062501,,shop,optician,16
+31.2436224,30.0507663,node,12307083101,Babel,shop,shoes,16
+31.2399097,30.0442901,node,12310181601,,shop,butcher,16
+31.3643890,30.0567705,node,12404931201,راما للاثاث المكتبي,shop,furniture,20
+31.3020169,30.0749264,node,12408117502,فتح الله جملة ماركت,shop,supermarket,11
+31.3648368,30.0564507,node,12416566502,التوحيد و النور,shop,variety_store,20
+31.2067746,30.1028750,node,12504977601,شركة ملوك الشحن,post_office,post_office,1
+31.2205024,30.0639556,node,12694822502,,shop,deli,15
+31.2222855,30.0610070,node,12695050701,,shop,cosmetics,15
+31.1403699,29.9756657,node,12704853603,,shop,ticket,-1
+31.2198264,30.0667105,node,12723679046,Dahab Market,shop,convenience,8
+31.2240134,30.0118657,node,12730239171,بيم,shop,supermarket,22
+31.2248153,30.0122438,node,12730239174,مخبز و حلواني الصياد,shop,bakery,22
+31.2839586,29.9795293,node,12733772821,Atlas Tours Lufthansa City Center,shop,travel_agency,31
+31.2785723,29.9600020,node,12741642252,Pets Home,shop,pet,38
+31.2786313,29.9599104,node,12741642253,Junker,shop,clothes,38
+31.2786327,29.9598631,node,12741642254,Daly,shop,frame,38
+31.2786292,29.9598222,node,12741642255,Natural Gardens,shop,greengrocer,38
+31.2786303,29.9597877,node,12741642256,Golf Sport,shop,clothes,38
+31.2786303,29.9597473,node,12741642257,Etisalat And,shop,telecommunication,38
+31.2786292,29.9596714,node,12741642259,,shop,electrical,38
+31.2786418,29.9596310,node,12741642260,Pro-mart,shop,convenience,38
+31.1454364,29.9855922,node,12776515476,,shop,convenience,-1
+31.3433472,30.0729698,node,12776755101,مترو اكسبرس,shop,supermarket,12
+31.3438921,30.0701712,node,12776806201,بلبن,shop,confectionery,12
+31.3431646,30.0737813,node,12776886402,,shop,hairdresser,12
+31.3432696,30.0735929,node,12776886501,صانع السعادة,shop,confectionery,12
+31.3422188,30.0731101,node,12776886601,,shop,shoes,12
+31.3387902,30.0728956,node,12776886602,,shop,bakery,12
+31.3430164,30.0731813,node,12776886801,,shop,sports,12
+31.3979920,30.1435791,node,12787738401,جزارة حضر موت عنتر,shop,butcher,-1
+31.2824946,30.0743061,node,12790368114,ميديكال فالي medical valley,shop,medical_supply,10
+31.3722981,30.1221200,node,12887230639,Telecom Egypt,shop,telecommunication,6
+31.3411030,30.0786832,node,12895489901,ألبان سونيستا,shop,dairy,12
+31.3434045,30.0731818,node,12895490101,Sport one,shop,sports,12
+31.1537982,29.9947095,node,12943501401,زعمطة,shop,beauty,-1
+31.3623781,30.0584997,node,12960597270,بالعربي عجلة,shop,bicycle,20
+31.2123231,30.0406672,node,12961398802,Abumi Poultry,shop,butcher,15
+31.2514836,30.0308269,node,13036826501,Super market zad - سوبر ماركت زاد,shop,supermarket,23
+31.1846741,30.0151541,node,13051586129,مكتب بريد مساكن كفر طهرمس,post_office,post_office,21
+31.3187184,29.9701369,node,13065243914,Bike Shop Egypt,shop,bicycle,32
+31.2654976,29.9685520,node,13070467659,العزقلاني للدراجات,shop,bicycle,31
+31.2549987,29.9609684,node,13070485519,معرض دراجات العزقلاني,shop,bicycle,37
+31.2524103,29.9639741,node,13070510041,بسكليت,shop,bicycle,37
+31.3417674,30.1415471,node,13073389411,النساجون الشرقيون المرج Oriental Weavers,shop,flooring,-1
+31.2565326,29.9611968,node,13091933092,آل علام للخضار والفاكهة,shop,greengrocer,37
+31.2326235,30.0301254,node,13114592836,الطبية العربية,shop,medical_supply,23
+31.3418801,30.1415494,node,13115453830,,shop,supermarket,-1
+31.2704193,29.9597989,node,13116553568,,shop,kiosk,38
+31.3420316,30.1407865,node,13127433901,جوبا فون,shop,electronics,-1
+31.2785234,29.9621690,node,13133079411,لابوار,shop,pastry,38
+31.2698992,29.9524692,node,13135958718,جاليري يمام,shop,antiques,38
+31.2638514,29.9531596,node,13152604771,ماركت السعادة,shop,convenience,38
+31.2625006,29.9542962,node,13152622275,ج جاليري,shop,lighting,38
+31.2607486,29.9591060,node,13153074932,sherrys.vinyl,shop,music,38
+31.2604697,29.9589972,node,13153088152,بيتس لاند,shop,pet,38
+31.2594900,29.9582721,node,13153096287,زادنا,shop,nuts,38
+31.2601920,29.9593418,node,13153103021,مادو,shop,houseware,38
+31.2597569,29.9592174,node,13153110587,كشك عباد الرحمن,shop,kiosk,38
+31.1941522,29.9898466,node,13169220702,,shop,shoes,29
+31.1507608,29.9774264,node,13169220704,,shop,convenience,-1
+31.3633033,30.1256272,node,13169228502,,shop,convenience,6
+31.2410097,30.0524637,node,13169228503,,shop,convenience,16
+31.1696185,29.9856634,node,13169228505,Abdullah market,shop,convenience,28
+31.1531472,29.9814714,node,13169228506,,shop,convenience,-1
+31.1525216,29.9808376,node,13169228507,,shop,greengrocer,-1
+31.1523999,29.9805594,node,13169228508,,shop,convenience,-1
+31.1527424,29.9807007,node,13169228509,,shop,coffee,-1
+31.1873659,29.9907055,node,13169228603,,shop,bakery,28
+31.1615281,29.9834517,node,13169228604,Bashaier,shop,convenience,28
+31.1463742,29.9763416,node,13169228703,,shop,car_repair,-1
+31.3651506,30.1210467,node,13169228801,,shop,convenience,6
+31.3615170,30.1284472,node,13169228802,,shop,convenience,6
+31.2388978,30.0514470,node,13169228803,,shop,convenience,16
+31.1489035,29.9767064,node,13169228804,,shop,convenience,-1
+31.1453134,29.9758616,node,13169228805,,shop,convenience,-1
+31.2044457,29.9928160,node,13169228902,,shop,convenience,29
+31.1944545,29.9899118,node,13169228903,,shop,convenience,29
+31.1646782,29.9841565,node,13169228905,,shop,convenience,28
+31.1555296,29.9818705,node,13169228906,,shop,convenience,-1
+31.1527043,29.9804984,node,13169228907,,shop,convenience,-1
+31.3633477,30.1259027,node,13169229002,,shop,convenience,6
+31.1763440,29.9877622,node,13169229003,Bim,shop,convenience,28
+31.1523749,29.9806055,node,13169229004,,shop,greengrocer,-1
+31.1528109,29.9799383,node,13169229005,,shop,convenience,-1
+31.1874520,29.9903695,node,13169229103,,shop,convenience,28
+31.1727675,29.9867471,node,13169229104,,shop,convenience,28
+31.1692701,29.9858209,node,13169229105,,shop,convenience,28
+31.3617942,30.1290062,node,13169229201,,market,marketplace,6
+31.2036943,29.9920129,node,13169229401,,shop,convenience,29
+31.1736446,29.9872313,node,13169229402,,shop,bakery,28
+31.1535788,29.9791698,node,13169229403,,shop,convenience,-1
+31.1532912,29.9783493,node,13169229404,,shop,convenience,-1
+31.1465869,29.9761588,node,13169229405,,post_office,post_office,-1
+31.1465016,29.9761495,node,13171210201,,shop,convenience,-1
+31.1445377,29.9750634,node,13171210301,,shop,convenience,-1
+31.1448450,29.9740202,node,13171210401,,shop,convenience,-1
+31.1453056,29.9735927,node,13171544402,Cheating on tourists,shop,convenience,-1
+31.1449956,29.9734590,node,13171544403,,shop,hairdresser,-1
+31.1450425,29.9732213,node,13171544404,Elhabib sweets,shop,confectionery,-1
+31.1448603,29.9734774,node,13171548902,,shop,hairdresser,-1
+31.1449232,29.9736985,node,13171548903,,shop,bakery,-1
+31.1435301,29.9732848,node,13171549001,,shop,hairdresser,-1
+31.1434615,29.9731627,node,13171549201,,shop,laundry,-1
+31.2348005,29.9739322,node,13171622378,صن ماركت,shop,convenience,30
+31.2576312,29.9584049,node,13171688887,إلكتريك أند فيوتشر هوم,shop,appliance,37
+31.1438553,29.9781566,node,13173155605,,shop,convenience,-1
+31.1450969,29.9781024,node,13175200801,kazyon - Real supermarket with good prices,shop,supermarket,-1
+31.3082769,29.9855380,node,13176643252,DGtizers,shop,computer,32
+31.1429022,29.9821564,node,13177651101,,shop,motorcycle_repair,-1
+31.1785283,29.9957562,node,13177651102,,shop,bakery,28
+31.2335534,30.0355482,node,13177651103,,shop,convenience,16
+31.2343588,30.0375481,node,13177651104,,shop,convenience,16
+31.2351370,30.0391590,node,13177651105,,shop,convenience,16
+31.2425831,30.0503567,node,13177651107,,shop,books,16
+31.3655369,30.1187294,node,13177651108,Kazyon market,shop,convenience,6
+31.3782299,30.1110905,node,13177651109,,shop,convenience,6
+31.3806929,30.1093910,node,13177651110,,shop,convenience,6
+31.1428657,29.9822998,node,13177651201,,shop,convenience,-1
+31.1711697,29.9927549,node,13177651202,,shop,convenience,28
+31.1788773,29.9958090,node,13177651203,,shop,convenience,28
+31.1879436,29.9992697,node,13177651204,,shop,bakery,28
+31.1927733,30.0014455,node,13177651206,,shop,convenience,22
+31.3637551,30.1260354,node,13177651209,,shop,convenience,6
+31.3686742,30.1254401,node,13177651210,,shop,convenience,6
+31.3663768,30.1228951,node,13177651211,Sanabel market,shop,convenience,6
+31.3670941,30.1212389,node,13177651212,,shop,greengrocer,6
+31.1412215,29.9866484,node,13177651401,Al maidan market,shop,convenience,-1
+31.1658555,29.9914244,node,13177651402,,shop,convenience,28
+31.1985154,30.0086273,node,13177651404,,shop,convenience,22
+31.3773953,30.1108184,node,13177651409,,shop,beverages,6
+31.3796369,30.1107436,node,13177651411,,shop,convenience,6
+31.2385211,30.0407352,node,13177651503,,shop,copyshop,16
+31.2411663,30.0503693,node,13177651505,,shop,shoes,16
+31.3656235,30.1265583,node,13177651506,Aman,shop,convenience,6
+31.3659113,30.1249466,node,13177651507,Safari market,shop,convenience,6
+31.1694452,29.9926855,node,13177651601,,shop,convenience,28
+31.1858476,29.9984358,node,13177651602,,shop,convenience,28
+31.1983873,30.0107234,node,13177651603,,shop,convenience,22
+31.2350630,30.0388844,node,13177651605,,shop,convenience,16
+31.3681820,30.1268754,node,13177651607,,shop,hairdresser,6
+31.3710283,30.1093028,node,13177651608,,shop,convenience,6
+31.3820537,30.1087993,node,13177651610,Mahmoud elfar,shop,convenience,6
+31.1706983,29.9931149,node,13177651701,,shop,convenience,28
+31.1721925,29.9937000,node,13177651801,,shop,convenience,28
+31.1992551,30.0038878,node,13177651803,,shop,convenience,22
+31.2422310,30.0505599,node,13177651805,,shop,books,16
+31.1806801,29.9962320,node,13177651902,,shop,convenience,28
+31.1982422,30.0119271,node,13177651903,,shop,convenience,22
+31.1978692,30.0132244,node,13177651904,,shop,shoes,22
+31.2169593,30.0281895,node,13177651906,Metro,shop,convenience,22
+31.3676956,30.1203527,node,13177651909,,shop,convenience,6
+31.3849542,30.1057796,node,13177651911,,shop,convenience,6
+31.3713262,30.1090871,node,13177652003,,shop,mobile_phone,6
+31.1791811,29.9956086,node,13177652101,,shop,bakery,28
+31.1856213,29.9987587,node,13177652102,,shop,convenience,28
+31.1871523,29.9993072,node,13177652103,,shop,convenience,28
+31.2419087,30.0505619,node,13177652105,,shop,convenience,16
+31.3829532,30.1074638,node,13177652106,,shop,convenience,6
+31.1921778,30.0011835,node,13177654901,,shop,car_repair,22
+31.1973041,30.0032382,node,13177655001,,shop,convenience,22
+31.2394306,30.0461183,node,13177658001,Mazaya market,shop,convenience,16
+31.2396371,30.0472529,node,13177658002,,shop,convenience,16
+31.3681549,30.1269516,node,13177659601,,shop,convenience,6
+31.3841469,30.1064583,node,13177659602,,shop,convenience,6
+31.2698756,29.9662740,node,13179681660,ماكس,shop,clothes,31
+31.2698064,29.9662416,node,13179681661,سبينيز,shop,supermarket,38
+31.3695134,30.1044039,node,13184808603,Pistachio,shop,beauty,6
+31.3695598,30.1043668,node,13184811601,اكسبريس شيراتون,shop,supermarket,6
+31.3697375,30.1041703,node,13184811701,عمرو فورد,shop,car_repair,6
+31.3694274,30.1034203,node,13184845847,بدر ماركت,shop,supermarket,6
+31.3696891,30.1036724,node,13184944801,Car book,shop,car_parts,6
+31.2785412,29.9612525,node,13185604794,مكتبة دجلة,shop,stationery,38
+31.2785753,29.9617269,node,13185604796,,shop,tyres,38
+31.2786156,29.9606761,node,13185607931,كلاودز,shop,e-cigarette,38
+31.2780812,29.9618418,node,13185631003,The Party Station,shop,party,38
+31.2781116,29.9610752,node,13185631043,Fun Toys,shop,toys,38
+31.2785495,29.9602529,node,13185640069,Vodafone,shop,mobile_phone,38
+31.2785418,29.9613377,node,13185640073,Kodak,shop,photo,38
+31.2757775,29.9645076,node,13185643279,دانيل هشتر,shop,clothes,38
+31.2785552,29.9610955,node,13185651855,All in One,shop,tobacco,38
+31.2785479,29.9611685,node,13185653388,River Island,shop,clothes,38
+31.2875814,29.9335878,node,13185654648,مركز المتحدون,shop,tyres,38
+31.2774852,29.9658965,node,13185662327,جوهرة,shop,jewelry,38
+31.2781135,29.9611666,node,13185662992,Giobert Slim Fit,shop,clothes,38
+31.2786168,29.9606968,node,13185662994,ماكس ماسل,shop,nutrition_supplements,38
+31.2786255,29.9604479,node,13185668558,أدهم جبريل,shop,hairdresser,38
+31.2786244,29.9604901,node,13185668559,iStore,shop,mobile_phone,38
+31.2786126,29.9607877,node,13185670113,Just Phone,shop,mobile_phone,38
+31.2781087,29.9612064,node,13185675602,Metro Market,shop,supermarket,38
+31.2786105,29.9608139,node,13185676457,,shop,tailor,38
+31.2785476,29.9603597,node,13185692381,5asec,shop,dry_cleaning,38
+31.2785437,29.9603384,node,13185695148,,shop,tobacco,38
+31.2785503,29.9603940,node,13185702181,Egy Puppy,shop,pet,38
+31.2785482,29.9602100,node,13185702805,Awan,shop,pottery,38
+31.2785782,29.9615482,node,13185702837,محمصات وعطار الشروق,shop,spices,38
+31.2786151,29.9603024,node,13185706605,سكوبي فان,shop,scuba_diving,38
+31.2785851,29.9618559,node,13186090767,ifix,shop,mobile_phone,38
+31.2785743,29.9623078,node,13186096377,,shop,tyres,38
+31.2785443,29.9614453,node,13186096378,Hotty,shop,clothes,38
+31.2773994,29.9603804,node,13186097181,كف فاطمة,shop,houseware,38
+31.2771028,29.9603452,node,13186104691,New Opera,shop,furniture,38
+31.2785172,29.9620460,node,13186105412,Degla Store,shop,mobile_phone,38
+31.2785707,29.9616217,node,13186112514,,shop,greengrocer,38
+31.2785194,29.9621386,node,13186113265,موناليزا,shop,frame,38
+31.2785172,29.9620075,node,13186113407,Mr Pets,shop,pet,38
+31.2711923,29.9589822,node,13186159406,Carnival,shop,gift,38
+31.2594483,29.9581342,node,13186205733,,shop,tailor,38
+31.2539409,29.9632065,node,13195764324,محمد العجلاتي,shop,bicycle,37
+31.1762383,29.9807848,node,13208188374,On The Run,shop,convenience,28
+31.2331573,30.0370995,node,13230496512,Inkjection,shop,art,16
+31.2597015,29.9586508,node,13232525880,Maadi Printing,shop,copyshop,38
+31.2420788,30.0324365,node,13287907319,شاهين الفسخانى السيدة زينب الاصل,shop,seafood,23
+31.2420788,30.0324365,node,13287963401,شاهين الفسخانى السيدة زينب الاصل,shop,seafood,23
+31.1977736,30.0426018,node,13310929759,محمود الفار,shop,convenience,15
+31.1970296,30.0431685,node,13310929760,المحبة للمنظفات المتطورة,shop,cleaning_supplies,15
+31.1970465,30.0430914,node,13310929761,Fai Gallery,shop,clothes,15
+31.1972682,30.0430841,node,13310929763,زين العطار,shop,spices,15
+31.1970541,30.0429237,node,13310929764,معرض الحمد للأدوات الصحية,shop,hardware,15
+31.1969962,30.0375601,node,13311049583,أبو الجوخ,shop,bicycle,15
+31.1969962,30.0375601,node,13316643849,أبو الجوخ,shop,bicycle,15
+31.2019843,30.0388467,node,13316643851,Dice,shop,clothes,15
+31.3699232,30.1038565,node,13322711408,كوافير المايسترو,shop,hairdresser,6
+31.3690445,30.1035421,node,13322712192,مكتبة توب فن,shop,stationery,6
+31.3689435,30.1034555,node,13322712193,ماجيك كلين,shop,dry_cleaning,6
+31.2828037,29.9934932,node,13326611795,Toyota,shop,car,31
+31.2454752,29.9636036,node,13327725612,Chery,shop,car,37
+31.2402329,29.9670786,node,13327725613,مشتل المعادي,shop,garden_centre,30
+31.2287552,29.9920077,node,13327742152,Audi,shop,car,30
+31.2497871,29.9611326,node,13328521176,La Poire,shop,confectionery,37
+31.2498347,29.9610271,node,13328521177,Sale Sucre,shop,confectionery,37
+31.2507383,29.9602266,node,13328521179,Maadi Computer Mall,shop,computer,37
+31.2577346,29.9582474,node,13328521180,ميتو ماركت,shop,convenience,37
+31.3821848,30.0990877,node,13333094491,Shreen Car,shop,car,13
+31.2533327,29.9582203,node,13333721472,,shop,kiosk,37
+31.2532722,29.9564378,node,13333721474,Bonjour,shop,convenience,37
+31.2476710,29.9667390,node,13334195571,Kia,shop,car,30
+31.2512529,29.9586223,node,13334195575,بيت الجملة,shop,supermarket,37
+31.2535689,29.9580357,node,13334195576,البان عرفة,shop,dairy,37
+31.2586927,29.9599223,node,13334195579,Olya Brands Stock,shop,clothes,37
+31.2586230,29.9602633,node,13334195581,NACITA,shop,car_repair,37
+31.2583273,29.9603476,node,13334195582,,shop,kiosk,37
+31.1655695,29.9352312,node,13336030008,,shop,greengrocer,35
+31.1656331,29.9350668,node,13336038904,,shop,kiosk,35
+31.1617830,29.9437392,node,13336038905,,shop,kiosk,35
+31.1650425,29.9369587,node,13336039004,,shop,kiosk,35
+31.1625292,29.9429292,node,13336039102,,shop,tyres,35
+31.1616792,29.9438826,node,13336039103,,shop,greengrocer,35
+31.1654968,29.9351256,node,13336039502,,shop,kiosk,35
+31.1653520,29.9359156,node,13336039503,,shop,kiosk,35
+31.1656906,29.9349271,node,13336039702,,shop,convenience,35
+31.1658202,29.9345413,node,13336039803,,shop,greengrocer,35
+31.1649172,29.9373413,node,13336039804,,shop,kiosk,35
+31.1648402,29.9375097,node,13336039805,Abu Yamen,shop,convenience,35
+31.1649738,29.9371540,node,13336040302,,shop,pastry,35
+31.1479744,29.9652801,node,13336041703,,shop,convenience,-1
+31.1488390,29.9641985,node,13336041802,,shop,convenience,-1
+31.1471978,29.9664647,node,13336041803,,shop,florist,-1
+31.1465981,29.9681036,node,13336041804,,shop,kiosk,-1
+31.1498511,29.9626942,node,13336042201,,shop,kiosk,-1
+31.1486782,29.9642133,node,13336042301,,shop,greengrocer,-1
+31.1463205,29.9679074,node,13336042303,,shop,convenience,-1
+31.1489036,29.9642435,node,13336042401,,shop,tyres,-1
+31.1485236,29.9644501,node,13336042902,,shop,kiosk,-1
+31.1479064,29.9654022,node,13336042904,,shop,kiosk,-1
+31.1478512,29.9654872,node,13336042905,,shop,butcher,-1
+31.1469010,29.9671234,node,13336042909,,shop,tyres,-1
+31.1484677,29.9645265,node,13336043001,,shop,tyres,-1
+31.1475270,29.9699374,node,13337090402,,shop,optician,-1
+31.1485644,29.9692281,node,13337090403,,shop,convenience,-1
+31.1497580,29.9690017,node,13337090404,,shop,houseware,-1
+31.1502156,29.9691161,node,13337090405,,shop,greengrocer,-1
+31.1507331,29.9690918,node,13337090406,,shop,convenience,-1
+31.1488826,29.9777007,node,13337090411,,shop,greengrocer,-1
+31.1488837,29.9778726,node,13337090412,market hall for greengrocers,market,marketplace,-1
+31.1486556,29.9781391,node,13337090413,,shop,kiosk,-1
+31.1447340,29.9780008,node,13337090416,,shop,confectionery,-1
+31.1448198,29.9757370,node,13337090417,Farqhaly Fruit - large cup 50egp,shop,beverages,-1
+31.1448342,29.9742269,node,13337090419,,shop,convenience,-1
+31.1451507,29.9741878,node,13337090420,,shop,pastry,-1
+31.1458859,29.9711207,node,13337090422,,shop,beverages,-1
+31.1456826,29.9675123,node,13337090425,,shop,convenience,-1
+31.1474622,29.9699277,node,13337094402,,shop,kiosk,-1
+31.1494385,29.9689606,node,13337094403,,shop,convenience,-1
+31.1491687,29.9765209,node,13337094407,,shop,butcher,-1
+31.1491451,29.9766959,node,13337094408,,shop,pastry,-1
+31.1489435,29.9769954,node,13337094409,,shop,kiosk,-1
+31.1489330,29.9770493,node,13337094410,,shop,convenience,-1
+31.1489960,29.9773017,node,13337094411,,shop,greengrocer,-1
+31.1487045,29.9779321,node,13337094412,,shop,convenience,-1
+31.1484742,29.9786852,node,13337094414,,shop,optician,-1
+31.1480165,29.9698384,node,13337094502,,shop,greengrocer,-1
+31.1512464,29.9692424,node,13337094505,,shop,optician,-1
+31.1500044,29.9725419,node,13337094506,,shop,convenience,-1
+31.1493372,29.9752578,node,13337094507,,shop,kiosk,-1
+31.1493203,29.9757562,node,13337094508,,shop,pastry,-1
+31.1463455,29.9783497,node,13337094509,,shop,kiosk,-1
+31.1449849,29.9735851,node,13337094510,,shop,greengrocer,-1
+31.1454397,29.9729155,node,13337094511,,shop,hairdresser,-1
+31.1460327,29.9705324,node,13337094515,,shop,optician,-1
+31.1464549,29.9686891,node,13337094516,,shop,kiosk,-1
+31.1462118,29.9698324,node,13337094603,,shop,convenience,-1
+31.1510506,29.9691652,node,13337094702,,shop,butcher,-1
+31.1500720,29.9727911,node,13337094704,,shop,convenience,-1
+31.1493230,29.9753731,node,13337094705,double price for tourists,shop,beverages,-1
+31.1494091,29.9753185,node,13337094706,,shop,shoes,-1
+31.1492036,29.9757403,node,13337094707,,shop,optician,-1
+31.1489072,29.9771256,node,13337094709,,shop,pastry,-1
+31.1490170,29.9771972,node,13337094710,,shop,convenience,-1
+31.1488802,29.9772512,node,13337094711,,shop,bakery,-1
+31.1458704,29.9782517,node,13337094713,,shop,supermarket,-1
+31.1451229,29.9754773,node,13337094715,,shop,motorcycle,-1
+31.1459544,29.9711634,node,13337094716,,shop,kiosk,-1
+31.1473462,29.9698950,node,13337094801,,shop,kiosk,-1
+31.1512181,29.9693522,node,13337094802,,shop,pastry,-1
+31.1505805,29.9712691,node,13337094803,,shop,beverages,-1
+31.1495866,29.9742622,node,13337094805,,shop,pastry,-1
+31.1489420,29.9775212,node,13337094806,,shop,greengrocer,-1
+31.1450357,29.9747867,node,13337094807,,shop,kiosk,-1
+31.1451454,29.9742847,node,13337094809,,shop,gift,-1
+31.1451635,29.9741000,node,13337094810,,shop,kiosk,-1
+31.1453699,29.9729713,node,13337094811,,shop,kiosk,-1
+31.1459239,29.9709374,node,13337094813,,shop,bakery,-1
+31.1461562,29.9700564,node,13337094814,,shop,hairdresser,-1
+31.1477252,29.9698812,node,13337094901,,shop,optician,-1
+31.1504156,29.9714661,node,13337094902,,shop,convenience,-1
+31.1497768,29.9742107,node,13337094903,,shop,convenience,-1
+31.1487764,29.9777313,node,13337094904,,shop,kiosk,-1
+31.1448322,29.9756844,node,13337094905,,shop,kiosk,-1
+31.1456310,29.9721556,node,13337094906,,shop,kiosk,-1
+31.1511509,29.9691834,node,13337095001,,shop,convenience,-1
+31.1495198,29.9745757,node,13337095102,,shop,kiosk,-1
+31.1511602,29.9694852,node,13337095301,,shop,shoes,-1
+31.1491010,29.9761407,node,13337095303,,shop,convenience,-1
+31.1488732,29.9777466,node,13337095305,,shop,clothes,-1
+31.1487317,29.9782340,node,13337095306,,shop,shoes,-1
+31.1445532,29.9778941,node,13337095310,big cup 50egp,shop,beverages,-1
+31.1453965,29.9730882,node,13337095313,,shop,greengrocer,-1
+31.1452739,29.9722337,node,13337095314,,shop,shoes,-1
+31.1456149,29.9722017,node,13337095315,,shop,hairdresser,-1
+31.1458105,29.9713808,node,13337095317,,shop,kiosk,-1
+31.1460968,29.9703065,node,13337095319,,shop,kiosk,-1
+31.1446670,29.9779893,node,13337095403,,shop,electronics,-1
+31.1446395,29.9749295,node,13337095404,,shop,gift,-1
+31.1458262,29.9713262,node,13337095407,,shop,beverages,-1
+31.1458504,29.9712555,node,13337095408,,shop,kiosk,-1
+31.1491358,29.9760551,node,13337095502,,shop,convenience,-1
+31.1493806,29.9755808,node,13337095601,,shop,kiosk,-1
+31.1452345,29.9738891,node,13337095602,,shop,hairdresser,-1
+31.1455107,29.9727114,node,13337095603,,shop,kiosk,-1
+31.1442886,29.9764361,node,13337095903,,shop,convenience,-1
+31.1458551,29.9674579,node,13337095905,,shop,kiosk,-1
+31.2626600,30.0474367,node,13337977301,,shop,gift,17
+31.1481566,29.9653986,node,13339057702,,shop,bakery,-1
+31.1500749,29.9655269,node,13339057703,,shop,convenience,-1
+31.1513600,29.9683886,node,13339057706,,shop,pastry,-1
+31.1509284,29.9679469,node,13339057707,,shop,hairdresser,-1
+31.1488153,29.9650974,node,13339057708,,shop,pastry,-1
+31.1475998,29.9659038,node,13339057709,,shop,hairdresser,-1
+31.1516266,29.9657261,node,13339057803,,shop,hairdresser,-1
+31.1488872,29.9654235,node,13339057901,,shop,kiosk,-1
+31.1515825,29.9676348,node,13339057903,,shop,pastry,-1
+31.1509446,29.9678557,node,13339057904,,shop,electronics,-1
+31.1509254,29.9678275,node,13339057905,,shop,shoes,-1
+31.1503801,29.9672292,node,13339057906,,shop,convenience,-1
+31.1500924,29.9668870,node,13339057907,,shop,hairdresser,-1
+31.1491216,29.9656702,node,13339057908,,shop,convenience,-1
+31.1489561,29.9654817,node,13339058001,,shop,beverages,-1
+31.1490158,29.9654341,node,13339058002,,shop,convenience,-1
+31.1503726,29.9655159,node,13339058003,Egypt Post,post_office,post_office,-1
+31.1514993,29.9683762,node,13339058006,gaming center,shop,video_games,-1
+31.1501764,29.9669688,node,13339058007,,shop,convenience,-1
+31.1494903,29.9660964,node,13339058009,,shop,kiosk,-1
+31.1490343,29.9655757,node,13339058011,,shop,kiosk,-1
+31.1504749,29.9656022,node,13339058103,,shop,kiosk,-1
+31.1518900,29.9656765,node,13339058104,,shop,convenience,-1
+31.1499671,29.9667311,node,13339058105,,shop,convenience,-1
+31.1492291,29.9654493,node,13339058201,,shop,convenience,-1
+31.1509004,29.9677877,node,13339058202,,shop,clothes,-1
+31.1516363,29.9656392,node,13339058301,,shop,convenience,-1
+31.1515620,29.9681837,node,13339058302,,shop,kiosk,-1
+31.1515368,29.9682472,node,13339058303,,shop,shoes,-1
+31.1499002,29.9665289,node,13339058304,,shop,cosmetics,-1
+31.1491503,29.9657069,node,13339058305,,shop,clothes,-1
+31.1516548,29.9673844,node,13339058402,,shop,convenience,-1
+31.1516089,29.9679370,node,13339058403,,shop,electronics,-1
+31.1507821,29.9677650,node,13339058404,,shop,kiosk,-1
+31.1502647,29.9670814,node,13339058406,,shop,convenience,-1
+31.1492699,29.9658659,node,13339058408,,shop,convenience,-1
+31.1511001,29.9680459,node,13339058801,,shop,clothes,-1
+31.1487341,29.9647593,node,13339059301,,shop,hairdresser,-1
+31.2707569,29.9560180,node,13339301813,علي الفكهاني,shop,greengrocer,38
+31.2431296,30.0498395,node,13358795155,صالة مزادات كاتساروس,shop,furniture,16
+31.2438807,30.0502378,node,13358795157,ذا ريدرز كورنر,shop,books,16
+31.3425112,30.0734144,node,13423477001,الموان,shop,paint,12
+31.1887168,30.0117425,node,13426865565,الفرجاني,shop,supermarket,21
+31.2634676,30.0487032,node,13428309383,مجوهرات بي تي سي,shop,jewelry,17
+31.2043393,30.0311135,node,13430316857,تامر الميكانيكي,shop,car_repair,22
+31.2789017,30.1477467,node,13433885397,مصنع إيتوال أسكو,shop,confectionery,-1
+31.1358426,29.9908269,node,13434705501,Orange,shop,mobile_phone,-1
+31.1353049,29.9906261,node,13434705601,Volvan,shop,bakery,-1
+31.2425450,30.0525201,node,13437020583,محرر القصة,depot,logistics,16
+31.1349106,29.9913838,node,13440299802,,shop,hairdresser,-1
+31.1358779,29.9898862,node,13440299901,El Ezaby Pharmacy,shop,chemist,-1
+31.1312866,29.9901547,node,13441901605,,shop,dry_cleaning,-1
+31.2611688,30.0493091,node,13442769701,,shop,ticket,17
+31.2313027,30.0177996,node,13449107426,,shop,ticket,23
+31.2077646,30.0092288,node,13449107479,,shop,kiosk,22
+31.2078342,30.0089265,node,13449107500,,shop,kiosk,22
+31.2077116,30.0093448,node,13449109734,,shop,kiosk,22
+31.2076821,30.0095841,node,13449109785,,shop,kiosk,22
+31.2076480,30.0096988,node,13449109819,,shop,radiotechnics,22
+31.2151942,30.0168985,node,13451455702,Alban elmalek elsaleh,shop,supermarket,22
+31.2152155,30.0167996,node,13451455703,مكتبه العالميه,shop,bookmaker,22
+31.1642425,29.9964432,node,13464971601,,shop,variety_store,28
+31.3431469,30.0745532,node,13473149901,سوبر ماركت زيدان,shop,supermarket,12
+31.3455042,30.0625188,node,13516757125,Streeks,shop,clothes,19
+31.3454546,30.0624643,node,13516757126,Fizze,shop,clothes,19
+31.2513974,30.0545343,node,13524583402,Black Rose Fragrances,shop,perfumery,16
+31.2525731,30.0546055,node,13524653601,Ordny,shop,coffee,16
+31.2523133,30.0546085,node,13524653701,,shop,perfumery,16
+31.2522837,30.0546216,node,13524653801,,shop,perfumery,16
+31.2522494,30.0546212,node,13524653901,,shop,perfumery,16
+31.2522298,30.0545776,node,13524678601,,shop,perfumery,16
+31.2520954,30.0547209,node,13524678701,,shop,perfumery,16
+31.2520729,30.0546736,node,13524678702,,shop,deli,16
+31.2518588,30.0547140,node,13524679801,,shop,perfumery,16
+31.2518913,30.0547012,node,13524679901,Elkopre,shop,perfumery,16
+31.2520171,30.0545533,node,13524679902,Aqua D'or Parfums,shop,perfumery,16
+31.2519984,30.0545163,node,13524680001,Joker Fragrance,shop,perfumery,16
+31.2515306,30.0547463,node,13524790401,Hamouda,shop,perfumery,16
+31.2221668,30.0725363,node,13524823640,Timberland,shop,clothes,8
+31.2783060,29.9697888,node,13539109101,cardoo,shop,car_parts,31
+31.2756744,29.9561028,node,13539130501,seoudi supermarket maadi branch 2,shop,supermarket,38
+31.2775842,29.9706609,node,13539143501,kotchino stores,shop,shoes,31
+31.3169092,30.0972431,node,13594911543,,shop,art,11
+31.3166356,30.0966038,node,13594911546,,shop,pastry,11
+31.3165712,30.0965528,node,13594911547,,shop,toys,11
+31.3158296,30.0959958,node,13594911548,ارتيستو,shop,paint,11
+31.3156378,30.0959053,node,13594911549,,shop,toys,11
+31.3780268,30.1288748,node,13613700801,El Nozha post office مكتب بريد النزهه,post_office,post_office,6
+31.1996359,30.0694845,node,13619597302,Diwan Alarab,shop,travel_agency,8
+31.2504178,30.0518198,node,13621433901,مؤسسة رحيق للعطور,shop,perfumery,16
+31.1554606,30.0070570,node,13649072401,,shop,doityourself,-1
+31.2552833,29.9642286,node,13683454501,Pixel Store,shop,mobile_phone,37
+31.2401694,30.0874914,node,13684789501,العبد,shop,supermarket,9
+31.1525741,30.0006103,node,13687164902,تمباك,shop,department_store,-1
+31.1551396,29.9992991,node,13687171701,مخبز,shop,bakery,-1
+31.1894697,30.0550980,node,13691284202,العندليب أمام سلم ارض اللواء,shop,confectionery,14
+31.2437959,30.0600074,node,13691289802,التوحيد و النور,shop,department_store,16
+31.3717579,30.0992303,node,13698351101,Raw Specialty Coffee,shop,coffee,13
+31.2016640,30.0493039,node,13715140907,كازيون,shop,supermarket,15
+31.1658543,30.0010555,node,13738265097,Elsoltana Fashion,shop,clothes,21
+31.4005623,30.0065540,node,13764384340,Geant,shop,supermarket,-1
+31.2188151,30.0429741,node,13815322703,,shop,bathroom_furnishing,15
+31.1711833,29.9982663,node,13834538202,The Anime House,shop,gift,28
+31.1624862,29.9684224,node,13918244244,Al Miniawi Market,market,marketplace,28
+31.1607714,29.9678081,node,13918264602,Market Abu Hischam,market,marketplace,28
+31.2291172,29.9904600,node,13922874657,Grab Mart,shop,convenience,30
+31.2309379,29.9830085,node,13922915228,راديو طلعت,shop,appliance,30
+31.2274120,30.0161172,node,13922936265,أحمد بيومي الكنفاني,shop,confectionery,23
+31.2232968,30.0185763,node,13922936267,هشام,shop,hairdresser,22
+31.2157593,30.0198597,node,13923050507,فودافون,shop,mobile_phone,22
+31.2156237,30.0196969,node,13923050508,أورانج,shop,telecommunication,22
+31.2155944,30.0196927,node,13923050509,وي,shop,telecommunication,22
+31.2152530,30.0197295,node,13923050511,دار الكتب المقدسة,shop,books,22
+31.2149903,30.0197986,node,13923050512,كازيون,shop,supermarket,22
+31.2159481,30.0195065,node,13923050515,Bridgestone,shop,tyres,22
+31.1775254,30.0783563,node,14003204713,العطار جروب,shop,yes,7
+31.2413643,30.0486147,node,14040126715,مركز صيانة ال جى,shop,electronics,16
+31.2639442,30.0430033,node,14060367862,Bagasi DM minimarket,shop,kiosk,17
+31.2636062,30.0429741,node,14060367863,Maulana Corner,shop,supermarket,17
+31.2639495,30.0425969,node,14060367864,MIE AYAM BINTANS DARROSAH,shop,kiosk,17
+31.2638708,30.0425559,node,14060367865,Warung New Prasmanan Simpang X,shop,kiosk,17
+31.2677238,30.0480165,node,14060465811,Barakat,shop,yes,17
+31.3950397,30.0533825,node,14071452477,الايمان ماركت,shop,convenience,-1
+31.2559195,30.1023289,node,14078684001,اسواق الشرقيه عبود,shop,supermarket,2
+31.2373472,30.0444997,node,14096994398,فطاطري التحرير,shop,pastry,16
+31.2378275,30.0441322,node,14097003455,الكترونيات الجمال,shop,radiotechnics,16
+31.3996666,30.0474840,node,14101774001,مخبوزات زمزم,shop,bakery,-1
+31.2026912,30.0424194,node,14102954798,كازيون,shop,supermarket,15
+31.2024904,30.0428189,node,14102954799,تاي شوب,shop,clothes,15
+31.2022369,30.0428401,node,14102954800,جورميه,shop,supermarket,15
+31.2551157,29.9595018,node,14102961268,بيم,shop,supermarket,37
+31.2817573,29.9741355,node,14103593494,,shop,hardware,31
+31.2116950,30.0982046,node,14108620601,كريم فرج عربية فول وطعميه,shop,kiosk,8
+31.2537523,29.9584654,node,14110215976,زهور الحرية,shop,florist,37
+31.2638860,30.0436374,node,14114157466,REPAIR GADGET MASISIR,shop,supermarket,17
+31.2501080,29.9606417,node,14115531849,فودافون,shop,telecommunication,37
+31.2604439,30.0449990,node,14116154152,El Askary Market,shop,supermarket,17
+31.2629312,30.0430282,node,14116154170,Virgo,shop,hairdresser,17
+31.2638348,30.0437538,node,14116244033,Ammu karim,market,marketplace,17
+31.1599160,29.9947081,node,14116528156,صيدلية دكتور اياد عبد الوارث,shop,chemist,28
+31.1371742,29.9895382,node,14122359566,MG Motor,shop,car,-1
+31.1365560,29.9893779,node,14122384064,Oil Plus Automotive Oil,shop,car_repair,-1
+31.1364916,29.9893904,node,14122405461,فور باي فور اطارات سيارات,shop,tyres,-1
+31.1361434,29.9895091,node,14122407953,Clothina,shop,clothes,-1
+31.1362453,29.9894749,node,14122453393,وردة,shop,yes,-1
+31.1361935,29.9894907,node,14122496101,زهور نجلاء,shop,florist,-1
+31.1354435,29.9897566,node,14122537202,مخبز و حلواني وادي الملوك,shop,bakery,-1
+31.1359555,29.9898653,node,14122685949,سوبرماركت,shop,convenience,-1
+31.1598060,29.9962549,node,14129084844,صيدلية جوهرة,shop,chemist,28
+31.1350626,29.9905437,node,14129123226,سوبرماركت السلام,shop,convenience,-1
+31.1353561,29.9906427,node,14129212183,ملابس قطونيل,shop,clothes,-1
+31.1354110,29.9906644,node,14129232850,محمصات بالي السورية,shop,nuts,-1
+31.1354345,29.9907482,node,14129338614,صيدلية الامام,shop,chemist,-1
+31.3895072,30.0503566,node,14132495089,كشك الامانه,shop,kiosk,20
+31.3883852,30.0502380,node,14132510938,cook door زهراء مدينه نصر,shop,kiosk,20
+31.3907777,30.0505911,node,14132510947,مخبز الحرمين,shop,bakery,20
+31.1347323,29.9904414,node,14133173110,We,shop,telecommunication,-1
+31.1358860,29.9908425,node,14133241778,Dantella Lingerie,shop,clothes,-1
+31.1358069,29.9908155,node,14134135447,Enysta Cosmetics,shop,cosmetics,-1
+31.1358757,29.9904106,node,14134421413,كمال حسانين اقمشة,shop,fabric,-1
+31.1360822,29.9904866,node,14134442737,علاء الدين,shop,yes,-1
+31.1363726,29.9904986,node,14134668982,We Print Your Gift Custom Printing,shop,craft,-1
+31.1363388,29.9904523,node,14134691809,هيام عبيد صالون تجميل,shop,beauty,-1
+31.1363528,29.9906058,node,14134786424,اخر العنقود هدايا,shop,gift,-1
+31.1364084,29.9906232,node,14134805739,قصر السجاد,shop,carpet,-1
+31.1364587,29.9906370,node,14134812424,صيدلية ابو علي,shop,chemist,-1
+31.3073334,29.9647287,node,14136674001,Falken for cars tires and rims,shop,car_parts,39
+31.2935396,29.9616731,node,14136674101,Galaxy Bakery,shop,bakery,39
+31.1991479,30.0081512,node,14138469072,براميز مول,shop,mall,22
+31.3213857,30.0950433,node,14138931244,روماين,shop,supermarket,11
+31.3208877,30.0952452,node,14138931245,سعودي,shop,supermarket,11
+31.2728298,29.9615356,node,14141351456,نيلنز,shop,household_linen,38
+31.2003381,30.0139531,node,14144972965,ماك سجاد,shop,carpet,22
+31.2002405,30.0139157,node,14144974944,البنداري قطع غيار,shop,car_parts,22
+31.1357071,29.9899352,node,14148024568,Tseppas,shop,pastry,-1
+31.1357770,29.9899152,node,14148059073,محمصة البن البرازيلي,shop,coffee,-1
+31.1358227,29.9900379,node,14148075063,محمود قنديل توريدات كهربائية,shop,electrical,-1
+31.1357664,29.9900006,node,14148134921,شركة مكة سياحة,shop,travel_agency,-1
+31.1360475,29.9898407,node,14148310294,النساجون الشرقيون سجاد اوتليت,shop,carpet,-1
+31.1369020,29.9892696,node,14148509622,Car Services,shop,car_repair,-1
+31.1368376,29.9892911,node,14148526250,Loading Pro Care,shop,car_repair,-1
+31.1359196,29.9898753,node,14148552116,Museum Bazaar,shop,gift,-1
+31.1358825,29.9900201,node,14148579038,Sun Pyramids Tours,shop,travel_agency,-1
+31.1366391,29.9906950,node,14148780574,بروج اثاث,shop,furniture,-1
+31.1365347,29.9906618,node,14148789627,التوفيقية قطع غيار سيارات,shop,car_parts,-1
+31.1367359,29.9907258,node,14148813623,Vontx Electronics,shop,electronics,-1
+31.1366860,29.9907106,node,14148822832,رنين,shop,department_store,-1
+31.1367796,29.9907416,node,14148871514,Titanium Mobile Phones,shop,mobile_phone,-1
+31.1364655,29.9911173,node,14161582778,كشك بقالة,shop,kiosk,-1
+31.1347426,29.9904789,node,14161625862,سوبرماركت الحسن والحسين,shop,convenience,-1
+31.1346291,29.9904498,node,14161691380,العمدة,shop,yes,-1
+31.1345502,29.9900190,node,14163540976,حلواني هريسة احمد حسنين,shop,pastry,-1
+31.1398679,30.0103813,node,14164976379,اولاد الرويعي دهانات,shop,paint,-1
+31.1398955,30.0103438,node,14164980444,صيدلية دكتور ياسر العسيلي,shop,chemist,-1
+31.1366646,29.9911157,node,14165271715,سعودي ستورز موبايلات,shop,mobile_phone,-1
+31.1367389,29.9910873,node,14165276618,التهامي ماركت,shop,convenience,-1
+31.1367892,29.9911007,node,14167636148,Cake Door,shop,pastry,-1
+31.1373839,29.9913208,node,14167739944,صيدلية الشاذلي,shop,chemist,-1
+31.1373404,29.9913044,node,14167769206,الورداني سكالا بصريات,shop,optician,-1
+31.1374268,29.9913390,node,14167937498,الاخوة موبايلات,shop,mobile_phone,-1
+31.1371638,29.9908618,node,14167968696,Junior Children's Clothes,shop,clothes,-1
+31.1580104,30.0041350,node,14169627155,محمد حسن ابو دينا خضروات و فواكه,shop,greengrocer,-1
+31.1579797,30.0041627,node,14169630746,ابو ستة خضروات و فواكه,shop,greengrocer,-1
+31.1579579,30.0042282,node,14169652685,سوبرماركت اسواق اولاد الشيخ,shop,convenience,-1
+31.1579687,30.0041932,node,14169661443,معرض مؤسسة الدكتور موتوسيكلات,shop,motorcycle,-1
+31.1579389,30.0043225,node,14169679997,السوهاج,shop,yes,-1
+31.1579495,30.0042654,node,14169702063,مجوهرات ام النور,shop,jewelry,-1
+31.1579332,30.0043573,node,14169754309,المهندس,shop,yes,-1
+31.1359454,29.9909646,node,14170871157,Surprise,shop,yes,-1
+31.1373455,29.9909197,node,14170893288,فتكات هدايا,shop,fashion_accessories,-1
+31.1383265,29.9909979,node,14170926850,Marshal Tire,shop,tyres,-1
+31.1384189,29.9912778,node,14175289342,بزنس فون موبايلات,shop,mobile_phone,-1
+31.1384962,29.9913087,node,14175513149,Doctor iStores Mobile Phones,shop,mobile_phone,-1
+31.1384550,29.9912949,node,14175515651,صيدلية,shop,yes,-1
+31.2972282,29.9614130,node,14183658002,Oscar Grand Stores,shop,supermarket,39
+31.2743488,29.9575081,node,14183945690,THE SPACE MAADI,shop,clothes,38
+31.2742857,29.9623614,node,14184135485,Mobaco Cottons,shop,clothes,38
+31.2738416,29.9624735,node,14184144552,Gourmet,shop,supermarket,38
+31.2740023,29.9626673,node,14184148232,COW Maadi,shop,gift,38
+31.2786096,29.9579715,node,14184243023,Healthy and Tasty,shop,health_food,38
+31.2729217,29.9548451,node,14184248415,Egypt Duty Free Shops,shop,duty-free_retail,38
+31.2786311,29.9578854,node,14185322466,Luya Chinese Market,shop,supermarket,38
+31.2786222,29.9570559,node,14185336746,Cobbler,shop,shoe_repair,38
+31.2785791,29.9619276,node,14185357710,Mr. Tailor,shop,tailor,38
+31.2785951,29.9585450,node,14185389822,百佳超市,shop,supermarket,38
+31.2786505,29.9586365,node,14185389823,Bailian Company,shop,supermarket,38
+31.2786607,29.9588650,node,14185389839,عطارة مولانا,shop,spices,38
+31.2786515,29.9587734,node,14185391886,Technology Valley,shop,electronics,38
+31.2781756,29.9627454,node,14185446008,The Pet Factory,shop,pet,38
+31.2787134,29.9694437,node,14185461113,Bekky Barber,shop,hairdresser,31
+31.2775651,29.9612876,node,14185739073,Joe's Venture,shop,leather,38
+31.2234505,30.0610100,node,14188962539,Re-live vintage store,shop,second_hand,15
+31.2188737,30.0626937,node,14189011401,Cairo vintage Thrift Store,shop,second_hand,15
+31.2177900,30.0649758,node,14189011410,Retrograde Records,shop,music,15
+31.2169501,30.0657665,node,14189033060,Sherry's Vinyl,shop,music,15
+31.2304024,30.0341967,node,14189277093,Cairopolitan,shop,gift,16
+31.3261789,29.9696960,node,14189677631,All-in-One,shop,tobacco,33
+31.2236882,30.0539619,node,14190030022,LYCHEE,shop,health_food,15
+31.3144295,29.9683391,node,14190030320,Etoile Patisserie,shop,pastry,32
+31.2219016,30.0652585,node,14190031443,Seoudi Supermarket,shop,supermarket,15
+31.2223469,30.0601664,node,14190032562,Gallery Fanous,shop,antiques,15
+31.3235861,29.9790276,node,14190686992,Nour flowers زهور نور,shop,florist,32
+31.1349791,29.9898732,node,14196073763,منفذ لحوم الوطنية 2000,shop,butcher,-1
+31.1918374,30.0659544,node,14196105450,منفذ لحوم الوطنية 2000,shop,butcher,14
+31.1588583,29.9979068,node,14196206017,التوحيد والنور,shop,department_store,28
+31.1915419,30.0662003,node,14196219015,التوحيد والنور,shop,department_store,14
+31.1431502,29.9926175,node,14196230529,التوحيد والنور,shop,department_store,-1
+31.1515741,29.9858308,node,14196245660,منفذ لحوم الوطنية 2000,shop,butcher,-1
+31.2048969,30.0096804,node,14196250276,منفذ لحوم الوطنية 2000,shop,butcher,22
+31.2145326,30.0172667,node,14196255226,منفذ لحوم الوطنية 2000,shop,butcher,22
+31.1347434,29.9899496,node,14196604072,محمود قنديل توريدات كهربائية,shop,electrical,-1
+31.1344217,29.9906421,node,14199080302,الهضبة ستور موبايلات,shop,mobile_phone,-1
+31.1516702,29.9951527,node,14199421111,الهضبة ستور موبايلات,shop,mobile_phone,-1
+31.1655766,30.0091007,node,14200423784,جزارة الحسن والحسين,shop,butcher,21
+31.1651748,30.0090388,node,14200469874,مخبز و حلواني السلسلة,shop,bakery,21
+31.1512569,30.0064307,node,14200550850,ابو يوسف زجاج,shop,yes,-1
+31.1508044,30.0063568,node,14200666001,سوبرماركت ايجيبت,shop,convenience,-1
+31.1547284,30.0079400,node,14200764073,Kidzania Funnky Monkey,shop,yes,-1
+31.1470278,29.9819444,node,14201317422,Elgizawy,shop,supermarket,-1
+31.1471944,29.9816111,node,14201317423,Bim,shop,supermarket,-1
+31.1969559,30.0369983,node,14203399556,أبو الجوخ,shop,bicycle,15
+31.1361767,30.0085901,node,14205373385,Bella Donna Outlet,shop,clothes,-1
+31.1385530,29.9913330,node,14209354630,ALX Store Mobile Phones,shop,mobile_phone,-1
+31.1385246,29.9913211,node,14209360136,Eslam Essam Mobile Phones,shop,mobile_phone,-1
+31.1385792,29.9913437,node,14209388731,El Joker Mobile Phones,shop,mobile_phone,-1
+31.1386045,29.9913537,node,14209476585,الجوكر موبايلات,shop,mobile_phone,-1
+31.1386221,29.9913296,node,14209525109,ايجي مارت اثاث مكتبي,shop,furniture,-1
+31.1383838,29.9910181,node,14210595030,Quartz,shop,car_repair,-1
+31.1387151,29.9913941,node,14210779887,Premium Mobile Phones,shop,mobile_phone,-1
+31.1388340,29.9914358,node,14210975893,Ostura,shop,clothes,-1
+31.1387787,29.9914175,node,14210993807,ملابس البطل محجبات,shop,clothes,-1
+31.1389282,29.9914678,node,14211516063,ملابس صاحبة السعادة محجبات,shop,clothes,-1
+31.1390284,29.9915008,node,14211566957,ملابس الرداء محجبات,shop,clothes,-1
+31.1396131,29.9908297,node,14211591918,4or You Shoes,shop,shoes,-1
+31.1395808,29.9908754,node,14211622310,مركز ابو زيد,shop,yes,-1
+31.1396529,29.9907902,node,14212547582,البطل ادوات صحية,shop,bathroom_furnishing,-1
+31.1393856,29.9911032,node,14212575405,Lovely,shop,yes,-1
+31.1390618,29.9914705,node,14212869555,ملابس كنوز حواء,shop,clothes,-1
+31.1391477,29.9915409,node,14212881129,ملابس اسطورة محجبات,shop,clothes,-1
+31.1392225,29.9915687,node,14213019130,اولاد رمضان,shop,yes,-1
+31.1392732,29.9915849,node,14213022812,Bel Honey Cake,shop,pastry,-1
+31.1394727,29.9916424,node,14213120800,ملابس بريوني محجبات,shop,clothes,-1
+31.1396524,29.9916966,node,14213316389,اخر دلع هدايا,shop,gift,-1
+31.1397024,29.9917078,node,14213357333,Azad,shop,clothes,-1
+31.1395947,29.9916792,node,14213378805,ملابس دهب عبايات,shop,clothes,-1
+31.1397496,29.9917184,node,14213407749,El Gendy Shoes and Handbags,shop,shoes,-1
+31.2006044,30.0418945,node,14213435929,توب تويز,shop,toys,15
+31.2004928,30.0424081,node,14213435932,Sketchers,shop,shoes,15
+31.2004817,30.0424495,node,14213435933,U Turn,shop,clothes,15
+31.2004945,30.0423760,node,14213435934,Coup,shop,clothes,15
+31.2001983,30.0425197,node,14213435935,مغربي,shop,optician,15
+31.2005056,30.0425994,node,14213435938,جولي أوبتكس,shop,optician,15
+31.1393851,29.9916161,node,14213696354,Cairo Sport Sportswear and Swimwear,shop,clothes,-1
+31.3234914,30.1325061,node,14214360171,Telecom Egypt,shop,telecommunication,4
+31.3431010,30.1415385,node,14228157489,BİM,shop,convenience,-1
+31.2174141,30.0467523,node,14228452101,الاخوان الثلاثه,shop,supermarket,15
+31.1401725,29.9915182,node,14230778593,Mobil Mart,shop,convenience,-1
+31.1401732,29.9916159,node,14231072568,Mobil Autocare,shop,car_repair,-1
+31.1376588,29.9914191,node,14233281043,TM Digital Satellite Equipment and Dishes,shop,appliance,-1
+31.3328205,30.0666124,way,31820646,البيت السورى,shop,supermarket,12
+31.3335878,30.0666949,way,31820661,نور,shop,supermarket,12
+31.2574840,30.0423214,way,34204424,قصبة رضوان,shop,market,16
+31.3453167,30.0578578,way,37716867,مصطفى السلاب,shop,furniture,19
+31.3459301,30.0590914,way,37716878,National Motors Egypt,shop,car,19
+31.3459608,30.0588890,way,37716879,سلامة,shop,butcher,19
+31.3460106,30.0586800,way,37716880,مترو,wholesale,wholesale,19
+31.3465243,30.0549625,way,37716890,محجوب,shop,bathroom_furnishing,19
+31.3464007,30.0558290,way,37716894,الخباز,shop,bakery,19
+31.3481861,30.0509869,way,37800387,تكنولوجي مول,shop,computer,19
+31.3298256,30.0674639,way,38449286,طيبة مول,shop,mall,12
+31.3190225,30.0777007,way,39610219,Egypt Post (11827),post_office,post_office,11
+31.2399402,30.0501016,way,39700935,طلعت حرب مول,shop,mall,16
+31.2056792,30.0532810,way,39951427,سيراميكا كليوباترا,shop,electronics,15
+31.2270940,30.0697456,way,40287031,أركاديا مول,shop,mall,9
+31.3161518,29.9823874,way,45857738,Carrefour CityCentre,shop,mall,32
+31.3364043,30.0662701,way,48420589,راديو شاك,shop,electronics,12
+31.3356139,30.0636177,way,52299513,الشركة الدولية للخدمات البريدية ايجى سيرف فرع مدينة نصر,post_office,post_office,19
+31.2489010,30.0636441,way,52414432,,post_office,post_office,16
+31.3404971,30.0604514,way,59627105,Al Rowad Constructions & Pool Services,shop,swimming_pool,19
+31.4037847,30.1253441,way,93178279,Air Mall,shop,mall,-1
+31.3969299,30.1194237,way,93178284,,shop,supermarket,-1
+31.2327922,30.0512525,way,97145191,الملحق التجاري,shop,mall,16
+31.2397958,30.0443471,way,98244292,سوق خضار باب اللوق,market,marketplace,16
+31.2386687,30.0456628,way,98308861,مركز البستان التجاري,shop,mall,16
+31.3867179,30.1029858,way,99682702,سن سيتي مول,shop,mall,6
+31.2314496,30.0085505,way,99722211,Souk Fustat,shop,mall,23
+31.3125112,29.9841656,way,163755256,,shop,mall,32
+31.2124962,30.0667874,way,166492682,Imbaba Post Office,post_office,post_office,8
+31.1916745,30.0507868,way,186425465,السلام شوبنج,shop,clothes,14
+31.2179593,29.9976321,way,202129768,ستوديو كليوباترا,shop,photo_studio,29
+31.2396914,29.9906342,way,202133508,جبخانة محمد علي,depot,warehouse,30
+31.2648495,29.9519625,way,210589169,Sultan Market,shop,supermarket,38
+31.2670860,29.9504581,way,210706706,MECC - Maadi Engineering Cars Company;Pottery Cafe,shop,car_repair,38
+31.3380610,29.9812141,way,213132513,Bavarian Auto,shop,car,33
+31.3245433,30.0807279,way,217698375,Maleeka Designs,shop,clothes,11
+31.4046792,30.0303313,way,250642019,Honda,shop,car,-1
+31.4074309,30.0301805,way,250642020,ايكيا,shop,furniture,-1
+31.4047756,30.0294592,way,250642030,Toyota,shop,car,-1
+31.4124098,30.0173624,way,252880106,Downtown Mall,shop,mall,-1
+31.4082203,30.0279098,way,253593226,كايرو فستيفال سيتى مول,shop,mall,-1
+31.2700626,29.9654606,way,280854747,معادى جراند مول Maadi Grand Mall,shop,mall,38
+31.3457238,30.0729872,way,284147372,سيتى ستارز مول,shop,mall,12
+31.2102286,30.0250474,way,325018374,,depot,warehouse,22
+31.4105127,29.9717426,way,340022731,Total,shop,convenience,-1
+31.2208008,30.0638619,way,376242531,اليمامة سنتر,shop,mall,15
+31.3669001,29.9888703,way,391172634,توكيل سكودا,shop,car,34
+31.2727361,29.9755746,way,395363752,,shop,copyshop,31
+31.2064371,30.0575127,way,414000538,On the Run,shop,convenience,15
+31.2108156,30.0605426,way,448040705,,shop,bakery,15
+31.2102508,30.0606981,way,448040711,درنكيز,shop,beverages,15
+31.2144957,30.0571508,way,448045036,Advanced business systems,shop,electronics,15
+31.2083503,30.0581535,way,448048637,الشركة الدولية للخدمات البريدية ايجى سيرف فرع العجوزة,post_office,post_office,15
+31.2072236,30.0534847,way,448971400,الشركة الدولية للخدمات البريدية ايجى سيرف قسم الاستعلام,post_office,post_office,15
+31.3214137,30.0688758,way,455464035,سوق رابعة العدوية,market,marketplace,11
+31.3243012,30.0691465,way,455468475,,shop,car,11
+31.2620706,30.0477413,way,471494311,(صالة عرض في خان الخليلي) الكحال السجاد,shop,carpet,17
+31.2198749,30.0658597,way,490665802,ك المرعشلى,shop,supermarket,15
+31.2422928,30.0529035,way,502658724,الخطوط الجوية الليبية القاهرة,shop,ticket,16
+31.2251578,29.9951308,way,527246376,Mini Market _ Food Supplies,shop,convenience,29
+31.2219103,29.9826258,way,527249841,,shop,convenience,29
+31.2224651,29.9800377,way,528977239,Wedding Salon,shop,hairdresser,29
+31.2299055,30.0194501,way,560569655,شركة مرسيدس,shop,car,23
+31.3427750,30.0961614,way,705821037,الحرية,post_office,post_office,12
+31.2743648,29.9724254,way,726526138,Option Travel,shop,travel_agency,31
+31.2301410,30.0286735,way,751954221,Ticket Window,shop,ticket,23
+31.2225853,30.0569842,way,761734560,,shop,travel_agency,15
+31.2419582,30.0533764,way,767656946,,shop,alcohol,16
+31.2380085,30.0490782,way,769165203,Townhouse,shop,art,16
+31.2413048,30.0445137,way,769795116,,post_office,post_office,16
+31.2435519,30.0553881,way,771734759,شركه التاج الكتريك,shop,electrical,16
+31.1739245,29.9983110,way,771784390,كايرو مول,shop,mall,28
+31.2429093,30.0534507,way,771960597,معرض الحلويات الشرقية,shop,confectionery,16
+31.3916409,30.0593952,way,801724871,Nile Pharmacy,shop,chemist,20
+31.3215521,30.0704419,way,807246479,صن مول,shop,mall,11
+31.1863019,30.1290738,way,854460594,Tanash B-Tech Park,market,marketplace,0
+31.1924313,30.1248256,way,854460598,مكتب بريد طناش,post_office,post_office,1
+31.1408435,29.9754528,way,906925189,Giza Pyramids Ticket Checkpoint,shop,ticket,-1
+31.1833610,30.0331860,way,986674755,سوق زنين الحضرى,market,marketplace,14
+31.1834203,30.0328720,way,986674756,سوق زنين الحضرى,market,marketplace,21
+31.1834783,30.0324130,way,986674757,سوق زنين الحضرى,market,marketplace,21
+31.1996287,30.0271861,way,986694826,مركز بريد بولاق الدكرور,post_office,post_office,22
+31.1843831,30.0308900,way,990433600,,post_office,post_office,21
+31.2421933,30.0519822,way,990578904,Lehnert & Landrock,shop,books,16
+31.1943690,30.0580613,way,991340856,H&M,shop,clothes,15
+31.1948920,30.0576647,way,991340863,Fit & Fix,shop,tyres,15
+31.1951438,30.0521601,way,991443253,بلاتنيوم مول,shop,mall,15
+31.1748812,29.9996849,way,993700363,Ayman Salah Beauty Salon,shop,beauty,21
+31.2096176,30.0753924,way,1003878545,,depot,warehouse,8
+31.2086086,30.0759572,way,1003878546,,depot,warehouse,8
+31.2099698,30.0763776,way,1003878547,,depot,warehouse,8
+31.2108244,30.0752774,way,1003878548,,depot,warehouse,8
+31.3672113,30.1278419,way,1004051543,,depot,warehouse,6
+31.2239941,30.0626451,way,1113389434,كونكريت,shop,clothes,15
+31.2177893,30.0628051,way,1121899520,ألفا ماركت,shop,supermarket,15
+31.2213473,30.0616479,way,1121913637,موباكو كوتونز,shop,clothes,15
+31.2092143,30.0604937,way,1121915370,ابوسيف للسياحه,shop,travel_agency,15
+31.3177291,30.0034967,way,1123284102,الصخره,shop,supermarket,25
+31.3174831,30.0040585,way,1123284103,احباب المصطفى,shop,supermarket,25
+31.1948876,30.0555647,way,1123846171,,shop,travel_agency,15
+31.3491651,30.0627624,way,1225895986,بيت الكتب,shop,books,19
+31.2383911,29.9655902,way,1226209025,ستوديو جزيرة المعادى,shop,photo_studio,37
+31.3387296,30.0483475,way,1227159648,,shop,mall,19
+31.2654281,29.9525457,way,1236257786,,shop,mall,38
+31.2609329,30.0285247,way,1236920950,محل هدايا,shop,gift,24
+31.2300029,30.0061168,way,1244954032,,shop,ticket,23
+31.2532911,29.9970073,way,1295831398,,depot,warehouse,30
+31.2533040,29.9948649,way,1334240564,,post_office,post_office,30
+31.1892530,30.0584559,way,1354597979,منطفه ورش سكه حديد,shop,car_repair,14
+31.1899139,30.0553455,way,1358304941,,shop,variety_store,14
+31.1898825,30.0554874,way,1358305145,,shop,variety_store,14
+31.1897986,30.0558734,way,1358305358,,shop,variety_store,14
+31.1898425,30.0556689,way,1358305484,,shop,variety_store,14
+31.2866207,29.9582190,way,1376715165,Fit & Fix,shop,tyres,38
+31.1884758,30.0554829,way,1377742040,التوحيد و النور,shop,clothes,14
+31.1894048,30.0552284,way,1418605862,سوبر توفير مستقبل مصر لبيع المجمدات و السلع الغزائية,shop,supermarket,14
+31.1894466,30.0551240,way,1418606076,منفز سوبر توفير مستقبل مصر لبيع الفواكة و الخضروات بارض اللواء,shop,supermarket,14
+31.1894967,30.0550263,way,1421696074,منفز سوبر التوفير مستقبل مصر لبيع المخبوزات الجاهزه,shop,bakery,14
+31.3781824,30.0526795,way,1428551186,هايبر ماركت المحلاوي,shop,supermarket,20
+31.2270030,30.0429812,way,1465291626,,shop,ticket,16
+31.3073192,30.0982890,way,1466745754,سيركل كي,shop,supermarket,11
+31.2886409,29.9894287,way,1470191428,,shop,ticket,31
+31.1389811,29.9741105,way,1470431877,,shop,gift,-1
+31.2353689,30.0346871,way,1471647327,,shop,ticket,16
+31.1614596,29.9760452,way,1476638147,,market,marketplace,28
+31.3467347,30.0895810,way,1484514568,شوكولاتة بلانيت,shop,chocolate,12
+31.3736218,30.1266416,way,1495049088,Zamzam supermarket,shop,kiosk,6
+31.2853938,29.9764969,way,1540758307,Panorama El Maadi Mall,shop,mall,31
+31.3271680,30.1332100,way,1562204731,مخازن الشركة المصرية للاتصلات عين شمس,depot,warehouse,-1
+31.3808721,30.0910914,way,1563213503,Lulu Hypermarket,shop,supermarket,13
+31.3836696,30.0983119,way,1563218060,محجوب للسيراميك والبورسلين,shop,hardware,13

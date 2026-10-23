@@ -614,3 +614,285 @@ def build_city(city, *, pbf_path, tif_path, out_dir, continent, block_cells=DEFA
     log.info("%s: %d zones, pop %.2f M, major road %.0f km, %.1f s",
              city, zg.n_zones, zg.pop_window_total / 1e6, meta["road_km_major_zones"], meta["build_seconds"])
     return meta
+
+
+# ---------------------------------------------------------------------------
+# Points of interest (OpenStreetMap)
+# ---------------------------------------------------------------------------
+
+POI_CATEGORIES = ("shop", "market", "depot", "post_office", "locker", "wholesale")
+POI_COLUMNS = ("lon", "lat", "osm_type", "osm_id", "name", "category", "subtype")
+DEPOT_NAME_RE = re.compile(r"warehouse|logistic|depot|distribution|cargo|freight|courier|fulfil", re.IGNORECASE)
+DEPOT_INDUSTRIAL = frozenset({"warehouse", "logistics", "distribution"})
+DEPOT_OFFICE = frozenset({"logistics", "courier"})
+PARCEL_VENDING = frozenset({"parcel_pickup", "parcel_mail_in"})
+SHOP_EXCLUDED = frozenset({"vacant", "no"})
+DEPOT_SCORE_WEIGHTS = {"depot": 1.0, "wholesale": 0.5, "post_office": 0.25}
+
+
+def _has_parcel_vending(value) -> bool:
+    return bool(value) and any(part.strip() in PARCEL_VENDING for part in value.split(";"))
+
+
+def classify_poi(tags, area=False):
+    """Category and subtype of an OSM object from its tags, or None when it is not a point of interest.
+
+    ``tags`` is any mapping with ``get`` (pyosmium TagList or dict). ``area`` is True for ways.
+    When several rules match, the first in this order wins: depot, locker, post_office, wholesale,
+    market, shop, so each object is counted in exactly one category.
+    """
+    amenity = tags.get("amenity")
+    building = tags.get("building")
+    industrial = tags.get("industrial")
+    office = tags.get("office")
+    shop = tags.get("shop")
+
+    if amenity == "post_depot":
+        return "depot", amenity
+    if building == "warehouse":
+        return "depot", building
+    if industrial in DEPOT_INDUSTRIAL:
+        return "depot", industrial
+    if office in DEPOT_OFFICE:
+        return "depot", office
+    if area and tags.get("landuse") == "industrial":
+        name = tags.get("name")
+        if name and DEPOT_NAME_RE.search(name):
+            return "depot", "landuse=industrial"
+
+    if amenity == "parcel_locker":
+        return "locker", amenity
+    if amenity == "vending_machine" and _has_parcel_vending(tags.get("vending")):
+        return "locker", "vending=parcel"
+
+    if amenity == "post_office":
+        return "post_office", amenity
+
+    if shop in ("wholesale", "trade"):
+        return "wholesale", shop
+    if amenity == "marketplace":
+        return "market", amenity
+    if shop and shop not in SHOP_EXCLUDED:
+        return "shop", shop
+    return None
+
+
+class _PoiCollector(osmium.SimpleHandler):
+    """Collects points of interest: nodes at their location, ways at the mean of their node locations."""
+
+    def __init__(self):
+        super().__init__()
+        self.poi_lon = array("d")
+        self.poi_lat = array("d")
+        self.poi_id = array("q")
+        self.poi_type = []
+        self.poi_name = []
+        self.poi_category = []
+        self.poi_subtype = []
+        self.seen = set()
+        self.missing_locations = 0
+
+    def _add(self, kind, obj_id, lon, lat, tags, hit):
+        key = (kind, obj_id)
+        if key in self.seen:
+            return
+        self.seen.add(key)
+        self.poi_lon.append(lon)
+        self.poi_lat.append(lat)
+        self.poi_id.append(obj_id)
+        self.poi_type.append(kind)
+        self.poi_name.append(tags.get("name") or "")
+        self.poi_category.append(hit[0])
+        self.poi_subtype.append(hit[1])
+
+    def node(self, n):
+        if not n.tags:
+            return
+        hit = classify_poi(n.tags, area=False)
+        if hit is None:
+            return
+        try:
+            lon, lat = n.location.lon, n.location.lat
+        except osmium.InvalidLocationError:
+            self.missing_locations += 1
+            return
+        self._add("node", n.id, lon, lat, n.tags, hit)
+
+    def way(self, w):
+        if not w.tags:
+            return
+        hit = classify_poi(w.tags, area=True)
+        if hit is None:
+            return
+        lons, lats = [], []
+        try:
+            for nd in w.nodes:
+                lons.append(nd.lon)
+                lats.append(nd.lat)
+        except osmium.InvalidLocationError:
+            self.missing_locations += 1
+            return
+        if not lons:
+            self.missing_locations += 1
+            return
+        self._add("way", w.id, sum(lons) / len(lons), sum(lats) / len(lats), w.tags, hit)
+
+
+def extract_pois(pbf_path):
+    """One pass over the PBF; returns (DataFrame of POIs with POI_COLUMNS, stats dict)."""
+    t0 = time.perf_counter()
+    h = _PoiCollector()
+    h.apply_file(str(pbf_path), locations=True)
+    df = pd.DataFrame({
+        "lon": _frombuf(h.poi_lon, np.float64),
+        "lat": _frombuf(h.poi_lat, np.float64),
+        "osm_type": pd.Categorical(h.poi_type, categories=["node", "way"]),
+        "osm_id": _frombuf(h.poi_id, np.int64),
+        "name": pd.Series(h.poi_name, dtype=object),
+        "category": pd.Categorical(h.poi_category, categories=POI_CATEGORIES),
+        "subtype": pd.Series(h.poi_subtype, dtype=object),
+    }, columns=list(POI_COLUMNS))
+    per_cat = {c: int((df["category"] == c).sum()) for c in POI_CATEGORIES}
+    for c, k in per_cat.items():
+        log.info("pois %s: %d", c, k)
+    stats = {
+        "pois_total": len(df),
+        "per_category": per_cat,
+        "missing_locations": h.missing_locations,
+        "seconds": round(time.perf_counter() - t0, 2),
+    }
+    return df, stats
+
+
+def assign_points_to_zones(bounds, lon, lat) -> np.ndarray:
+    """Zone index of each point from (Z, 4) west, south, east, north rectangles, or -1.
+
+    Intervals are half-open (west <= lon < east, south <= lat < north), as in zone_index_of_points.
+    A point on a shared edge goes to the first zone in row order.
+    """
+    bounds = np.asarray(bounds, dtype=np.float64)
+    lon = np.asarray(lon, dtype=np.float64)
+    lat = np.asarray(lat, dtype=np.float64)
+    out = np.full(lon.shape, -1, dtype=np.int64)
+    for z, (w, s, e, n) in enumerate(bounds):
+        hit = (out < 0) & (lon >= w) & (lon < e) & (lat >= s) & (lat < n)
+        out[hit] = z
+    return out
+
+
+def count_pois_per_zone(zone_idx, category, n_zones) -> pd.DataFrame:
+    """Per-zone POI counts, one column n_<category> per entry of POI_CATEGORIES (-1 zone ignored)."""
+    zone_idx = np.asarray(zone_idx, dtype=np.int64)
+    category = np.asarray(category, dtype=object)
+    ok = zone_idx >= 0
+    out = pd.DataFrame(index=pd.RangeIndex(n_zones))
+    for c in POI_CATEGORIES:
+        m = ok & (category == c)
+        out[f"n_{c}"] = np.bincount(zone_idx[m], minlength=n_zones).astype(np.int64)
+    return out
+
+
+def depot_score(counts: pd.DataFrame) -> np.ndarray:
+    """n_depot + 0.5 n_wholesale + 0.25 n_post_office per zone."""
+    score = np.zeros(len(counts), dtype=np.float64)
+    for c, w in DEPOT_SCORE_WEIGHTS.items():
+        score += w * counts[f"n_{c}"].to_numpy(dtype=np.float64)
+    return score
+
+
+def select_depot_sites(zones: pd.DataFrame, n: int, rng: np.random.Generator, min_sep_km: float,
+                       *, ring_pct: float = 70.0) -> np.ndarray:
+    """Pick up to ``n`` zone ids for depots with high depot_score, spaced at least ``min_sep_km`` apart.
+
+    ``zones`` needs zone_id, lon, lat, depot_score and optionally pop. Distances are measured from
+    the population-weighted centroid. Zones are ordered by depot_score (descending), then by how
+    close their centroid distance lies to the ring at the ``ring_pct`` percentile of that distance
+    (this also orders zero-score zones when scoring zones are scarce), then by a random key from
+    ``rng``. A zone is accepted when it is at least ``min_sep_km`` from every accepted zone.
+
+    Returns an int64 array of zone ids. It is shorter than ``n`` when the extract cannot hold
+    ``n`` spaced sites; a warning is logged in that case.
+    """
+    n = int(n)
+    if n <= 0 or len(zones) == 0:
+        return np.zeros(0, dtype=np.int64)
+    zone_id = zones["zone_id"].to_numpy(dtype=np.int64)
+    lon = zones["lon"].to_numpy(dtype=np.float64)
+    lat = zones["lat"].to_numpy(dtype=np.float64)
+    score = zones["depot_score"].to_numpy(dtype=np.float64)
+    w = zones["pop"].to_numpy(dtype=np.float64) if "pop" in zones else np.ones(len(zones))
+    if not w.sum() > 0:
+        w = np.ones(len(zones))
+    lon0 = float(np.sum(lon * w) / w.sum())
+    lat0 = float(np.sum(lat * w) / w.sum())
+    dist_km = haversine_m(lon0, lat0, lon, lat) / 1000.0
+    ring = float(np.percentile(dist_km, ring_pct))
+    ring_gap = np.abs(dist_km - ring)
+    order = np.lexsort((rng.random(len(zones)), ring_gap, -score))
+
+    chosen: list[int] = []
+    for i in order:
+        if len(chosen) >= n:
+            break
+        if chosen:
+            sep = haversine_m(lon[i], lat[i], lon[chosen], lat[chosen]) / 1000.0
+            if np.min(sep) < min_sep_km:
+                continue
+        chosen.append(int(i))
+    if len(chosen) < n:
+        log.warning("select_depot_sites: %d of %d sites at min separation %.1f km (%d zones with score > 0)",
+                    len(chosen), n, min_sep_km, int(np.sum(score > 0)))
+    return zone_id[np.asarray(chosen, dtype=np.int64)]
+
+
+def build_city_pois(*, pbf_path, out_dir):
+    """Write pois.csv, add per-zone POI counts and depot_score to zones.csv, record POI counts in meta.json.
+
+    Existing zones.csv columns are kept as written (read as text and appended to). Re-running replaces
+    the POI columns. Returns the POI part of the meta dict.
+    """
+    t0 = time.perf_counter()
+    out_dir = Path(out_dir)
+    meta = json.loads((out_dir / "meta.json").read_text())
+    zones = pd.read_csv(out_dir / "zones.csv", dtype=str, keep_default_na=False)
+    bounds = np.load(out_dir / "zone_bounds.npy")
+    if len(bounds) != len(zones) or not np.array_equal(zones["zone_id"].astype(np.int64).to_numpy(),
+                                                       np.arange(len(zones))):
+        raise ValueError(f"{out_dir}: zones.csv rows do not match zone_bounds.npy")
+
+    pois, stats = extract_pois(pbf_path)
+    zone_idx = assign_points_to_zones(bounds, pois["lon"].to_numpy(), pois["lat"].to_numpy())
+    counts = count_pois_per_zone(zone_idx, pois["category"].astype(object).to_numpy(), len(zones))
+    counts["depot_score"] = depot_score(counts)
+
+    pois["zone_id"] = zone_idx
+    pois.to_csv(out_dir / "pois.csv", index=False, float_format="%.7f")
+
+    new_cols = [c for c in counts.columns if c != "depot_score"] + ["depot_score"]
+    base = zones.drop(columns=[c for c in new_cols if c in zones.columns])
+    counts_txt = counts[new_cols].astype(str)
+    base.reset_index(drop=True).join(counts_txt.reset_index(drop=True)).to_csv(
+        out_dir / "zones.csv", index=False)
+
+    in_zones = {c: int(counts[f"n_{c}"].sum()) for c in POI_CATEGORIES}
+    stamp = meta.get("osm_replication_timestamp") or pbf_header(pbf_path)[1]
+    poi_meta = {
+        "poi_osm_replication_timestamp": stamp,
+        "poi_counts": {
+            "extract": stats["per_category"],
+            "extract_total": stats["pois_total"],
+            "in_zones": in_zones,
+            "zones_with_any": int(np.sum(counts[[f"n_{c}" for c in POI_CATEGORIES]].sum(axis=1) > 0)),
+            "zones_with_depot": int(np.sum(counts["n_depot"] > 0)),
+            "zones_with_depot_score": int(np.sum(counts["depot_score"] > 0)),
+            "missing_locations": stats["missing_locations"],
+            "outside_zones": int(np.sum(zone_idx < 0)),
+        },
+        "poi_build_seconds": round(time.perf_counter() - t0, 2),
+    }
+    meta.update(poi_meta)
+    (out_dir / "meta.json").write_text(json.dumps(meta, indent=2, default=lambda o: o.item()))
+    log.info("%s: %d POIs, %d in zones, %d zones with a depot, %.1f s",
+             out_dir.name, stats["pois_total"], int(np.sum(zone_idx >= 0)),
+             poi_meta["poi_counts"]["zones_with_depot"], poi_meta["poi_build_seconds"])
+    return poi_meta

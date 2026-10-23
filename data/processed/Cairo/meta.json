@@ -79,5 +79,31 @@
     "secondary_link",
     "tertiary_link"
   ],
-  "build_seconds": 3.45
+  "build_seconds": 3.45,
+  "poi_osm_replication_timestamp": "2026-10-16T23:00:00Z",
+  "poi_counts": {
+    "extract": {
+      "shop": 2429,
+      "market": 28,
+      "depot": 10,
+      "post_office": 37,
+      "locker": 0,
+      "wholesale": 8
+    },
+    "extract_total": 2512,
+    "in_zones": {
+      "shop": 1961,
+      "market": 27,
+      "depot": 9,
+      "post_office": 35,
+      "locker": 0,
+      "wholesale": 7
+    },
+    "zones_with_any": 41,
+    "zones_with_depot": 5,
+    "zones_with_depot_score": 20,
+    "missing_locations": 0,
+    "outside_zones": 473
+  },
+  "poi_build_seconds": 6.56
 }
