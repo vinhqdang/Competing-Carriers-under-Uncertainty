@@ -1,0 +1,153 @@
+{
+ "testA": {
+  "trials": 40,
+  "max_rel_err_formula_vs_LP": 4.4572107527290733e-14,
+  "factor_trials": 20,
+  "max_rel_err_factor_formula_vs_LP": 2.4641889317669327e-14,
+  "mean_rel_excess_over_independent_coupling": 0.04461377289520455,
+  "max_rel_excess_over_independent_coupling": 0.1413040255066531
+ },
+ "testB": {
+  "trials": 60,
+  "max_abs_err_LP_budget": 1.4210854715202004e-14,
+  "max_abs_err_integer_budget_DP": 1.4210854715202004e-14
+ },
+ "testC": {
+  "trials": 12,
+  "all_rules_match_enumeration": true,
+  "rows": [
+   {
+    "n": 7,
+    "enum_best": 127.242212821741,
+    "enum_labels": 259,
+    "tau": 127.242212821741,
+    "tau_labels": 219,
+    "pointwise": 127.242212821741,
+    "pointwise_labels": 162,
+    "functional": 127.242212821741,
+    "functional_labels": 12
+   },
+   {
+    "n": 8,
+    "enum_best": 65.29560660208358,
+    "enum_labels": 8800,
+    "tau": 65.29560660208358,
+    "tau_labels": 2613,
+    "pointwise": 65.29560660208358,
+    "pointwise_labels": 875,
+    "functional": 65.29560660208358,
+    "functional_labels": 14
+   },
+   {
+    "n": 7,
+    "enum_best": 40.83346592725614,
+    "enum_labels": 1099,
+    "tau": 40.83346592725614,
+    "tau_labels": 695,
+    "pointwise": 40.83346592725614,
+    "pointwise_labels": 333,
+    "functional": 40.83346592725614,
+    "functional_labels": 15
+   },
+   {
+    "n": 7,
+    "enum_best": 165.94009391564435,
+    "enum_labels": 259,
+    "tau": 165.94009391564435,
+    "tau_labels": 203,
+    "pointwise": 165.94009391564435,
+    "pointwise_labels": 161,
+    "functional": 165.94009391564435,
+    "functional_labels": 8
+   },
+   {
+    "n": 6,
+    "enum_best": 54.566761706967114,
+    "enum_labels": 516,
+    "tau": 54.566761706967114,
+    "tau_labels": 275,
+    "pointwise": 54.566761706967114,
+    "pointwise_labels": 173,
+    "functional": 54.566761706967114,
+    "functional_labels": 7
+   },
+   {
+    "n": 7,
+    "enum_best": 38.71303496263444,
+    "enum_labels": 1099,
+    "tau": 38.71303496263444,
+    "tau_labels": 682,
+    "pointwise": 38.71303496263444,
+    "pointwise_labels": 370,
+    "functional": 38.71303496263444,
+    "functional_labels": 8
+   },
+   {
+    "n": 8,
+    "enum_best": 66.85156037186496,
+    "enum_labels": 8800,
+    "tau": 66.85156037186496,
+    "tau_labels": 3185,
+    "pointwise": 66.85156037186496,
+    "pointwise_labels": 908,
+    "functional": 66.85156037186496,
+    "functional_labels": 9
+   },
+   {
+    "n": 8,
+    "enum_best": 31.202226158552158,
+    "enum_labels": 8800,
+    "tau": 31.202226158552158,
+    "tau_labels": 3033,
+    "pointwise": 31.202226158552158,
+    "pointwise_labels": 938,
+    "functional": 31.202226158552158,
+    "functional_labels": 21
+   },
+   {
+    "n": 8,
+    "enum_best": 35.60969083064566,
+    "enum_labels": 8800,
+    "tau": 35.60969083064566,
+    "tau_labels": 2348,
+    "pointwise": 35.60969083064566,
+    "pointwise_labels": 869,
+    "functional": 35.60969083064566,
+    "functional_labels": 12
+   },
+   {
+    "n": 6,
+    "enum_best": 135.02688089364253,
+    "enum_labels": 516,
+    "tau": 135.02688089364253,
+    "tau_labels": 373,
+    "pointwise": 135.02688089364253,
+    "pointwise_labels": 183,
+    "functional": 135.02688089364253,
+    "functional_labels": 8
+   },
+   {
+    "n": 7,
+    "enum_best": 51.05650387923026,
+    "enum_labels": 259,
+    "tau": 51.05650387923026,
+    "tau_labels": 228,
+    "pointwise": 51.05650387923026,
+    "pointwise_labels": 159,
+    "functional": 51.05650387923026,
+    "functional_labels": 9
+   },
+   {
+    "n": 6,
+    "enum_best": 127.69082047444746,
+    "enum_labels": 1236,
+    "tau": 127.69082047444746,
+    "tau_labels": 697,
+    "pointwise": 127.69082047444746,
+    "pointwise_labels": 229,
+    "functional": 127.69082047444746,
+    "functional_labels": 8
+   }
+  ]
+ }
+}
