@@ -240,3 +240,10 @@ paper/*.log
 paper/*.blg
 paper/*.spl
 paper/*.toc
+survey/*.aux
+survey/*.out
+survey/*.log
+survey/*.blg
+survey/*.spl
+survey/*.toc
+survey/*.bbl

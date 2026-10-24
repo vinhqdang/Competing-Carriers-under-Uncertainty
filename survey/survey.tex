@@ -1,0 +1,339 @@
+\documentclass[preprint,12pt]{elsarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{xurl}
+\usepackage{orcidlink}
+
+\setlength{\tabcolsep}{4pt}
+\setlength{\emergencystretch}{2em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\gap}[1]{\textbf{#1}}
+
+\journal{Survey (working paper)}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Competing Carriers under Uncertainty: A Survey of Non-Cooperative, Stochastic and Data-Driven Vehicle Routing for Urban Last-Mile Delivery}
+
+\author{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
+\ead{vinh.dq4@buv.edu.vn}
+\address{British University Vietnam, Hung Yen, Vietnam}
+
+\begin{abstract}
+Urban last-mile delivery is served by several firms at once, yet the vehicle-routing literature mostly treats a single decision maker, and the collaborative-routing literature assumes the firms want to cooperate. This survey asks what is known when several competing carriers or delivery platforms act as strategic players, routing is modelled explicitly, demand and travel times are uncertain, and data-driven or learning-based methods are used. We review four streams that rarely meet: stochastic, dynamic and distributionally robust routing for one decision maker; cooperative multi-carrier routing; platform-competition economics, which is rich for ride-hailing but replaces routing by queues; and single-leader Stackelberg or bilevel last-mile models. We organise the work in a taxonomy along decision architecture, leadership and routing fidelity, compare the key papers, and review datasets and evaluation metrics. In our searches we found no peer-reviewed study that combines all four ingredients; the closest anchors are the sequential-auction work of Figliozzi, Mahmassani and Jaillet, competing-operator routing games outside the parcel setting, and recent single-leader bilevel models. We state six research gaps, record which pieces of prior art bear on each, and mark every absence claim with the databases and date of the search. The review is a structured narrative review, not a PRISMA systematic review. Every bibliographic record was checked against Crossref, arXiv or publisher pages on 24 October 2026.
+\end{abstract}
+
+\begin{keyword}
+last-mile delivery \sep vehicle routing \sep competition \sep Nash equilibrium \sep Stackelberg game \sep distributionally robust optimisation \sep multi-agent learning \sep survey
+\end{keyword}
+
+\end{frontmatter}
+
+%======================================================================
+\section{Introduction, scope and search methodology}\label{sec:intro}
+
+\subsection{Motivation and scope}
+
+Urban last-mile delivery is increasingly shaped by several firms operating in the same space: parcel integrators, retailer fleets, crowdsourced platforms and on-demand meal or grocery platforms. They serve overlapping customers, compete for a shared and partly multi-homing courier workforce, and use scarce common infrastructure such as curb space, loading zones, lockers and micro-hubs. Classical vehicle-routing theory assumes one decision maker and one fleet. Collaborative routing lets carriers share requests but still assumes that they want to cooperate. Neither captures the non-cooperative case, where each carrier's routing, acceptance and pricing decisions change its rivals' costs and revenues.
+
+The survey covers models in which (a) two or more carriers or platforms affect each other strategically, (b) at least one decision is routing, dispatching or order acceptance, or is explicitly linked to routing costs, and (c) uncertainty or dynamics is modelled, or the work is a methodological building block for such models. Foundational work before 2015 is covered selectively and 2015--2026 more intensively. We do not review vehicle routing in general, ride-hailing in general, or the mechanism-design literature on auctions beyond what is needed for the carrier setting.
+
+\paragraph{Reading guide} Section~\ref{sec:taxonomy} gives the taxonomy. Section~\ref{sec:svrp} reviews the single-decision-maker foundations. Section~\ref{sec:games} is the core: games among competing carriers and platforms, including a review of the equilibrium theory (aggregative games, approximate equilibria, complexity, ambiguity) that a routing-level model would rely on. Section~\ref{sec:coop} treats cooperative routing as a benchmark. Section~\ref{sec:learning} covers learning-based and data-driven methods, and Section~\ref{sec:data} datasets and metrics. Section~\ref{sec:synthesis} compares the key papers and lists the research gaps; Section~\ref{sec:future} gives directions, and Section~\ref{sec:position} states the position of a companion project.
+
+\subsection{Search methodology and transparency statement}\label{sec:method}
+
+This is a structured, citation-chained narrative review. It is not a PRISMA systematic review: we did not define a protocol in advance, we did not screen records in duplicate, and we report no screening counts.
+
+The first search pass covered publisher platforms (ScienceDirect, INFORMS PubsOnline, SpringerLink, Wiley, ACM Digital Library), Crossref, RePEc/IDEAS and arXiv, and followed citation chains from anchor papers. The keyword families were competition (``competing carriers'', ``generalized Nash'', ``Stackelberg'', ``bilevel'', ``price of anarchy'', ``multi-homing''), routing (``last-mile'', ``crowdshipping'', ``parcel locker'', ``curb'') and uncertainty and learning (``distributionally robust'', ``approximate dynamic programming'', ``reinforcement learning'', ``mean field''). The dates and exact query strings of that first pass were not recorded. A second pass on 24 October 2026 was logged (Table~\ref{tab:searchlog}). It used the Crossref REST API with a publication-date filter from 1 January 2025, the arXiv API, and a general web search engine. Records were then checked against Crossref metadata, the arXiv API, or publisher and proceedings pages.
+
+Inclusion required peer-reviewed articles in operations research, transportation or machine-learning venues with a direct link to competition, routing, uncertainty or learning. Industry reports, blogs and vendor material are excluded. Preprints are labelled as such and are not used for core claims. Several 2026 records, including two European Journal of Operational Research articles published in September 2026 and not yet assigned to a volume, were located by title and metadata only, and their abstracts could not be read; they are flagged where they appear.
+
+\paragraph{Absence claims} Sentences of the form ``we found no \dots'' report the outcome of the searches above, as of 24 October 2026, in the sources named. They are not proofs of non-existence. Searches of Scopus and Web of Science were not run; the recommended next step for a journal version is a documented Scopus or Web of Science query for 2015--2026 with PRISMA counts. Preprints and working papers are not systematically covered, so the absence of a peer-reviewed study says nothing about the preprint literature.
+
+\paragraph{Verification of references} Every reference in the list was checked on 24 October 2026 against a Crossref record (by DOI), the arXiv API, or the publisher or proceedings page. Author lists, years, volumes, pages and DOIs were corrected where the earlier draft was wrong or incomplete; 13 records were corrected in a substantive field (authors, year, volume, pages or title), and statements that could not be verified were removed or weakened. A record-by-record audit accompanies this paper (file \texttt{reference\_audit.csv}). Verification of a bibliographic record is not verification of the content attributed to it: where we read only an abstract, or only the title, we say so.
+
+\begin{table}[t]
+\centering
+\caption{Log of the second search pass (24 October 2026). Hits are counted by inspection of the first results returned; no screening counts are implied.}\label{tab:searchlog}
+\small
+\begin{tabularx}{\textwidth}{@{}L{2.6cm}X L{3.6cm}@{}}
+\toprule
+Source & Query families (all combined with the filter or sorting stated) & Outcome\\
+\midrule
+Crossref REST API, from 2025-01-01, journal articles & competing carriers $\times$ last-mile $\times$ Nash; logistics providers $\times$ generalized Nash; city authority $\times$ curb pricing $\times$ Stackelberg; distributionally robust $\times$ game $\times$ routing; multi-agent RL $\times$ competing delivery platforms; price of anarchy $\times$ delivery fleets; stochastic game $\times$ couriers $\times$ multi-homing; micro-hub access pricing $\times$ equilibrium & No study combining competition, routing-level responses and uncertainty. Items kept: \cite{Zhou2026trb,LiuMaMa2026,Salarpour2026,Zhou2026,Gao2025tre} (title and metadata)\\
+arXiv API (relevance order) & Nash $\times$ carriers $\times$ routing; Stackelberg $\times$ curb; competing $\times$ couriers; Nash $\times$ last-mile $\times$ delivery; DRO $\times$ Nash $\times$ routing; price of anarchy $\times$ delivery $\times$ carriers & No relevant hit; relevant preprints \cite{Masiha2026,Kaewpuang2023} were found through the web search below\\
+General web search & competing carriers $\times$ last-mile $\times$ Nash $\times$ stochastic travel times; Stackelberg regulator $\times$ curb access pricing $\times$ GNE; price of anarchy $\times$ logistics operators $\times$ DRO & New items: \cite{Martin2021,Kaewpuang2023,Masiha2026,Correa2019}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%======================================================================
+\section{A taxonomy of multi-carrier routing}\label{sec:taxonomy}
+
+We organise the literature along three axes (Table~\ref{tab:taxonomy}).
+
+\paragraph{Axis 1: decision architecture}
+\begin{enumerate}[leftmargin=*]
+\item \emph{Centralised (merged-fleet) planning.} One planner optimises all requests jointly. This is the system optimum, the denominator of a price of anarchy, and the upper bound reported in collaborative-routing studies \cite{GanstererHartl2018}.
+\item \emph{Cooperative, decentralised planning.} Carriers keep autonomy but exchange requests through auctions or trades and share gains via cost-allocation rules \cite{GanstererHartl2018,GanstererHartl2020top,Guajardo2016,Cleophas2019}. Incentive compatibility and stability (core, Shapley value) are central.
+\item \emph{Non-cooperative planning.} Carriers optimise their own objectives. Interaction runs through (a) competition for customers via prices, bids or service promises; (b) competition for couriers who may multi-home; and (c) congestion or capacity externalities on roads, curbs, lockers and hubs. Solution concepts are Nash, generalised Nash or Wardrop equilibria; Stackelberg equilibria when a platform or regulator moves first; and learning or evolutionary dynamics under bounded rationality.
+\end{enumerate}
+
+\paragraph{Axis 2: who leads} No leader (simultaneous Nash); a platform leading self-interested carriers \cite{Cerulli2024}; a public authority leading the market \cite{Catalano2014}, with curb-management models as the natural setting for such a leader \cite{XuSun2024}; or multi-level structures.
+
+\paragraph{Axis 3: routing fidelity} (i) stylised or aggregate (queues, continuous approximations); (ii) network-flow or assignment level; (iii) full vehicle-routing or travelling-salesman problems with profits per player. Game-theoretic work mostly sits at levels (i)--(ii); stochastic routing mostly at level (iii) with one player. The gap this survey targets is the non-cooperative architecture combined with level-(iii) fidelity and uncertainty.
+
+\begin{table}[t]
+\centering
+\caption{Taxonomy of multi-carrier routing with representative references.}\label{tab:taxonomy}
+\small
+\begin{tabularx}{\textwidth}{@{}L{3.1cm}L{3.6cm}X@{}}
+\toprule
+Axis & Category & Representative work\\
+\midrule
+\multirow{3}{3.1cm}{1. Decision architecture} & Centralised (merged fleet) & System optimum and savings bounds \cite{GanstererHartl2018,Los2025}\\
+ & Cooperative, decentralised & Auctions and request exchange \cite{GanstererHartl2016,GanstererHartl2020omega,Los2020tre}; cost allocation \cite{Guajardo2016}; incentive-compatible mechanisms \cite{Ozener2011,Xu2017}\\
+ & Non-cooperative & Sequential auctions \cite{Figliozzi2007}; competing operators \cite{Martin2021}; platform competition \cite{Bernstein2021}; selfish routing \cite{Roughgarden2002,Cominetti2009}\\
+\midrule
+\multirow{3}{3.1cm}{2. Who leads} & No leader & Simultaneous Nash and Wardrop equilibria \cite{Orda1993,Acemoglu2007}\\
+ & Platform leads & Bilevel compensation and routing \cite{Cerulli2024}; outsourcing fees \cite{Fernandez2025}; crowdsourcing menus \cite{Mofidi2019,Ausseil2022}\\
+ & Public authority leads & Terminal design \cite{Catalano2014}; curb pricing \cite{XuSun2024,LiuMaQian2023}; tolls on combinatorial congestion games (preprint) \cite{Masiha2026}\\
+\midrule
+\multirow{3}{3.1cm}{3. Routing fidelity} & Stylised or aggregate & Queueing platform models \cite{Taylor2018,Benjaafar2022,Bernstein2021}\\
+ & Network-flow or assignment & Atomic splittable routing \cite{Orda1993,Cominetti2009}; congestion games \cite{Rosenthal1973,Monderer1996}\\
+ & Full VRP/TSP per player & Truckload auctions \cite{Figliozzi2007}; bilevel profitable tours \cite{Cerulli2024}; orienteering games \cite{Martin2021}; single-player stochastic VRP \cite{Gendreau2016,Soeffker2022}\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%======================================================================
+\section{Stochastic and dynamic routing foundations}\label{sec:svrp}
+
+\subsection{Sources of uncertainty and modelling paradigms}
+
+Standard taxonomies cover uncertain demands, customer presence, and travel and service times \cite{Gendreau1996,Gendreau2016,Oyola2018}. Dynamic vehicle routing problems are reviewed by Pillac et al.\ \cite{Pillac2013}, Psaraftis, Wen and Kontovas \cite{Psaraftis2016} and Ritzinger, Puchinger and Hartl \cite{Ritzinger2016}. Four paradigms dominate.
+
+\begin{enumerate}[leftmargin=*]
+\item \emph{A priori and two-stage stochastic programming with recourse.} Routes are fixed first and recourse (depot returns, skipped customers) follows realisation. Classics are Bertsimas \cite{Bertsimas1992} and Laporte, Louveaux and Mercure \cite{Laporte1992}, with Florio, Hartl and Minner \cite{Florio2020} as an exact algorithm for stochastic demands.
+\item \emph{Chance constraints.} Capacity or time-window feasibility must hold with high probability.
+\item \emph{Robust and distributionally robust optimisation (DRO).} Gounaris, Wiesemann and Floudas \cite{Gounaris2013} studied the robust capacitated VRP under demand uncertainty. Ghosal and Wiesemann \cite{GhosalWiesemann2020} showed that the distributionally robust chance-constrained capacitated VRP can be solved with standard branch-and-cut whenever the ambiguity set is subadditive, a property that holds for a large class of moment ambiguity sets, with runtimes often comparable to the deterministic problem. Ghosal, Ho and Wiesemann \cite{GhosalHoWiesemann2024} unify the capacitated VRP under risk and ambiguity. For travel times, Zhang et al.\ \cite{Zhang2021} introduced a service-fulfilment risk index that accounts for both the probability and the magnitude of late arrival; under Wasserstein ambiguity it is evaluated in closed form and minimised by branch-and-cut or a metaheuristic. Jaillet, Qi and Sim \cite{Jaillet2016} give a related lateness-index framework. Worst cases over unknown dependence between random inputs are classical, with comonotone worst cases going back to Meilijson and N{\'a}das \cite{Meilijson1979}. A 2026 article on distributionally robust routing with crowdshipping and time windows \cite{Zhou2026trb} appeared in a transportation journal; we located it by title and could not read the abstract.
+\item \emph{Markov decision processes and approximate dynamic programming (ADP).} Ulmer et al.\ \cite{Ulmer2020} give a canonical MDP framework for route-based decisions; Soeffker, Ulmer and Mattfeld \cite{Soeffker2022} organise the field through prescriptive analytics. ADP has been developed for multi-period routing \cite{Ulmer2018}, customer acceptance \cite{UlmerThomas2020}, offline--online approximation \cite{Ulmer2019} and same-day delivery with drones \cite{Chen2022}. Online routing in large-scale applications is surveyed by Bertsimas, Jaillet and Martin \cite{Bertsimas2019}.
+\end{enumerate}
+
+\subsection{Demand management and pricing coupled with routing}
+
+Many last-mile decisions are demand-side: which orders to accept and which time slots to offer at what price. Choice-based time-slot management \cite{Agatz2011,Yang2016} and dynamic pricing for same-day delivery \cite{Ulmer2020pricing} are single-firm counterparts of the competitive problems in Section~\ref{sec:games}, where competition often acts through these levers rather than through routes.
+
+\subsection{Implications for competitive models}
+
+First, DRO formulations that keep the deterministic combinatorial structure \cite{GhosalWiesemann2020,GhosalHoWiesemann2024} are attractive \emph{best-response oracles} in equilibrium computation, because each best response remains an ordinary routing solve. Second, the MDP/ADP framework extends naturally to a \emph{stochastic (Markov) game} by indexing state and action by player. We found no peer-reviewed paper that does this for competing parcel carriers (Section~\ref{sec:method}).
+
+%======================================================================
+\section{Game-theoretic models of competing carriers and platforms}\label{sec:games}
+
+\subsection{Competition for requests: sequential auctions}
+
+Figliozzi, Mahmassani and Jaillet developed a framework for carrier strategies in auction-based marketplaces \cite{Figliozzi2003}, assessed dynamic routing technologies under sequential auctions \cite{Figliozzi2004}, studied auction settings \cite{Figliozzi2005}, quantified opportunity costs in sequential truckload auctions \cite{Figliozzi2006}, and introduced the vehicle routing problem in a competitive environment, which extends the travelling salesman problem with profits to a dynamic competitive auction environment and prices requests by opportunity costs from a one-step look-ahead \cite{Figliozzi2007}. A later chapter studies repeated auction games and learning dynamics in electronic logistics marketplaces \cite{Figliozzi2008}. Of the peer-reviewed work we found on parcel and freight carriers, this is the stream that comes closest to combining inter-carrier competition, routing-level costs and dynamic arrivals. Its limits are a truckload pickup-and-delivery setting, deterministic travel times, and simulation rather than equilibrium computation.
+
+\subsection{Nash and generalised Nash formulations among operators}
+
+Peer-reviewed models in which competing operators each solve a routing problem and the outcome is a Nash equilibrium are scarce. The closest we found is Martin, Minner, Po{\c c}as and Schulz \cite{Martin2021}, a competitive pickup-and-delivery orienteering problem for competing one-way car-sharing operators. They give mixed-integer formulations for several business models and, under the assumptions of unit-demand stations, homogeneous payoffs and indifferent customers, derive existence of equilibria and bounds on competition-induced losses from congestion-game results, with two algorithms that compute a Nash equilibrium. Their setting is car-sharing relocation rather than parcel delivery, and demand and travel times are deterministic. A short paper in an IEEE vehicular-technology venue combines vehicle-routing optimisation for less-than-truckload carriers with an evolutionary game in which customers choose carriers \cite{Kaewpuang2023}; there the strategic players are the customers, not the carriers.
+
+Network economics supplies the theory a routing-level model needs: oligopolistic atomic splittable routing \cite{Orda1993,Cominetti2009} and price competition among congestible providers \cite{Acemoglu2007}. The key move for parcel carriers is to treat shared curb, hub or road capacity as \emph{coupling constraints}, giving a generalised Nash equilibrium problem (GNEP; \cite{Facchinei2010}) whose variational equilibria share a common shadow price on the resource, which a regulator can set as Stackelberg leader.
+
+\subsection{Stackelberg and bilevel models: platforms, regulators and consolidation}
+
+\paragraph{Platform leads, carriers follow} Cerulli, Archetti, Fern{\'a}ndez and Ljubi{\'c} \cite{Cerulli2024} model a peer-to-peer last-mile platform that assigns requests, and optionally sets compensation, anticipating that each carrier solves its own profitable tour problem; they give single-level and projected reformulations and branch-and-cut. The model is deterministic and the followers do not interact, so it is not a Stackelberg--Nash game. Fern{\'a}ndez, Ljubi{\'c} and Zerega \cite{Fernandez2025} study a leader firm that chooses which commodities to serve and sets outsourcing fees for legs handled by outside carriers, again with independent profit-maximising followers (a single-level reformulation is obtained and the problem is NP-hard).
+
+\paragraph{Crowdsourced delivery with strategic couriers} Bilevel or menu-based acceptance models include Mofidi and Pazour \cite{Mofidi2019}, Horner, Pazour and Mitchell \cite{Horner2021} and Ausseil, Pazour and Ulmer \cite{Ausseil2022}. Crowdsourced delivery more broadly is reviewed by Alnaggar, Gzara and Bookbinder \cite{Alnaggar2021} and studied through occasional drivers \cite{Archetti2016,Arslan2019,Mancini2022,Voigt2022}, platform compensation \cite{Alnaggar2024}, fleet sizing \cite{Alnaggar2026}, courier scheduling and workforce management \cite{Behrendt2023,Cheng2025}, order bundling \cite{Mancini2025}, meal-delivery assignment \cite{Cosmi2025}, and travel-time uncertainty \cite{DiPuglia2023}. Stochastic crowd supply is studied by Gdowska, Viana and Pedroso \cite{Gdowska2018} and by Torres, Gendreau and Rei \cite{Torres2022} with stochastic programming and time windows. These works are mostly single-platform: the crowd is strategic, rival platforms are absent.
+
+\paragraph{Public authority leads} Catalano and Migliore \cite{Catalano2014} cast logistics-terminal design as a Stackelberg game with a system-optimal designer above a carrier equilibrium. Fern{\'a}ndez et al.\ \cite{Fernandez2025} belong here only in the sense that the leader is a firm with market power. A February 2026 preprint studies Stackelberg tuning of tolls, capacities or incentives in combinatorial congestion games where selfish users choose discrete routes \cite{Masiha2026}; its followers are nonatomic users in a Wardrop equilibrium, and it is not peer reviewed. A differentiable bilevel-programming preprint for Stackelberg congestion games \cite{LiPrep2022} is of the same type.
+
+\paragraph{Curb access} Xu and Sun \cite{XuSun2024} develop continuum models of a curb parking system with deliverers and find that pricing strategies for metered parking to general parkers are more efficient and flexible than other interventions, and that when curb parking pricing is optimally calibrated the need for dedicated delivery bays diminishes. Liu, Ma and Qian \cite{LiuMaQian2023} optimise curbside pricing for ride-hailing pick-ups and drop-offs. Practice-oriented work documents what cities do \cite{Dey2019,DallaChiara2026}. These are the most direct foundations for a \emph{curb-pricing leader}, but none embeds competing carriers with routing-level responses.
+
+\subsection{Competition for couriers and customers (mostly ride-hailing)}
+
+The richest equilibrium evidence on competing platforms comes from ride-hailing and on-demand services.
+\begin{itemize}[leftmargin=*]
+\item \emph{Single-platform foundations:} Taylor \cite{Taylor2018}, Bai et al.\ \cite{Bai2019} and Benjaafar et al.\ \cite{Benjaafar2022} model self-scheduling supply and delay-sensitive customers.
+\item \emph{Two competing platforms:} Bernstein, DeCroix and Keskin \cite{Bernstein2021} formulate a pricing game between two platforms that serve customers through independent drivers, with congestion effects, and find that although individual drivers may have an incentive to multi-home, all players are worse off when all drivers multi-home. Evidence on the welfare effect of multi-homing is not uniform: Zhang and Nie \cite{ZhangNie2021} study inter-platform competition under regulation with pooling, and a 2025 study of drivers' multi-homing choice \cite{Gao2025tre} appears, from its abstract as we saw it, to point the other way for system performance; we did not read either in full. A 2026 article on platform competition and driver multi-homing exists \cite{Zhou2026}; we could not read its abstract and draw no conclusion from it.
+\item \emph{Two-sided theory:} Bakos and Halaburda \cite{BakosHalaburda2020} analyse multi-homing on both sides; Di and Ban \cite{DiBan2019} give a unified equilibrium framework for shared-mobility systems.
+\item \emph{Food delivery:} Liu and Li \cite{LiuLi2023} study food-delivery and ride-sourcing markets that share one pool of drivers, characterise competitive and collaborative interactions, and examine a commission-rate cap.
+\end{itemize}
+These models use queues or aggregate matching, with no vehicle routing. They supply the \emph{market layer} (prices, wages, multi-homing). We found no peer-reviewed model of competing \emph{parcel} platforms with multi-homing couriers \emph{and} explicit routing.
+
+\subsection{Shared infrastructure: lockers, collection points, first-mile sharing}
+
+\begin{itemize}[leftmargin=*]
+\item Li, Huang, Yue and Wang \cite{Li2024} analyse sharing of collection-delivery-point networks among express companies, in a setting where firms that own such networks may open them to others. We read only the first part of the abstract.
+\item Wang and Huang \cite{WangHuang2021} model two competing courier firms that can keep their own direct collection channel or join a cheaper shared first-mile platform, and find that joining raises profits and lowers prices in most cases.
+\item Mercurio, Schlicher, Rohmer and Van Woensel \cite{Mercurio2026} study joint locker placement as a cooperative game; stable profit allocations are guaranteed for a class of networks and appear possible in most numerical instances.
+\item Lyu and Teo \cite{LyuTeo2022} study Singapore's open-access Locker Alliance network.
+\end{itemize}
+All are stylised and mostly deterministic, with routing only as a reduced-form cost.
+
+\subsection{Congestion and potential games, and price of anarchy}\label{sec:poa}
+
+Selfish-routing theory \cite{Wardrop1952,Rosenthal1973,Monderer1996,Roughgarden2002,Correa2004} gives worst-case bounds, for example a price of anarchy of $4/3$ for nonatomic routing with affine latencies. Correa, Hoeksma and Schr{\"o}der \cite{Correa2019} show that bounds known for deterministic demand carry over to random demand, which is one of the few stochastic results of this type. A fleet operator, however, is an \emph{atomic} player choosing tours, not paths. Tour-based games are generally not potential games, may lack pure equilibria, and fall outside the standard bounds; Martin et al.\ \cite{Martin2021} obtain bounds only under assumptions that make the game a congestion game. Christodoulou, Koutsoupias and Spirakis \cite{Christodoulou2011} bound the price of anarchy and stability of approximate equilibria as functions of the slack, which is the natural tool when equilibria are only approximate. We found no peer-reviewed price-of-anarchy analysis for competing multi-stop delivery fleets.
+
+\subsection{Mean-field games, auctions and evolutionary games}
+
+Mean-field games and mean-field multi-agent reinforcement learning are used for \emph{within-platform} driver populations in ride-hailing \cite{Li2019,Lauriere2022} and suit large courier crowds, but competition among a few carriers is an oligopoly needing finite-player equilibria, possibly with a nested mean-field courier population. Auctions are mature in cooperative settings (Section~\ref{sec:coop}) and in truckload spot markets. Evolutionary-game models of competing carriers appear in a short IEEE paper \cite{Kaewpuang2023}; we found no peer-reviewed evolutionary-game model of competing last-mile carriers with routing-level strategies in the operations-research and transportation venues searched.
+
+\subsection{Equilibrium theory a routing-level model would rely on}\label{sec:eqtheory}
+
+A model in which each carrier chooses a tour from a finite, nonconvex set and interacts with rivals through aggregates leans on results that sit outside the logistics literature. We collect the closest ones; they matter because they decide which gaps in Section~\ref{sec:synthesis} are open and which are partly closed.
+
+\paragraph{Nonconvex aggregative games and rounding} Liu, Oudjane and Wan \cite{Liu2023} prove, using the Shapley--Folkman lemma in the tradition of Starr \cite{Starr1969}, that sum-aggregative games with nonconvex action sets have approximate pure equilibria whose error does not grow with the number of players, and give a gradient-proximal algorithm for congestion-type games. The optimisation counterpart, convexify-solve-round, goes back to Aubin and Ekeland \cite{Aubin1976} and appears with Frank--Wolfe and randomised rounding in Udell and Boyd \cite{Udell2016} and Bonnans et al.\ \cite{Bonnans2023}. For delivery fleets the rounding argument is attractive because plan sets are finite and nonconvex, but the error bound is stated for precise payoffs and does not bind when the number of players is small relative to the dimension of the aggregate.
+
+\paragraph{Approximate equilibria and implementation} Christodoulou et al.\ \cite{Christodoulou2011} bound the efficiency of $\varepsilon$-equilibria. Bhaskar et al.\ \cite{Bhaskar2014,Bhaskar2019} compute tolls that implement a target equilibrium in routing games using only best-response queries, without knowing the latency functions; this matches a leader facing carriers whose routing problems are black boxes. Large-game results give pure approximate equilibria with vanishing error \cite{Kalai2004,Azrieli2013}, but finding them can be PPAD-complete even for Lipschitz polymatrix games \cite{Goldberg2023}.
+
+\paragraph{Complexity of existence and computation} Deciding whether a pure equilibrium exists is NP-complete in coordination games on directed graphs \cite{Apt2022}, hence for polymatrix games, and integer-programming games add computational difficulty and sample-generation algorithms for equilibria \cite{Carvalho2022}. A routing game with integer tours inherits this difficulty unless special structure (a potential, or exposure-based coupling) is present.
+
+\paragraph{Ambiguity in games} Equilibria with ambiguous beliefs were introduced as equilibrium in beliefs \cite{Lo1996}, ambiguous games \cite{Marinacci2000}, Knightian games \cite{Stauber2011} and games with ambiguous payoffs, which include a notion of pure equilibrium in beliefs \cite{Beauchene2016}. Robust games \cite{Aghassi2006} and their recent theory \cite{Crespi2025} treat payoffs in uncertainty sets, and robust equilibria are approximate equilibria of the nominal game. Feik et al.\ \cite{Feik2026} study convex aggregative games with an optimal-transport ambiguity ball around the aggregate and report the price of anarchy as a function of the radius; the work is a preprint, its strategy sets are convex, and we read its abstract only. In our search we found no peer-reviewed result that bounds the belief imprecision needed to make rounded pure profiles equilibria of a finite nonconvex aggregative game uniformly in the number of players (Section~\ref{sec:position}).
+
+%======================================================================
+\section{Cooperative multi-carrier routing as a benchmark}\label{sec:coop}
+
+\begin{itemize}[leftmargin=*]
+\item \emph{Surveys.} Gansterer and Hartl \cite{GanstererHartl2018} classify collaborative VRP into centralised planning, decentralised planning without auctions, and auction-based planning; their 2020 review of shared resources \cite{GanstererHartl2020top} reports more than 40 articles from the preceding three years, classified by level of information sharing. Guajardo and R{\"o}nnqvist \cite{Guajardo2016} survey cost allocation; Cleophas et al.\ \cite{Cleophas2019} review collaborative urban transportation.
+\item \emph{Auction-based exchange.} Request evaluation and bundling \cite{GanstererHartl2016}, the value of information \cite{Gansterer2020ijpe} and frontiers of auction-based collaboration \cite{GanstererHartl2020omega}; earlier work by Krajewska et al.\ \cite{Krajewska2008}, Berger and Bierwirth \cite{Berger2010} and Wang and Kopfer \cite{WangKopfer2014}.
+\item \emph{Incentive compatibility.} Lane-exchange mechanisms \cite{Ozener2011} and truthful, budget-balanced bundle double auctions \cite{Xu2017} address misreporting and are the natural bridge to non-cooperative analysis.
+\item \emph{Scale and dynamics.} Los et al.\ quantify the value of information sharing on a platform \cite{Los2020tre}; the conference version of their large-scale work reports system-wide savings of up to 79\% for 1000 carriers on Dutch platform data \cite{Los2020iccl}, and the journal version reports up to 77\% from iterative single-order auctions plus up to 13\% from small bundles, and that misreporting by individuals can pay at the expense of the collective \cite{Los2025}. Strategic bidding is studied in \cite{Los2022lc}.
+\end{itemize}
+These savings bound from above what collaboration could recover. They are not a price of anarchy, because the baseline carriers plan independently and do not compete for the same customers.
+
+%======================================================================
+\section{Data-driven and learning-based methods}\label{sec:learning}
+
+\subsection{Neural combinatorial optimisation}
+
+Attention and pointer policies \cite{Vinyals2015,Nazari2018,Kool2019,Kwon2020} learn construction heuristics for static routing problems; Bengio, Lodi and Prouvost \cite{Bengio2021} survey machine learning for combinatorial optimisation. In competition, their value is as \emph{fast approximate best-response oracles}: fictitious play or best-response dynamics need many solves, and amortised neural solvers make this tractable, but approximation error becomes \emph{exploitability} that must be measured (Section~\ref{sec:data}).
+
+\subsection{Reinforcement learning for stochastic dynamic routing}
+
+Hildebrandt, Thomas and Ulmer \cite{Hildebrandt2023} argue that reinforcement learning for stochastic dynamic VRPs is most promising when combined with combinatorial structure, because route-based action spaces are combinatorial. Hildebrandt et al.\ \cite{Hildebrandt2026} learn to shape the reward or decision space of an optimisation model rather than replace it. Baty et al.\ \cite{Baty2024} embed combinatorial optimisation layers for the dynamic VRP with time windows, and Parmentier \cite{Parmentier2022} learns approximations by classic operations-research problems. These optimisation-in-the-loop architectures are natural single-agent blocks for multi-agent extensions.
+
+\subsection{Multi-agent reinforcement learning and learning in games}
+
+Peer-reviewed fleet multi-agent reinforcement learning concentrates on ride-hailing dispatch and repositioning, mostly within one platform \cite{Li2019}. Competitive multi-operator reinforcement learning for pricing and rebalancing, strategic dispatching equilibria in multi-regional ride-hailing, and stochastic generalised Nash models of ride-hail platform competition appear as preprints \cite{Toft2026,Chen2026prep,Fabiani2022}. We found no peer-reviewed multi-agent reinforcement-learning study of \emph{competing parcel carriers} with routing-level actions.
+
+\subsection{Decision-focused learning and distributionally robust optimisation}
+
+Predict-then-optimise and decision-focused learning \cite{Bertsimas2020,Elmachtoub2022} and Wasserstein DRO \cite{MohajerinEsfahani2018,Kuhn2025} are established. Routing-specific DRO includes Zhang et al.\ \cite{Zhang2021} and Ghosal and Wiesemann \cite{GhosalWiesemann2020}. Recent \emph{Omega} papers apply DRO to adjacent urban problems: emergency resource allocation and routing with distributionally robust chance constraints \cite{Wang2023omega}, data-driven robust ferry-vehicle management at airports \cite{Zhang2025ferry}, target-oriented DRO for micromobility battery swapping \cite{Jin2026omega} and two-stage DRO for drone-supported relief \cite{Gao2026omega}; a 2026 transportation-journal paper treats mixed drone--courier fleets \cite{Jin2026tre}. In crowdsourced delivery, prescriptive machine learning for courier scheduling \cite{Behrendt2023} and robust workforce management \cite{Cheng2025} are close relatives. None of these adds competition. A September 2026 EJOR article on decision-focused learning for distributionally robust multi-agent dynamic vehicle routing in e-commerce last-mile delivery \cite{LiuMaMa2026} should be read before any claim of novelty is made: from its title we cannot tell whether its agents are strategic, and we could not access its abstract. Apart from that record, we found no peer-reviewed distributionally robust \emph{game} for routing.
+
+\subsection{Simulation and digital twins}
+
+Agent-based simulation dominates evaluation in the competitive-auction \cite{Figliozzi2007} and large-scale collaboration \cite{Los2025} streams. We found no peer-reviewed ``digital twin'' of a multi-carrier urban delivery market; the term should be defined operationally if used.
+
+%======================================================================
+\section{Datasets, benchmarks and evaluation metrics}\label{sec:data}
+
+\paragraph{Datasets}
+\begin{itemize}[leftmargin=*]
+\item \emph{Amazon Last Mile Routing Research Challenge} (Merch{\'a}n et al.\ \cite{Merchan2024}): described by its authors as the first large and publicly available data set with instances based on real operational routing data; it contains route-, stop- and package-level features for 9,184 historical routes driven by Amazon drivers in 2018 in five US metropolitan areas (a training set of 6,112 and an evaluation set of 3,072 routes in the challenge). Single carrier.
+\item \emph{LaDe} (Wu et al.\ \cite{Wu2024}): the first publicly available large last-mile delivery dataset from industry, with 10,677k packages of 21k couriers over six months of real-world operation in several Chinese cities, from a single company.
+\end{itemize}
+\emph{Implication:} we know of no public dataset that records competing carriers serving the same territory. Multi-carrier instances must be built, for example by splitting Amazon or LaDe demand among $N$ synthetic carriers with market-share and overlap parameters, and documented as a methodological contribution.
+
+\paragraph{Metrics}
+\begin{enumerate}[leftmargin=*]
+\item \emph{Price of anarchy and stability:} worst or best equilibrium social cost divided by the merged-fleet optimum.
+\item \emph{Exploitability (NashConv):} total gain from unilateral best responses, essential for approximately learned equilibria.
+\item \emph{Social cost decomposition:} carrier costs, service level (lateness, slot availability), externalities (vehicle-km, curb occupancy, emissions).
+\item \emph{Fairness:} across carriers (profit relative to stand-alone), couriers (earnings and multi-homing welfare, as in \cite{Benjaafar2022,Alnaggar2024}) and neighbourhoods (spatial equity of lockers and hubs).
+\item \emph{Out-of-sample robustness} under distribution shift, the motivation for DRO.
+\end{enumerate}
+
+%======================================================================
+\section{Synthesis}\label{sec:synthesis}
+
+\subsection{Comparison of key papers}
+
+\begin{landscape}
+{\footnotesize
+\begin{longtable}{@{}L{3.3cm}L{3.3cm}L{2.6cm}L{2.6cm}L{3cm}L{2.2cm}L{4.1cm}@{}}
+\caption{Key papers compared. ``Pre'' marks a preprint. Entries describe what the cited abstracts or papers state; ``not read'' marks records for which we could not access the abstract.}\label{tab:keypapers}\\
+\toprule
+Reference & Competition model & Uncertainty & Routing fidelity & Method & Data & Key finding or limitation\\
+\midrule
+\endfirsthead
+\toprule
+Reference & Competition model & Uncertainty & Routing fidelity & Method & Data & Key finding or limitation\\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Figliozzi et al.\ \cite{Figliozzi2004,Figliozzi2007} & Sequential auctions among carriers & Dynamic arrivals; deterministic travel times & Truckload pickup-and-delivery, TSP with profits & Opportunity-cost pricing; simulation & Synthetic & Routing-level competitive dynamic model; truckload, no learning\\
+Martin et al.\ \cite{Martin2021} & Nash among car-sharing operators & Deterministic & Pickup-and-delivery orienteering & MILP; two equilibrium algorithms & Munich case study & Existence and loss bounds under restrictive assumptions; car-sharing, not parcels\\
+Cerulli et al.\ \cite{Cerulli2024} & Stackelberg: platform leads independent carriers & None & Profitable tour per carrier & Bilevel MILP, branch-and-cut & Synthetic & Ignoring carrier reactions misestimates profit; followers do not interact\\
+Fern{\'a}ndez et al.\ \cite{Fernandez2025} & Stackelberg: firm leads outsourced carriers & None stated & Multi-commodity flow & Single-level MINLP, MIP formulations & Computational tests & NP-hard; followers independent\\
+Catalano \& Migliore \cite{Catalano2014} & Stackelberg: public designer leads carrier equilibrium & Demand scenarios & Network and terminal level & Bilevel heuristic & Case study & High public share, few consolidation terminals\\
+Masiha et al.\ \cite{Masiha2026} (Pre) & Stackelberg tolls over nonatomic combinatorial congestion games & Deterministic & Discrete routes, Wardrop followers & Frank--Wolfe, zeroth-order outer step & Real networks & Convergence to stationary points; no atomic carriers\\
+Li et al.\ \cite{Li2024} & Sharing of collection points among express companies & Not read in full & Reduced form & Analytical game & None & Conditions under which sharing pays (abstract only)\\
+Wang \& Huang \cite{WangHuang2021} & Duopoly with a shared first-mile platform & Not established & Reduced form & Analytical game & None & Joining raises profits in most cases\\
+Mercurio et al.\ \cite{Mercurio2026} & Cooperative locker-placement game & Deterministic & Reduced form & Cooperative game theory & Generated instances & Stable allocations for a network class and most instances\\
+Bernstein et al.\ \cite{Bernstein2021} & Price Nash, two platforms; multi-homing & Congestion effects & None (queues) & Equilibrium analysis & None & All players worse off when all drivers multi-home (ride-hailing)\\
+Ghosal \& Wiesemann \cite{GhosalWiesemann2020} & Single carrier & Demand ambiguity (moment sets) & Full capacitated VRP & DR chance constraints, branch-and-cut & Benchmarks & Branch-and-cut applies whenever the set is subadditive; best-response oracle candidate\\
+Zhang et al.\ \cite{Zhang2021} & Single carrier & Travel-time ambiguity (Wasserstein) & Full VRP with time windows & Branch-and-cut, metaheuristic & Data-driven simulation & Risk index lowers lateness and overfitting\\
+Liu et al.\ \cite{Liu2023} & Nonconvex sum-aggregative games (general) & None & None (abstract actions) & Shapley--Folkman rounding; gradient-proximal & Numerical example & Approximate pure equilibria, error independent of $N$\\
+Los et al.\ \cite{Los2020iccl,Los2025} & Cooperative auctions, multi-agent systems & Dynamic orders & Full pickup and delivery & Combinatorial auctions & Dutch platform data & Up to 79\% (conference) or 77\% (journal) savings; benchmark, not price of anarchy\\
+Merch{\'a}n et al.\ \cite{Merchan2024} & n/a & Real operations & Real routes & Dataset & Amazon 2018, 9,184 routes & Single carrier; needs synthetic splitting\\
+\end{longtable}}
+\end{landscape}
+
+\subsection{Research gaps}\label{sec:gaps}
+
+Each gap is stated as it stands in the literature we reviewed, followed by the prior art that bears on it.
+
+\begin{enumerate}[leftmargin=*,label=\gap{G\arabic*}.,itemsep=4pt]
+\item \gap{No routing-level equilibrium model of competing parcel carriers under uncertainty.} We found no peer-reviewed paper that computes Nash or generalised Nash equilibria among $N$ carriers who each solve a stochastic routing problem while competing for customers or sharing capacity. The nearest items are the sequential-auction stream \cite{Figliozzi2007} (deterministic, simulation-based), the competitive orienteering problem of car-sharing operators \cite{Martin2021} (deterministic, strong assumptions), and aggregative-game theory without routing \cite{Liu2023}. Existence of pure equilibria is itself computationally delicate for integer strategy sets \cite{Apt2022,Carvalho2022}.
+\item \gap{No Stackelberg--GNEP model with a public leader above interacting carriers.} Regulator models treat followers as aggregate or independent \cite{Catalano2014,XuSun2024}; bilevel last-mile models have a platform or firm leader and non-interacting followers \cite{Cerulli2024,Fernandez2025}; a recent preprint treats leader tuning of tolls over nonatomic combinatorial congestion games \cite{Masiha2026}. Leader design with black-box followers is studied in routing games \cite{Bhaskar2019} but not with tour-level atomic carriers.
+\item \gap{Transfer from ride-hailing to parcel delivery is unvalidated.} Multi-homing results come from queue-based ride-hailing models and are untested for couriers with multi-stop, capacitated, time-windowed routes. Even within ride-hailing the evidence on the welfare effect of multi-homing is not uniform \cite{Bernstein2021,Gao2025tre}.
+\item \gap{Efficiency theory for tour-based games is incomplete.} General results exist for approximate equilibria of congestion games \cite{Christodoulou2011}, for random demand in nonatomic routing \cite{Correa2019} and for precise aggregative games \cite{Liu2023}, and Martin et al.\ \cite{Martin2021} give loss bounds under congestion-game assumptions. Price-of-anarchy and stability bounds for atomic multi-stop fleets with heterogeneous finite plan sets, and systematic empirical estimates, remain open as far as we found.
+\item \gap{Data-driven robustness in games.} DRO is mature for single-carrier routing, and robust and ambiguous games have a theory \cite{Aghassi2006,Beauchene2016,Crespi2025,Feik2026}, but we found no peer-reviewed distributionally robust or learning-augmented equilibrium computation for routing games. In particular, the relation between the rounding error of nonconvex aggregative games and the width of beliefs (credal absorption, below) is not covered in the sources searched; and deciding whether imprecise equilibria exist can be NP-complete or trivial depending on how congestion enters the payoffs (the exposure-based and vehicle-count regimes of the companion model).
+\item \gap{Benchmarks and evaluation protocols.} No public multi-carrier dataset or protocol exists, and exploitability is not reported in routing studies.
+\end{enumerate}
+
+\paragraph{Status after the companion project} A companion article by the author (Section~\ref{sec:position}) addresses pieces of G1, G2, G5 and G6 together, for one parametrised model. What it contributes to the gap list is narrow. For G5 it proves that, for finite aggregative games with affine coupling, belief imprecision of a width that does not grow with the number of players turns any mixed equilibrium into a pure E-admissible equilibrium (credal absorption), contrasts this with $\Gamma$-maximin where it fails, and shows a complexity split: existence at every width under exposure-based congestion, strong NP-completeness below an explicit width under vehicle-count congestion. For G1 and G4 it supplies a model and some efficiency statements for a Cournot--congestion game, not for general competitive vehicle routing. A budget-resource labelling algorithm supports exact pricing of routes whose arc times are probability boxes, which is a building block for best-response computation rather than a general solution of G1. G3 is not addressed.
+
+%======================================================================
+\section{Future directions}\label{sec:future}
+
+\begin{enumerate}[leftmargin=*]
+\item \emph{Variational-equilibrium pricing of shared capacity:} use the GNEP coupling multiplier as a curb or hub price and study when a leader can implement the merged-fleet optimum.
+\item \emph{Distributionally robust routing games:} existence and uniqueness under Wasserstein hedging, and how the ambiguity radius shifts the price of anarchy; a comparison with credal and optimal-transport ambiguity \cite{Feik2026}.
+\item \emph{Learning equilibria with combinatorial oracles:} fictitious play or policy-space response oracles with neural VRP solvers, reporting exploitability.
+\item \emph{Courier multi-homing with routing:} nest a mean-field courier population under $N$ parcel platforms and test whether ride-hailing welfare results carry over.
+\item \emph{Competition through time slots and promises:} extend choice-based slot management to oligopoly.
+\item \emph{Benchmarks:} release multi-carrier instance generators on Amazon and LaDe data.
+\item \emph{A documented systematic search:} a Scopus and Web of Science query for 2015--2026 with PRISMA counts, to replace the narrative search reported here.
+\end{enumerate}
+
+%======================================================================
+\section{Position of the present project}\label{sec:position}
+
+A companion article by the author, ``Imprecise beliefs, pure equilibria and city charges for competing delivery carriers'', studies a parametrised model of this setting: carriers choose routing plans from finite sets, interact through zone aggregates of deliveries and vehicle-hours, hold credal sets of beliefs about traffic and rivals, and face a city leader who sets charges. It addresses G1, G2, G5 and G6 only for that model: it does not treat auction or time-slot competition, general stochastic routing, Wasserstein ambiguity, learned best responses or Markov games, and it makes no claim about G3. Where the companion article relies on known results (rounding for nonconvex aggregative games \cite{Liu2023}, hardness of pure-equilibrium existence \cite{Apt2022}) it cites them, and its novelty is limited to the statements about imprecise equilibria discussed under G5, which we did not find in the sources searched. The survey was prepared independently of those results, and the reading of the closest neighbours \cite{Beauchene2016,Feik2026} was at abstract level.
+
+\paragraph{What the author must still check} A Scopus or Web of Science rerun with PRISMA counts; the full text of \cite{Beauchene2016} and \cite{Feik2026}; the abstracts of the 2026 records \cite{Zhou2026,Zhou2026trb,LiuMaMa2026,Salarpour2026}; and the content of \cite{Gao2025tre,Li2024}, for which only abstract fragments were available.
+
+%======================================================================
+\bibliographystyle{elsarticle-num}
+\bibliography{survey}
+\end{document}
