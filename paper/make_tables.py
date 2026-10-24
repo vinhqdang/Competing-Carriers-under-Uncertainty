@@ -206,6 +206,14 @@ def byseed(x, sig=3):
     return " / ".join(fmt(v, sig) for v in x) if len(x) else "--"
 
 
+def reduced_cities(exp, full):
+    d = read("summary_exact_oracle.csv")
+    if d is None:
+        return set()
+    e = d[d.experiment == exp]
+    return {c for c, g in e.groupby("city") if (g.rows_exact < full).any()}
+
+
 MATERIAL = 0.5  # leader gain (% of |SC|) below which the delivery-only share is not informative
 
 
@@ -217,7 +225,8 @@ def t_e2():
         s["seed"] = 0
     n = seeds_note(s, "EtwoSeeds")
     macro("NSeeds", str(n))
-    macro("NCases", str(n * s.city.nunique()))
+    macro("NCases", str(len(set(zip(s.city, s.seed)))))
+    red2 = reduced_cities("E2", 63)
     for obj, fname in (("main", "tab_e2.tex"), ("broad", "tab_e2broad.tex")):
         x = s[s.objective == obj]
         rows = []
@@ -228,7 +237,7 @@ def t_e2():
             g = {cfg: y[y.config == cfg].sort_values("seed") for cfg in ("congestion_only", "delivery_only", "both")}
             b = g["both"]
             share = (g["delivery_only"].gain_pct_of_abs.values / np.where(b.gain_pct_of_abs.values > 0, b.gain_pct_of_abs.values, np.nan))
-            row = [NAME[c], mrange(g["congestion_only"].gain_pct_of_abs), mrange(g["delivery_only"].gain_pct_of_abs),
+            row = [NAME[c] + ("$^\\dagger$" if c in red2 else ""), mrange(g["congestion_only"].gain_pct_of_abs), mrange(g["delivery_only"].gain_pct_of_abs),
                    mrange(b.gain_pct_of_abs)]
             if obj == "main":
                 mat = b.gain_pct_of_abs.values >= MATERIAL
@@ -247,6 +256,13 @@ def t_e2():
     i = piv.congestion_only.idxmax()
     macro("EtwoCongMax", fmt(piv.congestion_only.max(), 3))
     macro("EtwoCongMaxCase", f"{NAME[piv.loc[i, 'city']]}, seed {int(piv.loc[i, 'seed'])}")
+    rest = piv.drop(index=i)
+    j = rest.congestion_only.idxmax()
+    macro("EtwoCongSecond", fmt(rest.congestion_only.max(), 3))
+    macro("EtwoCongSecondCase", f"{NAME[rest.loc[j, 'city']]}, seed {int(rest.loc[j, 'seed'])}")
+    macro("EtwoCongBelowN", str(int((piv.congestion_only < 1.7).sum())))
+    zba = piv[piv.city == "BuenosAires"].sort_values("seed")
+    macro("EtwoCongBA", " / ".join(fmt(v, 2) for v in zba.congestion_only))
     macro("EtwoBothMax", fmt(piv.both.max(), 3))
     mat = piv[piv.both >= MATERIAL].copy()
     mat["share"] = mat.delivery_only / mat.both
@@ -260,6 +276,13 @@ def t_e2():
         if len(z):
             parts.append(f"{NAME[c]} {fmt(z.share.min(), 2)}--{fmt(z.share.max(), 2)}" if len(z) > 1 else f"{NAME[c]} {fmt(z.share.iloc[0], 2)}")
     macro("EtwoShareRanges", ", ".join(parts))
+    fparts = []
+    for c in ORDER:
+        z = mat[(mat.city == c) & (~mat.city.isin(red2))]
+        if len(z):
+            fparts.append(f"{NAME[c]} {fmt(z.share.min(), 2)}--{fmt(z.share.max(), 2)}")
+    macro("EtwoShareFullRanges", ", ".join(fparts))
+    macro("EtwoShareAboveOne", ", ".join(f"{NAME[r.city]} seed {int(r.seed)}" for _, r in mat[mat.share > 1.0001].iterrows()) or "none")
     mb = mat[mat.city == "Bombay"].sort_values("seed")
     macro("EtwoMumbaiShares", " / ".join(fmt(v, 2) for v in mb.share))
     small = [c for c in ORDER if c in set(piv.city) and (piv[piv.city == c].both < MATERIAL).all()]
@@ -349,6 +372,7 @@ def t_e4():
     pb = s[s.kind == "pbox"].sort_values("eps").groupby(["city", "seed"]).tail(1)
     ga = s[s.kind == "gamma"].sort_values("delta").groupby(["city", "seed"]).tail(1)
     mono = read("summary_E4_monotone.csv")
+    red4 = reduced_cities("E4", 12)
     rows = []
     for c in ORDER:
         a, g = pb[pb.city == c], ga[ga.city == c]
@@ -358,7 +382,7 @@ def t_e4():
         if mono is not None:
             z = mono[mono.city == c]
             mcount = f"{int(z.monotone.astype(str).str.lower().eq('true').sum())}/{len(z)}"
-        rows.append([NAME[c], mrange(a.d_deliveries_pct, 3), mrange(a.d_welfare_pct, 3), mrange(g.d_deliveries_pct, 3),
+        rows.append([NAME[c] + ("$^\\dagger$" if c in red4 else ""), mrange(a.d_deliveries_pct, 3), mrange(a.d_welfare_pct, 3), mrange(g.d_deliveries_pct, 3),
                      mrange(g.d_welfare_pct, 3), mcount])
     write_table("tab_e4.tex", ["City", "$\\Delta$deliv.\\ \\%", "$\\Delta W$ \\%", "$\\Delta$deliv.\\ \\%",
                                "$\\Delta W$ \\%", "monotone series"], rows, "lrrrrr")
@@ -668,6 +692,130 @@ def t_theory():
         macro("ThCityScales", ", ".join(fmt(x, 1) for x in sorted(c.scale.unique())))
 
 
+# ---------------------------------------------------------------- exact-oracle re-run: coverage, call statistics, old vs new
+FULL_E2 = 63
+
+
+def t_exact():
+    import glob as _g
+    d = read("summary_exact_oracle.csv")
+    if d is None:
+        return
+    tot = d[["bp_calls", "bp_optimal", "bp_retried", "bp_unproven"]].sum()
+    macro("ExCalls", f"{int(tot.bp_calls):,}".replace(",", "{,}"))
+    macro("ExOptimal", f"{int(tot.bp_optimal):,}".replace(",", "{,}"))
+    macro("ExProvenPct", f"{100 * tot.bp_optimal / tot.bp_calls:.2f}")
+    macro("ExRetried", str(int(tot.bp_retried)))
+    macro("ExUnproven", str(int(tot.bp_unproven)))
+    macro("ExMaxGap", fmt(d.bp_max_gap.max(), 2))
+    macro("ExRegretFreshMax", fmt(d.max_regret_fresh.max()))
+    nz = d[d.max_regret_lp_bound > 1e-9]
+    macro("ExBoundN", str(len(nz)))
+    macro("ExBoundMax", fmt(nz.max_regret_lp_bound.max(), 3) if len(nz) else "0")
+    # coverage
+    e1 = d[d.experiment == "E1"]
+    macro("ExEoneN", str(len(e1)))
+    e2 = d[d.experiment == "E2"]
+    macro("ExEtwoN", str(len(e2)))
+    g = e2.groupby("city").rows_exact
+    full = [c for c in ORDER if c in g.groups and (g.get_group(c) >= FULL_E2).all()]
+    red = [c for c in ORDER if c in g.groups and c not in full]
+    macro("ExEtwoFullCities", ", ".join(NAME[c] for c in full))
+    macro("ExEtwoRedCities", ", ".join(NAME[c] for c in red))
+    rr = e2[e2.city.isin(red)].rows_exact
+    macro("ExEtwoRedMin", str(int(rr.min())) if len(rr) else "--")
+    macro("ExEtwoRedMax", str(int(rr.max())) if len(rr) else "--")
+    e3 = read("summary_E3.csv")
+    if e3 is not None:
+        macro("ExEthreeN", str(len(e3)))
+        have = set(zip(e3.city, e3.seed))
+        miss = [f"{NAME[c]} seed {s}" for c in ORDER for s in range(3) if (c, s) not in have]
+        macro("ExEthreeMissing", ", ".join(miss) if miss else "none")
+    e4 = d[d.experiment == "E4"]
+    macro("ExEfourN", str(len(e4)))
+    g4 = e4.groupby("city").rows_exact
+    full4 = [c for c in ORDER if c in g4.groups and (g4.get_group(c) >= 12).all()]
+    red4 = [c for c in ORDER if c in g4.groups and c not in full4]
+    macro("ExEfourFullCities", ", ".join(NAME[c] for c in full4))
+    macro("ExEfourRedCities", ", ".join(NAME[c] for c in red4))
+    macro("ExEfourRedWidths", str(int(e4[e4.city.isin(red4)].rows_exact.max())) if red4 else "--")
+    have4 = set(zip(e4.city, e4.seed))
+    miss4 = [f"{NAME[c]} seed {s}" for c in ORDER for s in range(3) if (c, s) not in have4]
+    macro("ExEfourMissing", ", ".join(miss4) if miss4 else "none")
+    macro("ExTotalDone", str(len(e1) + len(e2) + (len(e3) if e3 is not None else 0) + len(e4)))
+    # coverage table
+    rows = []
+    for c in ORDER:
+        row = [NAME[c]]
+        for s in range(3):
+            def has(exp):
+                z = d[(d.experiment == exp) & (d.city == c) & (d.seed == s)]
+                return z
+            a = "E1" if len(has("E1")) else "--"
+            b2 = has("E2")
+            b = f"{int(b2.rows_exact.iloc[0])}/63" if len(b2) else "--"
+            t3 = "yes" if e3 is not None and ((e3.city == c) & (e3.seed == s)).any() else "--"
+            b4 = has("E4")
+            f4 = f"{int(b4.rows_exact.iloc[0])}/12" if len(b4) else "--"
+            row += [b, t3, f4]
+        rows.append(row)
+    write_table("tab_coverage.tex", ["City"] + [f"{h} s{s}" for s in range(3) for h in ("E2", "E3", "E4")], rows,
+                "l" + "rrr" * 3)
+    # old (price-and-branch) equilibria under the exact oracle
+    fs = sorted(_g.glob(str(RES / "exact_parts" / "oldreg_*.csv")))
+    if fs:
+        o = pd.concat([pd.read_csv(f) for f in fs], ignore_index=True)
+        bad = o[o.regret_exact_max > 1e-6]
+        macro("ExOldN", str(len(o)))
+        macro("ExOldBadN", str(len(bad)))
+        macro("ExOldBadMax", fmt(bad.regret_exact_max.max(), 2) if len(bad) else "0")
+        ok_c = [c for c in ORDER if c in set(o.city) and (o[o.city == c].regret_exact_max <= 1e-6).all()]
+        macro("ExOldExactCities", ", ".join(NAME[c] for c in ok_c))
+        parts = []
+        for c in ORDER:
+            z = o[o.city == c]
+            b = z[z.regret_exact_max > 1e-6]
+            if len(b):
+                parts.append(f"{NAME[c]} ({len(b)} of {len(z)} seeds, up to {fmt(b.regret_exact_max.max(), 2)} USD)")
+        macro("ExOldBadList", "; ".join(parts))
+    # old vs new
+    c = read("exact_vs_pb_comparison_by_seed.csv")
+    if c is not None:
+        def get(city, seed, col):
+            z = c[(c.city == city) & (c.seed == seed)]
+            return z[col].iloc[0] if len(z) else np.nan
+        macro("ExBAPoAold", fmt(get("BuenosAires", 0, "E3_PoA_zmc_old"), 4))
+        macro("ExBAPoAnew", fmt(get("BuenosAires", 0, "E3_PoA_zmc_new"), 4))
+        macro("ExBerlinPoAold", fmt(get("Berlin", 0, "E3_PoA_zmc_old"), 4))
+        macro("ExBerlinPoAnew", fmt(get("Berlin", 0, "E3_PoA_zmc_new"), 4))
+        macro("ExBACongOld", fmt(get("BuenosAires", 0, "E2_gain_congestion_only_pct_old"), 3))
+        macro("ExBACongNew", fmt(get("BuenosAires", 0, "E2_gain_congestion_only_pct_new"), 2))
+        macro("ExDelhiShareOld", fmt(get("NewDelhi", 0, "E2_share_delivery_alone_old"), 2))
+        macro("ExDelhiShareNew", fmt(get("NewDelhi", 0, "E2_share_delivery_alone_new"), 2))
+        macro("ExMumbaiShareOld", fmt(get("Bombay", 0, "E2_share_delivery_alone_old"), 1))
+        macro("ExMumbaiShareNew", fmt(get("Bombay", 0, "E2_share_delivery_alone_new"), 2))
+        macro("ExBAWOld", fmt(get("BuenosAires", 0, "E1_welfare_old"), 4))
+        macro("ExBAWNew", fmt(get("BuenosAires", 0, "E1_welfare_new"), 4))
+        ws = c.dropna(subset=["E1_welfare_new"])
+        dw = 100 * (ws.E1_welfare_new / ws.E1_welfare_old - 1)
+        macro("ExEoneWChangeMaxNotBA", fmt(dw[ws.city != "BuenosAires"].abs().max(), 2))
+        macro("ExEoneWChangeBA", fmt(dw[ws.city == "BuenosAires"].min(), 2))
+        e4c = c.dropna(subset=["E4_pbox_widest_d_deliveries_pct_new"])
+        ch = (e4c.E4_pbox_widest_d_deliveries_pct_new - e4c.E4_pbox_widest_d_deliveries_pct_old).abs()
+        macro("ExEfourSeedChangeMax", fmt(ch.max(), 2))
+    cm = read("exact_vs_pb_comparison.csv")
+    if cm is not None:
+        ch = pd.concat([(cm[f"E4_{k}_new"] - cm[f"E4_{k}_old"]).abs() for k in
+                        ("pbox_widest_d_deliveries_pct", "pbox_widest_d_welfare_pct", "gamma_widest_d_deliveries_pct",
+                         "gamma_widest_d_welfare_pct")])
+        macro("ExEfourMeanChangeMax", fmt(ch.max(), 2))
+        dp = (cm.E3_PoA_zmc_new - cm.E3_PoA_zmc_old).abs()
+        macro("ExPoAMeanChangeMax", fmt(dp.max(), 2))
+        dwm = 100 * (cm.E1_welfare_new / cm.E1_welfare_old - 1)
+        macro("ExEoneWMeanMaxNotBA", fmt(dwm[cm.city != "BuenosAires"].abs().max(), 2))
+        macro("ExEoneWMeanBA", fmt(dwm[cm.city == "BuenosAires"].iloc[0], 2))
+
+
 def t_cert():
     fs = sorted(RES.glob("E2cert_*.csv"))
     if not fs:
@@ -679,7 +827,7 @@ def t_cert():
 
 
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest
