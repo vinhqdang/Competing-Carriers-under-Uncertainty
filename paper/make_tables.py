@@ -539,6 +539,135 @@ def t_zmc_synth():
     macro("ZMCsynthN", str(len(df)))
 
 
+# ---------------------------------------------------------------- branch-and-price (BRL integer step)
+def pct(v, sig=2):
+    s = fmt(v, sig)
+    return ("+" + s if v > 0 else s) + "\\%"
+
+
+def t_bp():
+    b = read("summary_bp.csv")
+    if b is not None:
+        b = order(b)
+        rows = []
+        for _, r in b.iterrows():
+            rows.append([NAME[r.city] + ("$^*$" if r.city == "Moscow" else ""), fmt(r.root_lp, 4), fmt(r.published_price_and_branch, 4),
+                         fmt(r.branch_and_price, 4), fmt(r.gap_rel_pct, 2), str(int(r.nodes)), fmt(r.time_s, 3),
+                         fmt(r.bp_vs_best_heur_pbox_pct, 2), fmt(r.bp_vs_saa_true_pct, 2)])
+        write_table("tab_brl_metro.tex", ["City", "root LP", "P\\&B plan", "B\\&P optimum", "gap \\%", "nodes", "time s",
+                                          "vs best heur.\\ \\%", "vs SAA, true law \\%"], rows, "lrrrrrrrr")
+        macro("BPoptimalN", str(int((b.status == "optimal").sum())))
+        macro("BPtimeMaxMin", fmt(b.time_s.max() / 60, 2))
+        macro("BPtimeMaxCity", NAME[b.loc[b.time_s.idxmax(), "city"]])
+        macro("BPpricingShare", fmt(100 * b.pricing_time_s.sum() / b.time_s.sum(), 2))
+        macro("BPnodesMax", str(int(b.nodes.max())))
+        better = b[b.bp_vs_best_heur_pbox_pct < -1e-6]
+        equal = b[b.bp_vs_best_heur_pbox_pct.abs() <= 1e-6]
+        macro("BPbetterCities", ", ".join(f"{NAME[r.city]} ({fmt(r.bp_vs_best_heur_pbox_pct, 2)}\\%)" for _, r in better.iterrows()))
+        macro("BPequalCities", ", ".join(NAME[c] for c in equal.city))
+        worse_true = b[b.bp_vs_saa_true_pct > 0.5]
+        macro("BPtrueWorse", ", ".join(f"{NAME[r.city]} ({pct(r.bp_vs_saa_true_pct)})" for _, r in worse_true.iterrows()))
+        macro("BPpbGapMax", fmt(b.pb_gap_to_bp_pct.max(), 2))
+        macro("BPconsMin", fmt(b.pbox_to_true_pct.min(), 2))
+        macro("BPconsMax", fmt(b.pbox_to_true_pct.max(), 2))
+        lo = b[b.city == "London"].iloc[0]
+        macro("BPLondonSame", "yes" if bool(lo.same_plan_as_saa) else "no")
+    v = read("summary_bp_verify.csv")
+    if v is not None:
+        a = v[v.kind == "all"].iloc[0]
+        macro("BPverN", str(int(a.instances)))
+        macro("BPverExact", str(int(a.bp_exact)))
+        macro("BPverPBsub", str(int(a.pb_suboptimal)))
+        macro("BPverPBmax", fmt(a.max_pb_gap_pct, 2))
+        macro("BPverNodesMax", str(int(a.max_nodes)))
+    g = read("summary_bp_game.csv")
+    if g is not None:
+        g = g.set_index("city")
+        for c in g.index:
+            macro(f"BPgame{c}W", pct(g.loc[c, "welfare_change_pct"]))
+            macro(f"BPgame{c}Ratio", fmt(g.loc[c, "runtime_ratio"], 2))
+        macro("BPgameCities", ", ".join(NAME[c] for c in ORDER if c in g.index))
+
+
+# ---------------------------------------------------------------- theory-to-experiment checks
+def t_theory():
+    import glob as _g
+    s = read("theory_absorption_summary.csv")
+    st = read("summary_theory.csv")
+    if s is None or st is None:
+        return
+    m = s[s.anchor != "pure"]
+    ma = m[m.w_mode == "agg"]
+    macro("ThGamesMixed", str(int(st.seeds_with_mixed_anchor.sum())))
+    macro("ThGamesTotal", str(int(st.n_seeds.sum())))
+    macro("ThNoMixedCities", ", ".join(NAME[c] for c in st[st.seeds_with_mixed_anchor == 0].city))
+    macro("ThAnchors", str(len(ma)))
+    macro("ThProfiles", str(int(m.n_measured.sum())))
+    macro("ThProfilesAgg", str(int(ma.n_measured.sum())))
+    vio = int(s[[c for c in s.columns if c.startswith("viol")]].sum().sum())
+    macro("ThViol", str(vio))
+    macro("ThRatioMin", fmt(ma.ratio_Emax_over_bound.min(), 2))
+    macro("ThRatioMax", fmt(ma.ratio_Emax_over_bound.max(), 2))
+    macro("ThRatioMed", fmt(ma.ratio_Emax_over_bound.median(), 2))
+    macro("ThRatioNMin", fmt(ma.ratio_Emax_over_boundN.min(), 2))
+    macro("ThRatioNMax", fmt(ma.ratio_Emax_over_boundN.max(), 2))
+    macro("ThHatMax", fmt(ma.ratio_E_over_hat_max.max(), 2))
+    t1 = (ma.bound_anchor >= ma.T1 - 1e-12) if "T1" in ma.columns else None
+    macro("ThZmcFinite", str(int(st.zmc_start_n_finite_E.sum())))
+    macro("ThZmcN", str(int(st.zmc_start_n.sum())))
+    rows = []
+    for c in ORDER:
+        z = st[st.city == c]
+        if not len(z):
+            continue
+        r = z.iloc[0]
+        has = r.seeds_with_mixed_anchor > 0
+        rows.append([NAME[c], f"{int(r.seeds_with_mixed_anchor)}/{int(r.n_seeds)}",
+                     fmt(r.agg_rho_bar, 2) if has else "--", fmt(r.agg_bound_anchor, 3) if has else "--",
+                     fmt(r.agg_bound_N, 3) if has else "--", fmt(r.agg_E_max, 2) if has else "--",
+                     fmt(r.agg_ratio_Emax_over_bound, 2) if has else "--",
+                     fmt(r["gamma0.1_served_drop"], 2), fmt(r["gamma1.0_served_drop"], 2), fmt(r["gamma1.0_Mthr_over_delta"], 2)])
+    write_table("tab_theory.tex", ["City", "mixed", "$\\bar\\rho$", "anchored bd.", "$N$-unif.\\ bd.", "max $\\delta_E$",
+                                   "ratio", "drop $\\delta{=}0.1$", "drop $\\delta{=}1$", "M-thr./$\\delta$"], rows, "lrrrrrrrrr")
+    macro("ThGamDropLoMin", fmt(st["gamma0.1_served_drop"].min(), 1))
+    macro("ThGamDropLoMax", fmt(st["gamma0.1_served_drop"].max(), 2))
+    macro("ThGamDropHiMin", fmt(st["gamma1.0_served_drop"].min(), 2))
+    macro("ThGamDropHiMax", fmt(st["gamma1.0_served_drop"].max(), 2))
+    macro("ThGamMthrMin", fmt(st["gamma1.0_Mthr_over_delta"].min(), 2))
+    macro("ThGamMthrMax", fmt(st["gamma1.0_Mthr_over_delta"].max(), 2))
+    gfs = [f for f in _g.glob(str(RES / "theory_gamma_*.csv"))]
+    if gfs:
+        g = pd.concat([pd.read_csv(f) for f in gfs], ignore_index=True)
+        macro("ThGamCases", str(len(g)))
+        macro("ThGamDiff", str(int((~g.same_profile.astype(str).str.lower().eq("true")).sum())))
+        macro("ThGamNotAdm", str(int((g.gamma_adm_NE_frac < 1).sum())))
+        r = (g.M_thr_G / g.delta).replace([np.inf], np.nan)
+        macro("ThGamMthrAllMax", fmt(r.max(), 3))
+        macro("ThGamInf", str(int(np.isinf(g.M_thr_G).sum())))
+    p71 = read("theory_D2_prop71.csv")
+    if p71 is not None:
+        macro("ThPropOK", f"{int(p71.ok.sum())} of {len(p71)}")
+    k = read("theory_D2_kernels.csv")
+    if k is not None:
+        macro("ThKernOK", f"{int((k.ok_sets & k.ok_existence).sum())} of {len(k)}")
+    r = read("theory_D2_random_explicit.csv")
+    if r is not None:
+        d2, d1 = r[r.regime == "D2"], r[r.regime == "D1"]
+        macro("ThRandDtwo", f"{int(d2.no_pne.sum())} of {len(d2)}")
+        macro("ThRandDone", f"{int(d1.no_pne.sum())} of {len(d1)}")
+    t = read("theory_D2_tiny.csv")
+    if t is not None:
+        macro("ThTiny", f"{int(t.no_pne_D2.sum())} of {len(t)}")
+    cfs = _g.glob(str(RES / "theory_D2_*_s*.csv"))
+    if cfs:
+        c = pd.concat([pd.read_csv(f) for f in cfs], ignore_index=True)
+        c = c[c.kind == "summary"]
+        macro("ThCityRuns", str(int(c.n_starts.sum())))
+        macro("ThCityConv", str(int(c.n_converged.sum())))
+        macro("ThCityCycles", str(int(c.n_cycle.sum())))
+        macro("ThCityScales", ", ".join(fmt(x, 1) for x in sorted(c.scale.unique())))
+
+
 def t_cert():
     fs = sorted(RES.glob("E2cert_*.csv"))
     if not fs:
@@ -550,7 +679,7 @@ def t_cert():
 
 
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest
