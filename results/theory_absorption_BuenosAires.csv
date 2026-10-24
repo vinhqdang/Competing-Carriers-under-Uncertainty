@@ -1,0 +1,5 @@
+city,seed,N,Z,d,d_eff,w_mode,anchor,n_mixers,prod_size,idx,sigma_max,bound_N,rho_bar,sigma_bar,d_L,k_sharp,T1,T2,T3,bound,delta_hat,min_delta_hat,max_delta_hat,delta_E,delta_M,delta_ID,eps_orc_max
+BuenosAires,0,4,208,416,62,agg,pure,0,1,0,3.39578,10.1874,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BuenosAires,0,4,208,416,62,agg,zmc_start,-1,1,0,3.39578,10.1874,,,,,,,,,,,,inf,inf,0.0674949,
+BuenosAires,0,4,208,416,62,type_median,pure,0,1,0,1.4,4.2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BuenosAires,0,4,208,416,62,type_median,zmc_start,-1,1,0,1.4,4.2,,,,,,,,,,,,inf,inf,0.0865683,

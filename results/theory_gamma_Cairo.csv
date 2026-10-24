@@ -1,0 +1,5 @@
+city,seed,N,Z,delta,same_profile,regret_surcharge_game,gamma_regret_NE,gamma_adm_NE_frac,gamma_regret_Gprofile,E_thr_G,M_thr_G,ID_thr_G,served_NE,served_G,hours_NE,hours_G,welfare_NE,welfare_G,vehicles_NE,vehicles_G,time_s
+Cairo,0,4,42,0.1,False,0,0.714894,0.5,0,inf,0,0,1,1,124.992,124.992,1063.7,1064.33,28,28,118.278
+Cairo,0,4,42,0.25,False,0,0.714894,0.25,0,inf,0,0,1,1,124.992,124.992,1063.7,1064.95,28,28,133.241
+Cairo,0,4,42,0.5,False,0,1.23054,0,0.171956,inf,inf,0.0113845,1,0.987903,124.992,123.48,1063.7,1056.96,28,27,456.994
+Cairo,0,4,42,1,False,0,66.8219,0,0,0.991709,0.991709,0.492193,1,0.538306,124.992,67.284,1063.7,680.876,28,14,294.538

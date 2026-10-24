@@ -1,0 +1,9 @@
+city,seed,N,Z,d,d_eff,w_mode,anchor,n_mixers,prod_size,idx,sigma_max,bound_N,rho_bar,sigma_bar,d_L,k_sharp,T1,T2,T3,bound,delta_hat,min_delta_hat,max_delta_hat,delta_E,delta_M,delta_ID,eps_orc_max
+Cairo,0,4,42,84,32,agg,pure,0,1,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cairo,0,4,42,84,32,agg,zmc_start,-1,1,0,1,3,,,,,,,,,,,,inf,inf,0.000316739,
+Cairo,0,4,42,84,32,type_median,pure,0,1,0,0.606061,1.81818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cairo,0,4,42,84,32,type_median,zmc_start,-1,1,0,0.606061,1.81818,,,,,,,,,,,,inf,inf,0.00213808,
+Cairo,1,4,42,84,33,agg,pure,0,1,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cairo,1,4,42,84,33,agg,zmc_start,-1,1,0,1,3,,,,,,,,,,,,inf,inf,0.000882864,
+Cairo,1,4,42,84,33,type_median,pure,0,1,0,0.606061,1.81818,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cairo,1,4,42,84,33,type_median,zmc_start,-1,1,0,0.606061,1.81818,,,,,,,,,,,,inf,inf,0.00102776,

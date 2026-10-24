@@ -74,12 +74,17 @@ def profile_key(prof):
 def make_weights(g, prof, mode: str = "type_median") -> np.ndarray:
     """Belief-width weights w_k (verification_plan.md, Part B: w is the city median of the rival aggregate).
 
+    agg         : (E4 convention) w_k = realised aggregate A_k where positive, else the median positive entry;
     type_median : one constant per coordinate type (deliveries Q, second block X): median over (carrier, own zone) pairs of the
                   realised rival aggregate at `prof`, positive entries only (fallback: mean full capacity of the type);
     coord_cap   : w_k = mean over carriers of the rival *capacity* sum_{j != i} full_a_jk (coordinate specific).
     """
     Z, N = g.Z, g.N
     full = np.array([g.full_a(i) for i in range(N)])
+    if mode == "agg":  # convention of E4 (run_imprecision.py): w_k = realised aggregate where positive, else the median positive one
+        A = agg(prof)
+        pos = A[A > 1e-9]
+        return np.where(A > 1e-9, A, np.median(pos) if len(pos) else 1.0)
     if mode == "coord_cap":
         w = (full.sum(0)[None, :] - full).mean(0)
         fb = np.array([w[:Z][w[:Z] > 0].mean() if (w[:Z] > 0).any() else 1.0, w[Z:][w[Z:] > 0].mean() if (w[Z:] > 0).any() else 1.0])
@@ -109,10 +114,14 @@ def make_weights(g, prof, mode: str = "type_median") -> np.ndarray:
 # ---------------------------------------------------------------------------------------------------------------
 
 
-def e_threshold(g, i, prof, w, cuts=(), tol=1e-7, max_iter=400, fresh_final=False):
-    """Exact E-admissibility threshold A_i^E(p) (eq. EthrLP) by Kelley cutting planes.  Returns (delta, info)."""
+def e_threshold(g, i, prof, w, cuts=(), tol=1e-7, max_iter=400, fresh_final=False, eps=0.0):
+    """Exact E-admissibility threshold A_i^E(p) (eq. EthrLP) by Kelley cutting planes.  Returns (delta, info).
+
+    eps (absolute, default 0) is the oracle inexactness: p must be optimal up to max(tol (1+|J|), eps) at the belief; used for the
+    city games whose BRL oracle (price-and-branch with a time limit) is exact only up to a small gap."""
     p = prof[i]
     A = rival_aggregate(prof, i)
+    atol = max(tol * (1.0 + abs(cost_at(g, p, A))), float(eps))
     K = np.flatnonzero(full_phi(g, i) > 0)
     nK = len(K)
     M = np.asarray(g.M, float)
@@ -139,7 +148,7 @@ def e_threshold(g, i, prof, w, cuts=(), tol=1e-7, max_iter=400, fresh_final=Fals
         r = np.zeros(nK + 1)
         r[:nK] = ((phi_p - phi_of(q)) * M)[K]
         rows.append(r)
-        rhs.append(q.c - p.c)
+        rhs.append(q.c - p.c + atol)  # tolerance: numerically tied plans must not make the LP infeasible
         ncut += 1
 
     for q in cuts:
@@ -159,10 +168,10 @@ def e_threshold(g, i, prof, w, cuts=(), tol=1e-7, max_iter=400, fresh_final=Fals
         m[K] = res.x[:nK]
         q = best_response(g, i, m)
         gain = cost_at(g, p, m) - cost_at(g, q, m)
-        if gain <= tol * (1.0 + abs(cost_at(g, p, m))):
+        if gain <= atol:
             if fresh_final:
                 q2 = best_response(g, i, m, fresh=True)
-                if cost_at(g, p, m) - cost_at(g, q2, m) > tol * (1.0 + abs(cost_at(g, p, m))):
+                if cost_at(g, p, m) - cost_at(g, q2, m) > atol:
                     q = q2
                 else:
                     return delta, dict(cuts=ncut, iters=iters, status="ok", fresh_checked=True)
@@ -237,24 +246,24 @@ def _bisect(adm, hi, iters, rel=1e-6):
     return hi
 
 
-def m_threshold(g, i, prof, w, hi=np.inf, tol=1e-7, iters=40, fresh=False):
+def m_threshold(g, i, prof, w, hi=np.inf, tol=1e-7, iters=40, fresh=False, eps=0.0):
     p = prof[i]
     A = rival_aggregate(prof, i)
     Jp = cost_at(g, p, A)
 
     def adm(d):
-        return _min_M(g, i, p, A, w, d, fresh=fresh) >= Jp - tol * (1.0 + abs(Jp))
+        return _min_M(g, i, p, A, w, d, fresh=fresh) >= Jp - max(tol * (1.0 + abs(Jp)), eps)
 
     return _bisect(adm, hi, iters)
 
 
-def id_threshold(g, i, prof, w, hi=np.inf, tol=1e-7, iters=40, fresh=False):
+def id_threshold(g, i, prof, w, hi=np.inf, tol=1e-7, iters=40, fresh=False, eps=0.0):
     p = prof[i]
     A = rival_aggregate(prof, i)
 
     def adm(d):
         jl, jmin = _id_sides(g, i, p, A, w, d, fresh=fresh)
-        return jl <= jmin + tol * (1.0 + abs(jl))
+        return jl <= jmin + max(tol * (1.0 + abs(jl)), eps)
 
     return _bisect(adm, hi, iters)
 
@@ -269,25 +278,27 @@ def gamma_regret(g, i, prof, w, delta, fresh=False):
     return max(0.0, cost_at(g, p, hi) - cost_at(g, q, hi))
 
 
-def profile_thresholds(g, prof, w, kinds=("E", "M", "ID"), cuts=None, iters=24):
+def profile_thresholds(g, prof, w, kinds=("E", "M", "ID"), cuts=None, iters=24, e_given=None, eps=None):
     """Per-carrier thresholds and their maxima.  The order ID <= M <= E (Lemma 3.4) is used to bracket the bisections."""
     N = len(prof)
     out = {k: np.full(N, np.nan) for k in kinds}
     info = []
     for i in range(N):
         e = np.nan
-        if "E" in kinds or "M" in kinds or "ID" in kinds:
-            e, inf_ = e_threshold(g, i, prof, w, cuts=(cuts[i] if cuts else ()))
+        if e_given is not None:
+            e = float(e_given[i])
+        elif "E" in kinds or "M" in kinds or "ID" in kinds:
+            e, inf_ = e_threshold(g, i, prof, w, cuts=(cuts[i] if cuts else ()), eps=(0.0 if eps is None else float(eps[i])))
             info.append(inf_)
         if "E" in kinds:
             out["E"][i] = e
         mval = np.nan
         if "M" in kinds or "ID" in kinds:
-            mval = m_threshold(g, i, prof, w, hi=e, iters=iters)
+            mval = m_threshold(g, i, prof, w, hi=e, iters=iters, eps=(0.0 if eps is None else float(eps[i])))
             if "M" in kinds:
                 out["M"][i] = mval
         if "ID" in kinds:
-            out["ID"][i] = id_threshold(g, i, prof, w, hi=mval, iters=iters)
+            out["ID"][i] = id_threshold(g, i, prof, w, hi=mval, iters=iters, eps=(0.0 if eps is None else float(eps[i])))
     res = {f"{k}_max": float(np.max(v)) for k, v in out.items()}
     res.update({f"{k}_by_carrier": v for k, v in out.items()})
     res["info"] = info
@@ -358,7 +369,8 @@ def delta_hat(prof, abar, w):
 
 
 def check_relaxed(g, support, weights, tol=1e-7, fresh=False):
-    """Largest violation of the relaxed-equilibrium condition: support plans must minimise J_i(.; Abar_{-i}) over the full plan set."""
+    """Largest relative violation of the relaxed-equilibrium condition: support plans must minimise J_i(.; Abar_{-i}) over the
+    full plan set (violation = (J(p) - min J) / (1 + |min J|) over support plans with positive weight)."""
     abar = mean_contribution(support, weights)
     Abar = sum(abar)
     worst = 0.0
@@ -368,7 +380,7 @@ def check_relaxed(g, support, weights, tol=1e-7, fresh=False):
         vb = cost_at(g, b, m)
         for x, p in zip(weights[i], support[i]):
             if x > 1e-12:
-                worst = max(worst, cost_at(g, p, m) - vb)
+                worst = max(worst, (cost_at(g, p, m) - vb) / (1.0 + abs(vb)))
     return worst
 
 
@@ -448,7 +460,7 @@ def profiles_in_support(support, cap=64, rng=None):
     return out
 
 
-def br_run(g, init, order=None, max_rounds=60, tol=1e-9, rng=None):
+def br_run(g, init, order=None, max_rounds=60, tol=1e-9, rng=None, trail=None):
     """Gauss-Seidel best-response dynamics with cycle detection.
 
     Returns dict(profile, status in {'converged','cycle','budget'}, rounds, cycle_len, calls)."""
@@ -467,6 +479,8 @@ def br_run(g, init, order=None, max_rounds=60, tol=1e-9, rng=None):
                 A = Am + b.a
                 prof[i] = b
                 moved = True
+        if trail is not None:
+            trail.append(list(prof))
         if not moved:
             return dict(profile=prof, status="converged", rounds=rnd, cycle_len=0, calls=getattr(g, "calls", 0) - c0)
         k = profile_key(prof)

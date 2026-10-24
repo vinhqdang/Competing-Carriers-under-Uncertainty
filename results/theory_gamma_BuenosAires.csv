@@ -1,0 +1,5 @@
+city,seed,N,Z,delta,same_profile,regret_surcharge_game,gamma_regret_NE,gamma_adm_NE_frac,gamma_regret_Gprofile,E_thr_G,M_thr_G,ID_thr_G,served_NE,served_G,hours_NE,hours_G,welfare_NE,welfare_G,vehicles_NE,vehicles_G,time_s
+BuenosAires,0,4,208,0.1,False,0,4.48899,0,0,0.039673,0.039673,0.0203397,0.376616,0.304348,46.152,37.296,266.699,232.898,10,8,4.56424
+BuenosAires,0,4,208,0.25,False,0,13.5601,0,0,0.208862,0.208862,0.208862,0.376616,0.266745,46.152,32.688,266.699,217.259,10,7,4.51634
+BuenosAires,0,4,208,0.5,False,0,33.6786,0,0,0.393064,0.393065,0.322101,0.376616,0.220917,46.152,27.072,266.699,186.972,10,6,4.59047
+BuenosAires,0,4,208,1,False,0,91.533,0,0,0.949294,0.949294,0.949295,0.376616,0,46.152,0,266.699,0,10,0,3.10703

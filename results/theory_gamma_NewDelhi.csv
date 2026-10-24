@@ -1,0 +1,5 @@
+city,seed,N,Z,delta,same_profile,regret_surcharge_game,gamma_regret_NE,gamma_adm_NE_frac,gamma_regret_Gprofile,E_thr_G,M_thr_G,ID_thr_G,served_NE,served_G,hours_NE,hours_G,welfare_NE,welfare_G,vehicles_NE,vehicles_G,time_s
+NewDelhi,0,5,120,0.1,False,0,0.144278,0.8,0,0.0607619,0.0607619,0.0107706,0.248355,0.242599,45.3,44.25,74.6311,72.5964,9,9,0.954863
+NewDelhi,0,5,120,0.25,False,0,1.0423,0.4,0,0.194343,0.194343,0.0974325,0.248355,0.194079,45.3,35.4,74.6311,64.6694,9,7,2.63167
+NewDelhi,0,5,120,0.5,False,0,3.51783,0.2,0,0.456358,0.456358,0.384617,0.248355,0.113487,45.3,20.7,74.6311,43.6932,9,4,3.09906
+NewDelhi,0,5,120,1,False,0,11.1678,0,0,0.782982,0.782982,0.564116,0.248355,0.0608553,45.3,11.1,74.6311,25.9668,9,2,3.03056

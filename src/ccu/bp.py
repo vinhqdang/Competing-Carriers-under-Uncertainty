@@ -99,10 +99,11 @@ def _cmin_allowed(inst: brl.RoutingInstance, allow: np.ndarray):
 
 
 class _Node:
-    __slots__ = ("lb", "depth", "allow", "forced", "uid", "valid", "nvalid")
+    __slots__ = ("lb", "depth", "allow", "forced", "uid", "valid", "nvalid", "kmin", "kmax")
 
-    def __init__(self, lb, depth, allow, forced, uid):
+    def __init__(self, lb, depth, allow, forced, uid, kmin=0, kmax=None):
         self.lb, self.depth, self.allow, self.forced, self.uid = lb, depth, allow, forced, uid
+        self.kmin, self.kmax = kmin, kmax  # bounds on the number of routes (fleet size)
         self.valid = None
         self.nvalid = 0
 
@@ -110,7 +111,8 @@ class _Node:
 class BranchAndPrice:
     def __init__(self, inst: brl.RoutingInstance, kappa=None, *, partition: bool = False, ng_size: int = 8,
                  ng: np.ndarray | None = None, init_cols: dict | None = None, augment_ng: bool = True,
-                 max_cols: int = 60, mip_every: int = 8, mip_time: float = 10.0, verbose: bool = False, log=None):
+                 max_cols: int = 60, mip_every: int = 8, mip_time: float = 10.0, verbose: bool = False, log=None,
+                 fleet_branching: bool = True):
         self.inst = inst
         n = inst.n
         self.n = n
@@ -121,6 +123,7 @@ class BranchAndPrice:
         self.ng = (brl.ng_masks(inst, ng_size) if ng is None else np.asarray(ng, np.uint64).copy())
         self.augment_ng = augment_ng
         self.max_cols = max_cols
+        self.fleet_branching = fleet_branching
         self.mip_every = mip_every
         self.mip_time = mip_time
         self.verbose = verbose
@@ -219,30 +222,46 @@ class BranchAndPrice:
         c = self.cost[idx] + self.kap[1:] @ A
         eqrows = np.flatnonzero(eq)
         ubrows = np.flatnonzero(~eq)
-        if len(eqrows):
-            E = np.zeros((n, len(eqrows)))
-            E[eqrows, np.arange(len(eqrows))] = 1.0
-            Af = np.hstack([A, E])
-            cf = np.concatenate([c, np.full(len(eqrows), self.M)])
-        else:
-            Af, cf = A, c
-        res = linprog(cf, A_ub=Af[ubrows] if len(ubrows) else None, b_ub=np.ones(len(ubrows)) if len(ubrows) else None,
-                      A_eq=Af[eqrows] if len(eqrows) else None, b_eq=np.ones(len(eqrows)) if len(eqrows) else None,
-                      bounds=(0, None), method="highs")
+        m = len(idx)
+        # fleet rows (number of routes): -sum x - s <= -kmin ; sum x - s <= kmax, with big-M slacks s
+        frows = []
+        if node.kmin > 0:
+            frows.append((-1.0, -float(node.kmin)))
+        if node.kmax is not None:
+            frows.append((1.0, float(node.kmax)))
+        ne, nf = len(eqrows), len(frows)
+        Aub_parts = [np.hstack([A[ubrows], np.zeros((len(ubrows), ne + nf))])] if len(ubrows) else []
+        bub = [np.ones(len(ubrows))] if len(ubrows) else []
+        for q, (coef, rhs) in enumerate(frows):
+            row = np.concatenate([np.full(m, coef), np.zeros(ne + nf)])
+            row[m + ne + q] = -1.0
+            Aub_parts.append(row[None, :])
+            bub.append(np.array([rhs]))
+        Aeq = None
+        if ne:
+            Aeq = np.hstack([A[eqrows], np.zeros((ne, ne + nf))])
+            Aeq[np.arange(ne), m + np.arange(ne)] = 1.0
+        cf = np.concatenate([c, np.full(ne + nf, self.M)])
+        res = linprog(cf, A_ub=np.vstack(Aub_parts) if Aub_parts else None, b_ub=np.concatenate(bub) if bub else None,
+                      A_eq=Aeq, b_eq=np.ones(ne) if ne else None, bounds=(0, None), method="highs")
         if res.status != 0:
             raise RuntimeError(f"node LP failed: {res.message}")
         y = np.zeros(n)
+        shift = 0.0
         if len(ubrows):
-            y[ubrows] = res.ineqlin.marginals
-        if len(eqrows):
+            y[ubrows] = res.ineqlin.marginals[: len(ubrows)]
+        for q, (coef, rhs) in enumerate(frows):
+            shift -= coef * res.ineqlin.marginals[len(ubrows) + q]  # rc_r = ... - y_f * coef
+        if ne:
             y[eqrows] = res.eqlin.marginals
-        x = res.x[: len(idx)]
-        art = float(res.x[len(idx):].sum()) if len(eqrows) else 0.0
-        return float(res.fun), x, y, art, c
+        x = res.x[:m]
+        art = float(res.x[m:].sum())
+        return float(res.fun), x, y, shift, art, c
 
     # ------------------------------------------------------------------ node column generation
-    def _price(self, node: _Node, duals: np.ndarray, Cmin: np.ndarray):
-        best, new, st = brl.espprc(self.inst, duals, ng=self.ng, max_cols=self.max_cols, allow=node.allow, Cmin=Cmin)
+    def _price(self, node: _Node, duals: np.ndarray, Cmin: np.ndarray, shift: float = 0.0):
+        best, new, st = brl.espprc(self.inst, duals, ng=self.ng, max_cols=self.max_cols, allow=node.allow, Cmin=Cmin,
+                                   fixed_shift=shift)
         self.n_pricing += 1
         self.ptime += st["time"]
         self.max_labels = max(self.max_labels, st["kept"])
@@ -264,10 +283,11 @@ class BranchAndPrice:
             it += 1
             valid = self._node_valid(node)
             idx = np.flatnonzero(valid)
-            z, x, y, art, c = self._lp(node, idx)
+            z, x, y, shift, art, c = self._lp(node, idx)
             duals = np.concatenate([[0.0], y - self.kap[1:]])
-            best, new = self._price(node, duals, Cmin)
-            lag = z + self.n * min(best, 0.0)
+            best, new = self._price(node, duals, Cmin, shift)
+            nmax = self.n if node.kmax is None else min(self.n, node.kmax)
+            lag = z + nmax * min(best, 0.0)
             node.lb = max(node.lb, lag)  # valid also with artificial columns (they are not in any feasible plan)
             if node.lb >= self.UB - self._gap_tol() - 1e-12:
                 return "pruned", z, x, idx, y, art
@@ -347,7 +367,16 @@ class BranchAndPrice:
                 if i == 0:
                     forced.add(j)
             al[i, j] = was
-        return _Node(lb, node.depth + 1, al, frozenset(forced), uid)
+        return _Node(lb, node.depth + 1, al, frozenset(forced), uid, node.kmin, node.kmax)
+
+    def _root_node(self) -> _Node:
+        n = self.n
+        allow0 = np.ones((n + 1, n + 1), bool)
+        np.fill_diagonal(allow0, False)
+        kmin = 0
+        if self.partition:  # every customer is served: at least ceil(total demand / capacity) routes
+            kmin = int(math.ceil(float(self.inst.dem[1:].sum()) / float(self.inst.cap) - 1e-9))
+        return _Node(-math.inf, 0, allow0, frozenset(), 0, kmin, None)
 
     def _nonelementary(self, idx, x):
         for k in np.flatnonzero(x > 1e-7):
@@ -382,9 +411,7 @@ class BranchAndPrice:
         deadline = t0 + time_limit
         self.gap_tol = gap_tol
         n = self.n
-        allow0 = np.ones((n + 1, n + 1), bool)
-        np.fill_diagonal(allow0, False)
-        root = _Node(-math.inf, 0, allow0, frozenset(), 0)
+        root = self._root_node()
         heap = [(-math.inf, 0, 0, root)]
         uid = 1
         nodes = 0
@@ -453,6 +480,19 @@ class BranchAndPrice:
                 self._milp(self.mip_time)
                 if node.lb >= self.UB - gap_tol * max(1.0, abs(self.UB)):
                     continue
+            ssum = float(x.sum())
+            if art <= 1e-7 and abs(ssum - round(ssum)) > 1e-6 and self.fleet_branching:
+                lo_, hi_ = math.floor(ssum + 1e-9), math.ceil(ssum - 1e-9)
+                for kind in (0, 1):
+                    ch = _Node(node.lb, node.depth + 1, node.allow, node.forced, uid, node.kmin, node.kmax)
+                    ch.valid, ch.nvalid = (node.valid.copy() if node.valid is not None else None), node.nvalid
+                    if kind == 0:
+                        ch.kmax = lo_ if node.kmax is None else min(node.kmax, lo_)
+                    else:
+                        ch.kmin = max(node.kmin, hi_)
+                    heapq.heappush(heap, (node.lb, -(node.depth + 1), uid, ch))
+                    uid += 1
+                continue
             if frac.max() < 1e-6:
                 # integral arc flows but fractional x: cannot happen for elementary columns; fall back to the MILP
                 self.notes.append("integral flows, fractional x")

@@ -21,6 +21,7 @@ Model of one carrier (see docs/EXPERIMENTS.md, Section 2):
 the ng-route relaxation when pricing is not truncated) and then solves the integer packing over the generated
 elementary columns (price-and-branch without branching): an upper bound.  The result is therefore an *oracle with
 a certified gap*, not a proven integer optimum.  That is the main approximation of the integration.
+An exact integer step (branch-and-price on arc flows and fleet size, same pricer) is in `ccu.bp`.
 """
 from __future__ import annotations
 
@@ -340,11 +341,12 @@ def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng,
 
 def espprc(inst: RoutingInstance, duals: np.ndarray, *, ng: np.ndarray | None = None, max_cols: int = 40,
            maxlab: int = 200_000, tol_rc: float = 1e-9, allow: np.ndarray | None = None,
-           Cmin: np.ndarray | None = None):
+           Cmin: np.ndarray | None = None, fixed_shift: float = 0.0):
     """BRL pricing with node duals (reduced cost = route cost - sum_j duals[j]).
 
     `allow[i, j]` (bool, (n+1) x (n+1)) removes arcs (branching in ccu.bp); `Cmin` is then the shortest return time on the
-    allowed arcs (a smaller-or-equal value is always valid).
+    allowed arcs (a smaller-or-equal value is always valid).  `fixed_shift` is added to every route's reduced cost
+    (the dual of a fleet-size row).
     Returns (best reduced cost over all routes, [(rc, route)] sorted, stats).  `overflow=True` in stats means the
     label limit was hit and the result is not a certificate.
     """
@@ -360,7 +362,7 @@ def espprc(inst: RoutingInstance, duals: np.ndarray, *, ng: np.ndarray | None = 
     t0 = time.perf_counter()
     best, crc, rts, rl, created, kept, overflow = _espprc_nb(
         n, L, inst.arcS, inst.dem.astype(np.float64), float(inst.cap), inst.w, inst.wsuf, ls.gamma, ls.rho, ls.Tmax,
-        ls.fixed, np.asarray(Cmin, float), ng.astype(np.uint64), np.asarray(duals, float), maxlab, 4096, max_cols,
+        ls.fixed + fixed_shift, np.asarray(Cmin, float), ng.astype(np.uint64), np.asarray(duals, float), maxlab, 4096, max_cols,
         tol_rc, np.asarray(allow, np.bool_))
     out = []
     for c in np.argsort(crc):

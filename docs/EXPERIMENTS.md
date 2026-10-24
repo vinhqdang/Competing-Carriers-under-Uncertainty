@@ -570,3 +570,90 @@ Run time: about 2-3 hours on 4 cores for the first seed (Cairo dominates), about
 | NewYork | 3.35e-12 | 1 | 0 | 128 | 0.0435 | 0 | 1 | 1 | 0.00385 | 0.0625 | 0 |
 | Paris | 1.48e-12 | 1 | 0 | 136 | 0.0415 | 0.00441 | 1 | 1 | 0.00385 | 0.0625 | 0 |
 
+
+
+## Branch-and-price for BRL
+
+Date: 2026-10-24. Code: `src/ccu/bp.py` (plus an arc mask and a fleet-size shift in `brl.espprc`), tests `tests/test_bp.py`, driver `experiments/run_bp.py`, results `results/bp_*.csv|json`, `results/summary_bp*.csv`, figure `figures/bp_gap.png`, progress and resume notes `results/PROGRESS_bp.md`.
+
+**Why.** The BRL pricer is exact, but the integer step of Section 2 and of `theory/new_algorithm_B` is price-and-branch: column generation at the root, then an integer program over the generated columns. That plan can be worse than a heuristic optimised on the observed days (London, Paris and Berlin, 0.1-1.3%). `ccu.bp` makes the integer step exact.
+
+**Method.**
+* Master: set partitioning (metro study: every customer once) or prize-collecting set packing (game oracle), with a global column pool shared by all nodes; a column is usable at a node if all its arcs are allowed there.
+* Node LP: column generation with the exact BRL labelling pricer, with the arc restrictions of the node and a return-time bound recomputed on the allowed arcs. Dominance is unchanged and stays valid, because the restrictions are local to the current node.
+* Branching on the aggregated arc flow `f_ij` (including depot arcs). `f_ij = 0` deletes the arc. `f_ij = 1` deletes the other arcs leaving i and entering j and turns the row of i (or j if i is the depot) into an equality. The pricing problem does not change. Integral arc flows imply an integral plan, so no other branching is needed.
+* Fleet size: with every customer served the number of routes is at least `ceil(total demand / capacity)`. This row is added at the root (partition mode), and a fractional number of routes is branched on (`sum x <= floor` / `>= ceil`) before any arc. The dual of this row is a constant added to every route's reduced cost (`fixed_shift`).
+* ng-routes: a non-elementary column in an LP solution triggers an enlargement of the ng-sets along the cycle and the removal of the columns that became infeasible. Earlier bounds stay valid, since the relaxation only gets tighter.
+* Bounds: node LP value, and during column generation the Lagrangian bound `z + n_max * min(0, min reduced cost)` for early pruning and for a bound that is valid at every moment. A bound is flagged invalid if a pricing call hit the label limit. Infeasible nodes are handled by big-M artificial columns, which only relax, so the bound stays valid.
+* Upper bounds: integral nodes, and a restricted master MILP over the generated elementary columns at the root and every 8 nodes, with reduced-cost fixing from the root duals. No heuristic plan is used as warm start.
+* Node selection: best bound. Stops at relative gap 1e-6 (`gap_tol`), a time limit or a node limit. The result carries the status `optimal`, `time_limit`, `node_limit` or `label_overflow`, the incumbent, the global bound and the remaining gap.
+* Bound semantics: ng-routes are a relaxation of elementary routes, so the bound is valid for the elementary problem. The reported value is always the cost of a feasible elementary plan.
+
+**Verification** (`python experiments/run_bp.py verify`, `results/bp_verify.csv`, `results/summary_bp_verify.csv`, plus `tests/test_bp.py`). 400 random Euclidean instances (n = 7-10, capacity 2-5, deadline fraction 0.3-1.2, ng-size 3-5, K = 4 sectors, DKW p-boxes from 40 samples), each solved as partition and as packing with random prizes and costs, against complete enumeration of all routes and an integer program over all customer subsets. Branch-and-price equals the enumerated optimum and its bound is below it in 800 of 800 cases (also in an earlier scratch run of 740 cases before the fleet-size rows were added). Price-and-branch (integer program over the root columns) is strictly suboptimal in 39 of the 800 (18 packing, 21 partition), by up to 7.3%. Mean 10.7 nodes, maximum 479.
+
+**Nine metro instances** (`run_bp.py metro`, same `real_instances.build` calibration and seed 0, 22 customer zones, 60 observed days, L = 51, ng-size 8, partition, 1800 s limit, one core each, two jobs in parallel). Values are the p-box (robust) loss in driver-hours.
+
+| City | root LP | root LP after ng enlargement | P&B (root columns, partition) | P&B (published pipeline) | B&P value | B&P bound | gap | nodes | time (s) | root CG (s) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Berlin | 51.8535 | 51.8613 | 52.7448 | 52.6658 | 52.0639 | 52.0639 | 0 | 3 | 6 | 4.4 |
+| Mumbai | 53.8151 | 53.8151 | 53.9076 | 54.0807 | 53.9076 | 53.9076 | 0 | 177 | 4 | 0.2 |
+| Buenos Aires | 47.2921 | 47.2921 | 50.4628 | 48.3708 | 48.1287 | 48.1287 | 0 | 1659 | 166 | 2.8 |
+| Cairo | 40.3903 | 40.3903 | 40.4195 | 40.4195 | 40.4195 | 40.4195 | 0 | 215 | 5 | 0.3 |
+| London | 51.0386 | 51.0386 | 52.2712 | 52.0349 | 51.3767 | 51.3767 | 0 | 59 | 21 | 3.0 |
+| Moscow* | 42.0093 | 42.0093 | 44.1063 | 43.6458 | 43.1669 | 43.1669 | 0 | 7487 | 1063 | 2.2 |
+| New Delhi | 63.0258 | 63.0258 | 64.3730 | 63.1835 | 63.1835 | 63.1835 | 0 | 65 | 2 | 0.2 |
+| New York | 46.0988 | 46.0988 | 46.0988 | 46.0988 | 46.0988 | 46.0988 | 0 | 1 | 8 | 8.2 |
+| Paris | 37.7317 | 37.8402 | 38.2524 | 38.3170 | 38.2454 | 38.2454 | 0 | 4305 | 715 | 5.6 |
+
+(*) Moscow congestion imputed. "P&B (published pipeline)" is the covering integer program with repair of `results.md` (`theory/new_algorithm_B/results_E.json`); "P&B (root columns, partition)" is the integer program over the columns that the root column generation of this implementation produced, with equality rows. The two are different heuristics, so neither dominates. All nine instances were solved to proven optimality (gap 0 up to 1e-6 relative). The total is 1989 s of one core. Moscow, Paris and Buenos Aires carry 98% of it.
+
+Against the heuristics (all plans evaluated with the p-box worst case; "true" = the calibrated law, 20,000 draws):
+
+| City | heur p-box | heur SAA | heur Wass. | B&P | B&P vs SAA (p-box) | SAA plan, true law | B&P plan, true law | B&P vs SAA (true) |
+|---|---|---|---|---|---|---|---|---|
+| Berlin | 52.7746 | 52.5479 | 52.9401 | 52.0639 | -0.92% | 38.746 | 41.369 | +6.77% |
+| Mumbai | 54.0807 | 54.0807 | 54.0807 | 53.9076 | -0.32% | 48.039 | 47.890 | -0.31% |
+| Buenos Aires | 49.3008 | 49.4526 | 49.4715 | 48.1287 | -2.68% | 34.770 | 37.216 | +7.03% |
+| Cairo | 40.4195 | 40.4195 | 40.4335 | 40.4195 | 0 | 36.583 | 36.583 | 0 |
+| London | 52.0349 | 51.3767 | 52.4455 | 51.3767 | 0 | 35.525 | 35.525 | 0 |
+| Moscow* | 43.6458 | 43.7389 | 43.7389 | 43.1669 | -1.31% | 33.250 | 33.059 | -0.57% |
+| New Delhi | 63.1835 | 63.1835 | 63.1836 | 63.1835 | 0 | 47.602 | 47.602 | 0 |
+| New York | 51.2296 | 51.7054 | 51.2296 | 46.0988 | -10.84% | 34.443 | 36.089 | +4.78% |
+| Paris | 38.3170 | 38.2855 | 38.7425 | 38.2454 | -0.10% | 31.661 | 31.653 | -0.03% |
+
+Reading:
+* The gap to the heuristics is closed and reversed. The SAA plan in London is in fact optimal for the robust objective (the exact method finds a plan with the same value, 51.3767, so the earlier 1.3% deficit came from price-and-branch, not from the model). In Berlin and Paris the exact plan is strictly better than the SAA plan (-0.92%, -0.10%). In Mumbai, Moscow and Buenos Aires it improves on the best heuristic by 0.32%, 1.10% and 2.38%. In New York it is the same proven optimum as before. In Cairo and New Delhi the best heuristic was already optimal.
+* Under the calibrated true law the robust optimum is not better: it is 6.8% (Berlin), 7.0% (Buenos Aires) and 4.8% (New York) worse than the SAA plan and equal or slightly better elsewhere. This is the model conservatism of `results.md` (the p-box criterion is not the expected cost), not an algorithmic effect. A plan that is optimal for the robust criterion should not be read as the best plan under the true law.
+* The published LP bounds are reproduced (e.g. London 51.039, Paris 37.732); the fleet-size row does not move them when the root solution already uses at least `ceil(demand/capacity)` routes, and it lifts Cairo from 38.811 to 40.390.
+* Elementary cross-check (`--ng 22 --tag _ng22`, `results/bp_metro_<city>_ng22.json`): New Delhi, Cairo and Mumbai give the same optimum with elementary routes. For Berlin and London the elementary labelling hit the 200,000-label limit, so the run is not a certificate (status `label_overflow`), but the values (52.0639 and 51.3767) agree with the ng-8 optimum.
+
+**What did not work first, honestly.** The first version had arc branching only. It solved London (91 s), Buenos Aires (930 s), Paris (1509 s), Berlin (57 s) and New York (10 s), but Cairo hit the 1800 s limit with value 40.6548 (worse than the heuristic 40.4195), bound 39.0129 and 4% gap after 1448 nodes. The reason is the fleet size: Cairo has demand 247 and capacity 40, so at least 7 routes are needed, while the LP uses 6.28 vehicles; each fractional vehicle saves a fixed cost and the arc branching had to repair this one arc at a time. Adding the fleet row and branching on the number of routes solved Cairo in 5 s (215 nodes) and reduced London from 91 s to 21 s, Buenos Aires from 930 s to 166 s, Paris from 1509 s to 715 s. The first-version JSON files are kept in `results/bp_v1/` (Bombay was stopped after 18 minutes, Moscow and New Delhi were not run with it). The table above is from the final version only.
+
+Limits that remain: (i) the 22-zone instances are small, since capacity admits only 3-6 customers per route; larger instances would likely need cuts (subset-row, rounded capacity) and are untested; (ii) Moscow and Paris need 4,300-7,500 nodes (12-18 min); the BRL pricing takes about 64% of the time and the rest is the master LPs and python bookkeeping over up to 17,000 columns; (iii) the bound is for ng-routes with enlargement, so an optimality claim for the elementary problem relies on the enlargement (cycles are removed whenever they appear in a node solution, and the final plans are elementary and feasible); (iv) a pricing call that hits the label limit invalidates the bound (`bound_valid`); this did not happen with ng-size 8 (at most 11,159 labels kept, Berlin) but did with ng-size 22.
+
+**Integrated game with the exact integer step** (`run_bp.py game London Paris Berlin --tl 20`, base instances seed 0, 22 customer zones, same `solve_ne(..., certify="fresh")` as E1; `RoutingGame.bp_time` switches the oracle to branch-and-price; per-call limit 20 s; pricing calls use the 5e-3 relative gap of the old pipeline, best responses 1e-8; `results/bp_game_<city>.csv`, `results/summary_bp_game.csv`). The old equilibrium was recomputed with price-and-branch (it reproduces `results/E1_<city>.csv`) and then tested with the exact oracle.
+
+| City | welfare, exact (price-and-branch) | served share | oracle calls (B&P calls, optimal) | time, exact (P&B) | regret of the P&B equilibrium under the exact oracle | regret of the new equilibrium |
+|---|---|---|---|---|---|---|
+| London | 631.778 (631.778) | 0.1989 (0.1989) | 49 (55, 55) | 3 s (1 s) | 0 | 0 |
+| Paris | 5718.17 (5706.43) | 0.8869 (0.8801) | 50 (56, 54; 56 with a 120 s limit) | 84 s (9 s) | 0.78, 1.61, 2.04 USD (carriers 3, 4, 5) | 0 |
+| Berlin | 8401.35 (8446.19) | 0.8767 (0.8841) | 59 (69, 69) | 42 s (13 s) | 3.54 USD (carrier 2) | 0 |
+
+* London: unchanged (welfare differs by 1e-4). The previous equilibrium is also exact.
+* Paris and Berlin: the price-and-branch equilibrium is not an exact equilibrium. In Paris three carriers and in Berlin one carrier can gain 0.8-3.5 USD by a plan that the pooled MILP did not generate. The exact oracle leads to a different equilibrium: welfare +0.21% in Paris (5718.17 against 5706.43), -0.53% in Berlin (8401.35 against 8446.19). The sign differs, so this is a change of equilibrium (the game has several), not a systematic welfare gain. The ZMC potential improves in both cities (Paris -3902.1 against -3897.7, Berlin -5611.3 against -5601.6), and the certified gap of the dual bound shrinks (`eta_cert` 156 against 166, and 172 against 206); the largest oracle gap `lp_gap_max` drops from 16 and 21 USD to 2.1 and 0 USD.
+* Time limits: in Paris 2 of 56 calls reached the 20 s limit (largest remaining gap 2.14 USD). With a 120 s limit all 56 calls are optimal, with the same equilibrium and welfare (`results/bp_game_Paris_tl120.csv`). The runtime is 3 times (London, Berlin) to 9 times (Paris) that of price-and-branch.
+* Caveat: the new profile has regret 0 against the fresh exact oracle, which uses the same method. The result is therefore exact up to the 1e-8 gap and the time limits stated, and conditional on the correctness of the pricer (checked against enumeration in `tests/test_brl.py` and in the verification above). Only the three cities and seed 0 of the base case were rerun; the other six cities, the sensitivity scenarios, the leader and imprecision experiments (E2-E4) were not rerun with the exact oracle, and their numbers in this document still come from price-and-branch.
+
+Bugs and issues found: (1) price-and-branch is suboptimal on 39 of 800 random formulations; (2) the published equilibria of Paris and Berlin carry exact-oracle regrets of up to 3.5 USD; (3) the first branch-and-price version stalled on Cairo, fixed by the fleet-size row; (4) with the covering formulation of `real_instances.column_generation` the repair step is not guaranteed to preserve optimality, so the published "P&B" column is only an upper bound; the partition formulation used here is what the heuristics optimise. No error was found in the BRL pricer itself.
+
+Reproduce (about 33 minutes of one core for the metro runs, 5 min for the game, 3 min for verification; all resumable; the commands skip finished results):
+```
+export OMP_NUM_THREADS=1
+python experiments/run_bp.py verify                                   # 800 formulations vs enumeration
+python experiments/run_bp.py metro London Paris Berlin NewYork Bombay --tl 1800 &
+python experiments/run_bp.py metro BuenosAires Cairo Moscow NewDelhi --tl 1800 &
+python experiments/run_bp.py game London Paris Berlin --tl 20          # integrated oracle (add: Paris --tl 120 --tag _tl120)
+python experiments/run_bp.py metro NewDelhi Cairo Bombay Berlin London --ng 22 --tag _ng22 --tl 900   # elementary cross-check
+python experiments/run_bp.py summary                                   # results/summary_bp*.csv, figures/bp_gap.png
+python -m pytest -q                                                    # 97 tests, 13 s
+```

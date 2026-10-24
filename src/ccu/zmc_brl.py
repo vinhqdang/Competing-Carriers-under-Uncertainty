@@ -18,7 +18,9 @@ set-packing problem with additive node costs, which is exactly what `ccu.brl.Rou
 Approximations (all listed again in docs/EXPERIMENTS.md):
   A1  all-or-nothing lots (no partial service of a customer zone);
   A2  the carrier oracle is column generation with exact BRL pricing + integer packing over the generated columns
-      (price-and-branch, no branching).  The LP value is a lower bound, so every oracle answer carries a gap;
+      (price-and-branch, no branching).  The LP value is a lower bound, so every oracle answer carries a gap.  Setting
+      `game.bp_time = seconds` replaces the integer step by the exact branch-and-price of `ccu.bp` (time limit per
+      call; the lower bound is then the global branch-and-price bound);
   A3  vehicle-hours that create congestion are the in-zone hours of the lots (service plus local circulation), not
       the inter-zone driving, which is priced through the p-box route loss only;
   A4  the congestion externality enters linearly (cost gamma*tau*(xi + c_z X_z)); xi is inside the p-box.

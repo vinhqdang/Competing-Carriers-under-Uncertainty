@@ -1,0 +1,5 @@
+city,seed,N,Z,d,d_eff,w_mode,anchor,n_mixers,prod_size,idx,sigma_max,bound_N,rho_bar,sigma_bar,d_L,k_sharp,T1,T2,T3,bound,delta_hat,min_delta_hat,max_delta_hat,delta_E,delta_M,delta_ID,eps_orc_max
+NewYork,0,4,234,468,64,agg,pure,0,1,0,1.08696,3.26087,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4.54747e-13
+NewYork,0,4,234,468,64,agg,zmc_start,-1,1,0,1.08696,3.26087,,,,,,,,,,,,0.0251461,0.0251461,0.000240181,
+NewYork,0,4,234,468,64,type_median,pure,0,1,0,1.05263,3.15789,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4.54747e-13
+NewYork,0,4,234,468,64,type_median,zmc_start,-1,1,0,1.05263,3.15789,,,,,,,,,,,,0.0105878,0.0105878,0.000258195,

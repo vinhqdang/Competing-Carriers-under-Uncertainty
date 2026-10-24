@@ -1,0 +1,5 @@
+city,seed,N,Z,d,d_eff,w_mode,anchor,n_mixers,prod_size,idx,sigma_max,bound_N,rho_bar,sigma_bar,d_L,k_sharp,T1,T2,T3,bound,delta_hat,min_delta_hat,max_delta_hat,delta_E,delta_M,delta_ID,eps_orc_max
+Moscow,0,5,160,320,71,agg,pure,0,1,0,1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Moscow,0,5,160,320,71,agg,zmc_start,-1,1,0,1,4,,,,,,,,,,,,0,0,0,
+Moscow,0,5,160,320,71,type_median,pure,0,1,0,1.45833,5.83333,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Moscow,0,5,160,320,71,type_median,zmc_start,-1,1,0,1.45833,5.83333,,,,,,,,,,,,0,0,0,

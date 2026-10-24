@@ -121,8 +121,8 @@ def verify(lo: int, hi: int, force: bool = False) -> None:
 # ---------------------------------------------------------------------------------------------------------------
 
 
-def metro(city: str, tl: float, node_limit: int, ng_size: int, force: bool = False) -> None:
-    out = RES / f"bp_metro_{city}.json"
+def metro(city: str, tl: float, node_limit: int, ng_size: int, force: bool = False, tag: str = "") -> None:
+    out = RES / f"bp_metro_{city}{tag}.json"
     if out.exists() and not force:
         print(city, "already done", flush=True)
         return
@@ -173,7 +173,7 @@ def metro(city: str, tl: float, node_limit: int, ng_size: int, force: bool = Fal
     msg = (f"{city}: root {res.root_lp:.4f} P&B {res.pb_value:.4f} B&P {res.value:.4f} lb {res.lb:.4f} {res.status} "
            f"nodes {res.nodes} {res.time:.0f}s | heur pbox {e['heur_pbox']['pbox']:.4f} saa {e['heur_saa']['pbox']:.4f}")
     print(msg, flush=True)
-    progress("metro " + msg)
+    progress(("metro" + tag + " ") + msg)
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -181,13 +181,13 @@ def metro(city: str, tl: float, node_limit: int, ng_size: int, force: bool = Fal
 # ---------------------------------------------------------------------------------------------------------------
 
 
-def game(city: str, tl: float, seed: int = 0, rounds: int = 8, ncust: int = 22, force: bool = False) -> None:
+def game(city: str, tl: float, seed: int = 0, rounds: int = 8, ncust: int = 22, force: bool = False, tag: str = "") -> None:
     from ccu import zmc_brl as zb
 
     sys.path.insert(0, str(ROOT / "experiments"))
     from common import scalars, solve_ne  # noqa: E402
 
-    out = RES / f"bp_game_{city}.csv"
+    out = RES / f"bp_game_{city}{tag}.csv"
     if out.exists() and not force:
         print(city, "game already done", flush=True)
         return
@@ -204,6 +204,19 @@ def game(city: str, tl: float, seed: int = 0, rounds: int = 8, ncust: int = 22, 
               "profit_total", "phi", "calls", "converged", "time_s", "max_regret", "eta_cert", "lp_gap_max"):
         row[f"pb_{k}"] = old[k]
     row["profile_routes"] = json.dumps([sorted(p.routes) for p in o["profile"]])
+    # same game with the price-and-branch oracle (deterministic, reproduces results/E1_<city>.csv): is its equilibrium still
+    # an equilibrium for the exact integer oracle, and is it the same profile?
+    g0 = zb.build_city_game(city, n_cust=ncust, seed=seed)
+    o0 = solve_ne(g0, rounds=rounds, certify="fresh")
+    row["pb_replay_welfare"] = o0["row"]["welfare"]
+    row["same_profile_as_pb"] = bool(sorted(sorted(p.routes) for p in o["profile"]) == sorted(sorted(p.routes) for p in o0["profile"]))
+    g0.bp_time = tl
+    t1 = time.perf_counter()
+    reg = g0.regrets(o0["profile"], count=False, fresh=True)
+    row["pb_profile_exact_regret_max"] = float(reg.max())
+    row["pb_profile_exact_regret_each"] = json.dumps([float(v) for v in reg])
+    row["pb_profile_exact_regret_s"] = time.perf_counter() - t1
+    row["pb_profile_exact_regret_optimal"] = f"{g0.bp_optimal}/{g0.bp_calls}"
     atomic_csv(out, [row])
     msg = (f"game {city}: welfare {row['welfare']:.4f} (P&B {old['welfare']:.4f}) served {row['served_share']:.4f} "
            f"({old['served_share']:.4f}) regret {row.get('max_regret', float('nan')):.2e} calls {row['calls']} "
@@ -282,11 +295,11 @@ def _figure(df: pd.DataFrame) -> None:
     pb = 100 * (df.price_and_branch - df.branch_and_price) / df.branch_and_price
     gap = 100 * df.gap_abs / df.branch_and_price.abs()
     ax[0].bar(x - w, root, w, color="#6b7a8f", label="root LP bound to B&P value")
-    ax[0].bar(x, pb, w, color="#c1666b", label="price-and-branch above B&P value")
+    ax[0].bar(x, pb, w, color="#c1666b", label="price-and-branch (root columns) above B&P value")
     ax[0].bar(x + w, gap, w, color="#2f7d6d", label="remaining B&P gap")
     ax[0].set_xticks(x, lab, rotation=40, ha="right")
     ax[0].set_ylabel("percent of B&P value")
-    ax[0].set_title("Gaps")
+    ax[0].set_title(f"Gaps (largest remaining B&P gap: {100 * (df.gap_abs / df.branch_and_price.abs()).max():.4f}%)", fontsize=10)
     ax[0].legend(frameon=False, fontsize=8)
     ax[1].bar(x - w / 2, df.root_time_s, w, color="#6b7a8f", label="root column generation")
     ax[1].bar(x + w / 2, df.time_s, w, color="#2f7d6d", label="full branch-and-price")
@@ -316,11 +329,13 @@ def main() -> None:
     a.add_argument("--tl", type=float, default=1800.0)
     a.add_argument("--nodes", type=int, default=10**7)
     a.add_argument("--ng", type=int, default=8)
+    a.add_argument("--tag", default="", help="suffix of the output file (cross-checks with other settings)")
     a.add_argument("--force", action="store_true")
     a = sub.add_parser("game")
     a.add_argument("cities", nargs="+")
     a.add_argument("--tl", type=float, default=20.0)
     a.add_argument("--seed", type=int, default=0)
+    a.add_argument("--tag", default="")
     a.add_argument("--force", action="store_true")
     sub.add_parser("summary")
     ns = ap.parse_args()
@@ -328,10 +343,10 @@ def main() -> None:
         verify(*ns.seeds, force=ns.force)
     elif ns.cmd == "metro":
         for c in ns.cities:
-            metro(c, ns.tl, ns.nodes, ns.ng, ns.force)
+            metro(c, ns.tl, ns.nodes, ns.ng, ns.force, ns.tag)
     elif ns.cmd == "game":
         for c in ns.cities:
-            game(c, ns.tl, ns.seed, force=ns.force)
+            game(c, ns.tl, ns.seed, force=ns.force, tag=ns.tag)
     else:
         summary()
 

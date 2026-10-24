@@ -1,0 +1,5 @@
+city,seed,N,Z,delta,same_profile,regret_surcharge_game,gamma_regret_NE,gamma_adm_NE_frac,gamma_regret_Gprofile,E_thr_G,M_thr_G,ID_thr_G,served_NE,served_G,hours_NE,hours_G,welfare_NE,welfare_G,vehicles_NE,vehicles_G,time_s
+Bombay,0,5,143,0.1,False,0,0.204822,0.8,0,0,0,0,0.430272,0.408163,75.9,72,144.342,140.915,14,13,3.9676
+Bombay,0,5,143,0.25,False,1.42109e-14,3.23748,0.4,0,0.185307,0.185307,0.0352974,0.430272,0.34949,75.9,61.65,144.342,131.892,14,11,9.97149
+Bombay,0,5,143,0.5,False,0,8.80397,0,0,0.481844,0.481844,0.181769,0.430272,0.282313,75.9,49.8,144.342,114.922,14,9,7.80733
+Bombay,0,5,143,1,False,0,29.4748,0,0,0.980501,0.980501,0.701762,0.430272,0.0994898,75.9,17.55,144.342,43.1968,14,3,5.8105
