@@ -6,7 +6,7 @@ Resume after a restart (all commands skip finished work; 3 processes):
 nohup python experiments/run_exact_queue.py > results/logs/run_exact_queue.out 2>&1 &
 ```
 
-Updated 2026-10-24 17:04:38. x = finished, . = missing (E1 / E2 / E3 / E4 per seed; sens = E1 sensitivity).
+Updated 2026-10-24 17:12:41. x = finished, . = missing (E1 / E2 / E3 / E4 per seed; sens = E1 sensitivity).
 
 | city | s0 | s1 | s2 | E1 sens |
 |---|---|---|---|---|
@@ -17,10 +17,10 @@ Updated 2026-10-24 17:04:38. x = finished, . = missing (E1 / E2 / E3 / E4 per se
 | NewYork | x/x/x/x | x/x/x/x | x/././. | . |
 | Bombay | x/x/x/x | x/x/x/x | x/x/x/x | . |
 | London | x/x/x/x | x/x/x/x | x/x/x/x | . |
-| Paris | x/x/x/x | x/x/x/x | x/x/x/. | . |
+| Paris | x/x/x/x | x/x/x/x | x/x/x/x | . |
 | Berlin | x/x/x/x | x/x/x/x | x/././. | . |
 
-97 of 108 city/seed/experiment results complete (E2/E3/E4 files are only counted when they were produced after the old ones were moved to results/pb_old).
+98 of 108 city/seed/experiment results complete (E2/E3/E4 files are only counted when they were produced after the old ones were moved to results/pb_old).
 
 ## Log
 - 2026-10-24 10:34 started: old results copied to results/pb_old (E1-E4, summaries, tables.md; figures to figures/pb_old); E2/E3/E4 files removed from results/ so that the scripts recompute them; E1 written per city/seed to results/exact_parts and assembled by `run_exact.py assemble`.
