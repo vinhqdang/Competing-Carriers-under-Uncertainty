@@ -1,7 +1,7 @@
 /-
   Statement skeletons for the machine-checking targets listed in `lean_targets.md`.
-  Every `sorry` marks a proof obligation; the statements themselves type-check
-  against the Mathlib revision pinned in `../lean/lake-manifest.json`.
+  All statements below are fully proved (no `sorry`); they check against the
+  Mathlib revision pinned in `../lean/lake-manifest.json`.
   Compile from the `lean/` directory with:  lake env lean ../theory/LeanTargets.lean
 -/
 import Mathlib
@@ -86,7 +86,133 @@ theorem shapleyFolkman {ι E : Type*} [Fintype ι] [DecidableEq E] [AddCommGroup
     (S : ι → Finset E) (x : E) (hx : x ∈ ∑ i, convexHull ℝ (S i : Set E)) :
     ∃ y : ι → E, (∀ i, y i ∈ convexHull ℝ (S i : Set E)) ∧ ∑ i, y i = x ∧
       (univ.filter (fun i => y i ∉ S i)).card ≤ Module.finrank ℝ E := by
-  sorry
+  classical
+  rcases isEmpty_or_nonempty ι with hι | hι
+  · refine ⟨fun i => isEmptyElim i, fun i => isEmptyElim i, ?_, ?_⟩
+    · simp only [univ_eq_empty, sum_empty]
+      have : x ∈ (0 : Set E) := by simpa using hx
+      exact (Set.mem_zero.1 this).symm
+    · simp
+  obtain ⟨y₀, hy₀, hsum⟩ := (Set.mem_fintype_sum _ _).1 hx
+  set n : ℝ := (Fintype.card ι : ℝ) with hn_def
+  have hn : 0 < n := by
+    rw [hn_def]; exact_mod_cast Fintype.card_pos
+  set T : Set (E × (ι → ℝ)) := ⋃ i, (S i : Set E) ×ˢ {(Pi.single i (1:ℝ) : ι → ℝ)} with hT
+  have hmem : ((1 / n) • x, fun _ => 1 / n) ∈ convexHull ℝ T := by
+    have h1 : ((1 / n) • x, fun _ => 1 / n)
+        = ∑ i, (1 / n) • (y₀ i, (Pi.single i (1:ℝ) : ι → ℝ)) := by
+      refine Prod.ext ?_ ?_
+      · simp only [Prod.fst_sum, Prod.smul_fst, ← Finset.smul_sum, hsum]
+      · funext j
+        simp [Prod.snd_sum, Finset.sum_apply, Pi.single_apply]
+    rw [h1]
+    refine (convex_convexHull ℝ T).sum_mem (fun i _ => by positivity) ?_ ?_
+    · rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← hn_def]
+      field_simp
+    · intro i _
+      have h2 : convexHull ℝ ((S i : Set E) ×ˢ {(Pi.single i (1:ℝ) : ι → ℝ)})
+          = convexHull ℝ (S i : Set E) ×ˢ {(Pi.single i (1:ℝ) : ι → ℝ)} := by
+        rw [convexHull_prod, convexHull_singleton]
+      have h3 : (y₀ i, (Pi.single i (1:ℝ) : ι → ℝ)) ∈
+          convexHull ℝ ((S i : Set E) ×ˢ {(Pi.single i (1:ℝ) : ι → ℝ)}) := by
+        rw [h2]; exact ⟨hy₀ i, rfl⟩
+      exact convexHull_mono (Set.subset_iUnion (fun i => (S i : Set E) ×ˢ
+        {(Pi.single i (1:ℝ) : ι → ℝ)}) i) h3
+  obtain ⟨κ, hκ, z, w, hz, haff, hw, hw1, hwz⟩ := eq_pos_convex_span_of_mem_convexHull hmem
+  have hex : ∀ k, ∃ (i : ι) (s : E), s ∈ S i ∧ z k = (s, (Pi.single i (1:ℝ) : ι → ℝ)) := by
+    intro k
+    have := hz (Set.mem_range_self k)
+    simp only [hT, Set.mem_iUnion, Set.mem_prod, Set.mem_singleton_iff] at this
+    obtain ⟨i, hs, h2⟩ := this
+    exact ⟨i, (z k).1, hs, Prod.ext rfl h2⟩
+  choose idx pt hpt heq using hex
+  set fib : ι → Finset κ := fun i => univ.filter (fun k => idx k = i) with hfib
+  have hfst : ∑ k, w k • pt k = (1 / n) • x := by
+    have := congrArg Prod.fst hwz
+    simpa [Prod.fst_sum, heq] using this
+  have hcoord : ∀ i, ∑ k ∈ fib i, w k = 1 / n := by
+    intro i
+    have := congrFun (congrArg Prod.snd hwz) i
+    simp only [Prod.snd_sum, Finset.sum_apply, Prod.smul_snd, Pi.smul_apply, heq,
+      Pi.single_apply, smul_eq_mul] at this
+    rw [hfib, Finset.sum_filter, ← this]
+    refine Finset.sum_congr rfl (fun k _ => ?_)
+    by_cases h : idx k = i
+    · simp [h]
+    · simp [h, Ne.symm h]
+  have hne : ∀ i, (fib i).Nonempty := by
+    intro i
+    by_contra hcon
+    rw [Finset.not_nonempty_iff_eq_empty] at hcon
+    have := hcoord i
+    rw [hcon, Finset.sum_empty] at this
+    have : (0:ℝ) < 1 / n := by positivity
+    linarith
+  have hmemfib : ∀ i, ∀ k ∈ fib i, pt k ∈ S i := by
+    intro i k hk
+    have : idx k = i := (Finset.mem_filter.1 hk).2
+    rw [← this]; exact hpt k
+  let y : ι → E := fun i => n • ∑ k ∈ fib i, w k • pt k
+  have hy : ∀ i, y i = ∑ k ∈ fib i, (n * w k) • pt k := by
+    intro i
+    simp only [y, Finset.smul_sum, smul_smul]
+  refine ⟨y, ?_, ?_, ?_⟩
+  · intro i
+    rw [hy i]
+    refine (convex_convexHull ℝ (S i : Set E)).sum_mem (fun k _ => (mul_pos hn (hw k)).le) ?_
+      (fun k hk => subset_convexHull ℝ _ (hmemfib i k hk))
+    rw [← Finset.mul_sum, hcoord i]; field_simp
+  · have : ∑ i, y i = n • ∑ k, w k • pt k := by
+      simp only [y]
+      rw [← Finset.smul_sum]
+      congr 1
+      exact Finset.sum_fiberwise univ idx (fun k => w k • pt k)
+    rw [this, hfst, smul_smul]
+    field_simp
+    simp
+  · -- counting
+    have hlin : LinearIndependent ℝ z := by
+      rw [Fintype.linearIndependent_iff]
+      intro g hg
+      have hs : ∑ k, g k = 0 := by
+        have := congrArg (fun p : E × (ι → ℝ) => ∑ j, p.2 j) hg
+        simp only [Prod.snd_sum, Prod.smul_snd, Finset.sum_apply, Pi.smul_apply, heq,
+          smul_eq_mul, Prod.snd_zero, Pi.zero_apply, Finset.sum_const_zero] at this
+        rw [Finset.sum_comm] at this
+        simpa [Pi.single_apply] using this
+      have := (affineIndependent_iff_of_fintype (k := ℝ) (p := z)).1 haff g hs
+        (by rw [Finset.weightedVSub_eq_linear_combination _ hs]; exact hg)
+      exact this
+    have hcard : Fintype.card κ ≤ Module.finrank ℝ E + Fintype.card ι := by
+      have := hlin.fintype_card_le_finrank
+      rwa [Module.finrank_prod, Module.finrank_fintype_fun_eq_card] at this
+    set B : Finset ι := univ.filter (fun i => 2 ≤ (fib i).card) with hB
+    have hsub : univ.filter (fun i => y i ∉ S i) ⊆ B := by
+      intro i hi
+      rw [Finset.mem_filter] at hi ⊢
+      refine ⟨hi.1, ?_⟩
+      by_contra hlt
+      push Not at hlt
+      have h1 : (fib i).card = 1 := le_antisymm (by omega) (Finset.card_pos.2 (hne i))
+      obtain ⟨k, hk⟩ := Finset.card_eq_one.1 h1
+      apply hi.2
+      have hw' : w k = 1 / n := by have := hcoord i; rwa [hk, Finset.sum_singleton] at this
+      have : y i = pt k := by
+        rw [hy i, hk, Finset.sum_singleton, hw', mul_one_div_cancel hn.ne', one_smul]
+      rw [this]
+      exact hmemfib i k (by rw [hk]; exact Finset.mem_singleton_self k)
+    have hsumcard : Fintype.card κ = ∑ i, (fib i).card := by
+      rw [← Finset.card_univ]
+      exact Finset.card_eq_sum_card_fiberwise (fun _ _ => Finset.mem_univ _)
+    have hB' : B.card = ∑ i, if 2 ≤ (fib i).card then 1 else 0 := Finset.card_filter _ _
+    have : ∑ i : ι, (1 + (if 2 ≤ (fib i).card then 1 else 0)) ≤ ∑ i, (fib i).card := by
+      refine Finset.sum_le_sum (fun i _ => ?_)
+      have := Finset.card_pos.2 (hne i)
+      split_ifs <;> omega
+    rw [Finset.sum_add_distrib, ← hB', Finset.sum_const, Finset.card_univ, ← hsumcard] at this
+    simp only [smul_eq_mul, mul_one] at this
+    calc (univ.filter (fun i => y i ∉ S i)).card ≤ B.card := Finset.card_le_card hsub
+      _ ≤ _ := by omega
 
 /-! ## T4. Exact potential identity under D1 (φ = a) -/
 
@@ -99,7 +225,49 @@ theorem potential_identity (G : AggGame N d) (hD1 : ∀ i p, G.φ i p = G.a i p)
     (σ : ∀ i, G.P i) (i : Fin N) (q : G.P i) :
     potential G (Function.update σ i q) - potential G σ
       = G.u i q (G.rival σ i) - G.u i (σ i) (G.rival σ i) := by
-  sorry
+  classical
+  -- sum over all players of a function of the (updated) plan
+  have hsum : ∀ F : ∀ j, G.P j → ℝ,
+      ∑ j, F j (Function.update σ i q j) = ∑ j ∈ univ.erase i, F j (σ j) + F i q := by
+    intro F
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ i), Function.update_self]
+    congr 1
+    refine Finset.sum_congr rfl (fun j hj => ?_)
+    rw [Function.update_of_ne (Finset.ne_of_mem_erase hj)]
+  have hsum' : ∀ F : ∀ j, G.P j → ℝ,
+      ∑ j, F j (σ j) = ∑ j ∈ univ.erase i, F j (σ j) + F i (σ i) := fun F =>
+    (Finset.sum_erase_add _ _ (Finset.mem_univ i)).symm
+  set R : Fin d → ℝ := G.rival σ i with hR
+  have hRz : ∀ z, R z = ∑ j ∈ univ.erase i, G.a j (σ j) z := fun z => by
+    simp [hR, AggGame.rival, Finset.sum_apply]
+  have hA : ∀ (p : G.P i) z, ∑ j, G.a j (Function.update σ i p j) z = R z + G.a i p z := by
+    intro p z
+    have := Finset.sum_erase_add (univ : Finset (Fin N))
+      (fun j => G.a j (Function.update σ i p j) z) (Finset.mem_univ i)
+    rw [← this, Function.update_self, hRz]
+    congr 1
+    refine Finset.sum_congr rfl (fun j hj => ?_)
+    rw [Function.update_of_ne (Finset.ne_of_mem_erase hj)]
+  have hA0 : ∀ z, ∑ j, G.a j (σ j) z = R z + G.a i (σ i) z := by
+    intro z
+    have := hA (σ i) z
+    simpa using this
+  have e : ∀ p : G.P i, ∑ z, G.M z * (R z + G.a i p z) ^ 2
+      = ∑ z, G.M z * R z ^ 2 + 2 * ∑ z, G.M z * R z * G.a i p z
+        + ∑ z, G.M z * G.a i p z ^ 2 := by
+    intro p
+    rw [Finset.mul_sum, ← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+    exact Finset.sum_congr rfl (fun z _ => by ring)
+  have hu : ∀ p : G.P i, G.u i p R = G.π i p - ∑ z, G.M z * R z * G.a i p z := by
+    intro p
+    simp only [AggGame.u, hD1]
+    congr 1
+    exact Finset.sum_congr rfl (fun z _ => by ring)
+  unfold potential
+  rw [hsum (fun j p => G.π j p + (1 / 2) * ∑ z, G.M z * G.a j p z ^ 2)]
+  rw [hsum' (fun j p => G.π j p + (1 / 2) * ∑ z, G.M z * G.a j p z ^ 2)]
+  simp only [hA, hA0, e, hu]
+  ring
 
 /-! ## T5. Kernel reduction (Theorem 7.3, combinatorial core) -/
 

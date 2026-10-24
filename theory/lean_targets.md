@@ -6,7 +6,7 @@ The statement skeletons are in `theory/LeanTargets.lean`. They type-check agains
 cd lean && PATH=$HOME/.elan/bin:$PATH lake env lean ../theory/LeanTargets.lean
 ```
 
-The file compiles with two `sorry`s: T3 (Shapley–Folkman) and T4 (the potential identity). The other targets below marked **DONE** are proved in the file.
+The file compiles with no `sorry`. T1 to T7 are proved in the file (T3 and T4 included). `#print axioms` shows only `propext`, `Classical.choice` and `Quot.sound` for each theorem.
 
 Common setup, from `LeanTargets.lean`:
 
@@ -52,7 +52,7 @@ theorem absorption (σ) (anchor : Fin N → (Fin d → ℝ))
 - Proof: a term-mode witness.
 - Next step (easy): connect it to mixed equilibria. If `x i : P i → ℝ` are distributions and every `p` in `supp (x i)` maximises `G.u i · (Σ_{j≠i} Σ_p x j p • G.a j p)`, then any selection `σ i ∈ supp (x i)` satisfies `hbr`. The proof is `Finset.sum_nonneg` plus nonnegativity of `a` for `hnn`.
 
-## T3. Shapley–Folkman lemma, finite form (Theorem 4.1). Status: statement compiles; proof open. Realistic.
+## T3. Shapley–Folkman lemma, finite form (Theorem 4.1). Status: DONE
 
 ```lean
 theorem shapleyFolkman {ι E : Type*} [Fintype ι] [DecidableEq E] [AddCommGroup E]
@@ -62,7 +62,9 @@ theorem shapleyFolkman {ι E : Type*} [Fintype ι] [DecidableEq E] [AddCommGroup
       (univ.filter (fun i => y i ∉ S i)).card ≤ Module.finrank ℝ E
 ```
 
-Proof strategy, by minimal support:
+Proof as formalised: lift to `E × (ι → ℝ)` with the points `(s, e_i)`, `s ∈ S i`. The point `(x/n, 1/n)` lies in their convex hull. Mathlib's Carathéodory (`eq_pos_convex_span_of_mem_convexHull`) gives affinely independent support points with positive weights. These lie in the hyperplane where the indicator coordinates sum to 1, so they are linearly independent and number at most `finrank E + n`. Every index `i` owns at least one support point, so at most `finrank E` indices own two or more. The remaining indices have `y i ∈ S i`. The earlier plan by minimal support is kept below for reference.
+
+Original plan, by minimal support:
 
 1. Use `convexHull_sum` (`Mathlib/Analysis/Convex/Combination.lean`) to turn `hx` into `x = ∑ i, y₀ i` with `y₀ i ∈ convexHull`. Then write each `y₀ i` with weights by `Finset.mem_convexHull` / `Finset.centerMass_mem_convexHull`, or by Carathéodory `eq_pos_convex_span_of_mem_convexHull`.
 2. Among all weight families `λ : ∀ i, E → ℝ` (supported in `S i`, nonnegative, summing to 1, with `∑ i, ∑ s, λ i s • s = x`), choose one minimising the total support size. Use `Nat.find` or `WellFounded.min` on the measure `∑ i, (supp λ i).card`.
@@ -71,7 +73,7 @@ Proof strategy, by minimal support:
 
 Difficulty: medium–hard, about 300–600 lines. Step 4 is the bulk: it mirrors `Mathlib.Analysis.Convex.Caratheodory` but over a product of simplices. Using `d_L` (the dimension of the span of differences) instead of `finrank` is a strengthening. Formalise it afterwards by working in the submodule `Submodule.span ℝ (⋃ i, S i - S i)`.
 
-## T4. Exact potential identity under D1 (Proposition 7.5). Status: statement compiles; proof open. Realistic.
+## T4. Exact potential identity under D1 (Proposition 7.5). Status: DONE
 
 ```lean
 noncomputable def potential (G : AggGame N d) (σ) : ℝ :=
@@ -156,8 +158,7 @@ Algebra for the FOC characterisation and the sign of `∂_c(ℰ/β)`. The deriva
 
 ## Suggested order
 
-1. T1, T2, T5, T6, T7: done.
-2. T4 and T8 (about a week).
+1. T1, T2, T3, T4, T5, T6, T7: done.
+2. T8 (about a week).
 3. T9 and T10 (about a week).
-4. T3, Shapley–Folkman (one to two weeks; the most valuable target to upstream).
-5. T12, then T11.
+4. T12, then T11.
