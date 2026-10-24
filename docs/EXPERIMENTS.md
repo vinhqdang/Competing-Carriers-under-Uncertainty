@@ -657,3 +657,44 @@ python experiments/run_bp.py metro NewDelhi Cairo Bombay Berlin London --ng 22 -
 python experiments/run_bp.py summary                                   # results/summary_bp*.csv, figures/bp_gap.png
 python -m pytest -q                                                    # 97 tests, 13 s
 ```
+
+
+## Theory-to-experiment checks
+
+Code: `src/ccu/credal.py` (E / maximal / interval-dominance thresholds, Gamma-maximin regret, anchored radius and the bounds of main.tex Thm 6.1, relaxed-equilibrium search), `src/ccu/d2game.py` (vehicle-count congestion game, tiny enumeration), `experiments/run_theory_checks.py`, `experiments/run_theory.sh`, `tests/test_credal.py`. Outputs: `results/theory_absorption_*.csv` (profile level, per city; `theory_absorption_summary.csv` per city/seed/anchor; `theory_absorption_equilibria.csv`), `results/theory_gamma_*.csv`, `results/theory_D2_*.csv`, `results/summary_theory.csv`, `figures/theory_absorption.png`, `figures/theory_D2.png`. Reproduce: `experiments/run_theory.sh` (absorption + Gamma, 9 cities x seeds 0-2, 2 jobs, resumable, about 1.5 h), `python experiments/run_theory_checks.py d2tiny` (2 min), `KIND=d2city CITIES="Cairo Paris Bombay" experiments/run_theory.sh`, `python experiments/run_theory_checks.py report`.
+
+**Conventions.** Thresholds are exact up to the BRL oracle (price-and-branch): E by Kelley cuts on the LP (EthrLP), maximal and ID by bisection with one shifted-price oracle call. Because the oracle is exact only to a small gap, every threshold is relaxed by the observed inexactness (`eps`, largest improvement a known plan or the oracle offers at a certified equilibrium, up to 1.9 USD on plans worth 10^2-10^3); `eps = 0` gave infinite thresholds in a few cases. Belief weights: `agg` (E4 convention, w_k = realised aggregate), robustness `type_median`. The city game is D1 and the ZMC+BRL profile is an exact pure equilibrium, so its own threshold is 0 and its anchored bound is 0 (point-mass anchor): the absorption theorem is tight but empty there. Informative tests need non-trivial relaxed equilibria x*; they were built from pairs of distinct pure equilibria (best-response dynamics from perturbed starts, 4-9 per game) by solving the two-plan indifference system and verifying the result with the oracle (support plans optimal over all plans, B_j := supp). All profiles in the product of supports (at most 16 sampled with exact thresholds) are tested.
+
+**Absorption (Thm 6.1), w = agg.** 14 of 27 games have a non-trivial relaxed equilibrium (43 anchors before de-duplication, 24 distinct; Cairo and Moscow none: everything is served, no conflicts). Per city (means over the seeds that have an anchor):
+
+| city | N | Z | seeds with a mixed anchor | rho-bar | d_L | anchored bound | N-uniform bound | min delta-hat | max_p delta_E | max delta_E / bound | max delta_E / delta-hat |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Cairo | 4 | 42 | 0/3 | - | - | - | - | - | - | - | - |
+| Bombay | 5 | 143 | 2/3 | 0.74 | 3.3 | 1.23 | 10.6 | 0.36 | 0.53 | 0.43 | 0.60 |
+| Paris | 5 | 198 | 3/3 | 0.88 | 2.0 | 1.39 | 8.4 | 0.40 | 0.69 | 0.49 | 0.70 |
+| NewDelhi | 5 | 120 | 3/3 | 1.02 | 2.7 | 1.61 | 10.7 | 0.56 | 0.64 | 0.41 | 0.60 |
+| Moscow | 5 | 160 | 0/3 | - | - | - | - | - | - | - | - |
+| BuenosAires | 4 | 208 | 1/3 | 0.96 | 2.0 | 1.76 | 8.8 | 0.24 | 0.83 | 0.47 | 0.48 |
+| NewYork | 4 | 234 | 1/3 | 0.82 | 1.0 | 1.58 | 3.7 | 0.42 | 0.82 | 0.52 | 0.58 |
+| London | 5 | 348 | 3/3 | 0.85 | 2.0 | 1.56 | 13.6 | 0.42 | 0.82 | 0.53 | 0.76 |
+| Berlin | 6 | 593 | 1/3 | 0.94 | 2.0 | 0.94 | 8.0 | 0.28 | 0.41 | 0.44 | 0.74 |
+
+Findings. (i) No violation anywhere: delta_E(p) <= delta-hat(p) for all 255 tested profiles, min_p delta-hat <= three-term bound, delta_0 <= N-uniform bound, order ID <= M <= E (both w modes). (ii) The bound is loose by about a factor 2 against the worst profile and 3-15 against the profile of the construction: max delta_E / anchored bound 0.28-0.60 (median 0.45), delta_E(p*) / bound median 0.015 (p* = argmin delta-hat), delta_E / delta-hat up to 0.76. The N-uniform bound is 5-30 times looser (ratio 0.03-0.22). (iii) The first term (N-1) rho-bar is the minimum in every anchor (k = min(N, d_L) = 1-4 so k sigma-bar + rho-bar is 2-9); the Shapley-Folkman and Hoeffding terms are irrelevant at N <= 6, as the theory says. (iv) Dependence: ratio vs N not significant (Spearman -0.18), mild increase with d (Spearman 0.46, p = 0.02, 24 points: exploratory); the N-uniform bound does not grow with d here because min{N-1, ...} = N-1. rho-bar is 0.5-1.1 because mixing carriers switch whole zone lots. (v) Maximal and E thresholds coincide in 99% of profiles; ID threshold is about 8% of E (median). (vi) The ZMC rounding before the best-response polish is E-admissible at a finite width in only 10 of 27 games (infinite: some carrier's plan is strictly dominated), so the polish step is what makes absorption apply.
+
+**Gamma-maximin (Lemma 3.6).** The surcharge-game equilibrium (ZMC+BRL on charges delta M_k w_k, certified) differs from the precise equilibrium in all 108 (city, seed, delta) cases. The precise equilibrium is not Gamma-admissible (Gamma-regret column below), whereas the Gamma equilibrium is maximal at width delta (M threshold / delta = 0.76-0.99, never above 1: 106 of 108 finite, 2 Cairo cases infinite from oracle slack 0.02-0.17 USD) and its E threshold equals it (E_thr = M_thr). Gamma therefore drops service sharply (share of demand served, NE minus Gamma):
+
+| city | served drop at delta=0.1 | 0.25 | 0.5 | 1.0 | Gamma-regret of the precise NE at delta=0.5 (USD) | M-threshold of Gamma-eq / delta at 1.0 |
+|---|---|---|---|---|---|---|
+| Cairo | 0.000 | 0.000 | 0.014 | 0.475 | 0.9 | 0.99 |
+| Bombay | 0.049 | 0.102 | 0.159 | 0.335 | 14.2 | 0.92 |
+| Paris | 0.036 | 0.139 | 0.428 | 0.739 | 374.8 | 0.96 |
+| NewDelhi | 0.008 | 0.050 | 0.115 | 0.177 | 3.5 | 0.89 |
+| Moscow | 0.002 | 0.012 | 0.237 | 0.732 | 43.2 | 0.97 |
+| BuenosAires | 0.082 | 0.086 | 0.134 | 0.310 | 31.7 | 0.93 |
+| NewYork | 0.009 | 0.025 | 0.127 | 0.710 | 134.8 | 0.98 |
+| London | 0.033 | 0.061 | 0.098 | 0.172 | 62.5 | 0.76 |
+| Berlin | 0.050 | 0.138 | 0.501 | 0.765 | 601.0 | 0.97 |
+
+**D2 (vehicle-count congestion).** Gadgets (`theory_D2_prop71.csv`, `theory_D2_kernels.csv`, same threshold code through `ExplicitGame`): Prop 7.1 gives delta_0^E = delta_0^M = 1/w for w = 0.5, 1, 2 (2, 1, 0.5), no pure NE, ID threshold 0.6/w; Thm 7.3 kernel construction on 223 digraphs (n = 3 all, n = 4, 5 sampled): the sets ICNE_E, M, ID, Gamma at delta = 0 and 0.999/(2 Delta+ + 1) equal the kernel set in 223/223, delta_0 = 0 iff a kernel exists, otherwise delta_0 >= 1/(2 Delta+ + 1) (observed 0.27-0.63 vs 0.11-0.33). Random bilinear D2 games (N = 3): 6/400 have no pure NE (D1 control: 0/150), delta_0 in 0.03-0.46, always below the N-uniform bound (ratio <= 0.09); on 18 verified relaxed equilibria no violation, delta_E/delta-hat reaches 1.0 (tight). Routing-integrated D2 tiny games (N = 3-4, scales 1, 30, 1000, 540 games x 3 scales, including shared-zone lots): a pure NE always exists (0 of 1,620 without), so delta_0 = 0; the Prop 7.1 pattern (few long vs many short vehicles with opposite exposures) cannot be generated by routing plans, because exposure is proportional to the service indicator and subsets add. Cities (Cairo, Mumbai, Paris, seeds 0-2, externality scale 1, 10, 100, 1000, 10^4, 4 best-response starts each, 40-pass budget): all 180 runs converge to a pure NE (0 cycles), 1-4 distinct equilibria. At scale 1 the D1 equilibrium is already a D2 equilibrium in 6/9 runs (regret otherwise 1.6 USD in Paris); from scale 10 it is not (regret 12-21 USD at 10), the carriers change plans, and best-response dynamics still converge. The measured E width of the D1 profile under D2 is 0 where it is an equilibrium and infinite otherwise (its deviation is rival-independent, i.e. dominance), while the ID width is 0.0004-0.7. Null result: D2 does not bite on city instances; non-existence needs adversarial plan menus, which the Thm 7.3 and Prop 7.1 gadgets provide.
+
+Caveats: relaxed equilibria are found only for two-plan mixing (not all equilibria); the thresholds are exact only up to the oracle gap (eps above); the D2 calibration M_X = scale gc hbar is a new assumption; D2 city runs do not test Thm 6.1 because no cycle occurred.

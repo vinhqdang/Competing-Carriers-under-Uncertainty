@@ -13,3 +13,7 @@ after a container restart (finished stages are skipped).
 
 ## Status (updated by hand)
 - 2026-10-24 01:20  absorption/Gamma runs for all 27 (city, seed) launched (run_theory.sh). D2 + report code pending.
+- 2026-10-24 03:30 absorption + Gamma complete for all 27 (city, seed) (cache has rows_agg, rows_type_median, gamma_rows); d2tiny complete
+  (theory_D2_{prop71,kernels,random_explicit,tiny}.csv). D2 city runs restarted after container restart (per-(city,seed) files
+  theory_D2_<City>_s<seed>.csv; finished scales are skipped). Remaining: report, docs section, final pytest.
+- 2026-10-24 03:40 ALL DONE: D2 city runs complete (9 files), report written (summary_theory.csv, figures), docs/EXPERIMENTS.md section added, 97 tests pass.
