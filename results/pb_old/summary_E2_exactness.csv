@@ -1,0 +1,10 @@
+city,max_regret_grid,all_converged,max_regret_fresh_best_point
+Berlin,4.54747e-13,True,4.54747e-13
+Bombay,1.42109e-14,True,0
+BuenosAires,2.84217e-14,True,2.84217e-14
+Cairo,0,True,0
+London,5.68434e-14,True,2.27374e-13
+Moscow,0,True,0
+NewDelhi,2.84217e-14,True,2.84217e-14
+NewYork,0,True,0
+Paris,2.27374e-13,True,0

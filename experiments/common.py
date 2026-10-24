@@ -30,6 +30,7 @@ def solve_ne(g, rounds: int = 8, lam0=None, certify: str = "none") -> dict:
     """ZMC equilibrium + metrics.  certify: 'none' | 'oracle' (pooled oracle) | 'fresh' (independent fresh-pool oracle)."""
     t0 = time.perf_counter()
     c_start = g.calls
+    st0 = dict(g._st)
     r = zmc.run_zmc(g, rounds=rounds, lam0=lam0)
     prof = r["profile"]
     ev = g.evaluate(prof)
@@ -58,6 +59,15 @@ def solve_ne(g, rounds: int = 8, lam0=None, certify: str = "none") -> dict:
         row["max_regret"] = float(reg.max())
         row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
     row["lp_gap_max"] = g.lp_gap_max
+    if g.bp_time:  # exact-oracle bookkeeping of this solve (every solved call, including retries and the certification)
+        st = g._st
+        n = st["calls"] - st0["calls"]
+        row.update(oracle="exact", bp_calls=n, bp_optimal=st["optimal"] - st0["optimal"], bp_retried=st["retried"] - st0["retried"],
+                   bp_unproven=st["timeouts"] - st0["timeouts"], bp_invalid_bound=st["invalid"] - st0["invalid"],
+                   bp_max_gap=st["max_gap"], bp_nodes=st["nodes"] - st0["nodes"], bp_time=st["wall"] - st0["wall"])
+        row["bp_frac_optimal"] = row["bp_optimal"] / n if n else 1.0
+    else:
+        row["oracle"] = "pb"
     return dict(row=row, result=r, profile=prof, eval=ev)
 
 

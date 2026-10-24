@@ -1,0 +1,10 @@
+city,C1_delivery_alone_ge_half_by_seed,C1_flips,C2_congestion_only_max_pct,C2_holds_lt_1p7,C3_PoA_zmc_by_seed,C3_PoA_worstNE_by_seed,C3_large_ge_1p10_seeds,C3_worstNE_ge_1p10_seeds
+NewDelhi,yes / yes / yes,0,0,True,1.15 / 1.23 / 1.16,1.15 / 1.24 / 1.20,3,3
+Cairo,n/a / n/a / n/a,0,0.145637,True,1.00 / 1.00 / 1.00,1.00 / 1.00 / 1.00,0,0
+Moscow,n/a / n/a / n/a,0,0.0124299,True,1.00 / 1.00 / 1.00,1.00 / 1.00 / 1.00,0,0
+BuenosAires,yes / yes / yes,0,1.66517,True,1.35 / 1.42 / 1.31,1.35 / 1.54 / 1.31,3,3
+NewYork,n/a / n/a / n/a,0,0.105269,True,1.00 / 1.00 / 1.00,1.00 / 1.00 / 1.00,0,0
+Bombay,NO / yes / yes,1,0,True,1.02 / 1.04 / 1.04,1.11 / 1.08 / 1.04,0,1
+London,yes / yes / yes,0,1.33718,True,1.57 / 1.45 / 1.94,1.61 / 1.67 / 1.98,3,3
+Paris,yes / yes / yes,0,0.83292,True,1.03 / 1.03 / 1.05,1.03 / 1.03 / 1.05,0,0
+Berlin,yes / yes / yes,0,0.099749,True,1.01 / 1.02 / 1.03,1.02 / 1.02 / 1.03,0,0

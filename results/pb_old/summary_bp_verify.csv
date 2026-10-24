@@ -1,0 +1,4 @@
+kind,instances,bp_exact,pb_suboptimal,max_pb_gap_pct,mean_nodes,max_nodes
+packing,400,400,18,5.71395,11.2,479
+partition,400,400,21,7.32511,10.125,451
+all,800,800,39,7.32511,10.6625,479

@@ -110,18 +110,40 @@ def main():
         g.set_charges(toll=toll)
         oc = solve_ne(g, rounds=6, lam0=lam0_base, certify="fresh")
         cert = dict(city=a.city, seed=a.seed, theta=bb["theta"], sfrac=bb["sfrac"], regret_fresh=oc["row"]["max_regret"],
-                    regret_lp=oc["row"]["max_regret_lp"], social_cost=oc["row"]["social_cost"])
+                    regret_lp=oc["row"]["max_regret_lp"], social_cost=oc["row"]["social_cost"],
+                    **{k: v for k, v in oc["row"].items() if k.startswith("bp_") or k == "oracle"})
         write_csv(p_cert, [cert])
     g.set_charges()
 
     # ---------------------------------------------------------------- E3
     e3 = []
 
+    last = dict(g._st)
+
+    def stamp(r, prefix="bp_"):
+        """exact-oracle calls (solved, optimal, unproven after the retry) since the previous stamp"""
+        if g.bp_time:
+            st = g._st
+            n = st["calls"] - last["calls"]
+            r[prefix + "calls"], r[prefix + "optimal"] = n, st["optimal"] - last["optimal"]
+            r[prefix + "unproven"] = st["timeouts"] - last["timeouts"]
+            r[prefix + "retried"] = st["retried"] - last["retried"]
+            r[prefix + "max_gap"] = st["max_gap"]  # running maximum over this city/seed run
+            r["oracle"] = "exact"
+            last.update(st)
+
+    def fresh_regret(r, prof):
+        """independent exact verification of a profile: fresh elementary pool, no shared columns"""
+        if g.bp_time:
+            r["max_regret_fresh"] = float(g.regrets(prof, count=False, fresh=True).max())
+            stamp(r, "bpfresh_")
+
     def add(kind, prof, extra=None, game=None):
         ev = g.evaluate(prof)
         r = dict(city=a.city, seed=a.seed, kind=kind, **scalars(ev))
         r.update(extra or {})
         e3.append(r)
+        stamp(r)
         return r
 
     for broad in (False, True):
@@ -132,7 +154,8 @@ def main():
             dict(phi_pure=so.potential(cg["profile"]), phi_relaxed=relaxed, calls=cg["calls"], converged=cg["converged"],
                  cg_iters=len(cg["hist"]), cg_last_gap=cg["hist"][-1][1]))
     # equilibria of the unpriced game: ZMC, BR from the empty profile, from full service, from random prices
-    add("NE_zmc", base["profile"], dict(phi_pure=base["row"]["phi"], calls=base["row"]["calls"], max_regret=base["row"]["max_regret"]))
+    r_ne = add("NE_zmc", base["profile"], dict(phi_pure=base["row"]["phi"], calls=base["row"]["calls"], max_regret=base["row"]["max_regret"]))
+    fresh_regret(r_ne, base["profile"])
     rng = np.random.default_rng(a.seed + 7)
     Amax = sum(g.full_a(i) for i in range(g.N))
     starts = {"NE_br_empty": None,
@@ -156,8 +179,9 @@ def main():
         toll[Z:] = b["theta"] * ext
         g.set_charges(toll=toll)
         o = point(b["theta"], b["sfrac"])
-        add("NE_priced_main" if obj == "social_cost" else "NE_priced_broad", o["profile"],
-            dict(theta=b["theta"], sfrac=b["sfrac"], phi_pure=o["row"]["phi"], max_regret=o["row"]["max_regret"]))
+        r_pr = add("NE_priced_main" if obj == "social_cost" else "NE_priced_broad", o["profile"],
+                   dict(theta=b["theta"], sfrac=b["sfrac"], phi_pure=o["row"]["phi"], max_regret=o["row"]["max_regret"]))
+        fresh_regret(r_pr, o["profile"])
     g.set_charges()
     write_csv(p_e3, e3)  # E3 is written once, atomically (it takes minutes, not hours)
     print(a.city, a.seed, "done", round(time.perf_counter() - t0), flush=True)

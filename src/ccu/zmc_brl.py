@@ -32,6 +32,8 @@ import csv
 import itertools
 import math
 import re
+import time
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -161,13 +163,22 @@ class RoutingGame:
         self.lp_gap_max = 0.0
         self.invalid_bounds = 0
         self.bp_time = None  # per-call time limit (s) of the exact branch-and-price integer step; None = price-and-branch
-        self.bp_calls = self.bp_optimal = self.bp_timeouts = self.bp_nodes = 0
-        self.bp_max_gap = 0.0
-        self.bp_time_used = 0.0
+        self.bp_retry = None  # longer limit (s) for a retry of a call that hit bp_time (None = no retry)
+        # counters shared with the social-cost variants (shallow copies share this dict)
+        self._st = dict(calls=0, optimal=0, timeouts=0, retried=0, retry_optimal=0, invalid=0, nodes=0, max_gap=0.0,
+                        sum_gap=0.0, time_used=0.0, wall=0.0)
         self.ng_size = None
         self.so_broad = False
         self._cache = {}
         self._full = [self._make_full(i) for i in range(self.N)]
+
+    # exact-oracle counters (read-only views of the shared dict `_st`)
+    bp_calls = property(lambda self: self._st["calls"])
+    bp_optimal = property(lambda self: self._st["optimal"])  # calls proven optimal (after the retry, if any)
+    bp_timeouts = property(lambda self: self._st["timeouts"])  # calls still unproven after the retry
+    bp_nodes = property(lambda self: self._st["nodes"])
+    bp_max_gap = property(lambda self: self._st["max_gap"])
+    bp_time_used = property(lambda self: self._st["time_used"])
 
     # -------------------------------------------------------------- basic
     @property
@@ -281,14 +292,28 @@ class RoutingGame:
             pool = cr.pool
         if self.bp_time and integer:
             # exact integer step (ccu.bp): branch-and-price on the pool columns; res.lp is the global lower bound
-            res = bp.solve_pool_bp(pool, kap, time_limit=self.bp_time, gap_tol=(gap if rho == 1.0 else 1e-8),
-                                   mip_time=min(5.0, self.bp_time))
-            self.bp_calls += 1
-            self.bp_optimal += int(res.status == "optimal")
-            self.bp_timeouts += int(res.status != "optimal")
-            self.bp_nodes += res.nodes
-            self.bp_max_gap = max(self.bp_max_gap, res.value - res.lp)
-            self.bp_time_used += res.pricing_time
+            tol = gap if rho == 1.0 else 1e-8
+            st = self._st
+            t_call = time.perf_counter()
+            res = bp.solve_pool_bp(pool, kap, time_limit=self.bp_time, gap_tol=tol, mip_time=min(5.0, self.bp_time))
+            st["calls"] += 1
+            st["nodes"] += res.nodes
+            st["time_used"] += res.pricing_time
+            if res.status != "optimal" and self.bp_retry and self.bp_retry > self.bp_time and res.status in ("time_limit", "node_limit"):
+                st["retried"] += 1
+                res = bp.solve_pool_bp(pool, kap, time_limit=self.bp_retry, gap_tol=tol, mip_time=min(5.0, self.bp_retry))
+                st["nodes"] += res.nodes
+                st["retry_optimal"] += int(res.status == "optimal")
+            st["wall"] += time.perf_counter() - t_call
+            if res.status == "optimal":
+                st["optimal"] += 1
+            else:
+                st["timeouts"] += 1
+                if res.bound_valid:
+                    st["max_gap"] = max(st["max_gap"], res.value - res.lp)
+                    st["sum_gap"] += max(res.value - res.lp, 0.0)
+                else:
+                    st["invalid"] += 1
         else:
             res = pool.solve(kap, integer=integer, mip_gap=gap, mip_time=(4.0 if rho == 1.0 else 20.0))
         if fresh:  # inject the independent columns so that the pooled oracle can reproduce an improvement
@@ -516,6 +541,9 @@ def build_city_game(city: str, *, overrides: dict | None = None, n_cust: int = 1
                 share=share.tolist(), peak=peak, ndays=ndays, K=K, ng_size=ng_size)
     g = RoutingGame(Z, carriers, alpha, b, gc, gamma_h, bg=bg, name=city, meta=meta)
     g.ng_size = ng_size
+    if os.environ.get("CCU_BP_TIME"):  # exact integer step for every oracle call (experiments/run_exact.py)
+        g.bp_time = float(os.environ["CCU_BP_TIME"])
+        g.bp_retry = float(os.environ.get("CCU_BP_RETRY", "0")) or None
     return g
 
 
