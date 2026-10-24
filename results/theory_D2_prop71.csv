@@ -1,0 +1,4 @@
+w,n_pne,delta0_E,delta0_M,delta0_ID,predicted,rho_bar,bound_T1,min_delta_hat,relaxed_violation,ok
+0.5,0,2,2,1.2,2,2,2,2,0,True
+1,0,1,1,0.6,1,1,1,1,0,True
+2,0,0.5,0.5,0.3,0.5,0.5,0.5,0.5,0,True

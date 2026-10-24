@@ -530,15 +530,15 @@ def d2tiny():
 # Part 2b: D2 on real cities
 # ---------------------------------------------------------------------------------------------------------------
 
-D2_SCALES = (1.0, 10.0, 100.0)
+D2_SCALES = (1.0, 10.0, 100.0, 1000.0, 10000.0)
 
 
 def d2city(city, seeds, budget=900.0):
-    path = RES / f"theory_D2_{city}.csv"
     from common import read_rows
-    rows = read_rows(path)
-    done = {(int(r["seed"]), float(r["scale"])) for r in rows if r.get("kind") == "summary"}
     for seed in seeds:
+        path = RES / f"theory_D2_{city}_s{seed}.csv"  # one file per (city, seed): parallel jobs never share a file
+        rows = read_rows(path)
+        done = {(int(r["seed"]), float(r["scale"])) for r in rows if r.get("kind") == "summary"}
         todo = [sc for sc in D2_SCALES if (seed, sc) not in done]
         if not todo:
             continue
@@ -632,7 +632,8 @@ def anchor_summary(df):
             n_E_infinite=int((~np.isfinite(x.delta_E)).sum())))
     res = pd.DataFrame(out)
     key = ["city", "seed", "w_mode", "rho_bar", "bound_anchor", "min_delta_hat", "E_max"]
-    return res.drop_duplicates(subset=key).reset_index(drop=True)  # anchors with identical support products are listed once
+    keep = res[key].round({"rho_bar": 5, "bound_anchor": 5, "min_delta_hat": 5, "E_max": 4}).drop_duplicates().index
+    return res.loc[keep].reset_index(drop=True)  # anchors with identical support products are listed once
 
 
 def report():
@@ -687,18 +688,23 @@ def report():
                 r[f"{wm}_ratio_E_over_hat_max"] = m.ratio_E_over_hat_max.max()
         z = df[(df.city == city) & (df.anchor == "zmc_start") & (df.w_mode == "agg")]
         if len(z):
-            r["zmc_start_delta_E_mean"] = z.delta_E.mean()
-            r["zmc_start_delta_E_max"] = z.delta_E.max()
+            zf = z[np.isfinite(z.delta_E)]
+            r["zmc_start_n"] = len(z)
+            r["zmc_start_n_finite_E"] = len(zf)
+            r["zmc_start_delta_E_median_finite"] = float(zf.delta_E.median()) if len(zf) else np.nan
+            r["zmc_start_delta_E_max_finite"] = float(zf.delta_E.max()) if len(zf) else np.nan
         g_ = G[G.city == city] if len(G) else G
         for de in GAMMA_DELTAS:
             q = g_[np.isclose(g_.delta, de)] if len(g_) else g_
             if len(q):
                 r[f"gamma{de}_served_drop"] = float((q.served_NE - q.served_G).mean())
                 r[f"gamma{de}_NE_gamma_regret"] = float(q.gamma_regret_NE.mean())
-                r[f"gamma{de}_Mthr_over_delta"] = float((q.M_thr_G / de).mean())
-        d2p = RES / f"theory_D2_{city}.csv"
-        if d2p.exists():
-            D = pd.read_csv(d2p)
+                qf = q[np.isfinite(q.M_thr_G)]
+                r[f"gamma{de}_Mthr_over_delta"] = float((qf.M_thr_G / de).mean()) if len(qf) else np.nan
+                r[f"gamma{de}_Mthr_nonfinite"] = int(len(q) - len(qf))
+        d2fs = sorted(RES.glob(f"theory_D2_{city}_s?.csv"))
+        if d2fs:
+            D = pd.concat([pd.read_csv(f) for f in d2fs])
             S = D[D.kind == "summary"]
             for sc, q in S.groupby("scale"):
                 r[f"D2x{sc:g}_converged_frac"] = float(q.n_converged.sum() / max(q.n_starts.sum(), 1))
@@ -718,14 +724,16 @@ def make_figures(summ, G):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    a = summ[(summ.w_mode == "agg") & (summ.anchor != "pure")]
+    a0 = summ[(summ.w_mode == "agg")]
+    a = a0[a0.anchor != "pure"]
     if len(a):
-        cities = [c for c in CITIES if c in set(a.city)]
+        cities = [c for c in CITIES if c in set(a0.city)]
         col = dict(bN="#9a9a9a", b="#1b6ca8", hat="#d98e04", E="#c0392b")
         fig, ax = plt.subplots(1, 2, figsize=(12.5, 4.8), gridspec_kw=dict(width_ratios=[1.6, 1]))
         floor = 1e-3
         for k, c in enumerate(cities):
-            x = a[a.city == c]
+            x = a0[a0.city == c]
+            x = x[x.anchor != "pure"] if (x.anchor != "pure").any() else x
             for key, off, m, lab in (("bound_N", -0.27, "_", "N-uniform bound"), ("bound_anchor", -0.09, "_", "anchored 3-term bound"),
                                      ("min_delta_hat", 0.09, "o", "min delta_hat(p)"), ("E_max", 0.27, "s", "empirical delta_E (worst p in prod B_j)")):
                 cc = {"bound_N": col["bN"], "bound_anchor": col["b"], "min_delta_hat": col["hat"], "E_max": col["E"]}[key]
@@ -735,8 +743,8 @@ def make_figures(summ, G):
         ax[0].set_yscale("log")
         ax[0].set_xticks(range(len(cities)))
         ax[0].set_xticklabels(cities, rotation=30)
-        ax[0].set_ylabel("credal width delta (units of w)")
-        ax[0].set_title("Absorption on real equilibria (mixed relaxed equilibria, seeds 0-2)")
+        ax[0].set_ylabel("credal width delta (units of w); 1e-3 = zero")
+        ax[0].set_title("Absorption on real equilibria (seeds 0-2; Cairo, Moscow: only the pure anchor, delta = 0)", fontsize=9)
         ax[0].legend(frameon=False, fontsize=8, loc="upper left")
         ax[0].grid(axis="y", alpha=0.25)
         ratio = a.ratio_Emax_over_bound
@@ -759,17 +767,16 @@ def make_figures(summ, G):
 
     S = []
     for c in CITIES:
-        p = RES / f"theory_D2_{c}.csv"
-        if p.exists():
+        for p in sorted(RES.glob(f"theory_D2_{c}_s?.csv")):
             D = pd.read_csv(p)
             S.append(D[D.kind == "summary"])
     if S:
         S = pd.concat(S)
         fig, ax = plt.subplots(1, 2, figsize=(10.5, 4))
         for c, x in S.groupby("city"):
-            g_ = x.groupby("scale").agg(conv=("n_converged", "sum"), n=("n_starts", "sum"), dE=("delta_E_D1NE", "max"))
+            g_ = x.groupby("scale").agg(conv=("n_converged", "sum"), n=("n_starts", "sum"), reg=("regret_D1NE_under_D2", "max"))
             ax[0].plot(g_.index, g_.conv / g_.n, "o-", label=c)
-            ax[1].plot(g_.index, np.maximum(g_.dE, 1e-9), "s-", label=c)
+            ax[1].plot(g_.index, np.maximum(g_.reg.fillna(0.0), 1e-4), "s-", label=c)
         ax[0].set_xscale("log")
         ax[0].set_ylim(-0.05, 1.05)
         ax[0].set_xlabel("vehicle-count externality scale")
@@ -777,7 +784,7 @@ def make_figures(summ, G):
         ax[1].set_xscale("log")
         ax[1].set_yscale("log")
         ax[1].set_xlabel("vehicle-count externality scale")
-        ax[1].set_ylabel("delta_E of the D1 equilibrium under D2")
+        ax[1].set_ylabel("max regret of the D1 equilibrium under D2 (USD, floor 1e-4)")
         ax[0].legend(frameon=False)
         for a_ in ax:
             a_.grid(alpha=0.25)

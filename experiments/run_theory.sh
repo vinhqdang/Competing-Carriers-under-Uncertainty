@@ -7,6 +7,6 @@ export NUMBA_NUM_THREADS=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THRE
 mkdir -p ../results/logs
 KIND=${KIND:-absorb}
 SEEDS=${SEEDS:-"0 1 2"}
-CITIES="Berlin London Cairo Paris NewYork Moscow BuenosAires NewDelhi Bombay"
+CITIES=${CITIES:-"Berlin London Cairo Paris NewYork Moscow BuenosAires NewDelhi Bombay"}
 for s in $SEEDS; do for c in $CITIES; do echo "$c $s"; done; done | \
   xargs -P 2 -L 1 sh -c 'python run_theory_checks.py '"$KIND"' $0 --seeds $1 >> ../results/logs/theory_'"$KIND"'_$0_s$1.log 2>&1'
