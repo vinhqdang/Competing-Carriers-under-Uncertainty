@@ -10,7 +10,7 @@ flock -n 9 || exit 0  # another process already runs this job
 # E2 grid and E4 widths: exact oracle everywhere for the cheap cities, reduced exact set for the heavy ones
 # (see docs/EXPERIMENTS.md, 'Exact oracle re-run'); override with CCU_E2_MODE / CCU_E4_MODE = full | reduced
 if [ -z "$CCU_E2_MODE" ]; then
-  case $c in Cairo|Paris|Berlin|NewYork|Moscow) CCU_E2_MODE=minimal ;; *) CCU_E2_MODE=full ;; esac
+  case $c in Cairo|Paris|Berlin|NewYork|Moscow|Bombay) CCU_E2_MODE=minimal ;; *) CCU_E2_MODE=full ;; esac
 fi
 if [ -z "$CCU_E4_MODE" ]; then
   case $c in Cairo|Paris|Berlin|NewYork|Moscow) CCU_E4_MODE=reduced ;; *) CCU_E4_MODE=full ;; esac

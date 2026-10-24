@@ -1,0 +1,2 @@
+city,seed,welfare_replay,welfare_old_file,regret_pb_certified,regret_exact_max,regret_exact_each,n_carriers_with_regret,bp_calls,bp_optimal,bp_unproven
+Paris,2,5417.75,5417.75,0,1.87273,"[0.0, 0.0, 0.0517, 0.0, 1.8727]",2,5,5,0

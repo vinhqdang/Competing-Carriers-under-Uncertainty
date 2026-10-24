@@ -1,0 +1,2 @@
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_frac_optimal
+London,1,16,-0.4,0,1.42109e-14,-796.8,exact,43,43,0,0,0,0,197,3.18092,1

@@ -182,6 +182,8 @@ def main():
             r[prefix + "calls"], r[prefix + "optimal"] = n, st["optimal"] - last["optimal"]
             r[prefix + "unproven"] = st["timeouts"] - last["timeouts"]
             r[prefix + "retried"] = st["retried"] - last["retried"]
+            r[prefix + "br_calls"], r[prefix + "br_optimal"] = st["br_calls"] - last["br_calls"], st["br_optimal"] - last["br_optimal"]
+            r[prefix + "br_max_gap"] = st["br_max_gap"]
             r[prefix + "max_gap"] = st["max_gap"]  # running maximum over this city/seed run
             r["oracle"] = "exact"
             last.update(st)

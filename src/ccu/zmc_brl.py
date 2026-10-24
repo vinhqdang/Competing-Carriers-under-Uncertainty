@@ -166,7 +166,7 @@ class RoutingGame:
         self.bp_retry = None  # longer limit (s) for a retry of a call that hit bp_time (None = no retry)
         # counters shared with the social-cost variants (shallow copies share this dict)
         self._st = dict(calls=0, optimal=0, timeouts=0, retried=0, retry_optimal=0, invalid=0, nodes=0, max_gap=0.0,
-                        sum_gap=0.0, time_used=0.0, wall=0.0)
+                        sum_gap=0.0, time_used=0.0, wall=0.0, br_calls=0, br_optimal=0, br_max_gap=0.0)
         self.ng_size = None
         self.so_broad = False
         self._cache = {}
@@ -299,12 +299,19 @@ class RoutingGame:
             st["calls"] += 1
             st["nodes"] += res.nodes
             st["time_used"] += res.pricing_time
-            if res.status != "optimal" and self.bp_retry and self.bp_retry > self.bp_time and res.status in ("time_limit", "node_limit"):
+            # the retry with the longer limit is for the calls that define or verify an equilibrium (rho = 0: best responses,
+            # regrets); pricing calls (rho = 1) only steer the price search and keep the first limit
+            if rho == 0.0 and res.status != "optimal" and self.bp_retry and self.bp_retry > self.bp_time and res.status in ("time_limit", "node_limit"):
                 st["retried"] += 1
                 res = bp.solve_pool_bp(pool, kap, time_limit=self.bp_retry, gap_tol=tol, mip_time=min(5.0, self.bp_retry))
                 st["nodes"] += res.nodes
                 st["retry_optimal"] += int(res.status == "optimal")
             st["wall"] += time.perf_counter() - t_call
+            if rho == 0.0:
+                st["br_calls"] += 1
+                st["br_optimal"] += int(res.status == "optimal")
+                if res.status != "optimal" and res.bound_valid:
+                    st["br_max_gap"] = max(st["br_max_gap"], res.value - res.lp)
             if res.status == "optimal":
                 st["optimal"] += 1
             else:

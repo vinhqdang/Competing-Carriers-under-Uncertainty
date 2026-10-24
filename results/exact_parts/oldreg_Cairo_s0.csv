@@ -1,0 +1,2 @@
+city,seed,welfare_replay,welfare_old_file,regret_pb_certified,regret_exact_max,regret_exact_each,n_carriers_with_regret,bp_calls,bp_optimal,bp_unproven
+Cairo,0,1063.7,1063.7,0,0.720015,"[0.72, 0.7149, 0.1399, 0.198]",4,4,4,0

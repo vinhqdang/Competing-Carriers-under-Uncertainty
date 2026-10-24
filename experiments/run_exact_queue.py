@@ -13,22 +13,29 @@ HERE = Path(__file__).resolve().parent
 NPROC = int(os.environ.get("NPROC", "3"))
 HEAVY_FIRST = ["Cairo", "Paris", "BuenosAires", "London", "NewDelhi", "Bombay", "NewYork", "Moscow", "Berlin"]  # cheap cities before the heavy tail (Berlin)
 jobs = []
-for c in HEAVY_FIRST:
-    for s in (0, 1, 2):
-        jobs.append(("e1", c, s))
-LATE = ["Berlin"]  # slowest city: after E4 seed 0 of the others
+if os.environ.get("WITH_E1"):  # E1 parts are finished; set WITH_E1=1 after a restart that lost some of them
+    for c in HEAVY_FIRST:
+        for s in (0, 1, 2):
+            jobs.append(("e1", c, s))
+LATE = ["NewYork", "Moscow", "Berlin"]  # the slowest cities
 for c in HEAVY_FIRST:
     if c not in LATE:
         for s in (0, 1, 2):
             jobs.append(("leader", c, s))
+for s in (0, 1):
+    for c in LATE:
+        jobs.append(("leader", c, s))
 for c in HEAVY_FIRST:
     jobs.append(("imprecision", c, 0))
-for c in LATE:
+for c in ("Paris", "Berlin", "Cairo"):
     for s in (0, 1, 2):
-        jobs.append(("leader", c, s))
+        jobs.append(("oldreg", c, s))
+CHEAP_FIRST = ["BuenosAires", "London", "NewDelhi", "Bombay", "NewYork", "Moscow", "Paris", "Berlin", "Cairo"]
 for s in (1, 2):
-    for c in HEAVY_FIRST:
+    for c in CHEAP_FIRST:
         jobs.append(("imprecision", c, s))
+for c in LATE:
+    jobs.append(("leader", c, 2))  # seeds 2 of the slowest cities (not finished within the time budget)
 for c in HEAVY_FIRST:
     for s in (0, 1, 2):
         jobs.append(("oldreg", c, s))

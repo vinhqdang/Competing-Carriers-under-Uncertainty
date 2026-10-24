@@ -1,0 +1,2 @@
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_frac_optimal
+NewDelhi,0,2,-0.2,0,0,-82.8539,exact,44,44,0,0,0,0,144,2.59837,1

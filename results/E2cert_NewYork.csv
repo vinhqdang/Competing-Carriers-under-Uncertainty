@@ -1,0 +1,2 @@
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_br_calls,bp_br_optimal,bp_br_max_gap,bp_frac_optimal
+NewYork,0,2,-0.1,0,0,-21466.2,exact,8,8,0,0,0,0,1184,36.1838,8,8,0,1

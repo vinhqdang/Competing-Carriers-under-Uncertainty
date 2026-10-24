@@ -1,0 +1,2 @@
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_br_calls,bp_br_optimal,bp_br_max_gap,bp_frac_optimal
+Bombay,1,2,-0.2,0,3.55271e-15,-169.273,exact,44,44,0,0,0,0.756155,2412,30.9701,14,14,0,1

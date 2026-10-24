@@ -1,0 +1,2 @@
+city,seed,welfare_replay,welfare_old_file,regret_pb_certified,regret_exact_max,regret_exact_each,n_carriers_with_regret,bp_calls,bp_optimal,bp_unproven
+Berlin,2,8892.32,8892.32,2.27374e-13,0.246676,"[0.0, 0.0, 0.2467, 0.0, 0.0, 0.0]",1,6,5,1

@@ -53,3 +53,18 @@ def test_city_game_smoke():
     assert g.regrets(r["profile"], fresh=True).max() < 1e-6
     ev = g.evaluate(r["profile"])
     assert 0.0 <= ev["served_share"] <= 1.0
+
+
+def test_exact_oracle_counters_and_retry():
+    """bp_time switches the integer step to branch-and-price; counters are shared with the social-cost variant."""
+    g = zb.make_tiny_game(N=2, Z=5, n_cust=3, seed=1)
+    ref = [g.oracle(i, np.zeros(g.d), rho=0.0, count=False) for i in range(g.N)]
+    g.bp_time, g.bp_retry = 10.0, 30.0
+    g._cache.clear()
+    ex = [g.oracle(i, np.zeros(g.d), rho=0.0, count=False) for i in range(g.N)]
+    assert g.bp_calls == 2 and g.bp_optimal == 2 and g.bp_timeouts == 0
+    assert all(abs(a.c - b.c) < 1e-6 for a, b in zip(ref, ex))  # tiny instances: price-and-branch is already exact
+    so = g.so_variant(False)
+    so.oracle(0, np.zeros(g.d), rho=1.0, count=False)
+    assert g.bp_calls == 3  # shared counters
+    assert g._st["br_calls"] == 2  # best responses (rho = 0) are counted separately

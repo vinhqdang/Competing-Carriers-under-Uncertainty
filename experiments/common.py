@@ -64,7 +64,8 @@ def solve_ne(g, rounds: int = 8, lam0=None, certify: str = "none") -> dict:
         n = st["calls"] - st0["calls"]
         row.update(oracle="exact", bp_calls=n, bp_optimal=st["optimal"] - st0["optimal"], bp_retried=st["retried"] - st0["retried"],
                    bp_unproven=st["timeouts"] - st0["timeouts"], bp_invalid_bound=st["invalid"] - st0["invalid"],
-                   bp_max_gap=st["max_gap"], bp_nodes=st["nodes"] - st0["nodes"], bp_time=st["wall"] - st0["wall"])
+                   bp_max_gap=st["max_gap"], bp_nodes=st["nodes"] - st0["nodes"], bp_time=st["wall"] - st0["wall"],
+                   bp_br_calls=st["br_calls"] - st0["br_calls"], bp_br_optimal=st["br_optimal"] - st0["br_optimal"], bp_br_max_gap=st["br_max_gap"])
         row["bp_frac_optimal"] = row["bp_optimal"] / n if n else 1.0
     else:
         row["oracle"] = "pb"

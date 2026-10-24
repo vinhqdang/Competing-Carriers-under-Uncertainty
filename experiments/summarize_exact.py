@@ -118,12 +118,16 @@ def comparison():
     by_seed = old.join(new, lsuffix="_old", rsuffix="_new").reset_index()
     by_seed = by_seed[[c for c in by_seed.columns if not (c.endswith("_new") and by_seed[c].isna().all())]]
     by_seed.to_csv(RES / "exact_vs_pb_comparison_by_seed.csv", index=False, float_format="%.6g")
+    old = old.where(new.reindex(old.index).notna())  # same seeds on both sides: the old mean only over the seeds that were re-run
     om = old.groupby("city").mean().reindex(CITIES)
     nm = new.groupby("city").mean().reindex(CITIES)
+    nseeds = new.notna().groupby("city").sum().reindex(CITIES)
     out = pd.DataFrame(index=CITIES)
     for c in num:
         out[c + "_old"] = om[c]
         out[c + "_new"] = nm[c]
+    for c in ("E1_welfare", "E2_gain_both_pct", "E3_PoA_zmc", "E4_pbox_widest_d_deliveries_pct"):
+        out["n_seeds_" + c.split("_")[0]] = nseeds[c]
     out.index.name = "city"
     out.reset_index().to_csv(RES / "exact_vs_pb_comparison.csv", index=False, float_format="%.6g")
     return out, by_seed

@@ -1,5 +1,8 @@
 # Game-theoretic experiments: ZMC with a BRL carrier oracle on nine city maps
 
+> **Update 2026-10-24.** The files in `results/` and `figures/` now come from the **exact (branch-and-price) oracle**, see the section "Exact oracle re-run" (after "Branch-and-price for BRL").
+> The tables and numbers of Sections 4 and 4a below were written for the price-and-branch run (kept in `results/pb_old/`, `figures/pb_old/`) and are not updated; where the two differ, the exact re-run is the one to quote.
+
 All numbers come from the files in `results/` (CSV per experiment and city; `results/tables.md` holds every table of
 this page in machine-generated form). Figures are in `figures/`. Seeds are fixed: E1, E2, E3 and E4 were run for seeds 0, 1 and 2 (seed s changes the depots, the
 customer-zone sampling, the sector clustering and the 30 observed days; section 4a), E6 and the sensitivity runs use seed 0 only. Tables headed "seed 0" below are the first
@@ -33,7 +36,7 @@ is reused across all calls (warm start across ZMC rounds and across the leader's
 * **A1 all-or-nothing lots.** A carrier serves a customer zone fully or not at all; lot size `d_iz` is 10-50% of
   `drops_per_vehicle_per_day`, proportional to the zone's parcels (population x parcels per capita x market share).
   The Cournot game is therefore lumpy.
-* **A2 price-and-branch, not branch-and-price.** The integer step runs on generated columns only. LP value is a lower
+* **A2 price-and-branch, not branch-and-price (superseded: the final results use branch-and-price, see "Exact oracle re-run").** The integer step runs on generated columns only. LP value is a lower
   bound, and the largest observed oracle gap (integer value minus LP value) per game is recorded as `lp_gap_max`
   (up to about 20 USD on plans worth hundreds to thousands). Pricing calls (`rho=1`) use a 0.5% MIP gap and 4 s limit;
   best responses use gap 1e-7 and 20 s. "Exact NE" below means exact with respect to this oracle, certified by an
@@ -528,7 +531,7 @@ the ranges around every magnitude (London's leader gain 34-86%, PoA 1.45-1.94). 
 * **Seeds.** Seed variation covers the sampled slice of the city (depots, customer zones, observed days); it does not vary calibration inputs, so the spread understates total uncertainty.
 * **Search is a grid.** The leader's optimum is a grid optimum (63 points); several optima sit at the grid edge in the broad objective; no continuous refinement.
 * **PoA/PoS are empirical** (equilibria found from 5 starts); the social optimum is a rounded convexified optimum, not proven.
-* **Reduced or skipped.** 30 observed days instead of 60; 22 customer zones as asked; E1-E4 use three seeds (the sd of three values is a rough guide; E5, E6, sensitivity and verification use one); the credal/RSRC hypotheses H1-H4, H8, H9 were skipped; no full branch-and-price; Cairo E1, E2, E4 were re-run after the container restart.
+* **Reduced or skipped.** 30 observed days instead of 60; 22 customer zones as asked; E1-E4 use three seeds (the sd of three values is a rough guide; E5, E6, sensitivity and verification use one); the credal/RSRC hypotheses H1-H4, H8, H9 were skipped; no full branch-and-price (added later, see the last sections); Cairo E1, E2, E4 were re-run after the container restart.
   The first E1 pass had a stale-cache bug (fixed, those cities re-run). An earlier import error in `run_imprecision.py` (New Delhi) was fixed and re-run.
 * The fiscal cost of subsidies is not part of the social cost (transfers), as in main.tex.
 
@@ -658,6 +661,193 @@ python experiments/run_bp.py summary                                   # results
 python -m pytest -q                                                    # 97 tests, 13 s
 ```
 
+
+## Exact oracle re-run
+
+Date: 2026-10-24. E1-E4 of Section 4 were first computed with the price-and-branch integer step (A2). After branch-and-price
+(`ccu.bp`, previous section) became available, they were re-run with the exact integer step in the carrier oracle
+(`RoutingGame.bp_time`). The **files in `results/` (and `figures/`) are now the exact ones**, under the usual names, so `summarize.py`,
+`plot_results.py` and the paper tables read them unchanged (with two small filters, see below). The price-and-branch results are untouched in
+`results/pb_old/` (all `E1-E4`, `zones`, `summary_*`, `tables.md`) and `figures/pb_old/`. The tables of Sections 4 and 4a above still quote the
+price-and-branch numbers; `results/exact_vs_pb_comparison.csv` (mean over the seeds that were re-run) and
+`results/exact_vs_pb_comparison_by_seed.csv` hold old and new side by side, the tables below are generated from them (`experiments/exact_report.py`).
+`paper/` was not touched.
+
+**Protocol.** Branch-and-price on the pool columns for every oracle call (pricing calls `rho = 1`, best responses `rho = 0`, regrets), limit 20 s per call.
+Pricing calls keep the relative gap 5e-3 of the old pipeline (a call is "proven optimal" when it closes that gap), best responses 1e-8. Calls that
+hit the limit are retried with 120 s (E1 and the E2/E3 runs of Cairo, Paris, Buenos Aires, London, New Delhi: every call; Mumbai, New York,
+Moscow, Berlin and all of E4: best responses and regrets only, because a pricing call only steers the price search and a 120 s retry on every
+pricing call made the 63-point grids unaffordable). Every call is counted (`bp_calls`, `bp_optimal`, `bp_retried`, `bp_unproven`, `bp_max_gap` in the result rows,
+`results/summary_exact_oracle.csv` per experiment, city and seed); the remaining gap of an unproven call is the incumbent value minus the proven bound, in USD of the oracle objective.
+Equilibria are verified as before: E1 and the E2 best point by an independent fresh-pool oracle (elementary routes, empty pool, branch-and-price), E2/E3/E4 grid
+points by the pooled exact oracle; new in E3: the profiles `NE_zmc`, `NE_priced_main`, `NE_priced_broad` are also verified with a fresh exact oracle (`max_regret_fresh`).
+The old (price-and-branch) equilibria were re-tested with the same fresh exact oracle in all 27 city/seeds (`results/exact_parts/oldreg_*.csv`, `experiments/run_old_regret.py`).
+
+**What was reduced (the full re-run did not fit the budget of about 6 hours on 3 cores; one exact E1 solve costs 3-12 times the price-and-branch one, the 63-point grids and E3 dominate).**
+Coverage per city and seed (E2: grid points solved with the exact oracle out of 63; E3: complete; E4: widths solved exactly out of 12):
+
+| city | s0: E1 / E2 exact pts / E3 / E4 exact rows | s1: E1 / E2 exact pts / E3 / E4 exact rows | s2: E1 / E2 exact pts / E3 / E4 exact rows |
+|---|---|---|---|
+| New Delhi | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
+| Cairo | x / 13/63 / x / 6/12 | x / 17/63 / x / 6/12 | x / 13/63 / x / . |
+| Moscow | x / 12/63 / x / 6/12 | x / 10/63 / x / 6/12 | x / . / . / . |
+| Buenos Aires | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
+| New York | x / 7/63 / x / 6/12 | x / 7/63 / x / 6/12 | x / . / . / . |
+| Mumbai | x / 15/63 / x / 12/12 | x / 14/63 / x / 12/12 | x / 14/63 / x / 12/12 |
+| London | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
+| Paris | x / 14/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / 13/63 / x / . |
+| Berlin | x / 13/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / . / . / . |
+
+* **E1 base: all nine cities and three seeds, exact** (certified with the fresh exact oracle). The sensitivity scenarios (the `sens` rows of `E1_<city>.csv`) were **not** re-run: they keep their
+  price-and-branch values and carry `oracle = pb`; `summarize.py` compares them with the price-and-branch base case of the same seed.
+* **E3: exact for 24 of 27 city/seeds** (Cairo, Paris, Buenos Aires, London, New Delhi, Mumbai: three seeds; New York, Moscow, Berlin: seeds 0 and 1). Seed 2 of New York, Moscow and Berlin was not finished in time and is absent from the exact files
+  (the new three-seed tables then average two seeds for these cities, `n_seeds` says so; the old values of their seed 2 are in `results/pb_old/`). In New York, Moscow and Berlin the SO benchmark of the *broad* objective (`SO_broad`) was computed with price-and-branch (`oracle = pb` in that row);
+  everything else in E3 is exact.
+* **E2 grid: complete 63-point exact grid for Buenos Aires, London and New Delhi; for Cairo, Paris, Berlin, New York, Moscow and Mumbai only a subset of the grid is exact**, chosen by screening with the price-and-branch grid of the same city and seed: the exact oracle is applied at (0, 0) and
+  at the two best points of every (objective, configuration) among the three charge configurations (`CCU_E2_MODE=minimal`). The other grid points keep their price-and-branch row (`oracle = pb`, copied from `results/pb_old`).
+  `summarize.py` and `plot_results.py` ignore the `pb` rows, so the best point of every configuration is the best *exact* point. The reported leader gains of these six cities are therefore **lower bounds** of the gain over the 63-point grid
+  (the exact grid is a subset), and shares of delivery-only in the two-instrument gain can exceed 1 when the best two-instrument point was not among the exact points (Mumbai seed 1: 1.38). No local refinement was done (the first, abandoned, version also evaluated the grid neighbours of the best point, so Cairo, Paris, Mumbai, Moscow and Berlin seeds contain a few more exact points than the minimal set; the number of exact points is in the coverage table).
+  The leader's best points, E2best, E2cert and the priced equilibria of E3 are all exact equilibria of the exact game.
+* **E4: complete for New Delhi, Buenos Aires, London and Mumbai (12 widths, exact); for Cairo, Paris, Berlin, New York and Moscow six widths are exact (p-box alpha in {2, 0.05, 1e-4}, i.e. eps = 0, base, widest; credal delta in {0, 0.2, 0.8}) and the others keep price-and-branch rows (`oracle = pb`, ignored by `summarize.py`)**.
+  Seeds: see the coverage table (a dot means the seed was not re-run exactly; it is then absent from the new tables).
+
+**Oracle calls proven optimal.**
+
+| experiment | bp_calls | bp_optimal | bp_retried | bp_unproven | proven_share | max_remaining_gap_usd |
+|---|---|---|---|---|---|---|
+| E1 | 1403 | 1385 | 55 | 18 | 0.987 | 4.84 |
+| E2 | 24256 | 24205 | 189 | 51 | 0.998 | 3 |
+| E2cert_fresh | 761 | 744 | 40 | 17 | 0.978 | 4.94 |
+| E3 | 3694 | 3655 | 104 | 39 | 0.989 | 5.7 |
+| E3_fresh_verification | 342 | 330 | 33 | 12 | 0.965 | 5.7 |
+| E4 | 8135 | 8089 | 34 | 46 | 0.994 | 8.47 |
+
+Over all experiments 38591 oracle calls were solved by branch-and-price, 38408 (99.53%) proven optimal (within the stated gap), 455 calls needed the 120 s retry, 183 (0.47%) remain unproven. In the calls that are not proven, the remaining gap (incumbent minus proven lower bound) is at most 8.5 USD
+(plans worth 10^2-10^4 USD); the equilibria are verified against the incumbents of the verifying calls, so a profile can only be an exact equilibrium
+up to the regret *bound* `max_regret_lp` (verifying call against its proven lower bound). That bound is zero for all but the following E1/E2cert profiles (largest bound 4.84 USD, New York seed 2 base case;
+the same profile has regret 0 against the incumbent): Cairo seed 2 (E1, 0.00201 USD); Cairo seed 2 (E2 best point, 0.0221 USD); Moscow seed 2 (E1, 1.24 USD); NewYork seed 2 (E1, 4.84 USD); Paris seed 0 (E2 best point, 1.76 USD); Paris seed 1 (E1, 0.759 USD); Paris seed 1 (E2 best point, 2.64 USD); Berlin seed 1 (E2 best point, 1.72 USD); Berlin seed 2 (E1, 0.9 USD).
+
+By city:
+
+| city | bp_calls | bp_optimal | bp_unproven | proven_share | max_gap_usd |
+|---|---|---|---|---|---|
+| NewDelhi | 8759 | 8756 | 3 | 1 | 0.243 |
+| Cairo | 1832 | 1792 | 40 | 0.978 | 0.573 |
+| Moscow | 1496 | 1488 | 8 | 0.995 | 2.62 |
+| BuenosAires | 7612 | 7612 | 0 | 1 | 0 |
+| NewYork | 987 | 970 | 17 | 0.983 | 7.55 |
+| Bombay | 4071 | 4025 | 46 | 0.989 | 0.821 |
+| London | 8510 | 8510 | 0 | 1 | 0 |
+| Paris | 3009 | 2966 | 43 | 0.986 | 8.47 |
+| Berlin | 2315 | 2289 | 26 | 0.989 | 5.4 |
+
+**Verification that the returned profiles are exact pure equilibria.** Regret against the *fresh* exact oracle (elementary routes, empty pool): E1 base, all 27 city/seeds: maximum 9e-13 USD (zero); E2 best "both" point (`E2cert`): 0 in all 24 certified city/seeds; E3 `NE_zmc` and priced profiles (`max_regret_fresh`): 0 in all
+24 verified city/seeds. All grid points of E2, E3 and E4 have regret at most 3e-13 USD against the pooled exact oracle, and every ZMC solve converged (best-response polish).
+For the price-and-branch equilibria the same test gives (regret, USD; seeds in which at least one carrier could gain):
+
+| city | seeds | seeds_not_exact_eq | max_regret_usd |
+|---|---|---|---|
+| NewDelhi | 3 | 0 | 0 |
+| Cairo | 3 | 3 | 0.819 |
+| Moscow | 3 | 2 | 0.834 |
+| BuenosAires | 3 | 0 | 0 |
+| NewYork | 3 | 1 | 4.04 |
+| Bombay | 3 | 0 | 0 |
+| London | 3 | 0 | 1.14e-13 |
+| Paris | 3 | 2 | 2.04 |
+| Berlin | 3 | 2 | 3.54 |
+
+So the old equilibria were already exact in New Delhi, Buenos Aires, Mumbai and London; in Cairo (3 of 3 seeds, up to 0.8 USD), Moscow (2 of 3, 0.8), New York (1 of 3, 4.0), Paris (2 of 3, 2.0) and Berlin (2 of 3, 3.5 USD) the old profile was not an exact equilibrium.
+Several equilibria exist, and where the old one was exact the exact run can still select another one (Buenos Aires seed 0, see below), because the pricing calls and the best responses are solved by a different integer method and the ZMC trajectory differs.
+
+**Old (price-and-branch) against new (exact).** Mean over the seeds that were re-run (same seeds on both sides).
+
+| city | welfare | served_share | slowdown_pct |
+|---|---|---|---|
+| New Delhi | 82.7 -> 82.7 | 0.259 -> 0.259 | 4.18 -> 4.18 |
+| Cairo | 1065.0 -> 1065.9 | 1.000 -> 1.000 | 3.61 -> 3.61 |
+| Moscow | 6755.7 -> 6756.0 | 0.990 -> 0.990 | 17.57 -> 17.57 |
+| Buenos Aires | 276.0 -> 272.3 | 0.367 -> 0.359 | 0.81 -> 0.77 |
+| New York | 20001.5 -> 20002.8 | 0.989 -> 0.989 | 7.75 -> 7.75 |
+| Mumbai | 152.8 -> 152.8 | 0.448 -> 0.448 | 4.59 -> 4.59 |
+| London | 570.1 -> 570.1 | 0.182 -> 0.182 | 6.68 -> 6.68 |
+| Paris | 5327.1 -> 5331.6 | 0.845 -> 0.847 | 4.98 -> 4.99 |
+| Berlin | 8630.6 -> 8618.8 | 0.892 -> 0.889 | 3.67 -> 3.68 |
+
+| city | both | delivery_only | congestion_only | share_delivery_alone |
+|---|---|---|---|---|
+| New Delhi | 14.51 -> 14.49 | 10.98 -> 10.32 | 0.00 -> 0.00 | 0.73 -> 0.68 |
+| Cairo | 0.11 -> 0.00 | 0.04 -> 0.00 | 0.11 -> 0.00 | n/a -> n/a |
+| Moscow | 0.13 -> 0.13 | 0.11 -> 0.13 | 0.01 -> 0.00 | 0.85 -> 1.00 |
+| Buenos Aires | 33.35 -> 35.45 | 33.35 -> 35.45 | 1.25 -> 2.49 | 1.00 -> 1.00 |
+| New York | 0.45 -> 0.39 | 0.42 -> 0.39 | 0.06 -> 0.00 | 0.93 -> 1.00 |
+| Mumbai | 2.87 -> 2.16 | 1.97 -> 2.09 | 0.00 -> 0.00 | 0.61 -> 0.88 |
+| London | 58.48 -> 59.72 | 47.95 -> 49.27 | 0.45 -> 0.45 | 0.84 -> 0.85 |
+| Paris | 3.77 -> 3.57 | 3.62 -> 3.47 | 0.55 -> 0.04 | 0.95 -> 0.97 |
+| Berlin | 1.39 -> 1.77 | 1.24 -> 1.70 | 0.00 -> 0.00 | 0.89 -> 0.96 |
+
+| city | PoA_zmc | PoS | PoA_worst | priced_gap_pct | unpriced_gap_pct |
+|---|---|---|---|---|---|
+| New Delhi | 1.180 -> 1.180 | 1.172 -> 1.172 | 1.197 -> 1.197 | 2.95 -> 2.96 | 15.20 -> 15.20 |
+| Cairo | 1.001 -> 1.000 | 1.000 -> 1.000 | 1.001 -> 1.000 | -0.00 -> 0.00 | 0.11 -> 0.00 |
+| Moscow | 1.001 -> 1.001 | 1.001 -> 1.001 | 1.001 -> 1.001 | 0.01 -> 0.01 | 0.14 -> 0.13 |
+| Buenos Aires | 1.358 -> 1.380 | 1.333 -> 1.334 | 1.399 -> 1.426 | 1.78 -> 1.81 | 26.26 -> 27.37 |
+| New York | 1.004 -> 1.004 | 1.004 -> 1.004 | 1.004 -> 1.004 | 0.00 -> 0.00 | 0.45 -> 0.39 |
+| Mumbai | 1.032 -> 1.032 | 1.032 -> 1.032 | 1.077 -> 1.077 | 0.36 -> 1.04 | 3.13 -> 3.13 |
+| London | 1.655 -> 1.655 | 1.628 -> 1.628 | 1.752 -> 1.752 | 4.33 -> 3.69 | 38.65 -> 38.65 |
+| Paris | 1.039 -> 1.037 | 1.029 -> 1.031 | 1.039 -> 1.037 | 0.16 -> 0.16 | 3.78 -> 3.59 |
+| Berlin | 1.015 -> 1.018 | 1.015 -> 1.018 | 1.018 -> 1.018 | 0.14 -> 0.05 | 1.51 -> 1.79 |
+
+| city | pbox_deliveries | pbox_welfare | gamma_deliveries |
+|---|---|---|---|
+| New Delhi | -53.5 -> -53.5 | -60.1 -> -60.4 | -62.2 -> -62.2 |
+| Cairo | 0.0 -> 0.0 | -2.7 -> -2.8 | -31.4 -> -30.9 |
+| Moscow | -1.5 -> -1.5 | -10.5 -> -10.5 | -64.1 -> -64.8 |
+| Buenos Aires | -53.0 -> -52.3 | -53.0 -> -52.9 | -65.6 -> -64.9 |
+| New York | -2.5 -> -2.5 | -10.7 -> -10.9 | -67.3 -> -66.2 |
+| Mumbai | -28.8 -> -29.4 | -30.8 -> -30.3 | -59.3 -> -59.0 |
+| London | -63.4 -> -64.8 | -73.9 -> -74.8 | -89.5 -> -89.5 |
+| Paris | -7.4 -> -9.1 | -16.5 -> -17.0 | -75.0 -> -73.5 |
+| Berlin | -6.9 -> -8.6 | -16.8 -> -17.6 | -71.1 -> -71.3 |
+
+Gains are in percent of |social cost| of the unpriced equilibrium, main objective; PoA = W_SO / W_NE; priced gap = (W_SO - W_priced)/W_SO. By seed: `results/exact_vs_pb_comparison_by_seed.csv`.
+
+**What did not change.**
+* The E1 picture: welfare, served share and slowdown are the same to three digits in New Delhi, Mumbai and London and within 0.01% in Moscow and New York, within 0.1% in Cairo, Paris and Berlin, and 1.4% (welfare) / 0.8 pp (served share) lower in Buenos Aires (a different equilibrium).
+* The PoA ordering **London (1.66) > Buenos Aires (1.38) > New Delhi (1.18)** and the ordering of all nine cities (Paris 1.04, Mumbai 1.03, Berlin 1.02, New York 1.00, Moscow 1.00, Cairo 1.00) are unchanged for PoA, PoS and the worst equilibrium found; London's PoA is identical to three digits.
+  The exact SO benchmark is slightly higher than the price-and-branch one (up to +0.2%), the exact equilibria are slightly higher or lower, so PoA moves by at most 0.03.
+* "Large PoA only where the leader's gain is large": London, Buenos Aires and New Delhi stay the only cities with PoA >= 1.10 and the only ones with leader gains above 10%.
+* "Priced equilibria are within a few percent of the optimum": the largest single-seed priced gap is still London seed 1, 7.4% of W_SO (unchanged), the city means are 3.7% (London), 3.0% (New Delhi), 1.8% (Buenos Aires), 1.0% (Mumbai) and 0.2% or less elsewhere.
+  The ordering of the cities by priced gap is unchanged; Mumbai's mean rises from 0.36% to 1.04% and London's falls from 4.33% to 3.69%.
+* E4: deliveries and welfare fall with both kinds of imprecision in every city, with the same magnitudes (the widest-width effect changes by at most 2 percentage points), see the table.
+
+**What flipped or moved.**
+* **The "congestion charge alone gains less than 1.7%" bound fails in Buenos Aires seed 0: 6.5%** (old: 1.67%, so the old maximum was just below the bound). The reason is the baseline, not the charge: the exact unpriced equilibrium of Buenos Aires seed 0 is a worse one
+  (social cost -252.2 against -266.7), while the best congestion-charge equilibrium is about the same (-268.6 against -271.1). Seeds 1 and 2: 0.4% and 0.5%. All other city/seeds stay below 1.7% (largest: London 1.34%, Paris 0.12%, Cairo 0). So "a congestion charge alone is nearly worthless" is true in eight of nine cities and, in Buenos Aires, depends on which unpriced equilibrium is selected.
+* **Cairo: the leader's gain vanishes in the evaluated points** (old 0.05-0.15% for the congestion charge, now 0 in all seeds: with the exact oracle none of the 13-17 exact points beats no charge, so the tiny price-and-branch gains were artefacts of the integer step at those points). Paris' congestion-only gain falls from 0.55% to 0.04% (a lower bound, reduced grid); in the full-grid cities the congestion-only gains are unchanged (New Delhi 0, London 0.45%) or larger (Buenos Aires 1.25% -> 2.49%, see above).
+* **Delivery-only share of the two-instrument gain** (the paper's statement that the per-delivery instrument alone captures about half or more): the by-seed statement "at least half in every seed" now fails in New Delhi seed 0 (0.57 -> 0.41; the delivery-only gain 7.0% -> 5.0% of |SC|) as well as in Mumbai seed 0 (0.04 -> 0.46, failing in both runs).
+  Mumbai's three-seed mean share is 0.88 (was 0.61), but Mumbai is a reduced grid, where the two-instrument gain is a lower bound; in seed 1 the share exceeds 1 (1.38). The qualitative statement (delivery-only dominates; congestion-only is negligible) stands; the numbers for Mumbai should not be quoted to two digits.
+* **Buenos Aires**: E1 welfare -1.4% (276.0 -> 272.3), leader gain 33.3% -> 35.4%, PoA 1.358 -> 1.380 (seed 0: 1.349 -> 1.429), all from the changed equilibrium of seed 0 (welfare -5.4%) and a small shift in seed 2.
+* **Berlin**: E1 welfare -0.14%; seed-0 PoA 1.014 -> 1.020 (equilibrium welfare -0.53%, the equilibrium found by `run_bp.py game` earlier); Paris: welfare +0.09%, Cairo +0.09%.
+* New York and Moscow: the equilibria differ in the second digit only; New York seed 2 base case has 6 unproven calls (gap bound 4.8 USD on a welfare of 20,000), see above.
+
+**Caveats.** (1) The exact oracle is exact for the elementary problem with the proven bound only where the call is proven optimal; unproven calls are quantified above (largest gap 8.5 USD). (2) The reduced grids make the E2 gains of Cairo, Paris, Berlin, New York, Moscow and Mumbai lower bounds. (3) The equilibrium is not unique; PoS/PoA use the equilibria found from six starting points, as before.
+(4) Two oracle protocols were used for the pricing calls (retry on all calls, or on best responses only, see Protocol); the equilibria and their verification are the same in both. (5) The E1 sensitivity and the E5/E6/verification runs of Section 4 were not re-run.
+Run time: 6 h 25 min (10:34-16:59) wall-clock on 3 processes for E1, E2/E3, E4 and the 27 regret checks of the old equilibria (price-and-branch needed about 3 hours of one core in total for the same files, excluding the sensitivity runs).
+
+**Reproduce** (all steps resumable; finished work is skipped; status in `results/PROGRESS_exact.md`; 3 processes):
+```
+export OMP_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+nohup python experiments/run_exact_queue.py > results/logs/run_exact_queue.out 2>&1 &   # scheduler, priority order, 3 jobs at a time
+#   one job by hand (BP time limit 20 s, retry 120 s; E2/E4 modes as in run_exact_job.sh):
+#   experiments/run_exact_job.sh e1|leader|imprecision|oldreg CITY SEED
+python experiments/run_exact.py assemble --keep-old-sens      # E1 parts -> results/E1_<city>.csv, zones, traces
+python experiments/summarize.py && python experiments/summarize_exact.py && python experiments/plot_results.py && python experiments/plot_equilibria.py
+python experiments/exact_report.py                            # the tables of this section
+python -m pytest -q
+```
+The environment variables read by `build_city_game` and the scripts: `CCU_BP_TIME` (per-call limit, s; unset = price-and-branch), `CCU_BP_RETRY`, `CCU_E2_MODE` (`full` | `reduced` | `minimal`), `CCU_E4_MODE` (`full` | `reduced`), `CCU_E3_SO_BROAD` (`pb`).
+Old results: `results/pb_old/`, `figures/pb_old/`. New code: `experiments/run_exact*.py|sh`, `run_old_regret.py`, `summarize_exact.py`, `exact_report.py`; changes in `run_leader.py`, `run_imprecision.py`, `common.py`, `zmc_brl.py` (counters, retry), `summarize.py` and `plot_results.py` (filters for the `oracle = pb` rows).
 
 ## Theory-to-experiment checks
 

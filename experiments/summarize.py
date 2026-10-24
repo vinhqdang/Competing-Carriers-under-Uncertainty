@@ -68,9 +68,17 @@ def main():
         sens = e1[e1.scenario == "sens"].copy()
         if len(sens):
             b0 = base[base.seed == 0].set_index("city")
-            sens["d_served_pp"] = 100 * (sens.served_share.values - b0.loc[sens.city, "served_share"].values)
-            sens["d_welfare_pct"] = 100 * (sens.welfare.values / b0.loc[sens.city, "welfare"].values - 1)
-            sens["d_slowdown_pct"] = 100 * (sens.mean_slowdown.values / b0.loc[sens.city, "mean_slowdown"].values - 1)
+            if "oracle" in sens.columns and (sens.oracle == "pb").any():
+                # exact re-run: the sensitivity scenarios were not re-run, so their rows (oracle == 'pb') are compared with the
+                # price-and-branch base case of the same seed (results/pb_old), the others with the exact base case
+                pbb = pd.concat([pd.read_csv(RES / "pb_old" / f"E1_{c}.csv").query("scenario == 'base' and seed == 0") for c in sens.city.unique()]).set_index("city")
+                ref = [pbb if o == "pb" else b0 for o in sens.oracle.fillna("exact")]
+                ref_of = lambda col: np.array([r.loc[c, col] for r, c in zip(ref, sens.city)])
+            else:
+                ref_of = lambda col: b0.loc[sens.city, col].values
+            sens["d_served_pp"] = 100 * (sens.served_share.values - ref_of("served_share"))
+            sens["d_welfare_pct"] = 100 * (sens.welfare.values / ref_of("welfare") - 1)
+            sens["d_slowdown_pct"] = 100 * (sens.mean_slowdown.values / ref_of("mean_slowdown") - 1)
             sens[["city", "param", "level", "value", "N", "served_share", "welfare", "mean_slowdown", "d_served_pp",
                   "d_welfare_pct", "d_slowdown_pct", "calls", "converged", "max_regret"]].to_csv(
                 RES / "summary_E1_sensitivity.csv", index=False, float_format="%.6g")
@@ -182,6 +190,8 @@ def main():
         T.append("## E3 per city and seed (welfare ratios; SO = convexified-CG + rounding, upper bound W_SO_bound)\n" + md(s))
     # ------------------------------------------------ E4
     e4 = load("E4")
+    if len(e4) and "oracle" in e4.columns:  # exact re-run with a reduced set of widths: price-and-branch rows are not used
+        e4 = e4[e4.oracle.fillna("exact") != "pb"].copy()
     if len(e4):
         rows = []
         for (c, sd, kind), d in e4.groupby(["city", "seed", "kind"]):

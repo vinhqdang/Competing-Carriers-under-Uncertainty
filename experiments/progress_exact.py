@@ -11,7 +11,7 @@ PARTS = RES / "exact_parts"
 def main():
     L = ["# Progress: exact-oracle (branch-and-price) re-run of E1-E4", "",
          "Resume after a restart (all commands skip finished work; 3 processes):", "",
-         "```", "nohup experiments/run_exact.sh > results/logs/run_exact.out 2>&1 &", "```", "",
+         "```", "nohup python experiments/run_exact_queue.py > results/logs/run_exact_queue.out 2>&1 &", "```", "",
          f"Updated {time.strftime('%Y-%m-%d %H:%M:%S')}. x = finished, . = missing (E1 / E2 / E3 / E4 per seed; sens = E1 sensitivity).", "",
          "| city | s0 | s1 | s2 | E1 sens |", "|---|---|---|---|---|"]
     n = 0
