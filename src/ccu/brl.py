@@ -195,7 +195,8 @@ def _dominates(Sa, WSa, pia, Sb, WSb, pib, hi_lim, wsuf, gamma, rho, tol):
 
 
 @njit(cache=True)
-def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng, duals, maxlab, bcap, kcols, tol_rc):
+def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng, duals, maxlab, bcap, kcols, tol_rc,
+               allow):
     Sarr = np.empty((maxlab, L))
     WSarr = np.empty((maxlab, L + 1))
     node = np.empty(maxlab, np.int32)
@@ -233,7 +234,7 @@ def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng,
         if not alive[lab]:
             continue
         i = node[lab]
-        if i != 0:
+        if i != 0 and allow[i, 0]:
             tot = 0.0
             over = 0.0
             for l in range(L):
@@ -254,6 +255,8 @@ def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng,
                     cand_lab[worst] = lab
         for j in range(1, n + 1):
             if (mask[lab] >> np.uint64(j)) & one:
+                continue
+            if not allow[i, j]:
                 continue
             if load[lab] + dem[j] > cap + 1e-12:
                 continue
@@ -336,9 +339,12 @@ def _espprc_nb(n, L, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng,
 
 
 def espprc(inst: RoutingInstance, duals: np.ndarray, *, ng: np.ndarray | None = None, max_cols: int = 40,
-           maxlab: int = 200_000, tol_rc: float = 1e-9):
+           maxlab: int = 200_000, tol_rc: float = 1e-9, allow: np.ndarray | None = None,
+           Cmin: np.ndarray | None = None):
     """BRL pricing with node duals (reduced cost = route cost - sum_j duals[j]).
 
+    `allow[i, j]` (bool, (n+1) x (n+1)) removes arcs (branching in ccu.bp); `Cmin` is then the shortest return time on the
+    allowed arcs (a smaller-or-equal value is always valid).
     Returns (best reduced cost over all routes, [(rc, route)] sorted, stats).  `overflow=True` in stats means the
     label limit was hit and the result is not a certificate.
     """
@@ -347,10 +353,15 @@ def espprc(inst: RoutingInstance, duals: np.ndarray, *, ng: np.ndarray | None = 
     if ng is None:
         ng = ng_masks(inst, n)
     ls = inst.loss
+    if allow is None:
+        allow = np.ones((n + 1, n + 1), np.bool_)
+    if Cmin is None:
+        Cmin = inst.Cmin
     t0 = time.perf_counter()
     best, crc, rts, rl, created, kept, overflow = _espprc_nb(
         n, L, inst.arcS, inst.dem.astype(np.float64), float(inst.cap), inst.w, inst.wsuf, ls.gamma, ls.rho, ls.Tmax,
-        ls.fixed, inst.Cmin, ng.astype(np.uint64), np.asarray(duals, float), maxlab, 4096, max_cols, tol_rc)
+        ls.fixed, np.asarray(Cmin, float), ng.astype(np.uint64), np.asarray(duals, float), maxlab, 4096, max_cols,
+        tol_rc, np.asarray(allow, np.bool_))
     out = []
     for c in np.argsort(crc):
         if rl[c] > 0 and crc[c] < 1e299:

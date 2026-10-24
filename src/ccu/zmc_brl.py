@@ -36,7 +36,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import brl
+from . import bp, brl
 
 ROOT = Path(__file__).resolve().parents[2]
 CITIES = ["NewDelhi", "Cairo", "Moscow", "BuenosAires", "NewYork", "Bombay", "London", "Paris", "Berlin"]
@@ -158,6 +158,10 @@ class RoutingGame:
         self.calls = 0
         self.lp_gap_max = 0.0
         self.invalid_bounds = 0
+        self.bp_time = None  # per-call time limit (s) of the exact branch-and-price integer step; None = price-and-branch
+        self.bp_calls = self.bp_optimal = self.bp_timeouts = self.bp_nodes = 0
+        self.bp_max_gap = 0.0
+        self.bp_time_used = 0.0
         self.ng_size = None
         self.so_broad = False
         self._cache = {}
@@ -273,7 +277,18 @@ class RoutingGame:
             pool = brl.RoutePool(cr.inst, ng_size=cr.inst.n)  # elementary routes, empty pool
         else:
             pool = cr.pool
-        res = pool.solve(kap, integer=integer, mip_gap=gap, mip_time=(4.0 if rho == 1.0 else 20.0))
+        if self.bp_time and integer:
+            # exact integer step (ccu.bp): branch-and-price on the pool columns; res.lp is the global lower bound
+            res = bp.solve_pool_bp(pool, kap, time_limit=self.bp_time, gap_tol=(gap if rho == 1.0 else 1e-8),
+                                   mip_time=min(5.0, self.bp_time))
+            self.bp_calls += 1
+            self.bp_optimal += int(res.status == "optimal")
+            self.bp_timeouts += int(res.status != "optimal")
+            self.bp_nodes += res.nodes
+            self.bp_max_gap = max(self.bp_max_gap, res.value - res.lp)
+            self.bp_time_used += res.pricing_time
+        else:
+            res = pool.solve(kap, integer=integer, mip_gap=gap, mip_time=(4.0 if rho == 1.0 else 20.0))
         if fresh:  # inject the independent columns so that the pooled oracle can reproduce an improvement
             for r in pool.cols:
                 cr.pool._add(r)
