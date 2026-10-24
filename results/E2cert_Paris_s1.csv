@@ -1,2 +1,2 @@
-city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost
-Paris,1,8,-0.2,0,9.31153,-5013.2
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_frac_optimal
+Paris,1,8,-0.2,0,2.64026,-5013.2,exact,37,35,7,2,0,3.00015,3107,609.028,0.945946

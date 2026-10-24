@@ -81,6 +81,8 @@ def main():
     # ------------------------------------------------ E2
     cfgs = ["none", "congestion_only", "delivery_only", "both"]
     e2 = load("E2")
+    if len(e2) and "oracle" in e2.columns:  # exact re-run with a reduced grid: price-and-branch rows (oracle == 'pb') are not used
+        e2 = e2[e2.oracle.fillna("exact") != "pb"].copy()
     if len(e2):
         rows = []
         for (c, sd), d in e2.groupby(["city", "seed"]):

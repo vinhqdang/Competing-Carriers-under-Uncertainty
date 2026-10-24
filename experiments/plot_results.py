@@ -55,6 +55,8 @@ def e2_heat():
     e2 = pd.concat([x for c in CITIES for x in seeds_of(c, "E2") if len(x) == 63], ignore_index=True)
     if e2.empty:
         return
+    if "oracle" in e2.columns:  # reduced exact grid: leave the price-and-branch points blank
+        e2 = e2[e2.oracle.fillna("exact") != "pb"]
     fig, axs = plt.subplots(3, 3, figsize=(13, 10), constrained_layout=True)
     for ax, c in zip(axs.ravel(), CITIES):
         d = e2[e2.city == c]
@@ -67,10 +69,10 @@ def e2_heat():
             gs.append(dd.assign(g=100 * (none.social_cost - dd.social_cost) / max(abs(none.social_cost), 1e-9)))
         d = pd.concat(gs)
         p = d.pivot_table(index="theta", columns="sfrac", values="g", aggfunc="mean").sort_index()
-        im = ax.imshow(p.values, origin="lower", aspect="auto", cmap="RdBu", vmin=-max(abs(p.values).max(), 1e-6), vmax=max(abs(p.values).max(), 1e-6))
+        im = ax.imshow(p.values, origin="lower", aspect="auto", cmap="RdBu", vmin=-max(np.nanmax(abs(p.values)), 1e-6), vmax=max(np.nanmax(abs(p.values)), 1e-6))
         ax.set_xticks(range(len(p.columns)), [f"{x:g}" for x in p.columns], fontsize=7)
         ax.set_yticks(range(len(p.index)), [f"{x:g}" for x in p.index], fontsize=7)
-        ax.set_title(f"{nm(c)} (max {p.values.max():.2f}%, {d.seed.nunique()} seeds)")
+        ax.set_title(f"{nm(c)} (max {np.nanmax(p.values):.2f}%, {d.seed.nunique()} seeds)")
         ax.grid(False)
         ax.set_xlabel("per-delivery charge s / fee")
         ax.set_ylabel("congestion theta")

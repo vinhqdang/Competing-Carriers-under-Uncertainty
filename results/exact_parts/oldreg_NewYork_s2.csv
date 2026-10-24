@@ -1,0 +1,2 @@
+city,seed,welfare_replay,welfare_old_file,regret_pb_certified,regret_exact_max,regret_exact_each,n_carriers_with_regret,bp_calls,bp_optimal,bp_unproven
+NewYork,2,20089,20089,0,4.03809,"[0.0, 0.0, 4.0381, 0.0]",1,4,2,2

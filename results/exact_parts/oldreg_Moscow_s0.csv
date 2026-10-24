@@ -1,0 +1,2 @@
+city,seed,welfare_replay,welfare_old_file,regret_pb_certified,regret_exact_max,regret_exact_each,n_carriers_with_regret,bp_calls,bp_optimal,bp_unproven
+Moscow,0,6734.86,6734.86,0,2.27374e-13,"[0.0, 0.0, 0.0, 0.0, 0.0]",0,5,5,0

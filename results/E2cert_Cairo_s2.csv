@@ -1,2 +1,2 @@
-city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost
-Cairo,2,2,0.2,0,1.11416,-1045.21
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_frac_optimal
+Cairo,2,2,0.2,0,0.022052,-1045.75,exact,8,6,4,2,0,0.283659,2173,430.685,0.75

@@ -12,9 +12,11 @@ Writes results/E2_<city>.csv (every grid point), results/E2best_<city>.csv (best
 objective), results/E3_<city>.csv (social optimum, equilibria found, priced equilibrium).
 """
 import argparse
+import os
 import time
 
 import numpy as np
+import pandas as pd
 
 from common import RES, read_rows, rpath, scalars, solve_ne, write_csv, zb, zmc
 
@@ -44,6 +46,9 @@ def main():
     p_e2, p_best, p_cert, p_e3 = (rpath(k, a.city, a.seed) for k in ("E2", "E2best", "E2cert", "E3"))
     old = read_rows(p_e2)
     ngrid = len(THETAS) * len(SFRACS)
+    full_mode = os.environ.get("CCU_E2_MODE", "full") not in ("reduced", "minimal")
+    if full_mode and any(r.get("oracle") == "pb" for r in old):  # upgrade of a reduced grid: price-and-branch rows are recomputed
+        old = [r for r in old if r.get("oracle") != "pb"]
     if len(old) == ngrid and p_best.exists() and p_cert.exists() and len(read_rows(p_e3)) == N_E3:
         print(a.city, a.seed, "E2/E3 already complete, skipping", flush=True)
         return
@@ -73,9 +78,8 @@ def main():
             results[(th, sf)] = base if (th == 0 and sf == 0) else solve_ne(g, rounds=6, lam0=lam0_base, certify="oracle")
         return results[(th, sf)]
 
-    for th, sf in order:
-        if (th, sf) in done:
-            continue
+    def evaluate_point(th, sf):
+        nonlocal lam
         toll = np.zeros(2 * Z)
         toll[:Z] = sf * fee
         toll[Z:] = th * ext
@@ -89,14 +93,64 @@ def main():
         r = dict(city=a.city, seed=a.seed, config=config(th, sf), theta=th, sfrac=sf, s_usd=sf * fee, N=g.N, Z=Z, **o["row"])
         r["revenue"] = r.pop("charges")
         rows.append(r)
+        done.add((th, sf))
         print(a.city, a.seed, th, sf, round(r["social_cost"], 1), round(r["social_cost_broad"], 1), r["calls"], round(time.perf_counter() - t0), flush=True)
+        write_csv(p_e2, rows)
+
+    e2mode = os.environ.get("CCU_E2_MODE", "full")
+    reduced = e2mode in ("reduced", "minimal") and bool(g.bp_time)
+    if not reduced:
+        for th, sf in order:
+            if (th, sf) not in done:
+                evaluate_point(th, sf)
+    else:
+        # Reduced exact grid (heavy cities).  Screening with the price-and-branch grid of the same city/seed (results/pb_old):
+        # exact oracle at (0, 0), at the two best points of every (objective, configuration) and at the grid neighbours of
+        # the best one; then local refinement: the grid neighbours of the exact best point of every (objective,
+        # configuration) are evaluated with the exact oracle until no best point has an unevaluated neighbour (at most 4 rounds).
+        # The remaining points of the 63-point grid keep their price-and-branch rows (column oracle = 'pb').
+        pbrows = pd.read_csv(RES / "pb_old" / p_e2.name).to_dict("records")
+        ti = {t: k for k, t in enumerate(THETAS)}
+        si = {x: k for k, x in enumerate(SFRACS)}
+
+        def nbrs(th, sf):
+            i, j = ti[th], si[sf]
+            return [(THETAS[i + di], SFRACS[j + dj]) for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1))
+                    if 0 <= i + di < len(THETAS) and 0 <= j + dj < len(SFRACS)]
+
+        sel = {(0.0, 0.0)}
+        for obj in ("social_cost", "social_cost_broad"):
+            for cfg in ("congestion_only", "delivery_only", "both"):
+                cand = sorted((r for r in pbrows if r["config"] == cfg), key=lambda r: r[obj])
+                sel |= {(float(r["theta"]), float(r["sfrac"])) for r in cand[:2]}
+                if e2mode == "reduced":  # 'minimal' (Cairo): no neighbours and no refinement, only the price-and-branch top two
+                    sel |= set(nbrs(float(cand[0]["theta"]), float(cand[0]["sfrac"])))
+        for th, sf in order:
+            if (th, sf) in sel and (th, sf) not in done:
+                evaluate_point(th, sf)
+        for rnd in range(4 if e2mode == "reduced" else 0):
+            new = set()
+            for obj in ("social_cost", "social_cost_broad"):
+                for cfg in ("congestion_only", "delivery_only", "both"):
+                    ex = [r for r in rows if r["config"] in (cfg, "none") and r.get("oracle") == "exact"]
+                    b = min(ex, key=lambda r: r[obj])
+                    new |= {q for q in nbrs(float(b["theta"]), float(b["sfrac"])) if q not in done}
+            if not new:
+                break
+            for th, sf in order:
+                if (th, sf) in new:
+                    evaluate_point(th, sf)
+        have = {(float(r["theta"]), float(r["sfrac"])) for r in rows}
+        for r in pbrows:
+            if (float(r["theta"]), float(r["sfrac"])) not in have:
+                rows.append(dict(r, oracle="pb"))
         write_csv(p_e2, rows)
     g.set_charges()
     # best point per configuration and objective (the leader may always choose "none")
     best = []
     for obj in ("social_cost", "social_cost_broad"):
         for cfg in ("none", "congestion_only", "delivery_only", "both"):
-            cand = [r for r in rows if r["config"] in (cfg, "none")]
+            cand = [r for r in rows if r["config"] in (cfg, "none") and not (reduced and r.get("oracle") == "pb")]
             b = min(cand, key=lambda r: r[obj])
             best.append(dict(city=a.city, seed=a.seed, objective=obj, config=cfg, **{k: v for k, v in b.items() if k not in ("city", "config", "seed")},
                              chosen_config=b["config"]))
@@ -136,6 +190,7 @@ def main():
         """independent exact verification of a profile: fresh elementary pool, no shared columns"""
         if g.bp_time:
             r["max_regret_fresh"] = float(g.regrets(prof, count=False, fresh=True).max())
+            r["max_regret_fresh_lb"] = float(np.nanmax(g._last_regret_lp))  # regret measured against the proven lower bound: guaranteed bound
             stamp(r, "bpfresh_")
 
     def add(kind, prof, extra=None, game=None):
@@ -148,11 +203,16 @@ def main():
 
     for broad in (False, True):
         so = g.so_variant(broad)
+        so_pb = broad and os.environ.get("CCU_E3_SO_BROAD") == "pb"  # time budget: the broad-objective benchmark keeps the price-and-branch oracle
+        if so_pb:
+            so.bp_time = None
         cg = zmc.run_cg(so, iters=40)
         relaxed = zmc.relaxed_value(so, cg["pools"], cg["weights"])
-        add("SO_broad" if broad else "SO_main", cg["profile"],
-            dict(phi_pure=so.potential(cg["profile"]), phi_relaxed=relaxed, calls=cg["calls"], converged=cg["converged"],
-                 cg_iters=len(cg["hist"]), cg_last_gap=cg["hist"][-1][1]))
+        r_so = add("SO_broad" if broad else "SO_main", cg["profile"],
+                   dict(phi_pure=so.potential(cg["profile"]), phi_relaxed=relaxed, calls=cg["calls"], converged=cg["converged"],
+                        cg_iters=len(cg["hist"]), cg_last_gap=cg["hist"][-1][1]))
+        if so_pb:
+            r_so["oracle"] = "pb"
     # equilibria of the unpriced game: ZMC, BR from the empty profile, from full service, from random prices
     r_ne = add("NE_zmc", base["profile"], dict(phi_pure=base["row"]["phi"], calls=base["row"]["calls"], max_regret=base["row"]["max_regret"]))
     fresh_regret(r_ne, base["profile"])
