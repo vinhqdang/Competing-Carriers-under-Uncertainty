@@ -12,7 +12,9 @@ Layout: three panels, left to right, on a white background.
    exposure-based congestion: pure imprecise equilibria at every belief width;
    vehicle-count congestion: existence NP-complete below an explicit width;
    enough imprecision makes a rounded mixed equilibrium an exact pure equilibrium.
-3. **Evidence**: the left half of `figures/E2_instruments.png` (main objective, gain of the leader's best
+3. **Leader method** (optional fourth panel): `figures/dip_charges_London.png` (left half: DIP's zone charges per delivery,
+   in units of the fee), captioned "Zone charges from dual implementation pricing; the target is an exact equilibrium".
+4. **Evidence**: the left half of `figures/E2_instruments.png` (main objective, gain of the leader's best
    charge by instrument, mean over three seeds with spread bars), captioned
    "Nine cities, three seeds each: a per-delivery subsidy captures most of the gain; a congestion charge alone captures little."
 

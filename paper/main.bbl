@@ -1,4 +1,4 @@
-\begin{thebibliography}{93}
+\begin{thebibliography}{104}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -722,6 +722,98 @@
   \bibinfo{address}{Boston, MA}, \bibinfo{year}{2005}, pp.
   \bibinfo{pages}{33--65}. \DOIprefix\doi{10.1007/0-387-25486-2_2}.
 %Type = Article
+\bibitem[{Buchanan(1969)}]{Buchanan1969}
+\bibinfo{author}{J.~M. Buchanan},
+\newblock \bibinfo{title}{External diseconomies, corrective taxes, and market
+  structure},
+\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{59}
+  (\bibinfo{year}{1969}) \bibinfo{pages}{174--177}.
+%Type = Article
+\bibitem[{Barnett(1980)}]{Barnett1980}
+\bibinfo{author}{A.~H. Barnett},
+\newblock \bibinfo{title}{The {Pigouvian} tax rule under monopoly},
+\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{70}
+  (\bibinfo{year}{1980}) \bibinfo{pages}{1037--1041}.
+%Type = Article
+\bibitem[{Wolpert and Tumer(2001)}]{Wolpert2001}
+\bibinfo{author}{D.~H. Wolpert}, \bibinfo{author}{K.~Tumer},
+\newblock \bibinfo{title}{Optimal payoff functions for members of collectives},
+\newblock \bibinfo{journal}{Advances in Complex Systems} \bibinfo{volume}{4}
+  (\bibinfo{year}{2001}) \bibinfo{pages}{265--279}.
+  \DOIprefix\doi{10.1142/S0219525901000188}.
+%Type = Article
+\bibitem[{Marden and Wierman(2013)}]{Marden2013}
+\bibinfo{author}{J.~R. Marden}, \bibinfo{author}{A.~Wierman},
+\newblock \bibinfo{title}{Distributed welfare games},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{61}
+  (\bibinfo{year}{2013}) \bibinfo{pages}{155--168}.
+  \DOIprefix\doi{10.1287/opre.1120.1137}.
+%Type = Incollection
+\bibitem[{Bergendorff et~al.(1997)Bergendorff, Hearn, and
+  Ramana}]{Bergendorff1997}
+\bibinfo{author}{P.~Bergendorff}, \bibinfo{author}{D.~W. Hearn},
+  \bibinfo{author}{M.~V. Ramana},
+\newblock \bibinfo{title}{Congestion toll pricing of traffic networks},
+\newblock in: \bibinfo{booktitle}{Network Optimization}, volume
+  \bibinfo{volume}{450} of \textit{\bibinfo{series}{Lecture Notes in Economics
+  and Mathematical Systems}}, \bibinfo{publisher}{Springer},
+  \bibinfo{address}{Berlin}, \bibinfo{year}{1997}, pp. \bibinfo{pages}{51--71}.
+  \DOIprefix\doi{10.1007/978-3-642-59179-2_4}.
+%Type = Incollection
+\bibitem[{Hearn and Ramana(1998)}]{Hearn1998}
+\bibinfo{author}{D.~W. Hearn}, \bibinfo{author}{M.~V. Ramana},
+\newblock \bibinfo{title}{Solving congestion toll pricing models},
+\newblock in: \bibinfo{booktitle}{Equilibrium and Advanced Transportation
+  Modelling}, \bibinfo{publisher}{Springer}, \bibinfo{address}{Boston, MA},
+  \bibinfo{year}{1998}, pp. \bibinfo{pages}{109--124}.
+  \DOIprefix\doi{10.1007/978-1-4615-5757-9_6}.
+%Type = Article
+\bibitem[{Ahuja and Orlin(2001)}]{Ahuja2001}
+\bibinfo{author}{R.~K. Ahuja}, \bibinfo{author}{J.~B. Orlin},
+\newblock \bibinfo{title}{Inverse optimization},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{49}
+  (\bibinfo{year}{2001}) \bibinfo{pages}{771--783}.
+  \DOIprefix\doi{10.1287/opre.49.5.771.10607}.
+%Type = Article
+\bibitem[{Fotakis and Spirakis(2008)}]{Fotakis2008}
+\bibinfo{author}{D.~Fotakis}, \bibinfo{author}{P.~G. Spirakis},
+\newblock \bibinfo{title}{Cost-balancing tolls for atomic network congestion
+  games},
+\newblock \bibinfo{journal}{Internet Mathematics} \bibinfo{volume}{5}
+  (\bibinfo{year}{2008}) \bibinfo{pages}{343--363}.
+  \DOIprefix\doi{10.1080/15427951.2008.10129175}.
+%Type = Article
+\bibitem[{Wang(2009)}]{Wang2009}
+\bibinfo{author}{L.~Wang},
+\newblock \bibinfo{title}{Cutting plane algorithms for the inverse mixed
+  integer linear programming problem},
+\newblock \bibinfo{journal}{Operations Research Letters} \bibinfo{volume}{37}
+  (\bibinfo{year}{2009}) \bibinfo{pages}{114--116}.
+  \DOIprefix\doi{10.1016/j.orl.2008.12.001}.
+%Type = Article
+\bibitem[{Bodur et~al.(2022)Bodur, Chan, and Zhu}]{Bodur2022}
+\bibinfo{author}{M.~Bodur}, \bibinfo{author}{T.~C.~Y. Chan},
+  \bibinfo{author}{I.~Y. Zhu},
+\newblock \bibinfo{title}{Inverse mixed integer optimization: Polyhedral
+  insights and trust region methods},
+\newblock \bibinfo{journal}{INFORMS Journal on Computing} \bibinfo{volume}{34}
+  (\bibinfo{year}{2022}) \bibinfo{pages}{1471--1488}.
+  \DOIprefix\doi{10.1287/ijoc.2021.1138}.
+%Type = Misc
+\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
+\bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
+  \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
+  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
+  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
+  \bibinfo{year}{2025}.
+%Type = Misc
+\bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
+\bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
+  \bibinfo{author}{N.~Kiyavash}, \bibinfo{author}{P.~Thiran},
+  \bibinfo{title}{Zeroth-order {Stackelberg} control in combinatorial
+  congestion games}, \bibinfo{howpublished}{arXiv preprint 2602.23277},
+  \bibinfo{year}{2026}.
+%Type = Article
 \bibitem[{Briant et~al.(2008)Briant, Lemar{\'e}chal, Meurdesoif, Michel,
   Perrot, and Vanderbeck}]{Briant2008}
 \bibinfo{author}{O.~Briant}, \bibinfo{author}{C.~Lemar{\'e}chal},
@@ -750,13 +842,6 @@
 \newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{179}
   (\bibinfo{year}{2020}) \bibinfo{pages}{343--384}.
   \DOIprefix\doi{10.1007/s10107-018-1334-9}.
-%Type = Misc
-\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
-\bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
-  \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
-  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
-  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
-  \bibinfo{year}{2025}.
 %Type = Article
 \bibitem[{Haklay and Weber(2008)}]{Haklay2008}
 \bibinfo{author}{M.~Haklay}, \bibinfo{author}{P.~Weber},

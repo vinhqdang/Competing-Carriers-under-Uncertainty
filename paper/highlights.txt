@@ -2,4 +2,4 @@ Competing delivery carriers modelled as a routing game with credal beliefs
 Pure imprecise equilibria always exist under exposure-based congestion
 Existence is NP-complete under vehicle-count congestion below a set width
 Exact route pricing for probability-box travel times with unknown dependence
-Nine-city evidence: a per-delivery subsidy beats a congestion charge alone
+City charges computed by implementing a target optimum, without a grid

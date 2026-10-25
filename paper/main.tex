@@ -72,7 +72,7 @@
 \address{British University Vietnam, Hung Yen, Vietnam}
 
 \begin{abstract}
-Competing parcel carriers share streets and customers while planning with travel-time data too thin to identify a law. We model them as players of a Cournot--congestion game: each carrier chooses a routing plan, interacts with rivals through zone aggregates of deliveries and vehicle-hours, and holds a credal set of beliefs about traffic and rivals. Under exposure-based congestion the game has an exact potential and pure imprecise equilibria exist at every belief width. Under vehicle-count congestion, deciding whether a pure imprecise equilibrium exists is strongly NP-complete below an explicit width; above a width that does not grow with the number of carriers, every mixed equilibrium rounds to an exact pure E-admissible equilibrium, and this bound is attained. For computation we give an exact column-generation pricing algorithm for routes whose arc times are probability boxes with unknown dependence, with one resource per kink of the route loss, and a zone-market search whose routing calls per round do not grow with the number of zones. On nine cities built from OpenStreetMap, gridded population and published parameters, the empirical price of anarchy is near one where carriers serve almost all demand and lies between \PoADelhiMin{} and \PoALondonMax{} across three seeds where service is partial. A per-delivery subsidy captures most of a city leader's attainable gain in \EtwoShareGeHalfN{} of \EtwoMaterialN{} city-seed cases with a material gain; a congestion charge alone captures little in all but one case. Wider imprecision lowers deliveries and welfare. The zone-market search did not beat best response on the city games.
+Competing parcel carriers share streets and customers while planning with travel-time data too thin to identify a law. We model them as players of a Cournot--congestion game: each carrier chooses a routing plan, interacts with rivals through zone aggregates of deliveries and vehicle-hours, and holds credal beliefs about traffic and rivals. Under exposure-based congestion pure imprecise equilibria exist at every belief width. Under vehicle-count congestion, deciding existence is strongly NP-complete below an explicit width; above a width that does not grow with the number of carriers, every mixed equilibrium rounds to an exact pure E-admissible equilibrium, and this bound is attained. We give an exact column-generation pricing algorithm for routes whose arc times are probability boxes with unknown dependence, embedded in branch-and-price, and a leader method, dual implementation pricing, that computes a city's zone charges by implementing a target social optimum with one best response per carrier per round instead of solving equilibria over a grid. On nine cities built from OpenStreetMap, gridded population and published parameters, dual implementation pricing made its target an exact equilibrium in every run and, where a full grid exists, reached \DipFullGainMin--\DipFullGainMax\% of the grid-optimal gain with at most \DipFullCallsMax\% of its routing calls, mostly through zone-specific charges. The empirical price of anarchy is near one where carriers serve almost all demand and up to \PoALondonMax{} where service is partial; among flat charges a per-delivery subsidy captures most of the gain, while a congestion charge alone captures little in all but one case.
 \end{abstract}
 
 \begin{keyword}
@@ -94,7 +94,7 @@ Two features of the setting shape the model. First, a carrier rarely knows the p
 \begin{enumerate}[label=(\roman*),leftmargin=*]
 \item \emph{Model.} A Cournot--congestion game among carriers who choose routing plans from finite, nonconvex sets and interact through zone aggregates, with credal beliefs about traffic and rivals, four decision criteria, and two congestion regimes: exposure-based (D1) and vehicle-count (D2) (Section~\ref{sec:model}).
 \item \emph{Theory.} A credal absorption theorem: any mixed equilibrium can be rounded to a pure profile that is an exact E-admissible (hence maximal and interval-undominated) equilibrium once the belief width reaches an explicit radius whose bound does not grow with the number of carriers; the bound is attained. Below an explicit width, existence of pure imprecise equilibria is strongly NP-complete under D2 for all four criteria, while under D1 they exist at every width. The $\Gamma$-maximin equilibria form the equilibrium set of a precise game with a computable surcharge. These results, with tightness examples and price-of-anarchy transfers, are in Section~\ref{sec:theory}; full proofs are in \ref{app:proofs}. The discrete core statements, including the Shapley--Folkman lemma and the exact potential identity, are machine-checked in Lean~4 with no unproved steps; the full theorems, with their bounds and complexity claims, are not formalised (Section~\ref{sec:lean}).
-\item \emph{Algorithms.} Budget-resource labelling (BRL), an exact pricing algorithm for routes whose arc times are given by probability boxes with unknown dependence: the worst-case expected convex piecewise-linear route loss becomes a shortest-path problem with one decision resource per kink, and labels are compared by a dominance rule restricted to a computable completion window. Zone-market clearing (ZMC), a price search for good pure equilibria of the D1 game whose rounds cost one routing call per carrier, independently of the number of zones. A branch-and-price method with the BRL pricer makes the integer routing step exact. These components are integrated into one equilibrium engine (Section~\ref{sec:algo}).
+\item \emph{Algorithms.} Budget-resource labelling (BRL), an exact pricing algorithm for routes whose arc times are given by probability boxes with unknown dependence: the worst-case expected convex piecewise-linear route loss becomes a shortest-path problem with one decision resource per kink, and labels are compared by a dominance rule restricted to a computable completion window; a branch-and-price method with this pricer makes the carriers' integer routing step exact. Dual implementation pricing (DIP), a method for the city leader: it computes a target social optimum, starts from a closed-form tangent charge per zone derived from an exact identity between the carriers' potential and the social cost, and finds charges that make the target an exact equilibrium by cutting planes whose separation step is one best response per carrier at the target, so that no equilibrium is solved for the leader's decision. As a secondary method, zone-market clearing (ZMC) searches for good pure equilibria of the D1 game with one routing call per carrier per round, independently of the number of zones; on the city games it was not better than plain best response. These components are integrated into one equilibrium engine (Section~\ref{sec:algo}).
 \item \emph{Evidence.} Nine city instances built from OpenStreetMap road networks, gridded population and web-sourced operating parameters, with every weak parameter flagged, and experiments on equilibria, city charges, empirical price of anarchy and stability, imprecision and algorithm performance over three random draws (seeds) of each city slice, including negative findings and the conclusions that change with the seed, together with tests of the theorems on the city equilibria and on vehicle-count variants of the games; the main game experiments use an exact integer routing step, and we quantify how the earlier inexact step changed the equilibria (Sections~\ref{sec:data} and~\ref{sec:results}).
 \end{enumerate}
 We do not claim a forecast for any city. The instances describe a representative slice of each city with proxy demand and several weak parameters, and the price-of-anarchy values are empirical, computed from the few equilibria the methods found.
@@ -293,9 +293,9 @@ $W(\sigma)\ge W^*-\sum_z\big[\tfrac{b_z}{2}\sum_iq_{iz}^{*2}+\tfrac{\gamma c_z}{
 
 A smoothness-based price-of-anarchy bound also transfers to imprecise equilibria through Lemma~\ref{lem:transfer} (Proposition~\ref{prop:smooth}), but it is conditional: we do not have smoothness constants for the Cournot--congestion game with arbitrary private routing costs. The price-of-anarchy values in Section~\ref{sec:results} are therefore empirical.
 
-\subsection{Certificates and the rounding algorithm}\label{sec:cert}
+\subsection{Exact thresholds and the rounding algorithm}\label{sec:cert}
 
-For any pure profile $p$, the exact E-threshold of carrier $i$,\[A^E_i(p)=\min\{\delta: p_i\text{ is E-admissible at width }\delta\},\]is the value of a linear program over the box, so $p\in\ICNE_E(\delta)$ if and only if $\delta\ge\max_iA^E_i(p)$ (Theorem~\ref{thm:cert}). Theorem~\ref{thm:main} and this certificate define an algorithm with four phases: relax (a mixed equilibrium by Frank--Wolfe on the concave relaxed potential under D1, or by a double oracle under D2; \citealp{McMahan2003}), sparsify (a vertex of the Shapley--Folkman polytope), round, and certify. Under D2 its output satisfies the bounds of Theorem~\ref{thm:main}(b) (Theorem~\ref{thm:D2}), but its relaxation phase is PPAD-hard in general. Under D1 the relaxation-and-rounding technique is classical \citep{Aubin1976,Udell2016,Bonnans2023}. The full rounding algorithm was not run on the city games, which use the D1 engine of Section~\ref{sec:algo}; the threshold certificate of Theorem~\ref{thm:cert} was used in the tests of Section~\ref{sec:res-theory}.
+For any pure profile $p$, the exact E-threshold of carrier $i$,\[A^E_i(p)=\min\{\delta: p_i\text{ is E-admissible at width }\delta\},\]is the value of a linear program over the box, so $p\in\ICNE_E(\delta)$ if and only if $\delta\ge\max_iA^E_i(p)$ (Theorem~\ref{thm:cert}). Theorem~\ref{thm:main} and this threshold computation define an algorithm with four phases: relax (a mixed equilibrium by Frank--Wolfe on the concave relaxed potential under D1, or by a double oracle under D2; \citealp{McMahan2003}), sparsify (a vertex of the Shapley--Folkman polytope), round, and compute the exact width. Under D2 its output satisfies the bounds of Theorem~\ref{thm:main}(b) (Theorem~\ref{thm:D2}), but its relaxation phase is PPAD-hard in general. Under D1 the relaxation-and-rounding technique is classical \citep{Aubin1976,Udell2016,Bonnans2023}. The full rounding algorithm was not run on the city games, which use the D1 engine of Section~\ref{sec:algo}; the exact thresholds of Theorem~\ref{thm:cert} were used in the tests of Section~\ref{sec:res-theory}.
 
 \begin{remark}[Nonaffine congestion]\label{rem:nonaffine}
 With a power congestion term the expected payoff under mixed rival strategies is no longer a function of the mean aggregate; Lemma~\ref{lem:reduction} and the exact credal statements fail, although relaxed equilibria still exist. We do not treat this case.
@@ -375,7 +375,95 @@ Price-and-branch can miss the integer optimum because the columns generated at t
 \item \emph{ng-routes.} If a non-elementary column appears in a node solution, the ng-sets along its cycle are enlarged and the columns that became infeasible are removed. This only tightens the relaxation, so earlier bounds remain valid, and the reported plans are elementary.
 \item \emph{Bounds.} The node LP value, and during column generation the Lagrangian bound $z+n_{\max}\min\{0,\min rc\}$, give a lower bound that is valid at every moment; a bound is marked invalid if a pricing call hits the label limit. Upper bounds come from integral nodes and from an integer program over the generated elementary columns. Nodes are selected by best bound, and the method stops when the relative gap is below $10^{-6}$.
 \end{itemize}
-Because ng-routes relax elementary routes, the final bound is valid for the elementary problem and the incumbent is a feasible elementary plan, so a zero gap certifies optimality. The scheme is standard branch-and-price machinery; its purpose here is to remove the inexact integer step, not to add a new branching rule.
+Because ng-routes relax elementary routes, the final bound is valid for the elementary problem and the incumbent is a feasible elementary plan, so a zero gap proves optimality. The scheme is standard branch-and-price machinery; its purpose here is to remove the inexact integer step, not to add a new branching rule.
+
+\subsection{Dual implementation pricing (DIP): the city's charges}\label{sec:dip}
+
+The city leader chooses charges so that the carriers' equilibrium has low social cost. A direct approach searches a grid of charges and solves one equilibrium per grid point; with 63 points this costs about two thousand routing calls per city and seed (Section~\ref{sec:res-leader}). DIP replaces the search by an implementation step: compute the profile the city wants, then compute charges under which that profile is an equilibrium, using the carriers' own routing oracle to separate candidate charges. No equilibrium is solved for the leader's decision.
+
+\paragraph{Setting} We use the D1 instance of Section~\ref{sec:model} in cost form. Carrier $i$ serves a subset of its customer zones with all-or-nothing lots $d_{iz}>0$, so $q_{iz}\in\{0,d_{iz}\}$ and $q_{iz}^2=d_{iz}q_{iz}$; vehicle-hours are $\tau_{iz}=r\,q_{iz}$ for one ratio $r>0$ (assumption (A3)); $R_i(p)\ge0$ is the robust routing cost of plan $p$; $g_z=\gamma c_z$. The city posts $s_z$ per delivery and $t_z$ per vehicle-hour. Carrier $i$'s cost and the social cost (charges are transfers) are
+\[
+J_i(p;\sigma_{-i})=R_i(p)+\sum_z\big[q_{iz}(-\alpha_z+b_z(q_{iz}+Q_{-i,z})+s_z)+\tau_{iz}(g_z(\tau_{iz}+X_{-i,z})+t_z)\big],
+\]
+\[
+\mathrm{SC}(\sigma)=\sum_iR_i(\sigma_i)+\sum_z\big[-\alpha_zQ_z+\tfrac{b_z}{2}Q_z^2+g_zX_z^2\big].
+\]
+Write $\zeta_z=g_zr^2$ (congestion slope in delivery units), $m_z=b_z+\zeta_z$ (the slope the carriers face) and $\bar d_z$ for the mean lot in zone $z$.
+
+\begin{proposition}[One instrument per zone]\label{prop:instr}
+(a) For every plan, $\sum_z(s_zq_{iz}+t_z\tau_{iz})=\ip{u}{q_i}$ with $u_z=s_z+rt_z$, so the game depends on the charges only through $u\in\R^Z$. (b) Every $u$ is realised by a uniform per-delivery charge $s=\min_zu_z$ over zones with lots and non-negative zone congestion charges $t_z=(u_z-s)/r$. (c) The grid of Section~\ref{sec:res-leader} is the two-parameter family $u=s\mathbf 1+\vartheta\,r\,g\odot X^{\rm NE}$.
+\end{proposition}
+
+Under $u$ the game has the exact potential $\Phi_u(\sigma)=\sum_iR_i(\sigma_i)+\sum_z[-\alpha_zQ_z+\tfrac{m_z}{2}(Q_z^2+\sum_iq_{iz}^2)+u_zQ_z]$ (Proposition~\ref{prop:D1}).
+
+\begin{lemma}[Potential--welfare identity]\label{lem:identity}
+Fix $Q^\circ\in\R^Z$, let $u^{\tan}_z=\zeta_zQ^\circ_z-\tfrac{m_z}{2}\bar d_z$ and $v=u-u^{\tan}$. For every pure profile $\sigma$,
+\[
+\Phi_u(\sigma)=\mathrm{SC}(\sigma)-\sum_z\tfrac{\zeta_z}{2}(Q_z-Q^\circ_z)^2+L(\sigma)+\ip{v}{Q}+\sum_z\tfrac{\zeta_z}{2}(Q^\circ_z)^2,\qquad L(\sigma)=\sum_{i,z}\tfrac{m_z}{2}(d_{iz}-\bar d_z)q_{iz}.
+\]
+\end{lemma}
+
+The \emph{tangent charge} $u^{\tan}$ is the classical corrective tax of a Cournot market with an externality: the marginal external damage at the target aggregate minus a market-power subsidy \citep{Buchanan1969,Barnett1980}. Two details are specific to all-or-nothing lots: the subsidy is half a lot, $\tfrac{m_z}{2}\bar d_z$ per delivery, and it includes the carriers' own congestion. With carrier-specific charges $U_{iz}=\zeta_zQ^*_{-i,z}-\tfrac{b_z}{2}d_{iz}$ every carrier's cost differences equal the social-cost differences, so every social optimum is an equilibrium; this is the classical marginal-contribution charge \citep{Wolpert2001,Marden2013} (Proposition~\ref{prop:pers} in \ref{app:dip}). A city cannot charge per carrier, and the next results measure what flat zone charges lose. In the convexified (mixed) game let $x^*$ minimise the convexified social cost $\overline{\mathrm{SC}}$, with aggregate $\bar Q^*$.
+
+\begin{theorem}[Loss under asymmetric lots]\label{thm:asym}
+Let $u=\zeta\odot\bar Q^*-\tfrac m2\odot\bar d$. Every convexified equilibrium $x^u$ satisfies $0\le\overline{\mathrm{SC}}(x^u)-\overline{\mathrm{SC}}(x^*)\le(1+\varrho)E$, where $\varrho=\max_z\zeta_z/(b_z+\zeta_z)<1$ and $E=\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\bar d_z|\,d_{iz}$ measures how unequal the lots in a zone are.
+\end{theorem}
+
+\begin{theorem}[Exact implementation with symmetric lots]\label{thm:convex}
+If all lots in a zone are equal, the tangent charge makes $x^*$ a convexified equilibrium, and every convexified equilibrium under it has aggregate $\bar Q^*$ and social cost $\overline{\mathrm{SC}}(x^*)$.
+\end{theorem}
+
+\emph{Sketch.} The identity holds for the convexified potential and social cost with the same algebra. Because $\overline{\mathrm{SC}}$ is linear plus a quadratic in $\bar Q$, its expansion around $x^*$ is exact; comparing it with the identity at a minimiser of the potential bounds the aggregate deviation by the lot-asymmetry term $L$, and $|L|\le E$. With equal lots $L\equiv0$.
+
+\paragraph{The pure game} For a pure target $\sigma^*$ and an admissible box $\mathcal U$ of charges let
+\[
+P(\sigma^*)=\big\{u\in\mathcal U:\ \ip{q_i(p)-q_i(\sigma^*_i)}{u}\ge J^0_i(\sigma^*_i;\sigma^*_{-i})-J^0_i(p;\sigma^*_{-i})\ \ \forall i,\ \forall p\in\mathcal P_i\big\},
+\]
+with $J^0_i$ the cost at zero charges. Since $J^u_i=J^0_i+\ip{u}{q_i}$, $P(\sigma^*)$ is exactly the set of charges under which $\sigma^*$ is a pure Nash equilibrium: a polyhedron, possibly empty. Toll polyhedra of this kind are classical for nonatomic routing \citep{Bergendorff1997,Hearn1998} and inverse optimisation \citep{Ahuja2001}.
+
+\begin{algorithm}[t]
+\caption{DIP: dual implementation pricing}\label{alg:dip}
+\begin{algorithmic}[1]
+\State \textbf{Target.} Column generation on the convexified social cost (the carriers' oracle at social prices), rounding and coordinate polish $\Rightarrow$ pure profile $\sigma^*$ with aggregate $Q^*$
+\State \textbf{Reference.} $u^{\rm ref}\gets\zeta\odot Q^*-\tfrac m2\odot\bar d$ (tangent charge); cuts $\mathcal C\gets\emptyset$; $u\gets u^{\rm ref}$
+\Repeat
+  \State for each $i$: $b_i\gets$ best response to $\sigma^*_{-i}$ under $u$ \Comment{$N$ routing calls, no equilibrium solve}
+  \State for each $i$ with $J^u_i(b_i)<J^u_i(\sigma^*_i)$: add $\ip{q_i(b_i)-q_i(\sigma^*_i)}{u}\ge J^0_i(\sigma^*_i)-J^0_i(b_i)+\varepsilon$ to $\mathcal C$
+  \State \textbf{if} no cut was added: \Return $u$ \Comment{$\sigma^*$ is an exact pure equilibrium under $u$}
+  \State $u\gets\arg\min\{\|u-u^{\rm ref}\|_1:u\in\mathcal U\text{ satisfies }\mathcal C\}$ (LP); \textbf{if} infeasible: \textbf{break}
+\Until{}
+\State \textbf{Fallback} (only if $P(\sigma^*)=\emptyset$): best-response dynamics from $\sigma^*$ under the least-violating charge and under $u^{\rm ref}$; keep the better equilibrium
+\State \textbf{Instruments.} $s=\min_zu_z$, $t_z=(u_z-s)/r$ (Proposition~\ref{prop:instr})
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Separation and finite termination]\label{thm:cut}
+(a) $u\in P(\sigma^*)$ if and only if no carrier has a strictly improving best response to $\sigma^*_{-i}$ under $u$; an improving best response gives that carrier's most violated constraint. (b) With $\varepsilon=0$, Algorithm~\ref{alg:dip} stops after at most $1+\sum_i(|\mathcal P_i|-1)$ rounds, either with $u\in P(\sigma^*)$ or with an infeasible LP, which happens only if $P(\sigma^*)=\emptyset$. Each round costs $N$ oracle calls and no equilibrium solve.
+\end{theorem}
+
+\begin{proposition}[Single-level form]\label{prop:opt}
+With optimistic selection, the leader's value is $V^\star=\min\{\mathrm{SC}(\sigma):\sigma\text{ pure},\ P(\sigma)\ne\emptyset\}\ge\min_\sigma\mathrm{SC}(\sigma)$. If Algorithm~\ref{alg:dip} ends in its main loop, the leader's loss is at most the suboptimality of the target, $\mathrm{SC}(\sigma^*)-\min_\sigma\mathrm{SC}(\sigma)$; in particular DIP is at least as good as any grid over any subfamily of charges when its target is a social optimum.
+\end{proposition}
+
+\begin{theorem}[Loss of the fallback]\label{thm:fallback}
+For any charge $u$ with $v=u-u^{\tan}$ and $Q^\circ=Q^*$, the equilibrium $\sigma^u$ reached from $\sigma^*$ by improving moves satisfies $\mathrm{SC}(\sigma^u)-\mathrm{SC}(\sigma^*)\le\sum_z\tfrac{\zeta_z}{2}(Q^u_z-Q^*_z)^2+L(\sigma^*)-L(\sigma^u)+\ip{v}{Q^*-Q^u}$.
+\end{theorem}
+
+\begin{corollary}[Oracle calls]\label{cor:calls}
+DIP uses the calls of the social target, $N$ calls per cutting-plane round, and, only if $P(\sigma^*)$ is empty, the calls of the fallback dynamics. A grid of $G$ points with an equilibrium solve of $C_{\rm eq}$ calls per point uses $GC_{\rm eq}$.
+\end{corollary}
+
+\begin{theorem}[Imprecision shifts the charge]\label{thm:credal}
+Under $\Gamma$-maximin credal boxes of width $\delta$ (Lemma~\ref{lem:gamma}), the charges that implement $\sigma^*$ are $P(\sigma^*)-\hat s(\delta)$ with $\hat s_z(\delta)=\delta(b_zw_{(z,Q)}+r\,g_zw_{(z,X)})$. One run of DIP therefore gives $u(\delta)=u(0)-\hat s(\delta)$ for every width at no further oracle cost, and the leader attains the same social cost at every width as long as $u(\delta)$ is admissible. For E-admissibility, maximality and interval dominance, $u(0)$ works at every width.
+\end{theorem}
+
+\begin{proposition}[When one instrument suffices]\label{prop:uniform}
+A uniform per-delivery charge implements the convexified optimum under equal lots if the tangent charge is the same in every active zone. With the calibration of Section~\ref{sec:data} ($\alpha_z=1.5\,$fee, $b_z=\alpha_z/(2Q^{\rm full}_z)$) and $n_z$ carriers with equal lots in zone $z$, the congestion-free tangent charge is $u_z=-0.375\,\mathrm{fee}/n_z$: a subsidy of 37.5\% of the fee in single-carrier zones and 19\% in two-carrier zones. The congestion charge contributes only spatial differentiation.
+\end{proposition}
+
+Proofs are in \ref{app:dip}. Theorem~\ref{thm:cut}(a) is what makes the method cheap: the separation oracle is one best response per carrier at the fixed target, not an equilibrium solve. Selection remains optimistic: the target is an exact equilibrium under the returned charges, but other equilibria may coexist.
+
+\paragraph{Prior art and the claim} The tangent charge is the Pigou--Cournot corrective tax \citep{Buchanan1969,Barnett1980}; carrier-specific charges are marginal-contribution utilities \citep{Wolpert2001,Marden2013}; toll polyhedra and implementing a target flow are classical \citep{Bergendorff1997,Hearn1998}, including cost-balancing tolls for atomic games \citep{Fotakis2008} and target-implementing tolls found by the ellipsoid method with an equilibrium oracle \citep{Bhaskar2019}; the loop is an inverse-optimisation cutting plane \citep{Ahuja2001,Wang2009,Bodur2022}; and best-response cutting planes are used for pure equilibria of integer-programming games and related market problems \citep{Dragotto2023,Duguet2025}. The closest leader-side method updates tolls by zeroth-order steps around an equilibrium solver in combinatorial congestion games, including freight carriers with hard tour problems \citep{Masiha2026}; like a grid, it needs an equilibrium solve per outer step. What remains new is modest: the exact potential--welfare identity of the lumpy Cournot--congestion game and the loss bounds it gives with the lot-asymmetry number $E$; the use of the carriers' own NP-hard best responses at the fixed target as the separation step, so that no equilibrium is solved; the translation of the implementing charges by the $\Gamma$-maximin surcharge; and the competitor-count rule.
 
 \subsection{Zone-market clearing (ZMC)}\label{sec:zmc}
 
@@ -429,7 +517,7 @@ In the experiments, carrier $i$'s oracle at a price vector $\lambda$ (zone price
 
 \subsection{Optional quality statement}\label{sec:addon}
 
-Two by-products are available at no extra oracle cost. Because BRL pricing is exact, the column-generation master value is a valid lower bound on the robust routing optimum, which turns any integer plan into a certified optimality gap; branch-and-price closes that gap. In ZMC, the dual values $\mathcal D(\lambda^t)$ bracket the convexified optimum with the potential of the returned equilibrium, which gives a certified relative potential gap $\eta_{\rm rel}$; with a heuristic routing oracle the LP bound of the oracle keeps the bracket valid. Neither is the contribution; Section~\ref{sec:results} reports both.
+Two by-products are available at no extra oracle cost. Because BRL pricing is exact, the column-generation master value is a valid lower bound on the robust routing optimum, which gives every integer plan a valid optimality gap; branch-and-price closes that gap. In ZMC, the dual values $\mathcal D(\lambda^t)$ bracket the convexified optimum with the potential of the returned equilibrium, which gives an upper bound $\eta_{\rm rel}$ on the relative potential gap; with a heuristic routing oracle the LP bound of the oracle keeps the bracket valid. Neither is the contribution; Section~\ref{sec:results} reports both.
 
 %======================================================================
 \section{Data and calibration}\label{sec:data}
@@ -465,10 +553,10 @@ The sensitivity runs (Table~\ref{tab:sens}), the algorithm comparison (Table~\re
 
 \subsection{Unpriced equilibria}\label{sec:res-eq}
 
-Table~\ref{tab:e1} reports the unpriced equilibria computed by ZMC with eight rounds and best-response polish. The cities fall into two groups. In \EoneHighCities{} the carriers serve at least \EoneServedHighMin\% of customer demand. In \EoneLowCities{} they serve between \EoneServedLowMin\% and \EoneServedLowMax\%, because the delivery fee is low relative to the vehicle-hour cost or the shift is short. The added travel-time slowdown caused by delivery vehicles ranges from \EoneSlowMin\% to \EoneSlowMax\% (\EoneSlowMaxCity). Figure~\ref{fig:eq} shows the equilibrium zone prices of seed 0 on the city grids. The certified relative potential gap $\eta_{\rm rel}$ is below 1\% in \EoneEtaBelowOne{} cities and reaches \EoneEtaMax\% in the low-service cities, where the potential is close to zero and the dual bound is loose; a small certified gap therefore holds only where service is high.
+Table~\ref{tab:e1} reports the unpriced equilibria computed by ZMC with eight rounds and best-response polish. The cities fall into two groups. In \EoneHighCities{} the carriers serve at least \EoneServedHighMin\% of customer demand. In \EoneLowCities{} they serve between \EoneServedLowMin\% and \EoneServedLowMax\%, because the delivery fee is low relative to the vehicle-hour cost or the shift is short. The added travel-time slowdown caused by delivery vehicles ranges from \EoneSlowMin\% to \EoneSlowMax\% (\EoneSlowMaxCity). Figure~\ref{fig:eq} shows the equilibrium zone prices of seed 0 on the city grids. The bound $\eta_{\rm rel}$ on the relative potential gap is below 1\% in \EoneEtaBelowOne{} cities and reaches \EoneEtaMax\% in the low-service cities, where the potential is close to zero and the dual bound is loose; a small proven gap therefore holds only where service is high.
 
 \begin{table}[t]\centering\small
-\caption{Unpriced equilibria with the exact oracle (mean over three seeds; seed standard deviation in parentheses). Served: share of customer demand delivered; slowdown: added mean travel-time slowdown from delivery vehicles; price: mean zone price (USD per parcel); veh.-h: vehicle-hours per day; welfare $W$ in USD per day of the modelled slice; calls: oracle calls; regret$^{\rm LP}$: guaranteed upper bound on any carrier's gain from deviating (USD), nonzero only where an oracle call was not proven optimal; $\eta_{\rm rel}$: certified relative potential gap.}\label{tab:e1}
+\caption{Unpriced equilibria with the exact oracle (mean over three seeds; seed standard deviation in parentheses). Served: share of customer demand delivered; slowdown: added mean travel-time slowdown from delivery vehicles; price: mean zone price (USD per parcel); veh.-h: vehicle-hours per day; welfare $W$ in USD per day of the modelled slice; calls: oracle calls; regret$^{\rm LP}$: guaranteed upper bound on any carrier's gain from deviating (USD), nonzero only where an oracle call was not proven optimal; $\eta_{\rm rel}$: upper bound on the relative potential gap.}\label{tab:e1}
 \adjustbox{max width=\linewidth}{\input{tables/tab_e1}}
 \end{table}
 
@@ -479,7 +567,7 @@ Table~\ref{tab:e1} reports the unpriced equilibria computed by ZMC with eight ro
 
 \subsection{The city leader's charges}\label{sec:res-leader}
 
-A city leader chooses a congestion charge per vehicle-hour, $t_z=\vartheta\gamma c_zX_z^{\rm NE}$ with multiplier $\vartheta\in\{0,0.5,1,2,4,8,16\}$, and a per-delivery charge $s$ expressed as a fraction of the fee in $\{-0.6,\dots,0.6\}$; negative values are subsidies. Each grid point requires one warm-started equilibrium. Table~\ref{tab:e2} reports the reduction of social cost relative to no charge, as a percentage of its absolute value, for the best exact grid point using only the congestion charge, only the delivery charge, or both.
+A city leader chooses a congestion charge per vehicle-hour, $t_z=\vartheta\gamma c_zX_z^{\rm NE}$ with multiplier $\vartheta\in\{0,0.5,1,2,4,8,16\}$, and a per-delivery charge $s$ expressed as a fraction of the fee in $\{-0.6,\dots,0.6\}$; negative values are subsidies. Each grid point requires one warm-started equilibrium. The grid serves as the baseline for the leader's charges, which are computed without a grid in Section~\ref{sec:res-dip}, and for the comparison of one and two instruments. Table~\ref{tab:e2} reports the reduction of social cost relative to no charge, as a percentage of its absolute value, for the best exact grid point using only the congestion charge, only the delivery charge, or both.
 
 \begin{table}[t]\centering\small
 \caption{City leader, main objective, exact oracle (\EtwoSeeds). Gain of the best charge over no charge (\% of $|$social cost$|$), mean [min, max] over seeds, with the congestion charge only, the delivery charge only, or both. Delivery share: gain with the delivery charge alone divided by the gain with both, per seed, shown where the combined gain is at least 0.5\%. Subsidy: seeds in which the best point with both instruments has $s<0$. Served share and city revenue (USD/day; negative is a net subsidy) at that point. $\dagger$: only a subset of the grid solved exactly, so gains are lower bounds and shares are ratios of lower bounds (a share above one is an artefact of the reduced grid).}\label{tab:e2}
@@ -499,6 +587,41 @@ With the broad objective, which adds the proxy for delay imposed on background t
 \begin{figure}[t]\centering
 \includegraphics[width=\textwidth]{E2_instruments.png}
 \caption{Gain of the city leader's best exact charge over no charge, by instrument: mean over the seeds computed, with standard-deviation bars and minimum/maximum ticks. Left: main objective. Right: broad objective with the background-delay proxy, whose shut-down optima are an artifact of the proxy. \ExEtwoRedCities{} use a reduced exact grid (lower bounds).}\label{fig:e2}
+\end{figure}
+
+\subsection{Charges by dual implementation pricing}\label{sec:res-dip}
+
+DIP (Section~\ref{sec:dip}) computes the leader's zone charges without a grid. It was run with the exact oracle on all nine cities and three seeds (\DipRuns{} runs) and compared with the grid of Section~\ref{sec:res-leader} for the same city and seed (Table~\ref{tab:dip}, Figure~\ref{fig:dip}). The gain share is DIP's social-cost gain over the unpriced equilibrium divided by the gain of the best grid point; calls count every routing-oracle query of each method, with the same counter.
+
+\begin{table}[t]\centering\small
+\caption{DIP against the leader's grid, per city and seed (0 / 1 / 2). Grid pts: exact grid points available (pb: the 63-point price-and-branch grid, used where no exact grid exists for that seed). Gain share: DIP gain divided by the best grid gain (n/a: no charge improves on the unpriced equilibrium). Calls: DIP's oracle calls as a percentage of the calls of the grid run, and of a 63-point grid at the same calls per point. Rounds: cutting-plane rounds (1: the tangent charge implemented the target without any cut). Exact: runs in which the target is an exact pure equilibrium under the returned charges. PoA of the grid's best point and of DIP's priced equilibrium.}\label{tab:dip}
+\adjustbox{max width=\linewidth}{\input{tables/tab_dip}}
+\end{table}
+
+\paragraph{Gain and cost} In the three cities with a full exact grid (\DipFullCities, \DipFullN{} runs), DIP reaches \DipFullGainMin\% to \DipFullGainMax\% of the grid-optimal gain (mean \DipFullGainMean\%) with \DipFullCallsMin\% to \DipFullCallsMax\% of the grid's oracle calls (mean \DipFullCallsMean\%). Over all runs with a positive gain DIP reaches at least \DipGainMinAll{} of the best evaluated grid point, and it uses at most \DipCallsSixtyThreeMax\% of the calls of a 63-point grid. In \DipNoGainCities{} no charge improves on the unpriced equilibrium, and DIP returns charges that leave it in place. The priced equilibrium attains the social cost of the target: its empirical price of anarchy is between \DipPoAmin{} and \DipPoAmax{} (values below one occur where DIP's multi-start target is slightly better than the social-optimum benchmark of Section~\ref{sec:res-poa}), against \DipFullPoAgridMin{} to \DipFullPoAgridMax{} for the grid's best point in the full-grid cities.
+
+\paragraph{Exactness} In all \DipExactN{} runs the cutting-plane loop ended with charges under which the target is an exact pure equilibrium; the regret against a fresh exact oracle is at most \DipRegretMax{} USD, and the fallback was never needed. The tangent charge alone implemented the target in \DipTangentN{} runs; the others needed at most \DipRoundsMax{} rounds and \DipCutsMax{} cuts. The uniform part of the returned charges is a subsidy of \DipSubsMin{} to \DipSubsMax{} of the fee, and the zone charges follow the competitor-count rule of Proposition~\ref{prop:uniform} (correlation 0.98 to 1.00 with $-0.375\,\mathrm{fee}/n_z$ in the seed-0 runs of the full-grid cities, as reported in \texttt{theory/new\_algorithm\_C/results.md}). Figure~\ref{fig:dip-charges} shows the charges for London.
+
+\paragraph{Qualifiers} Several limits apply.
+\begin{itemize}[leftmargin=*]
+\item Gains above 100\% of the grid come mainly from zone-specific charges. Restricted to the grid's two-parameter family, DIP reaches on average \DipFamMean{} of the grid gain, with the worst case \DipFamMin{} (\DipFamMinCase).
+\item Against the reduced exact grids of six cities, which have only 7--17 screened points, DIP uses more than 10\% of their calls in most runs (\DipRedCalls), although at most \DipCallsSixtyThreeMax\% of a 63-point grid.
+\item Wall-clock time is not always lower: the median ratio to the grid's time is \DipTimeMed, but in London seed 0 DIP took \DipLondonTime{} s against \DipLondonGridTime{} s, because the social-pricing calls of column generation are harder branch-and-price instances than warm-started equilibrium calls.
+\item Selection is optimistic. The target is an exact equilibrium under the returned charges but need not be the only one. The equilibrium that the grid's own protocol reaches from the unpriced prices under DIP's charges is the target in \DipSelSame{} of \DipRuns{} runs, and in all runs its gain is at least \DipSelMin{} of the grid's. In \DipTinyN{} enumerated tiny games the equilibrium under DIP's charges was unique in only \DipTinyUniquePct\% of the games.
+\item The result can be no better than the social target, whose quality is limited by the rounding gap of the social solver. In the tiny games DIP reached the exact leader optimum over all zone charges in \DipTinyHitPct\% of the games, and in \DipTinyHitXPct\% when given the exact social optimum as target, so every miss there was a miss of the social solver, not of the implementation step. DIP used \DipTinyCallsMin{} to \DipTinyCallsMax{} calls per tiny game against \DipTinyGridCallsMin{} to \DipTinyGridCallsMax{} for the grid.
+\item The closed forms need D1 and one hours-per-delivery ratio; without the ratio the per-zone instrument is two-dimensional, although the polyhedron and the cutting plane still apply.
+\end{itemize}
+
+\paragraph{Imprecision} By Theorem~\ref{thm:credal} the charges for $\Gamma$-maximin carriers are the same charges shifted by the surcharge. At $\delta=0.2$ and $\delta=0.8$ the shifted charges made the target an exact equilibrium in every run (largest regret \DipCredalRegret{} USD) without further oracle calls, so the welfare loss that imprecision causes without charges (Section~\ref{sec:res-imp}) is removable by charges in the model. At $\delta=0.8$, however, the required uniform subsidy is \DipCredalSubMin{} to \DipCredalSubMax{} times the fee, which is not a realistic policy.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{dip_calls_vs_gain.png}
+\caption{Leader's social-cost gain against routing-oracle calls: best grid point found so far (lines, exact grid rows in solve order) and DIP (one marker per run); 100\% is the best grid point. Six cities have reduced exact grids, and seed 2 of Berlin, Moscow and New York uses the price-and-branch grid.}\label{fig:dip}
+\end{figure}
+
+\begin{figure}[t]\centering
+\includegraphics[width=\textwidth]{dip_charges_London.png}
+\caption{DIP charges for London, seed 0. Left: implementing charge $u_z$ per delivery, in units of the fee (negative: subsidy). Right: the zone congestion charge per vehicle-hour that, with the uniform per-delivery subsidy, realises $u$. Grey: zones without lots.}\label{fig:dip-charges}
 \end{figure}
 
 \subsection{Empirical price of anarchy and stability}\label{sec:res-poa}
@@ -570,7 +693,7 @@ On the city games the picture is different (Table~\ref{tab:e5}). ZMC uses betwee
 
 \subsection{Theory meets data}\label{sec:res-theory}
 
-The city games are of type D1, so the profile returned by ZMC with best-response polish is an exact pure equilibrium; its own E-threshold is zero and Theorem~\ref{thm:main} holds trivially for it. To test the theorems in a non-trivial way we used the threshold certificates of Theorem~\ref{thm:cert} (E-thresholds by Kelley cuts on the linear program, maximal and interval-dominance thresholds by bisection), with belief weights $w$ equal to the realised aggregate. These tests were run with the earlier price-and-branch oracle; because that oracle is exact only up to a small gap, each threshold is relaxed by the largest improvement observed at a certified equilibrium. Table~\ref{tab:theory} and Figure~\ref{fig:theory} summarise the results.
+The city games are of type D1, so the profile returned by ZMC with best-response polish is an exact pure equilibrium; its own E-threshold is zero and Theorem~\ref{thm:main} holds trivially for it. To test the theorems in a non-trivial way we computed the exact thresholds of Theorem~\ref{thm:cert} (E-thresholds by Kelley cuts on the linear program, maximal and interval-dominance thresholds by bisection), with belief weights $w$ equal to the realised aggregate. These tests were run with the earlier price-and-branch oracle; because that oracle is exact only up to a small gap, each threshold is relaxed by the largest improvement observed at a verified equilibrium. Table~\ref{tab:theory} and Figure~\ref{fig:theory} summarise the results.
 
 \begin{table}[t]\centering\small
 \caption{Theorems on the city games (three seeds). Mixed: seeds with a non-trivial mixed (relaxed) equilibrium. For those seeds (means): $\bar\rho$; the anchored three-term bound of Theorem~\ref{thm:main}(b); the $N$-uniform bound of Theorem~\ref{thm:main}(c); the largest empirical E-threshold over the tested profiles; and the ratio of the latter to the anchored bound. $\Gamma$-maximin (Lemma~\ref{lem:gamma}): drop in the share of demand served from the precise to the surcharge equilibrium at $\delta=0.1$ and $\delta=1$, and the maximality threshold of the surcharge equilibrium divided by $\delta$ at $\delta=1$.}\label{tab:theory}
@@ -592,7 +715,7 @@ The city games are of type D1, so the profile returned by ZMC with best-response
 
 On \TinyN{} tiny games (two or three carriers, three or four customer zones) solved by exhaustive enumeration, the integrated ZMC--BRL profile is a pure equilibrium of the enumerated game in every case and reaches the global potential minimum in \TinyZMCglobal{} of \TinyN; best response reaches it in \TinyBRglobal, Frank--Wolfe with rounding in \TinyFWglobal{} and column generation in \TinyCGglobal{} (Table~\ref{tab:tiny}). These instances support correctness more than they separate the methods.
 
-At city scale, every base equilibrium, every certified leader best point (\CertN{} city-seeds) and every equilibrium of the price-of-anarchy experiment has regret at most \ExRegretFreshMax{} USD against an independent fresh exact oracle (elementary routes, empty column pool); all grid points of the leader and imprecision experiments have zero regret against the pooled exact oracle up to rounding (largest \EfourRegretMax). Because \ExUnproven{} oracle calls were not proven optimal, the guaranteed regret bound (incumbent of the verifying call against its proven lower bound) is nonzero for \ExBoundN{} profiles, at most \ExBoundMax{} USD (a New York base case with welfare of about 20{,}000 USD per day). These checks rely on the same branch-and-price method as the oracle; the pricer itself was checked against complete enumeration (Section~\ref{sec:res-algo}). The clearing identity of Theorem~\ref{thm:clear}(a) held to \EsixResid{} in every round of every city in the earlier price-and-branch run (Table~\ref{tab:e6}); this check was not repeated with the exact oracle.
+At city scale, every base equilibrium, every verified leader best point (\CertN{} city-seeds) and every equilibrium of the price-of-anarchy experiment has regret at most \ExRegretFreshMax{} USD against an independent fresh exact oracle (elementary routes, empty column pool); all grid points of the leader and imprecision experiments have zero regret against the pooled exact oracle up to rounding (largest \EfourRegretMax). Because \ExUnproven{} oracle calls were not proven optimal, the guaranteed regret bound (incumbent of the verifying call against its proven lower bound) is nonzero for \ExBoundN{} profiles, at most \ExBoundMax{} USD (a New York base case with welfare of about 20{,}000 USD per day). These checks rely on the same branch-and-price method as the oracle; the pricer itself was checked against complete enumeration (Section~\ref{sec:res-algo}). The clearing identity of Theorem~\ref{thm:clear}(a) held to \EsixResid{} in every round of every city in the earlier price-and-branch run (Table~\ref{tab:e6}); this check was not repeated with the exact oracle.
 
 %======================================================================
 \section{Managerial and policy implications}\label{sec:implications}
@@ -600,6 +723,8 @@ At city scale, every base equilibrium, every certified leader best point (\CertN
 The implications below are conditional on the model and on the proxies of Section~\ref{sec:data}; they indicate directions and magnitudes to be tested with city data, not recommendations for any particular city.
 
 \paragraph{For city authorities} First, the efficiency loss from competition among carriers is concentrated where service is incomplete. Where carriers already serve almost all demand, the empirical price of anarchy is close to one and charges change little; a city in that situation gains more from managing kerb space and background traffic than from pricing deliveries. Second, where service is partial, the lever with the largest effect in our instances is a per-delivery instrument, and in every city-seed case with a material gain its sign is that of a subsidy. How large the gain is, however, depends strongly on the sampled slice of the city (in London between \EtwoLondonBothMin\% and \EtwoLondonBothMax\% of social cost across three seeds), so the direction of the recommendation is better supported than its size. A congestion charge on delivery vehicle-hours alone recovers little in all but one city-seed case, because in these instances the congestion that carriers impose on each other is small relative to the under-provision caused by fixed route costs and market power; the exception (\EtwoCongMaxCase) arose because the unpriced market sat in a worse equilibrium, which shows that the value of a charge can depend on which equilibrium the market is in. Third, adding the congestion charge to the subsidy raised the gain noticeably only in some low-service cases, and which cases these are changed with the seed and with the integer method; a city should not count on a second instrument without local evidence. Fourth, even the best grid charges did not bring every equilibrium close to the social optimum (a remaining shortfall of up to \PricedGapMax\% in one London case), and any subsidy has a fiscal cost that a welfare criterion with transfers does not count, and its distributional effect across zones is uneven: access remains unequal in the low-service cities even at the best charges. Fifth, an objective that counts delay to other road users can reverse the recommendation; in our instances it did so only because of a crude proxy, which is the strongest argument for measuring that delay rather than imputing it.
+
+\paragraph{Computing charges} The city does not need to search over charges. With DIP it can compute zone charges that make a chosen target an equilibrium of the carriers' game at a small fraction of the routing calls of a grid, and the charges have a readable structure: a per-delivery subsidy of roughly 37.5\% of the fee divided by the number of carriers present in the zone, corrected for congestion. A zone-differentiated scheme of this kind did better than the best flat two-parameter scheme in the full-grid cities. It is also less transparent and harder to administer than a flat subsidy, and the target equilibrium need not be the only equilibrium under the charges; a city should weigh these points before adopting zone-specific charges.
 
 \paragraph{For carriers} Imprecision is costly. Wider probability boxes on travel times and wider credal sets about rivals both reduce the volume a carrier finds worth serving. Under the dependence-robust criterion the planned cost is well above the expected cost under the simulated law, so a carrier with enough data to estimate a law, or with knowledge of the dependence between road segments, should use it. Conversely, a carrier that plans robustly behaves like one facing a tax, which lowers congestion as a side effect.
 
@@ -616,7 +741,9 @@ The implications below are conditional on the model and on the proxies of Sectio
 
 \paragraph{Proxies and weak parameters} Demand is sampled, market shares are equal in seven cities, vehicle-hours are proportional to deliveries within a zone, and the congestion coupling is scaled by a slice multiplicity. Most operating parameters are country-level or rough estimates; over their plausible ranges, delivery fee, drops per vehicle and the number of carriers move welfare by tens of percent (Table~\ref{tab:sens}). The sign of the best per-delivery instrument depends on the fee-to-cost ratio and could change with better data.
 
-\paragraph{Vehicle-count congestion and the theory tests} The main city experiments are in the D1 regime. The D2 city runs of Section~\ref{sec:res-theory} use a calibration introduced for that test and found no game without a pure equilibrium, so they do not test Theorem~\ref{thm:main} under D2; the full rounding-and-certification algorithm of Section~\ref{sec:cert} was not run on real data. The absorption tests rely on mixed equilibria with two-plan supports and on thresholds that are exact only up to the oracle gap. The Lean formalisation covers the discrete core statements listed in Section~\ref{sec:lean}, not the full theorems with their bounds and complexity claims.
+\paragraph{Vehicle-count congestion and the theory tests} The main city experiments are in the D1 regime. The D2 city runs of Section~\ref{sec:res-theory} use a calibration introduced for that test and found no game without a pure equilibrium, so they do not test Theorem~\ref{thm:main} under D2; the full rounding algorithm of Section~\ref{sec:cert} was not run on real data. The absorption tests rely on mixed equilibria with two-plan supports and on thresholds that are exact only up to the oracle gap. The Lean formalisation covers the discrete core statements listed in Section~\ref{sec:lean}, not the full theorems with their bounds and complexity claims.
+
+\paragraph{Dual implementation pricing} DIP's result is no better than its social target, which comes from column generation with rounding; its selection is optimistic, since other equilibria may coexist under the returned charges; its closed forms need D1 and one hours-per-delivery ratio; and its advantage in oracle calls is smaller against the reduced exact grids, while wall-clock time was not lower in every run. The charges needed under strong ambiguity aversion are unrealistically large subsidies.
 
 \paragraph{Broad social cost} The background-delay proxy drives degenerate shut-down optima and is not a basis for conclusions. A measured value of the delay caused by delivery vehicles is needed.
 
@@ -627,7 +754,7 @@ The implications below are conditional on the model and on the proxies of Sectio
 %======================================================================
 \section{Conclusion}\label{sec:conclusion}
 
-We modelled competing delivery carriers as players of a Cournot--congestion game with routing-level strategies and credal beliefs. Under exposure-based congestion the game has a potential and pure imprecise equilibria at every width; under vehicle-count congestion their existence is strongly NP-complete below an explicit width, while above a width that does not grow with the number of carriers any mixed equilibrium rounds to an exact E-admissible equilibrium. An exact pricing algorithm for routes under probability boxes with unknown dependence and a zone-market clearing search make the D1 game computable with a routing oracle. On nine city instances with three random draws each, the empirical price of anarchy is close to one where service is complete and larger, with a wide spread across draws, where it is partial; a per-delivery subsidy captures most of what a city leader can gain in most city-seed cases with a material gain; a congestion charge alone captures little in all but one case, the exception arising from the selection of a worse unpriced equilibrium; and imprecision acts like a tax, although the response of the equilibrium reached is not always monotone in the width. These results were computed with an exact integer routing step; the earlier price-and-branch step had left some equilibria inexact by a few USD per day. The zone-market search did not outperform best response on these instances. The exact pricing algorithm outperformed scenario and quantile labelling on random pricing instances, and with branch-and-price it gives proven optimal robust routing plans on all nine metro instances; under the calibrated law those plans are not always better than a sample-average plan, which reflects the conservatism of the robust criterion. On the city equilibria the absorption bounds held in every test, with a slack of about a factor of two, and vehicle-count congestion did not prevent pure equilibria.
+We modelled competing delivery carriers as players of a Cournot--congestion game with routing-level strategies and credal beliefs. Under exposure-based congestion the game has a potential and pure imprecise equilibria at every width; under vehicle-count congestion their existence is strongly NP-complete below an explicit width, while above a width that does not grow with the number of carriers any mixed equilibrium rounds to an exact E-admissible equilibrium. An exact pricing algorithm for routes under probability boxes with unknown dependence, embedded in branch-and-price, makes the D1 game computable with an exact routing oracle, and dual implementation pricing computes the city's zone charges by implementing a target social optimum with one best response per carrier per round; on the city games it made its target an exact equilibrium in every run and reached at least \DipGainMinAll{} of the best grid point's gain at a small fraction of the grid's routing calls. On nine city instances with three random draws each, the empirical price of anarchy is close to one where service is complete and larger, with a wide spread across draws, where it is partial; a per-delivery subsidy captures most of what a city leader can gain in most city-seed cases with a material gain; a congestion charge alone captures little in all but one case, the exception arising from the selection of a worse unpriced equilibrium; and imprecision acts like a tax, although the response of the equilibrium reached is not always monotone in the width. These results were computed with an exact integer routing step; the earlier price-and-branch step had left some equilibria inexact by a few USD per day. The zone-market search did not outperform best response on these instances. The exact pricing algorithm outperformed scenario and quantile labelling on random pricing instances, and with branch-and-price it gives proven optimal robust routing plans on all nine metro instances; under the calibrated law those plans are not always better than a sample-average plan, which reflects the conservatism of the robust criterion. On the city equilibria the absorption bounds held in every test, with a slack of about a factor of two, and vehicle-count congestion did not prevent pure equilibria.
 
 \section*{Data and code availability}
 Code, processed data, parameter sources, result files, figures and the scripts that generate the tables of this paper are available at \url{https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty}. Raw OpenStreetMap extracts are distributed under the Open Database License; GHS-POP is distributed by the European Commission Joint Research Centre.
@@ -720,7 +847,7 @@ Take two carriers with plan sets $\{A_1,B_1\}^Z$ and $\{X,Y\}^Z$, the one-zone d
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:np}]
-\emph{Membership.} The certificate is a profile $\sigma$. With $K$ the clipped box and $\Xi$ a point: E-admissibility of $\sigma_i$ is feasibility of the linear system $\{m\in K:\ub_i(\sigma_i;m)\ge\ub_i(p';m)\ \forall p'\}$; maximality requires $\max_{m\in K}[\ub_i(\sigma_i;m)-\ub_i(p';m)]\ge0$ for each $p'$, a linear function maximised over a box coordinatewise; ID and $\Gamma$ require maxima and minima of $\ub_i(p;\cdot)$ over the box, also coordinatewise.
+\emph{Membership.} The witness is a profile $\sigma$. With $K$ the clipped box and $\Xi$ a point: E-admissibility of $\sigma_i$ is feasibility of the linear system $\{m\in K:\ub_i(\sigma_i;m)\ge\ub_i(p';m)\ \forall p'\}$; maximality requires $\max_{m\in K}[\ub_i(\sigma_i;m)-\ub_i(p';m)]\ge0$ for each $p'$, a linear function maximised over a box coordinatewise; ID and $\Gamma$ require maxima and minima of $\ub_i(p;\cdot)$ over the box, also coordinatewise.
 
 \emph{Construction.} Let $V(D)=[n]$ and $\Delta^-=\max(1,\text{max in-degree})$. Create one zone per arc $e=(u,v)$, using only its vehicle coordinate, with $M_e=\gamma c_e=1$, $w_e=1$ and no deliveries. Set $\eta=1/(2\Delta^-+2)$. Carrier $i$ has the plan \emph{out} with all data $0$, and the plan \emph{in} with $\pi_i=1$ and, for each out-arc $e=(i,j)$, vehicles $n_{ie}=1$ and exposure $\tau_{ie}=1$; for each in-arc $e=(h,i)$, vehicles $n_{ie}=2$ and exposure $\tau_{ie}=\eta$; zero elsewhere. This is D2, since $\varphi=\tau\ne a=n$.
 
@@ -767,7 +894,7 @@ With $\pi_i$ as in Section~\ref{sec:model} and $x=\tau$, direct expansion gives 
 
 \subsection{Section 4.7}
 
-\begin{theorem}[A posteriori certificates]\label{thm:cert}
+\begin{theorem}[Exact thresholds and regret brackets]\label{thm:cert}
 Let $p$ be a pure profile. (a) The exact E-threshold of carrier $i$ is the optimal value of the linear program
 $A_i^E(p)=\min\{\delta\ge0: m\ge0,\ \xi\in\Xi,\ |m_k-A_{-i,k}(p)|\le\delta w_k\ \forall k,\ \ub_i(p_i;m,\xi)\ge\ub_i(p';m,\xi)\ \forall p'\in\cP_i\}$ ($+\infty$ if infeasible), and $p\in\ICNE_E(\delta)$ iff $\delta\ge\max_iA^E_i(p)$. With an exact oracle and implicit $\cP_i$, Kelley's cutting-plane method on this program terminates finitely. (b) For anchors $m^i\ge0$, $\xi^i\in\Xi$ with $p_i\in\arg\max\ub_i(\cdot;m^i,\xi^i)$, $A_i^E(p)\le\|A_{-i}(p)-m^i\|_{w,\infty}$. (c) For a heuristic plan $h_i$ and a valid bound $\mathcal U_i\ge\max_{p'}\ub_i(p';m,\xi)$, the regret of $p_i$ lies in $[\ub_i(h_i)-\ub_i(p_i),\ \mathcal U_i-\ub_i(p_i)]$.
 \end{theorem}
@@ -876,6 +1003,61 @@ With charges $t$ on the contributions, let $\mu^*(t)=\lambda^*(t)+t$. Then $\|\m
 \end{proposition}
 \begin{proof}
 With charges, $V^t(\lambda)=V(\lambda+t)$, so the equilibrium condition reads $r=M^{-1}(\mu-t)\in R(\mu)$. For $r'=M^{-1}(\mu'-t')\in R(\mu')$, antitonicity gives $\ip{r-r'}{\mu-\mu'}\le0$, i.e.\ $\|\mu-\mu'\|^2_{M^{-1}}\le\ip{M^{-1}(t-t')}{\mu-\mu'}\le\|t-t'\|_{M^{-1}}\|\mu-\mu'\|_{M^{-1}}$. For the second claim, $\ip{r-r'}{t-t'}=\ip{r-r'}{(\mu-\mu')-M(r-r')}\le-\|r-r'\|^2_M\le0$.
+\end{proof}
+
+\section{Proofs for dual implementation pricing}\label{app:dip}
+
+Notation as in Section~\ref{sec:dip}; $m^S_z=b_z+2\zeta_z$ is the social slope, and $q_{iz}^2=d_{iz}q_{iz}$ is used throughout. The proofs are taken from the theory notes of the repository, file\\ \texttt{theory/new\_algorithm\_C/theory.tex}.
+
+\begin{proof}[Proof of Proposition~\ref{prop:instr}]
+(a) $\tau_{iz}=rq_{iz}$. (b) $s+rt_z=u_z$ and $t_z\ge0$ because $s\le u_z$; zones without lots carry no plan. (c) Substitution of $s_z\equiv s$ and $t_z=\vartheta g_zX^{\rm NE}_z$.
+\end{proof}
+
+\begin{proof}[Proof of Lemma~\ref{lem:identity}]
+With $q_{iz}^2=d_{iz}q_{iz}$, $X_z=rQ_z$ and $m^S_z-m_z=\zeta_z$, \[\Phi_u-\mathrm{SC}=\sum_z\big[\tfrac{m_z}{2}\textstyle\sum_id_{iz}q_{iz}-\tfrac{\zeta_z}{2}Q_z^2+u_zQ_z\big].\] Insert $u_z=\zeta_zQ^\circ_z-\tfrac{m_z}{2}\bar d_z+v_z$ and complete the square: $-\tfrac{\zeta_z}{2}Q_z^2+\zeta_zQ^\circ_zQ_z=-\tfrac{\zeta_z}{2}(Q_z-Q^\circ_z)^2+\tfrac{\zeta_z}{2}(Q^\circ_z)^2$, and $\tfrac{m_z}{2}\sum_id_{iz}q_{iz}-\tfrac{m_z}{2}\bar d_zQ_z=\sum_i\tfrac{m_z}{2}(d_{iz}-\bar d_z)q_{iz}$.
+\end{proof}
+
+\begin{proposition}[Carrier-specific charges; classical]\label{prop:pers}
+Let $\sigma^*$ be a pure profile and $U_{iz}=\zeta_zQ^*_{-i,z}-\tfrac{b_z}{2}d_{iz}$. Under carrier-specific per-delivery charges $U_i$, for all $i$ and $p,p'$: $J^U_i(p;\sigma^*_{-i})-J^U_i(p';\sigma^*_{-i})=\mathrm{SC}(p,\sigma^*_{-i})-\mathrm{SC}(p',\sigma^*_{-i})$. Hence every profile that no single carrier can improve socially is a pure equilibrium.
+\end{proposition}
+\begin{proof}
+$\mathrm{SC}(p,\sigma^*_{-i})=R_i(p)+\sum_zq_{iz}(-\alpha_z+m^S_zQ^*_{-i,z}+\tfrac{m^S_z}{2}d_{iz})+\text{const}$ and $J^U_i(p)=R_i(p)+\sum_zq_{iz}(-\alpha_z+m_zd_{iz}+m_zQ^*_{-i,z}+U_{iz})$; the brackets coincide because $m_z+\zeta_z=m^S_z$ and $m_z-\tfrac{b_z}{2}=\tfrac{m^S_z}{2}$.
+\end{proof}
+
+\paragraph{Convexified game} With mixtures $x_i\in\Delta(\mathcal P_i)$, $\bar q_i=\E_{x_i}q_i$ and $\bar Q=\sum_i\bar q_i$, the convexified potential and social cost are
+$\overline\Phi_u(x)=\sum_i\E_{x_i}[R_i+\sum_zq_{iz}(-\alpha_z+u_z+\tfrac{m_z}{2}d_{iz})]+\sum_z\tfrac{m_z}{2}\bar Q_z^2$ and
+$\overline{\mathrm{SC}}(x)=\sum_i\E_{x_i}[R_i-\sum_z\alpha_zq_{iz}]+\sum_z\tfrac{m^S_z}{2}\bar Q_z^2$. Both are convex, agree with $\Phi_u$ and $\mathrm{SC}$ at pure profiles, and the identity of Lemma~\ref{lem:identity} holds for them with $Q,q$ replaced by $\bar Q,\bar q$.
+
+\begin{proof}[Proof of Theorem~\ref{thm:asym}]
+$\overline{\mathrm{SC}}$ is linear in $x$ plus $\sum_z\tfrac{m^S_z}{2}\bar Q_z^2$ with $\bar Q$ linear in $x$, so $\overline{\mathrm{SC}}(x)-\overline{\mathrm{SC}}(x^*)=\ip{\nabla\overline{\mathrm{SC}}(x^*)}{x-x^*}+\sum_z\tfrac{m^S_z}{2}(\bar Q_z-\bar Q^*_z)^2$, and the inner product is non-negative by optimality of $x^*$. Hence $\Delta:=\overline{\mathrm{SC}}(x^u)-\overline{\mathrm{SC}}(x^*)\ge\sum_z\tfrac{m^S_z}{2}(\Delta\bar Q_z)^2$. By the identity with $Q^\circ=\bar Q^*$, $v=0$: $\overline\Phi_u(x)=\overline{\mathrm{SC}}(x)-\sum_z\tfrac{\zeta_z}{2}(\bar Q_z-\bar Q^*_z)^2+L(x)+\text{const}$. Since $x^u$ minimises $\overline\Phi_u$, $\Delta\le\sum_z\tfrac{\zeta_z}{2}(\Delta\bar Q_z)^2+L(x^*)-L(x^u)$. Combining, $\sum_z\tfrac{b_z+\zeta_z}{2}(\Delta\bar Q_z)^2\le L(x^*)-L(x^u)$; then $\sum_z\tfrac{\zeta_z}{2}(\Delta\bar Q_z)^2\le\varrho[L(x^*)-L(x^u)]$ and $\Delta\le(1+\varrho)[L(x^*)-L(x^u)]$. Finally $|L(x^*)-L(x^u)|\le\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\bar d_z|\,|\bar q^*_{iz}-\bar q^u_{iz}|\le E$ because $\bar q_{iz}\in[0,d_{iz}]$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:convex}]
+With $\bar d=d$, $L$ vanishes on the feasible set, so $E=0$ in Theorem~\ref{thm:asym} and every minimiser of $\overline\Phi_u$ has aggregate $\bar Q^*$ and social cost $\overline{\mathrm{SC}}(x^*)$. Moreover $\overline\Phi_u=\overline{\mathrm{SC}}-\sum_z\tfrac{\zeta_z}{2}(\bar Q_z-\bar Q^*_z)^2+\text{const}$; the subtracted term has zero gradient at $x^*$, so $x^*$ satisfies the first-order optimality condition of the convex function $\overline\Phi_u$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:cut}]
+(a) $J^u_i(p)=J^0_i(p)+\ip{u}{q_i(p)}$, so constraint $(i,p)$ reads $J^u_i(p)\ge J^u_i(\sigma^*_i)$; all of carrier $i$'s constraints hold iff $\min_pJ^u_i(p)\ge J^u_i(\sigma^*_i)$, and the violation $J^u_i(\sigma^*_i)-J^u_i(p)$ is maximised by a best response. (b) If a round adds a cut $(i,b_i)$, the current $u$ violates it and satisfies every earlier cut (it is LP-feasible), so the cut is new; there are $\sum_i(|\mathcal P_i|-1)$ non-trivial constraints. Every cut is a valid constraint of $P(\sigma^*)$, so an infeasible LP shows that $P(\sigma^*)$ is empty.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:opt}]
+$\sigma$ is an equilibrium under $u$ iff $u\in P(\sigma)$, so both descriptions of $V^\star$ range over the same pairs $(u,\sigma)$. The inequality is an inclusion of feasible sets. If the loop ends with $u\in P(\sigma^*)$, the leader attains $\mathrm{SC}(\sigma^*)$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:fallback}]
+Best-response dynamics strictly decreases $\Phi_u$ on a finite set, so it ends at a pure equilibrium with $\Phi_u(\sigma^u)\le\Phi_u(\sigma^*)$. Substitute the identity with $Q^\circ=Q^*$ on both sides; the constants cancel and the congestion term vanishes at $\sigma^*$.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:calls}]
+Count the calls of the three phases; Theorem~\ref{thm:cut} bounds the rounds, and each improvement of the fallback dynamics costs at most $N$ calls.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:credal}]
+By Lemma~\ref{lem:gamma}, carrier $i$'s $\Gamma$-maximin payoff is its precise payoff minus $\delta\ip{a_i(p)}{Mw}$ (traffic already enters the route loss at its upper expectation). With $a_i=(q_i,rq_i)$, $\delta\ip{a_i(p)}{Mw}=\ip{\hat s(\delta)}{q_i(p)}$, so the $\Gamma$-maximin cost under $u$ is the precise cost under $u+\hat s(\delta)$, and $u$ implements $\sigma^*$ iff $u+\hat s(\delta)\in P(\sigma^*)$. The social cost does not contain the surcharge. The last claim is Lemma~\ref{lem:nesting}: an equilibrium of the precise game lies in $\ICNE_C(\delta)$ for $C\in\{E,M,ID\}$ and every $\delta$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{prop:uniform}]
+The first claim is Theorem~\ref{thm:convex} with a uniform tangent charge. For the second, $Q^{\rm full}_z=n_zd_z$ with equal lots, and without congestion ($m_z\approx b_z$ when $\zeta_z\ll b_z$) $u_z=-\tfrac{b_z}{2}d_z=-\tfrac{\alpha_z}{4n_z}=-0.375\,\mathrm{fee}/n_z$. The last claim is Proposition~\ref{prop:instr}.
 \end{proof}
 
 \section{Additional tables}\label{app:tables}

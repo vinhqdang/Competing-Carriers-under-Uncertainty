@@ -816,6 +816,100 @@ def t_exact():
         macro("ExEoneWMeanBA", fmt(dwm[cm.city == "BuenosAires"].iloc[0], 2))
 
 
+# ---------------------------------------------------------------- dual implementation pricing (leader)
+def t_dip():
+    d = read("summary_dip.csv")
+    if d is None:
+        return
+    d = d.copy()
+    d["full"] = (d.grid_points >= 63) & (d.grid_oracle == "exact")
+    # summary_dip stores welfare ratios W/W_SO; the price of anarchy is the inverse
+    d["PoA_grid"] = 1.0 / d.poa_grid
+    d["PoA_dip"] = 1.0 / d.poa_dip
+    rows = []
+    for c in ORDER:
+        z = d[d.city == c].sort_values("seed")
+        if not len(z):
+            continue
+        gp = " / ".join(("63" if r.grid_points >= 63 else str(int(r.grid_points))) + ("$^{\\rm pb}$" if r.grid_oracle != "exact" else "")
+                        for _, r in z.iterrows())
+        gs = " / ".join(fmt(v, 3) if pd.notna(v) else "n/a" for v in z.dip_gain_share)
+        cs = " / ".join(fmt(100 * v, 2) for v in z.dip_calls_share)
+        c63 = " / ".join(fmt(100 * v, 2) for v in z.dip_calls_share_63)
+        rd = " / ".join(str(int(v)) for v in z.dip_rounds)
+        ex = f"{int((z.dip_status == 'exact').sum())}/{len(z)}"
+        rows.append([NAME[c], gp, gs, cs, c63, rd, ex, byseed(z.PoA_grid, 3), byseed(z.PoA_dip, 3)])
+    write_table("tab_dip.tex", ["City", "grid pts", "gain share", "calls \\% (grid run)", "calls \\% (63 pts)", "rounds",
+                                "exact", "PoA grid", "PoA DIP"], rows, "lrrrrrrrr")
+    macro("DipRuns", str(len(d)))
+    f = d[d.full]
+    macro("DipFullN", str(len(f)))
+    macro("DipFullCities", ", ".join(NAME[c] for c in ORDER if c in set(f.city)))
+    macro("DipFullGainMin", fmt(100 * f.dip_gain_share.min(), 3))
+    macro("DipFullGainMax", fmt(100 * f.dip_gain_share.max(), 3))
+    macro("DipFullGainMean", fmt(100 * f.dip_gain_share.mean(), 3))
+    macro("DipFullCallsMin", fmt(100 * f.dip_calls_share.min(), 2))
+    macro("DipFullCallsMax", fmt(100 * f.dip_calls_share.max(), 2))
+    macro("DipFullCallsMean", fmt(100 * f.dip_calls_share.mean(), 2))
+    macro("DipFullPoAgridMin", fmt(f.PoA_grid.min(), 3))
+    macro("DipFullPoAgridMax", fmt(f.PoA_grid.max(), 3))
+    g = d.dip_gain_share.dropna()
+    macro("DipGainMinAll", fmt(g.min(), 3))
+    macro("DipNoGainCities", ", ".join(NAME[c] for c in ORDER if c in set(d.city) and d[d.city == c].dip_gain_share.isna().all()))
+    macro("DipCallsSixtyThreeMax", fmt(100 * d.dip_calls_share_63.max(), 2))
+    macro("DipCallsMin", str(int(d.dip_calls.min())))
+    macro("DipCallsMax", str(int(d.dip_calls.max())))
+    red = d[~d.full & (d.grid_oracle == "exact")]
+    parts = []
+    for c in ORDER:
+        z = red[red.city == c]
+        if len(z):
+            lo, hi = 100 * z.dip_calls_share.min(), 100 * z.dip_calls_share.max()
+            parts.append(f"{NAME[c]} {fmt(lo, 2)}" + (f"--{fmt(hi, 2)}" if hi - lo > 0.5 else "") + "\\%")
+    macro("DipRedCalls", ", ".join(parts))
+    macro("DipExactN", str(int((d.dip_status == "exact").sum())))
+    macro("DipTangentN", str(int((d.dip_rounds == 1).sum())))
+    macro("DipRoundsMax", str(int(d.dip_rounds.max())))
+    macro("DipCutsMax", str(int(d.dip_n_cuts.max())))
+    macro("DipRegretMax", fmt(d.verify_max_regret_fresh.max()))
+    macro("DipPoAmin", f"{d.PoA_dip.min():.3f}")
+    macro("DipPoAmax", f"{d.PoA_dip.max():.3f}")
+    ts = d.dip_time_share.dropna()
+    macro("DipTimeMed", fmt(ts.median(), 2))
+    macro("DipTimeSlowN", str(int((ts > 1).sum())))
+    lo = d[(d.city == "London") & (d.seed == 0)]
+    if len(lo):
+        macro("DipLondonTime", fmt(lo.dip_time_s.iloc[0], 3))
+        macro("DipLondonGridTime", fmt(lo.grid_time_s.iloc[0], 3))
+    fam = d.fam_gain_share.dropna()
+    macro("DipFamMean", fmt(fam.mean(), 2))
+    macro("DipFamMin", fmt(fam.min(), 2))
+    i = d.fam_gain_share.idxmin()
+    macro("DipFamMinCase", f"{NAME[d.loc[i, 'city']]}, seed {int(d.loc[i, 'seed'])}")
+    macro("DipSelSame", str(int(d.sel_same.astype(str).str.lower().eq("true").sum())))
+    macro("DipSelMin", fmt(d.sel_gain_share.dropna().min(), 3))
+    macro("DipSubsMin", fmt(-d.dip_s_over_fee.max(), 2))
+    macro("DipSubsMax", fmt(-d.dip_s_over_fee.min(), 2))
+    cr = pd.concat([d["credal0.2_regret"], d["credal0.8_regret"]])
+    macro("DipCredalRegret", fmt(cr.max()))
+    macro("DipCredalSubMin", fmt(-d["credal0.8_s_over_fee"].max(), 2))
+    macro("DipCredalSubMax", fmt(-d["credal0.8_s_over_fee"].min(), 2))
+    t = read("dip_tiny.csv")
+    if t is not None:
+        macro("DipTinyN", str(len(t)))
+        macro("DipTinyExact", str(int(t.dip_status.eq("exact").sum())))
+        hit = (t.dip_sc <= t.opt_zone + 1e-6)
+        macro("DipTinyHitPct", fmt(100 * hit.mean(), 2))
+        hx = (t.dipx_sc <= t.opt_zone + 1e-6)
+        macro("DipTinyHitXPct", fmt(100 * hx.mean(), 3))
+        uniq = (t.dip_n_ne == 1)
+        macro("DipTinyUniquePct", fmt(100 * uniq.mean(), 2))
+        macro("DipTinyCallsMin", fmt(t.dip_calls.min(), 2))
+        macro("DipTinyCallsMax", fmt(t.dip_calls.max(), 2))
+        macro("DipTinyGridCallsMin", fmt(t.grid_calls.min(), 2))
+        macro("DipTinyGridCallsMax", fmt(t.grid_calls.max(), 2))
+
+
 def t_cert():
     fs = sorted(RES.glob("E2cert_*.csv"))
     if not fs:
@@ -827,7 +921,7 @@ def t_cert():
 
 
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest
