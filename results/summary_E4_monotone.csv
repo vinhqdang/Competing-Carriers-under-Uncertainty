@@ -3,6 +3,8 @@ Berlin,0,gamma,True,0
 Berlin,0,pbox,True,0
 Berlin,1,gamma,True,0
 Berlin,1,pbox,True,0
+Berlin,2,gamma,True,0
+Berlin,2,pbox,True,0
 Bombay,0,gamma,True,0
 Bombay,0,pbox,True,0
 Bombay,1,gamma,True,0
@@ -19,6 +21,8 @@ Cairo,0,gamma,True,0
 Cairo,0,pbox,True,0
 Cairo,1,gamma,True,0
 Cairo,1,pbox,True,0
+Cairo,2,gamma,True,0
+Cairo,2,pbox,True,0
 London,0,gamma,True,0
 London,0,pbox,True,0
 London,1,gamma,True,0
@@ -29,6 +33,8 @@ Moscow,0,gamma,True,0
 Moscow,0,pbox,True,0
 Moscow,1,gamma,True,0
 Moscow,1,pbox,True,0
+Moscow,2,gamma,True,0
+Moscow,2,pbox,True,0
 NewDelhi,0,gamma,True,0
 NewDelhi,0,pbox,True,0
 NewDelhi,1,gamma,True,0
@@ -39,7 +45,11 @@ NewYork,0,gamma,True,0
 NewYork,0,pbox,True,0
 NewYork,1,gamma,True,0
 NewYork,1,pbox,True,0
+NewYork,2,gamma,True,0
+NewYork,2,pbox,True,0
 Paris,0,gamma,True,0
 Paris,0,pbox,True,0
 Paris,1,gamma,True,0
 Paris,1,pbox,True,0
+Paris,2,gamma,True,0
+Paris,2,pbox,True,0
