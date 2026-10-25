@@ -6,7 +6,7 @@ Resume after a restart (all commands skip finished work; 3 processes):
 nohup python experiments/run_exact_queue.py > results/logs/run_exact_queue.out 2>&1 &
 ```
 
-Updated 2026-10-25 14:42:44. x = finished, . = missing (E1 / E2 / E3 / E4 per seed; sens = E1 sensitivity).
+Updated 2026-10-25 17:43:32. x = finished, . = missing (E1 / E2 / E3 / E4 per seed; sens = E1 sensitivity).
 
 | city | s0 | s1 | s2 | E1 sens |
 |---|---|---|---|---|
