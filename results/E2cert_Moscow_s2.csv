@@ -1,0 +1,2 @@
+city,seed,theta,sfrac,regret_fresh,regret_lp,social_cost,oracle,bp_calls,bp_optimal,bp_retried,bp_unproven,bp_invalid_bound,bp_max_gap,bp_nodes,bp_time,bp_br_calls,bp_br_optimal,bp_br_max_gap,bp_frac_optimal
+Moscow,2,0.5,-0.1,0,4.54747e-13,-6639.01,exact,33,30,2,3,0,3.73715,21809,388.212,10,10,0.714159,0.909091
