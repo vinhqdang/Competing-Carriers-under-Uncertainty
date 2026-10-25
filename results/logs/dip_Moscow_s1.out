@@ -1,0 +1,9 @@
+Moscow 1 dip exact 1 -6928.89 target -6928.89 grid -6928.89 calls 50 174
+Moscow 1 verify 0.0 0.0
+Moscow 1 already running elsewhere
+Moscow 1 base -6919.81 E2 base -6919.81
+Moscow 1 family exact -6928.89 -0.332 1.533
+Moscow 1 select -6928.89
+Moscow 1 credal 0.2 4.547473508864641e-13 -6928.89
+Moscow 1 credal 0.8 0.0 -6928.89
+Moscow 1 finished 568

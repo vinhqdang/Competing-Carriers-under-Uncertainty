@@ -1,0 +1,9 @@
+Paris 0 already running elsewhere
+Paris 0 dip exact 3 -5879.46 target -5879.46 grid -5876.67 calls 119 1247
+Paris 0 verify 0.0 2.2737367544323206e-13
+Paris 0 base -5718.17 E2 base -5718.17
+Paris 0 family empty -5875.58 -0.339 8.748
+Paris 0 select -5879.46
+Paris 0 credal 0.2 0.0 -5879.46
+Paris 0 credal 0.8 0.0 -5879.46
+Paris 0 finished 3036

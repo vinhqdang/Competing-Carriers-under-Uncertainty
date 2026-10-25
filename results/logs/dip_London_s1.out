@@ -1,0 +1,9 @@
+London 1 dip exact 3 -907.75 target -907.75 grid -840.32 calls 221 94
+London 1 verify 0.0 0.0
+London 1 base -624.79 E2 base -624.79
+London 1 family empty -873.91 -0.313 4.335
+London 1 select -904.77
+London 1 credal 0.2 0.0 -907.75
+London 1 credal 0.8 0.0 -907.75
+London 1 finished 99
+London 1 done, skipping

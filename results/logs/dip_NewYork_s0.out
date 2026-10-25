@@ -1,0 +1,9 @@
+NewYork 0 dip exact 1 -21466.16 target -21466.16 grid -21466.2 calls 50 19
+NewYork 0 verify 0.0 0.0
+NewYork 0 base -21396.38 E2 base -21396.4
+NewYork 0 family exact -21466.16 -0.4 13.497
+NewYork 0 select -21466.16
+NewYork 0 credal 0.2 9.094947017729282e-13 -21466.16
+NewYork 0 credal 0.8 0.0 -21466.16
+NewYork 0 finished 72
+NewYork 0 done, skipping

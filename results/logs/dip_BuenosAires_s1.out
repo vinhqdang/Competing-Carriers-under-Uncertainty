@@ -1,0 +1,9 @@
+BuenosAires 1 dip exact 1 -389.66 target -389.66 grid -384.54 calls 122 168
+BuenosAires 1 verify 0.0 0.0
+BuenosAires 1 base -275.18 E2 base -275.18
+BuenosAires 1 family empty -388.19 -0.266 20.618
+BuenosAires 1 select -389.66
+BuenosAires 1 credal 0.2 0.0 -389.66
+BuenosAires 1 credal 0.8 0.0 -389.66
+BuenosAires 1 finished 181
+BuenosAires 1 done, skipping

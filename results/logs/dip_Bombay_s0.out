@@ -1,0 +1,9 @@
+Bombay 0 dip exact 1 -148.12 target -148.12 grid -145.5 calls 139 148
+Bombay 0 verify 0.0 0.0
+Bombay 0 base -144.34 E2 base -144.34
+Bombay 0 family empty -144.93 -0.298 5.446
+Bombay 0 select -147.75
+Bombay 0 credal 0.2 0.0 -148.12
+Bombay 0 credal 0.8 0.0 -148.12
+Bombay 0 finished 195
+Bombay 0 done, skipping

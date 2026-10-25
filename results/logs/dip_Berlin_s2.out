@@ -1,0 +1,29 @@
+Berlin 2 dip exact 1 -9136.61 target -9136.61 grid -9107.98 calls 123 182
+Berlin 2 verify 0.0 0.0
+Berlin 2 base -8901.64 E2 base -8892.32
+Berlin 2 family empty -9136.03 -0.355 12.481
+Berlin 2 select -9136.61
+Berlin 2 credal 0.2 0.0 -9136.61
+Berlin 2 credal 0.8 0.0 -9136.61
+Traceback (most recent call last):
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 265, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 261, in main
+    run(a.city, a.seed, a.ncust)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 211, in run
+    dip_bp_share=D["bp_calls"] / ref["grid_bp_calls"], dip_time_share=D["time_s"] / ref["grid_time_s"],
+                 ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero
+Traceback (most recent call last):
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 265, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 261, in main
+    run(a.city, a.seed, a.ncust)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 211, in run
+    dip_bp_share=D["bp_calls"] / ref["grid_bp_calls"], dip_time_share=D["time_s"] / ref["grid_time_s"],
+                 ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero

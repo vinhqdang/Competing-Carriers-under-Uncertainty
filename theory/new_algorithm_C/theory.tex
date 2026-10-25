@@ -1,0 +1,230 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Qbar}{\bar Q}
+\newcommand{\dbar}{\bar d}
+\newcommand{\SC}{\mathrm{SC}}
+\newcommand{\SCbar}{\overline{\mathrm{SC}}}
+\newcommand{\Phibar}{\overline{\Phi}}
+\newcommand{\NE}{\mathrm{NE}}
+\newcommand{\ICNE}{\mathrm{ICNE}}
+\newcommand{\PROVED}{{\normalfont\textsc{[proved]}}}
+\newcommand{\CLASSICAL}{{\normalfont\textsc{[classical]}}}
+
+\title{Dual implementation pricing:\\ the city's charges from the social optimum,\\ with one best response per carrier per round}
+\author{Quang-Vinh Dang\\ British University Vietnam, Hung Yen, Vietnam\\ \texttt{vinh.dq4@buv.edu.vn} \quad ORCID 0000-0002-3877-8024}
+\date{Theory notes, direction C}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The city (leader) chooses per-delivery and per-vehicle-hour charges for $N$ carriers who play the exposure-based (D1) Cournot--congestion game of \texttt{theory/main.tex}, with plans from an NP-hard routing oracle. The project's current leader method is a grid over two charge parameters with one equilibrium solve per point (about $2{,}400$ oracle calls per city). We replace the search by an implementation step. (i) Because every lot's vehicle-hours are proportional to its deliveries, the two instruments collapse to one number $u_z$ per zone, and a uniform per-delivery charge plus non-negative zone congestion charges realise every $u\in\R^Z$ (Proposition~\ref{prop:instr}). (ii) An exact identity links the carriers' potential under $u$ to the social cost (Lemma~\ref{lem:identity}): with the tangent charge $u_z=\kappa_zQ^\circ_z-\tfrac{m_z}{2}\dbar_z$ (a Pigou term minus a lumpy Cournot subsidy) the two differ by a concave quadratic in the zone aggregates and a linear lot-asymmetry term. Consequences: the tangent charge implements the convexified social optimum exactly when lots are symmetric, and every convexified equilibrium is then socially optimal (Theorem~\ref{thm:convex}); with asymmetric lots the welfare loss is at most $(1+\rho)E$, with $E$ an explicit lot-asymmetry number (Theorem~\ref{thm:asym}). (iii) In the pure game the charges that make a given target profile an equilibrium form a polyhedron whose constraints are separated by \emph{one best response per carrier at the target}; a cutting-plane LP finds such a charge or proves that none exists, in finitely many rounds of $N$ oracle calls and with no equilibrium solve (Theorem~\ref{thm:cut}). When it succeeds, the leader attains the social cost of the target, so the only remaining loss is the suboptimality of the social solver (Proposition~\ref{prop:opt}). (iv) Under $\Gamma$-maximin imprecision of width $\delta$ the implementing set is translated by the surcharge, so the charges for every $\delta$ follow from one run (Theorem~\ref{thm:credal}). The individual ingredients (Pigou--Cournot corrective taxes, toll polyhedra, inverse optimisation by cutting planes) are classical; Section~\ref{sec:prior} says exactly what is new. Experiments (\texttt{results.md}) show the method on nine real city games with the exact branch-and-price oracle.
+\end{abstract}
+
+\section{Setting}\label{sec:setting}
+
+\begin{assumption}[City game; \texttt{src/ccu/zmc\_brl.py}]\label{ass:game}
+Zones $z\in[Z]$, carriers $i\in[N]$. Carrier $i$ has customer zones $C_i\subseteq[Z]$ with lot sizes $d_{iz}>0$ ($z\in C_i$; put $d_{iz}=0$ otherwise) and a finite plan set $\cP_i$. A plan $p$ serves a set $S(p)\subseteq C_i$ (all-or-nothing lots) with routes of routing cost $R_i(p)\ge0$ (the BRL upper expectation). Deliveries $q_{iz}(p)=d_{iz}\mathbf 1[z\in S(p)]$ and vehicle-hours $\tau_{iz}(p)=r\,q_{iz}(p)$ for one ratio $r>0$ (\texttt{h = d * h\_drop}). Inverse demand $\alpha_z-b_zQ_z$, congestion cost $\gamma c_z X_z$ per vehicle-hour ($g_z:=\gamma c_z$), with $Q=\sum_iq_i$, $X=\sum_i\tau_i=rQ$. The city posts $s_z$ per delivery and $t_z$ per vehicle-hour. Carrier $i$'s cost at the pure profile $\sigma$ is
+\[J_i(p;\sigma_{-i})=R_i(p)+\sum_z\Big[q_{iz}\big(-\alpha_z+b_z(q_{iz}+Q_{-i,z})+s_z\big)+\tau_{iz}\big(g_z(\tau_{iz}+X_{-i,z})+t_z\big)\Big].\]
+The social cost (charges are transfers) is
+$\SC(\sigma)=\sum_iR_i(\sigma_i)+\sum_z\big[-\alpha_zQ_z+\tfrac{b_z}{2}Q_z^2+g_zX_z^2\big]$.
+\end{assumption}
+
+Write $\kappa_z=g_zr^2$ (congestion slope in delivery units), $m_z=b_z+\kappa_z$ (the slope the carriers face) and $m^S_z=b_z+2\kappa_z$ (the social slope). Since $q_{iz}\in\{0,d_{iz}\}$ we have $q_{iz}^2=d_{iz}q_{iz}$, which is used repeatedly.
+
+\begin{proposition}[One instrument per zone]\label{prop:instr}\PROVED\
+(a) For every plan, $\sum_z(s_zq_{iz}+t_z\tau_{iz})=\ip{u}{q_i}$ with $u_z=s_z+rt_z$. Hence the game depends on $(s,t)$ only through $u\in\R^Z$.
+(b) Every $u\in\R^Z$ is realised by a \emph{uniform} per-delivery charge $s=\min_{z\in Z_+}u_z$ (a subsidy if negative) and non-negative zone congestion charges $t_z=(u_z-s)/r$, where $Z_+$ is the set of zones with at least one lot.
+(c) The grid of \texttt{experiments/run\_leader.py} uses $s_z\equiv s$ and $t_z=\theta\,g_zX^{\NE}_z$, i.e.\ the two-dimensional family $u=s\mathbf 1+\theta\, r\,g\odot X^{\NE}$.
+\end{proposition}
+\begin{proof}
+(a) $\tau_{iz}=rq_{iz}$. (b) $s+rt_z=u_z$ and $t_z\ge0$ because $s\le u_z$; zones without lots carry no plan and are irrelevant. (c) Substitution.
+\end{proof}
+
+With $u$ as the instrument, $J^u_i(p;\sigma_{-i})=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+m_z(d_{iz}+Q_{-i,z})+u_z\big)$ and the game has the exact potential (D1; \texttt{main.tex}, Theorem 4.4, Monderer--Shapley)
+\[\Phi_u(\sigma)=\sum_iR_i(\sigma_i)+\sum_z\Big[-\alpha_zQ_z+\tfrac{m_z}{2}\big(Q_z^2+\textstyle\sum_iq_{iz}^2\big)+u_zQ_z\Big],\]
+as one checks directly: changing $\sigma_i$ from $p$ to $p'$ changes $\Phi_u$ by $J^u_i(p')-J^u_i(p)$.
+
+\section{The potential--welfare identity}
+
+\begin{lemma}[Identity]\label{lem:identity}\PROVED\
+Fix $Q^\circ\in\R^Z$ and $\dbar\in\R^Z$ and let $u^{\tan}_z=\kappa_zQ^\circ_z-\tfrac{m_z}{2}\dbar_z$. For every $u$ put $v=u-u^{\tan}$. Then for every pure profile $\sigma$
+\begin{equation}\label{eq:id}
+\Phi_u(\sigma)=\SC(\sigma)-\sum_z\tfrac{\kappa_z}{2}(Q_z-Q^\circ_z)^2+L(\sigma)+\ip{v}{Q}+\sum_z\tfrac{\kappa_z}{2}(Q^\circ_z)^2,
+\qquad L(\sigma)=\sum_{i,z}\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+With $q_{iz}^2=d_{iz}q_{iz}$, $X_z=rQ_z$ and $m^S_z-m_z=\kappa_z$,
+$\Phi_u-\SC=\sum_z\big[\tfrac{m_z}{2}\sum_id_{iz}q_{iz}-\tfrac{\kappa_z}{2}Q_z^2+u_zQ_z\big]$.
+Insert $u_z=\kappa_zQ^\circ_z-\tfrac{m_z}{2}\dbar_z+v_z$ and complete the square:
+$-\tfrac{\kappa_z}{2}Q_z^2+\kappa_zQ^\circ_zQ_z=-\tfrac{\kappa_z}{2}(Q_z-Q_z^\circ)^2+\tfrac{\kappa_z}{2}(Q^\circ_z)^2$, and $\tfrac{m_z}{2}\sum_id_{iz}q_{iz}-\tfrac{m_z}{2}\dbar_zQ_z=\sum_i\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}$.
+\end{proof}
+
+The tangent charge is the classical corrective tax of a Cournot market with an externality (marginal external damage $\kappa_zQ_z$ minus a market-power subsidy; Buchanan 1969, Barnett 1980). Two details are specific to the lumpy lots: the subsidy is $\tfrac{m_z}{2}d$ per delivery (half a lot, and it includes the carriers' \emph{own} congestion $\kappa_z$), not $b_zq_i$; and the externality is evaluated at the target aggregate, not at the unpriced equilibrium. In ZMC price terms (\texttt{theory/new\_algorithm\_A}, $\lambda=MA$), $\kappa_zQ^\circ_z=\lambda^{SO}_z-\lambda_z$ is the gap between the social and the carriers' zone price \emph{at the same aggregate}.
+
+\begin{proposition}[Personalised charges; classical]\label{prop:pers}\CLASSICAL\ (marginal-contribution utilities, Wolpert--Tumer; Marden--Wierman 2013).
+Let $\sigma^*$ be a pure profile and $U_{iz}=\kappa_zQ^*_{-i,z}-\tfrac{b_z}{2}d_{iz}$. Under carrier-specific per-delivery charges $U_i$, for all $i$ and $p,p'\in\cP_i$: $J^{U}_i(p;\sigma^*_{-i})-J^{U}_i(p';\sigma^*_{-i})=\SC(p,\sigma^*_{-i})-\SC(p',\sigma^*_{-i})$. Hence every profile that no single carrier can improve socially (in particular every social optimum) is a pure equilibrium.
+\end{proposition}
+\begin{proof}
+$\SC(p,\sigma^*_{-i})=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+m^S_zQ^*_{-i,z}+\tfrac{m^S_z}{2}d_{iz}\big)+\text{const}$, and $J^U_i(p)=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+m_zd_{iz}+m_zQ^*_{-i,z}+U_{iz}\big)$; the brackets coincide because $m_z+\kappa_z=m^S_z$ and $m_z-\tfrac{b_z}{2}=\tfrac{m^S_z}{2}$.
+\end{proof}
+
+A city cannot charge per carrier. Flat charges reproduce $U_{iz}$ only up to the spread $\kappa_zd_{iz}+\tfrac{b_z}{2}(d_{iz}-d_{jz})$ across carriers; the rest of the paper measures what this costs and how to avoid it.
+
+\section{The convexified game}
+
+Let each carrier mix, $x_i\in\Delta(\cP_i)$, and write $\bar q_i=\mathbb E_{x_i}q_i$, $\Qbar=\sum_i\bar q_i$. The convexified potential (the relaxation of \texttt{main.tex} Section 5 and of ZMC) and the convexified social cost are
+\[\Phibar_u(x)=\sum_i\mathbb E_{x_i}\Big[R_i+\sum_zq_{iz}\big(-\alpha_z+u_z+\tfrac{m_z}{2}d_{iz}\big)\Big]+\sum_z\tfrac{m_z}{2}\Qbar_z^2,\qquad
+\SCbar(x)=\sum_i\mathbb E_{x_i}\Big[R_i-\sum_z\alpha_zq_{iz}\Big]+\sum_z\tfrac{m^S_z}{2}\Qbar_z^2.\]
+Both are convex on the product of simplices, they agree with $\Phi_u$ and $\SC$ up to the own-term, which is linear in $x$ because $q_{iz}^2=d_{iz}q_{iz}$, and the minimisers of $\Phibar_u$ are the convexified (relaxed) equilibria. Let $x^*$ minimise $\SCbar$, with aggregate $\Qbar^*$. The identity of Lemma~\ref{lem:identity} holds verbatim for $\Phibar_u$ and $\SCbar$ with $Q,q$ replaced by $\Qbar,\bar q$ (same algebra; both sides are affine in $x$ except the quadratic terms in $\Qbar$).
+
+\begin{theorem}[Asymmetric lots]\label{thm:asym}\PROVED\
+Let $u=\kappa\odot\Qbar^*-\tfrac{m}{2}\odot\dbar$ for any $\dbar$. Every convexified equilibrium $x^u$ (minimiser of $\Phibar_u$) satisfies
+\[0\le\SCbar(x^u)-\SCbar(x^*)\le(1+\rho)\,\big[L(x^*)-L(x^u)\big]\le(1+\rho)\,E,\qquad \rho=\max_z\frac{\kappa_z}{b_z+\kappa_z}<1,\]
+with $L(x)=\sum_{i,z}\tfrac{m_z}{2}(d_{iz}-\dbar_z)\bar q_{iz}$ and the lot-asymmetry number $E=\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\dbar_z|\,d_{iz}$. Moreover $\sum_z\tfrac{b_z+\kappa_z}{2}(\Qbar^u_z-\Qbar^*_z)^2\le L(x^*)-L(x^u)$.
+\end{theorem}
+\begin{proof}
+$\SCbar$ is a linear function of $x$ plus $\sum_z\tfrac{m^S_z}{2}\Qbar_z^2$ with $\Qbar$ linear in $x$, so the second-order expansion is exact:
+$\SCbar(x)-\SCbar(x^*)=\ip{\nabla\SCbar(x^*)}{x-x^*}+\sum_z\tfrac{m^S_z}{2}(\Qbar_z-\Qbar^*_z)^2$, and the inner product is non-negative by optimality of $x^*$ over the convex feasible set. Hence
+$\Delta:=\SCbar(x^u)-\SCbar(x^*)\ge\sum_z\tfrac{m^S_z}{2}(\Delta\Qbar_z)^2$.
+By the identity with $Q^\circ=\Qbar^*$, $v=0$: $\Phibar_u(x)=\SCbar(x)-\sum_z\tfrac{\kappa_z}{2}(\Qbar_z-\Qbar^*_z)^2+L(x)+\text{const}$. Since $x^u$ minimises $\Phibar_u$, $\Phibar_u(x^u)\le\Phibar_u(x^*)$, i.e.\
+$\Delta\le\sum_z\tfrac{\kappa_z}{2}(\Delta\Qbar_z)^2+L(x^*)-L(x^u)$.
+Combining the two bounds, $\sum_z\tfrac{m^S_z-\kappa_z}{2}(\Delta\Qbar_z)^2\le L(x^*)-L(x^u)$, which is the last claim since $m^S_z-\kappa_z=b_z+\kappa_z$. Then $\sum_z\tfrac{\kappa_z}{2}(\Delta\Qbar_z)^2\le\rho\sum_z\tfrac{b_z+\kappa_z}{2}(\Delta\Qbar_z)^2\le\rho\,[L(x^*)-L(x^u)]$ and $\Delta\le(1+\rho)[L(x^*)-L(x^u)]$. Finally $|L(x^*)-L(x^u)|\le\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\dbar_z|\,|\bar q^*_{iz}-\bar q^u_{iz}|\le E$ because $\bar q_{iz}\in[0,d_{iz}]$.
+\end{proof}
+
+\begin{theorem}[Exact implementation of the convexified optimum]\label{thm:convex}\PROVED\
+If lots are symmetric within zones ($d_{iz}=d_z$ for all $i$ with $z\in C_i$), the tangent charge $u_z=\kappa_z\Qbar^*_z-\tfrac{m_z}{2}d_z$ makes $x^*$ a convexified equilibrium, and \emph{every} convexified equilibrium under $u$ has aggregate $\Qbar^*$ and social cost $\SCbar(x^*)$.
+\end{theorem}
+\begin{proof}
+With $\dbar=d$, $L$ is identically zero on the feasible set (each term has $d_{iz}=\dbar_z$ or $\bar q_{iz}=0$), so $E=0$ in Theorem~\ref{thm:asym}: every minimiser $x^u$ of $\Phibar_u$ has $\Delta\Qbar=0$ and $\SCbar(x^u)=\SCbar(x^*)$. It remains to show that $x^*$ itself minimises $\Phibar_u$: $\Phibar_u=\SCbar-\sum_z\tfrac{\kappa_z}{2}(\Qbar_z-\Qbar^*_z)^2+\text{const}$, the subtracted term has zero gradient at $x^*$, so $\nabla\Phibar_u(x^*)=\nabla\SCbar(x^*)$ and the first-order optimality condition of the convex function $\Phibar_u$ (curvature $b_z+\kappa_z>0$ in $\Qbar_z$) holds at $x^*$.
+\end{proof}
+
+\begin{remark}[What the user's first idea gets right and wrong]
+The implementing charge is indeed ``social zone price minus carriers' zone price, minus a market-power wedge'', but (i) the two prices must be evaluated at the \emph{same} aggregate (the target), not at the unpriced equilibrium; (ii) the wedge is $\tfrac{m_z}{2}d_{iz}$, half a lot including own congestion, and not $b_zQ_z/N$; (iii) in the convexified game no refinement step is needed at all under symmetric lots (Theorem~\ref{thm:convex}). The refinement is needed only for lot asymmetry and for integrality, and the right tool for it is not a secant on the charge (each secant step needs an equilibrium solve, about $40$ oracle calls) but the cutting plane of Section~\ref{sec:pure}, whose rounds cost one best response per carrier.
+\end{remark}
+
+\section{The pure game: implementation polyhedron and cutting planes}\label{sec:pure}
+
+Let $\cU=\prod_z[\underline u_z,\overline u_z]$ be the admissible charges (in the code $[-\alpha_z,\alpha_z]$). For a pure target $\sigma^*$ let $J^0_i$ denote $J_i$ at $u=0$ and define
+\[P(\sigma^*)=\big\{u\in\cU:\ \ip{q_i(p)-q_i(\sigma^*_i)}{u}\ \ge\ J^0_i(\sigma^*_i;\sigma^*_{-i})-J^0_i(p;\sigma^*_{-i})\quad\forall i,\ \forall p\in\cP_i\big\}.\]
+By Proposition~\ref{prop:instr}(a), $J^u_i=J^0_i+\ip{u}{q_i}$, so $P(\sigma^*)$ is exactly the set of admissible charges under which $\sigma^*$ is a pure Nash equilibrium. It is a polyhedron (finitely many constraints), possibly empty. This ``toll polyhedron'' viewpoint is classical for nonatomic routing (Bergendorff--Hearn--Ramana 1997; Hearn--Ramana 1998) and for inverse optimisation (Ahuja--Orlin 2001).
+
+\begin{algorithm}[t]
+\caption{DIP: dual implementation pricing}\label{alg:dip}
+\begin{algorithmic}[1]
+\State \textbf{Target.} Column generation on $\SCbar$ (the social-cost variant of the carriers' oracle), rounding, coordinate polish $\Rightarrow$ pure $\sigma^*$, aggregate $Q^*$.
+\State \textbf{Reference.} $u^{\rm ref}=\kappa\odot Q^*-\tfrac m2\odot\dbar$ (tangent charge, $\dbar_z$ = mean lot in $z$); cuts $\mathcal C\gets\emptyset$; $u\gets u^{\rm ref}$.
+\For{$k=1,2,\dots$}
+  \For{$i=1..N$} $b_i\gets$ oracle best response to $\sigma^*_{-i}$ under $u$ \Comment{$N$ routing calls}
+     \If{$J^u_i(b_i)<J^u_i(\sigma^*_i)$} add the cut $\ip{q_i(b_i)-q_i(\sigma^*_i)}{u}\ge J^0_i(\sigma^*_i)-J^0_i(b_i)+\varepsilon$ to $\mathcal C$\EndIf
+  \EndFor
+  \If{no cut was added} \Return $u$, $\sigma^*$ \Comment{$\sigma^*$ is an exact pure equilibrium under $u$}\EndIf
+  \State $u\gets\arg\min\{\|u-u^{\rm ref}\|_1:\ u\in\cU,\ u\text{ satisfies }\mathcal C\}$ (LP);\quad \textbf{if} infeasible: \textbf{break}
+\EndFor
+\State \textbf{Fallback.} Best-response dynamics from $\sigma^*$ under the least-violating LP charge and under $u^{\rm ref}$; keep the better equilibrium.
+\State \textbf{Instruments.} $s=\min_zu_z$, $t_z=(u_z-s)/r$ (Proposition~\ref{prop:instr}).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[Separation and finite termination]\label{thm:cut}\PROVED\
+(a) For $u\in\cU$, $u\in P(\sigma^*)$ if and only if no carrier has a strictly improving best response to $\sigma^*_{-i}$ under $u$; if carrier $i$'s best response $b_i$ improves, the constraint $(i,b_i)$ is violated by $u$, and it is the most violated constraint of carrier $i$ (largest $J^u_i(\sigma^*_i)-J^u_i(p)$).
+(b) With $\varepsilon=0$, Algorithm~\ref{alg:dip} stops after at most $1+\sum_i(|\cP_i|-1)$ rounds, either with $u\in P(\sigma^*)$ or with an infeasible LP, and the latter happens only if $P(\sigma^*)=\emptyset$. With $\varepsilon>0$ the same holds for the shrunken polyhedron $P_\varepsilon(\sigma^*)$, whose elements make $\sigma^*$ a strict equilibrium against every plan with a different delivery vector. Each round costs $N$ oracle calls and no equilibrium solve.
+(c) \CLASSICAL\ If the LP step is replaced by a central cut (centre of gravity or ellipsoid, Grötschel--Lovász--Schrijver) and $P_\varepsilon(\sigma^*)$ contains a ball of radius $\varrho$ in the $k$ coordinates of the zones that appear in some deviation, a point of $P_\varepsilon(\sigma^*)$ is found in $O(k\log(D/\varrho))$ rounds (centre of gravity) or $O(k^2\log(D/\varrho))$ rounds (ellipsoid), $D$ the diameter of $\cU$.
+\end{theorem}
+\begin{proof}
+(a) $J^u_i(p)=J^0_i(p)+\ip{u}{q_i(p)}$, so constraint $(i,p)$ reads $J^u_i(p)\ge J^u_i(\sigma^*_i)$; all of carrier $i$'s constraints hold iff $\min_pJ^u_i(p)\ge J^u_i(\sigma^*_i)$, and the violation of $(i,p)$ is $J^u_i(\sigma^*_i)-J^u_i(p)$, maximised by a best response.
+(b) If round $k$ adds a cut $(i,b_i)$, the current $u_k$ violates it; $u_k$ satisfies every earlier cut (it is LP-feasible), so the cut is new. There are $\sum_i(|\cP_i|-1)$ non-trivial constraints, which bounds the number of rounds that add cuts. Every cut is a valid constraint of $P(\sigma^*)$, so an infeasible LP proves emptiness. The statement for $\varepsilon>0$ is the same argument applied to the right-hand sides increased by $\varepsilon$.
+(c) Standard: each round returns either a point of the set or a separating halfspace through the current centre; the volume of the localiser shrinks by a constant factor (centre of gravity: $1-1/e$; ellipsoid: $e^{-1/(2(k+1))}$) and cannot fall below the volume of the ball.
+\end{proof}
+
+\begin{proposition}[Single-level form and optimality]\label{prop:opt}\PROVED\
+Let $V^\star=\inf_{u\in\cU}\min_{\sigma\in\NE(u)}\SC(\sigma)$ be the leader's value with optimistic selection. Then $V^\star=\min\{\SC(\sigma):\ \sigma\text{ pure},\ P(\sigma)\neq\emptyset\}\ge\min_\sigma\SC(\sigma)\ge\min_x\SCbar(x)$. If Algorithm~\ref{alg:dip} ends in its main loop, it returns charges under which $\sigma^*$ is an equilibrium, so $\SC(\sigma^*)-V^\star\le\SC(\sigma^*)-\min_\sigma\SC(\sigma)$: the leader's loss is only the suboptimality of the social solver. In particular it is at least as good as any grid over any subfamily of $\cU$.
+\end{proposition}
+\begin{proof}
+$\sigma\in\NE(u)$ iff $u\in P(\sigma)$, so the two descriptions of $V^\star$ range over the same pairs $(u,\sigma)$. The other inequalities are inclusions of feasible sets ($\min\SCbar$ relaxes pure profiles to mixtures, and $\SCbar=\SC$ at pure profiles because $q^2=dq$).
+\end{proof}
+
+The leader problem is therefore a single-level problem over profiles with an implementability side condition; DIP solves its relaxation (drop the side condition) and checks the side condition at the relaxed optimum with the carriers' own oracle. Selection is the remaining issue: other equilibria may exist under the returned $u$ (Remark~\ref{rem:select}).
+
+\begin{theorem}[Loss of the fallback; a posteriori and a priori]\label{thm:fallback}\PROVED\
+Let $u$ be any charge, $v=u-u^{\tan}$ with $u^{\tan}=\kappa\odot Q^*-\tfrac m2\odot\dbar$, and let $\sigma^u$ be reached from $\sigma^*$ by strictly improving unilateral moves under $u$ (best-response dynamics; it terminates in a pure equilibrium because $\Phi_u$ strictly decreases on a finite set). Then
+\[\SC(\sigma^u)-\SC(\sigma^*)\ \le\ \sum_z\tfrac{\kappa_z}{2}(Q^u_z-Q^*_z)^2+L(\sigma^*)-L(\sigma^u)+\ip{v}{Q^*-Q^u}\]
+\[\le\ \sum_z\tfrac{\kappa_z}{2}\,\big(\textstyle\max\{Q^*_z,\ Q^{\rm full}_z-Q^*_z\}\big)^2+E+\sum_z|v_z|\,Q^{\rm full}_z,\]
+with $Q^{\rm full}_z=\sum_id_{iz}$. For $u=u^{\tan}$ and symmetric lots only the congestion term remains.
+\end{theorem}
+\begin{proof}
+$\Phi_u(\sigma^u)\le\Phi_u(\sigma^*)$; substitute \eqref{eq:id} with $Q^\circ=Q^*$ on both sides; the constant cancels and $Q^*-Q^*=0$ on the right. The a priori bound uses $0\le Q^u_z\le Q^{\rm full}_z$, the bound on $|L(\sigma^*)-L(\sigma^u)|$ from the proof of Theorem~\ref{thm:asym}, and $|Q^*_z-Q^u_z|\le Q^{\rm full}_z$.
+\end{proof}
+
+\begin{corollary}[Oracle calls]\label{cor:calls}\PROVED\
+DIP uses $C_{\rm SO}+N\,R+C_{\rm BR}$ oracle calls: $C_{\rm SO}$ for the social target (column generation, at most $N$ calls per iteration plus a coordinate polish), $R$ cutting-plane rounds (bounded in Theorem~\ref{thm:cut}) and, only if the polyhedron is empty, $C_{\rm BR}$ calls of best-response dynamics from $\sigma^*$ (at most $N$ per strict improvement of $\Phi_u$, plus a final verifying pass). No step solves an equilibrium from scratch. A grid with $G$ points and an equilibrium solve of $C_{\rm eq}$ calls per point uses $GC_{\rm eq}$.
+\end{corollary}
+
+\begin{remark}[Selection]\label{rem:select}
+DIP returns the target as an \emph{exact} pure equilibrium under the returned charges (verified by best responses, and in the experiments by a fresh-pool oracle). Other equilibria may coexist, as in the grid method, whose equilibria are those selected by ZMC from warm starts. Two tools reduce the risk: the margin $\varepsilon>0$ (strictness), and the identity \eqref{eq:id}: under the tangent charge with symmetric lots, an equilibrium $\sigma'$ that is a global minimiser of $\Phi_u$ satisfies $\SC(\sigma')\le\SC(\sigma^*)+\sum_z\tfrac{\kappa_z}{2}(Q'_z-Q^*_z)^2$, so the potential-minimising equilibrium can lose at most a congestion-sized term. The experiments report, in addition, the equilibrium that the grid's own protocol (ZMC from the unpriced prices) selects under DIP's charges.
+\end{remark}
+
+\section{Credal imprecision}
+
+\begin{theorem}[Translation by the surcharge]\label{thm:credal}\PROVED\
+Under $\Gamma$-maximin credal boxes of width $\delta$ and weights $w$ (\texttt{main.tex}, Lemma 3.6, Assumption 2.4), the $\Gamma$-maximin equilibria under $u$ are the pure equilibria of the game with the per-unit surcharge $\mathrm{sur}(\delta)=\delta\,Mw\in\R^{2Z}$ added to the contribution. With $\hat s_z(\delta)=\delta(b_zw_{(z,Q)}+r\,g_zw_{(z,X)})$:
+\[P^{\Gamma}_\delta(\sigma^*)=P(\sigma^*)-\hat s(\delta)\qquad(\text{intersected with }\cU).\]
+Hence one run of DIP gives the implementing charges $u(\delta)=u(0)-\hat s(\delta)$ for every $\delta\ge0$ at no further oracle cost, and as long as $u(\delta)\in\cU$ the leader attains the same social cost $\SC(\sigma^*)$ at every width: the welfare loss of ambiguity aversion that E4 measures without charges is entirely removable by charges. For the criteria E-admissibility, maximality and interval dominance, $u(0)$ itself makes $\sigma^*$ an imprecise equilibrium at every $\delta$, because $\ICNE_C(0)=\NE\subseteq\ICNE_C(\delta)$ (\texttt{main.tex}, Lemma 3.3).
+\end{theorem}
+\begin{proof}
+By Lemma 3.6 of \texttt{main.tex} under D1, carrier $i$'s $\Gamma$-maximin payoff is its precise payoff minus $\delta\ip{a_i(p)}{Mw}$ (traffic enters the BRL route loss already at its upper expectation). With $a_i=(q_i,rq_i)$, $\delta\ip{a_i(p)}{Mw}=\ip{\hat s(\delta)}{q_i(p)}$, so $J^{u,\Gamma}_i=J^{u+\hat s(\delta)}_i$ and $u\in P^\Gamma_\delta(\sigma^*)\iff u+\hat s(\delta)\in P(\sigma^*)$. The social cost does not contain the surcharge (it is a belief, not a resource cost). The last statement is the monotonicity lemma.
+\end{proof}
+
+\section{Two instruments}
+
+\begin{proposition}[When a uniform per-delivery charge suffices]\label{prop:uniform}\PROVED\
+(a) The pair (uniform $s$, zone $t\ge0$) realises every zone charge (Proposition~\ref{prop:instr}); a zone-specific per-delivery charge adds nothing to it, and a per-vehicle-hour charge adds nothing to a zone-specific per-delivery charge. The only thing the congestion instrument contributes beyond a uniform $s$ is spatial differentiation.
+(b) Under symmetric lots, a uniform charge implements the convexified optimum exactly (in the sense of Theorem~\ref{thm:convex}) if the tangent charge $\kappa_z\Qbar^*_z-\tfrac{m_z}{2}d_z$ is the same number in every active zone. The condition is sufficient, not necessary: zones at a vertex of the optimum tolerate one-sided deviations, which the cutting plane of Section~\ref{sec:pure} exploits.
+(c) With the calibration of \texttt{build\_city\_game}, $b_z=\alpha_z/(2Q^{\rm full}_z)$ and $\alpha_z=1.5\,\mathrm{fee}$. If the $n_z$ carriers present in zone $z$ have equal lots, $Q^{\rm full}_z=n_zd_z$ and the congestion-free tangent charge is $u_z=-\tfrac{b_z}{2}d_z=-\tfrac{\alpha_z}{4n_z}=-\tfrac{0.375}{n_z}\,\mathrm{fee}$: a subsidy of $37.5\%$ of the fee in single-carrier zones and $19\%$ in two-carrier zones. A uniform subsidy is exact only if every served zone has the same number of carriers; otherwise the zone congestion charge is needed to tax zones with more competitors relative to the others.
+\end{proposition}
+\begin{proof}
+(a) Proposition~\ref{prop:instr}. (b) Theorem~\ref{thm:convex}, since the tangent charge is then uniform. (c) Substitution, with $m_z\approx b_z$ when $\kappa_z\ll b_z$.
+\end{proof}
+
+The grid's best points (\texttt{docs/EXPERIMENTS.md}, E2: $s/\mathrm{fee}\in[-0.4,-0.2]$) sit exactly in the range predicted by (c), which explains why the per-delivery subsidy captures most of the gain and why the congestion charge helps where the number of competitors varies across zones.
+
+\section{Experiments in brief}
+Details in \texttt{results.md}. Exact branch-and-price oracle, nine cities, seeds 0--2 (27 runs). In the three cities with a complete 63-point exact grid (London, Buenos Aires, New Delhi), DIP reached $104$--$135\%$ of the grid-optimal social-cost gain with $4.9$--$9.4\%$ of the grid's oracle calls; in all 27 runs it reached at least $0.999$ of the best grid point with at most $9.4\%$ of the calls of a 63-point grid. The target was implemented exactly in all 27 runs (the tangent charge alone sufficed in 18; at most 3 cutting-plane rounds), so the priced equilibrium attains the social cost of the column-generation optimum. On 210 enumerated tiny games, DIP hit the exact leader optimum over all zone charges in $93\%$ of the games, and in $100\%$ when given the exact social optimum as target. The zone charges follow the rule $u_z\approx-0.375\,\mathrm{fee}/n_z$ of Proposition~\ref{prop:uniform}(c) (correlation $0.98$--$1.00$).
+
+\section{Prior art and what is new}\label{sec:prior}
+
+\begin{itemize}[leftmargin=1.2em]
+\item \textbf{Corrective taxes under oligopoly} (Buchanan 1969; Barnett 1980; Benchekroun--Long 1998 for dynamic Cournot): the optimal per-unit tax is the marginal external damage minus a market-power correction. The tangent charge is this rule; the half-lot, own-congestion form is a small adaptation to all-or-nothing lots. \emph{Classical.}
+\item \textbf{Marginal-contribution / Pigouvian personalised charges} (Wolpert--Tumer; Marden--Wierman 2013): Proposition~\ref{prop:pers}. \emph{Classical.}
+\item \textbf{Toll polyhedra and implementing a target flow} (Bergendorff, Hearn, Ramana 1997; Hearn--Ramana 1998; Fotakis--Spirakis 2008 cost-balancing tolls for atomic games; Bhaskar, Ligett, Schulman, Swamy, FOCS 2014 / GEB 2019, ellipsoid with an \emph{equilibrium} oracle; Stoll 2021 for unique equilibria in atomic unsplittable games). \emph{Classical framework.} Bhaskar et al.\ query an equilibrium flow for each candidate toll, i.e.\ one equilibrium solve per query; here the query is one best response per carrier at the fixed target, which is why the method needs no equilibrium solve.
+\item \textbf{Inverse optimisation by cutting planes} (Ahuja--Orlin 2001; Wang 2009 for inverse MILP; Bodur--Chan--Zhu 2022): Algorithm~\ref{alg:dip}'s loop is an inverse-optimisation cutting plane, one inverse problem per carrier coupled through the common charge. \emph{Classical technique.}
+\item \textbf{Leader search with an equilibrium solver in the loop} (Masiha, Elahi, Kiyavash, Thiran, arXiv 2602.23277, 2026: zeroth-order outer updates of tolls over a Frank--Wolfe equilibrium solver in combinatorial congestion games, including freight carriers with NP-hard tour problems). This is the closest leader-side neighbour; like the project's grid, every outer step needs an equilibrium solve.
+\item \textbf{Pure equilibria in integer-programming games} (Dragotto--Scatamacchia, Zero Regrets, IJOC 2023; Carvalho et al.\ Cut-and-Play; Duguet--Harks--Schmidt--Schwarz 2025): cutting planes over profiles with best-response separation, without a leader or charges.
+\end{itemize}
+\textbf{What we did not find and claim:} (1) the exact potential--welfare identity \eqref{eq:id} for the lumpy Cournot--congestion game, and the loss bounds it gives (Theorems~\ref{thm:asym}, \ref{thm:convex}, \ref{thm:fallback}) with the observable lot-asymmetry number $E$; (2) the combination ``social target by the same column-generation machinery $+$ implementation polyhedron separated by the carriers' own NP-hard best responses at the target'' as an algorithm for the leader of an atomic aggregative routing game, with the single-level characterisation of Proposition~\ref{prop:opt}; (3) the translation of the implementing set by the $\Gamma$-maximin surcharge (Theorem~\ref{thm:credal}); (4) the competitor-count rule of Proposition~\ref{prop:uniform}(c). These are modest; the contribution is mainly that the leader problem of this project needs one social solve and a few best-response rounds instead of a grid of equilibrium solves.
+
+\paragraph{Limits.} (i) The quality of the result is the quality of the social target; the column-generation target is a heuristic pure optimum (Proposition~\ref{prop:opt} makes this the only loss when the polyhedron is non-empty). (ii) Optimistic selection: the target is an exact equilibrium under the returned charges, but not necessarily the only one. (iii) The structure used is specific: D1, one hours-per-delivery ratio $r$ (collinearity), affine inverse demand and linear congestion. Without collinearity the per-zone instrument is two-dimensional and Proposition~\ref{prop:instr}(b) fails; the polyhedron and the cutting plane still work in $\R^{2Z}$. (iv) If $P(\sigma^*)=\emptyset$ the fallback is a heuristic with the a posteriori bound of Theorem~\ref{thm:fallback}; no rate is claimed for retargeting.
+
+\end{document}

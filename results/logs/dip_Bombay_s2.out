@@ -1,0 +1,9 @@
+Bombay 2 dip exact 2 -156.47 target -156.47 grid -155.09 calls 141 376
+Bombay 2 verify 0.0 1.4210854715202004e-14
+Bombay 2 base -150.18 E2 base -150.18
+Bombay 2 family empty -154.47 -0.121 2.429
+Bombay 2 select -155.7
+Bombay 2 credal 0.2 0.0 -156.47
+Bombay 2 credal 0.8 0.0 -156.47
+Bombay 2 finished 483
+Bombay 2 done, skipping

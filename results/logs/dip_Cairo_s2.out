@@ -1,0 +1,10 @@
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+Cairo 2 dip exact 1 -1045.75 target -1045.75 grid -1045.75 calls 45 464
+Cairo 2 verify 0.0 0.0
+Cairo 2 already running elsewhere
+Cairo 2 base -1045.75 E2 base -1045.75
+Cairo 2 family exact -1045.75 -0.285 36.701
+Cairo 2 select -1045.75
+Cairo 2 credal 0.2 0.0 -1045.75
+Cairo 2 credal 0.8 0.0 -1045.75
+Cairo 2 finished 1480

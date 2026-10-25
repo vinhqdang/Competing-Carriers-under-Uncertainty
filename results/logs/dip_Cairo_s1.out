@@ -1,0 +1,9 @@
+Cairo 1 already running elsewhere
+Cairo 1 dip exact 1 -1086.46 target -1086.46 grid -1086.46 calls 44 98
+Cairo 1 verify 0.0 0.0
+Cairo 1 base -1086.46 E2 base -1086.46
+Cairo 1 family exact -1086.46 -0.278 35.091
+Cairo 1 select -1086.46
+Cairo 1 credal 0.2 0.0 -1086.46
+Cairo 1 credal 0.8 0.0 -1086.46
+Cairo 1 finished 346

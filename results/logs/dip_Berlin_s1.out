@@ -1,0 +1,9 @@
+Berlin 1 already running elsewhere
+Berlin 1 dip exact 1 -8693.88 target -8693.88 grid -8689.19 calls 94 174
+Berlin 1 verify 2.2737367544323206e-13 0.0
+Berlin 1 base -8553.26 E2 base -8553.26
+Berlin 1 family empty -8688.7 -0.34 11.178
+Berlin 1 select -8693.88
+Berlin 1 credal 0.2 2.2737367544323206e-13 -8693.88
+Berlin 1 credal 0.8 2.2737367544323206e-13 -8693.88
+Berlin 1 finished 725

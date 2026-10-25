@@ -1,0 +1,9 @@
+Paris 2 already running elsewhere
+Paris 2 dip exact 2 -5688.6 target -5688.6 grid -5675.51 calls 109 484
+Paris 2 verify 0.0 0.0
+Paris 2 base -5419.67 E2 base -5419.67
+Paris 2 family empty -5684.31 -0.353 11.298
+Paris 2 select -5688.6
+Paris 2 credal 0.2 0.0 -5688.6
+Paris 2 credal 0.8 0.0 -5688.6
+Paris 2 finished 1298

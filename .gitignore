@@ -247,3 +247,6 @@ survey/*.blg
 survey/*.spl
 survey/*.toc
 survey/*.bbl
+theory/new_algorithm_C/*.aux
+theory/new_algorithm_C/*.log
+theory/new_algorithm_C/*.out

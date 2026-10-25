@@ -1,0 +1,9 @@
+NewDelhi 1 dip exact 1 -105.91 target -105.91 grid -100.76 calls 119 62
+NewDelhi 1 verify 0.0 0.0
+NewDelhi 1 base -85.84 E2 base -85.84
+NewDelhi 1 family empty -104.47 -0.314 6.833
+NewDelhi 1 select -105.91
+NewDelhi 1 credal 0.2 0.0 -105.91
+NewDelhi 1 credal 0.8 0.0 -105.91
+NewDelhi 1 finished 79
+NewDelhi 1 done, skipping

@@ -1,0 +1,19 @@
+Moscow 2 dip exact 1 -6639.01 target -6639.01 grid -6639.01 calls 70 344
+Moscow 2 verify 0.0 0.0
+Moscow 2 already running elsewhere
+Moscow 2 base -6613.4 E2 base -6613.31
+Moscow 2 family exact -6639.01 -0.346 3.606
+Moscow 2 select -6639.01
+Moscow 2 credal 0.2 0.0 -6639.01
+Moscow 2 credal 0.8 0.0 -6639.01
+Traceback (most recent call last):
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 265, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 261, in main
+    run(a.city, a.seed, a.ncust)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Competing-Carriers-under-Uncertainty/experiments/run_dip.py", line 211, in run
+    dip_bp_share=D["bp_calls"] / ref["grid_bp_calls"], dip_time_share=D["time_s"] / ref["grid_time_s"],
+                 ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero

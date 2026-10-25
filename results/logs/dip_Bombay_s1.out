@@ -1,0 +1,9 @@
+Bombay 1 already running elsewhere
+Bombay 1 dip exact 2 -170.36 target -170.36 grid -169.27 calls 169 193
+Bombay 1 verify 0.0 2.842170943040401e-14
+Bombay 1 base -163.85 E2 base -163.85
+Bombay 1 family empty -168.57 -0.187 2.933
+Bombay 1 select -170.36
+Bombay 1 credal 0.2 0.0 -170.36
+Bombay 1 credal 0.8 0.0 -170.36
+Bombay 1 finished 238

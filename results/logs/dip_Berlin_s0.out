@@ -1,0 +1,9 @@
+Berlin 0 dip exact 1 -8569.56 target -8569.56 grid -8564.95 calls 104 195
+Berlin 0 verify 0.0 9.094947017729282e-13
+Berlin 0 base -8401.35 E2 base -8401.35
+Berlin 0 family empty -8569.03 -0.307 20.07
+Berlin 0 select -8569.56
+Berlin 0 credal 0.2 4.547473508864641e-13 -8569.56
+Berlin 0 credal 0.8 9.094947017729282e-13 -8569.56
+Berlin 0 finished 637
+Berlin 0 done, skipping

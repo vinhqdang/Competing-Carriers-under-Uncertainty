@@ -1,0 +1,9 @@
+Cairo 0 dip exact 1 -1065.47 target -1065.47 grid -1065.47 calls 44 258
+Cairo 0 verify 0.0 0.0
+Cairo 0 base -1065.47 E2 base -1065.47
+Cairo 0 family exact -1065.47 -0.253 30.196
+Cairo 0 select -1065.47
+Cairo 0 credal 0.2 0.0 -1065.47
+Cairo 0 credal 0.8 0.0 -1065.47
+Cairo 0 finished 1149
+Cairo 0 done, skipping
