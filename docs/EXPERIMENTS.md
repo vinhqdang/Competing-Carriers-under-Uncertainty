@@ -1485,3 +1485,102 @@ python experiments/run_seeds10.py London 3 core && python experiments/run_seeds1
 python experiments/summarize_seeds10.py && python experiments/seeds10_report.py && python experiments/plot_seeds10.py && python experiments/seeds10_doc.py
 python -m pytest -q
 ```
+
+
+## BRL benchmark and scale study
+
+Date: 2026-10-26. Code: `src/ccu/brl_variants.py` (new module; `brl.py` and `bp.py` are untouched), tests `tests/test_brl_variants.py` (28 tests; the full suite has 179 passed), driver `experiments/run_brl_bench.py` (+ `brl_bench_lib.py`, `summarize_brl_bench.py`, `run_brl_bench_all.sh`), public data `data/public_instances/` (sources and licence note in its README), raw jobs `results/brl_bench/<stage>/*.json`, tables `results/brl_bench_*.csv`, generated summary `results/summary_brl_bench.md`, figures `figures/brl_bench_pub.png`, `brl_bench_labels.png`, `brl_bench_bpscale.png`, log `results/PROGRESS_brl_bench.md`. Everything ran on one core (`OMP/NUMBA_NUM_THREADS=1`).
+
+### What was built
+
+* One compiled labelling kernel with three dominance rules for the same p-box instance: **window** (BRL, identical to `brl.espprc`; checked equal on random instances), **nowin** (the same stop-loss comparison over the whole budget range D >= 0, valid but weaker) and **qv** (quantile-vector dominance with a scalar tie-break, valid but weakest; this is a stronger variant than the pointwise rule of the prototype). Masks have two 64-bit words, so n <= 127 (the old kernel stopped at 63 customers).
+* Baselines solved by the same branch-and-price on the same data (`VBP`, qv dominance on vector-valued resources, exact against enumeration in the tests): SAA expected cost on the N training days, the Wasserstein type-1 closed form of `ccu.robust` (eps = 0.05, scenario vector plus the K sector-time accumulators), mean-CVaR (0.5 mean + 0.5 CVaR at 0.8 over the training days), and a deterministic plan with the mean multipliers.
+* Scale-up devices: (1) dynamic ng sizing, in the branch-and-price (`ng_size` 4 with the existing cycle-driven enlargement of `bp`) and as DSSR in the root column generation (price, enlarge the ng-sets along the cycle of the cheapest route, reprice until the cheapest route is elementary); (2) heuristic-first pricing (at most 5 labels per node; the exact call only runs when the heuristic finds no column, and no bound is ever taken from the heuristic); (3) a completion bound (label dropped when the cost of the label completed by the level-wise shortest return path, minus the largest possible dual gain of the remaining capacity, is nonnegative; valid for ng-routes).
+
+### Data and criteria (emulation, stated plainly)
+
+* Public data downloaded from the NEO group mirror (Malaga): Solomon R1/C1/RC1 with 25, 50, 100 customers, Augerat A and B (URLs in `data/public_instances/README.md`). **Not obtained:** the instances of Zhang, Zhang, Lim and Sim (OR 2021; the INFORMS supplement is behind a bot check, HTTP 403) and of Adulyasak-Jaillet. No published branch-and-cut result is reproduced.
+* BRL has no customer time windows. Solomon is therefore used as a CVRP with demands, service times and a soft route-duration limit (the depot due date, 230 / 1236 / 240) with overtime penalty; Augerat uses a soft limit of 1.1 x (best known length / trucks). Loss: fixed 0.25 Tmax per route, 1 per time unit, 3 per unit of overtime.
+* Uncertainty: 4 sector multipliers (k-means on coordinates), lognormal with a common factor (the metro calibration: mean excess 0.3, 95% quantile excess 0.8); carriers see N = 10, 30, 60 days (nested), p-box = DKW band (alpha = 0.05) with the known support cap 2.6; held-out evaluation on 2000 fresh days from the same law; a second evaluation on days from a shifted law (excess x1.5, volatility x1.25) without re-solving.
+* Criteria implemented: BRL = worst case over couplings of p-box marginals (exact); SAA = expected cost on the training days; Wasserstein = SAA + eps(gamma+rho) max_k tau_k (a type-1 ball on the sector multipliers; it is the criterion of `ccu.robust`, not the time-window model of Zhang et al.); CVaR = mean-CVaR of the route loss over training days; deterministic = mean multipliers.
+* Instances: Solomon 25: R101, R105, RC101, RC105, C101; Augerat A-n32-k5, A-n34-k5 (two data draws); Solomon 50 R101, RC101 and A-n45-k6 (one draw). 51 complete cells (instance x N x draw), 255 solves, 90 s per solve, B&P with ng-8.
+
+### A. Public benchmark results (`results/brl_bench_pub*.csv`, `figures/brl_bench_pub.png`)
+
+Proven-optimal rates over all cells: BRL 59%, deterministic 35%, SAA 20%, Wasserstein 4%, CVaR 0%. BRL is proven on Solomon-25 R/RC in 1-7 s (median 4 s, 80-100% of cells); it is not proven on the Augerat instances (0 of 18) and on half of the Solomon-50 cells, and C101 (12-customer routes) is hard. The scenario-based arms are limited by the pricing: a label is a vector of N values and pointwise dominance keeps 60,000-100,000 labels where BRL keeps 13,000-15,000 (median over cells). With N = 30 or 60 days the SAA, Wasserstein and CVaR solves almost never finish; they return the best incumbent over the generated columns, without proof.
+
+Held-out and own-criterion results, mean over cells, relative to the SAA plan (raw time-limited plans; the polished block removes the pricing-heuristic handicap of the baselines by a relocate/swap/2-opt descent started from the best plan of any arm under the arm's own criterion):
+
+| N | plan | raw: held-out mean | raw: 95th pct | polished: mean | polished: 95th pct | polished: CVaR90 | shifted law, polished: mean / 95th pct |
+|---|---|---|---|---|---|---|---|
+| 10 | BRL | +3.1% | +0.6% | +5.0% | +2.8% | +2.1% | +3.3% / -2.3% |
+| 10 | Wasserstein | +3.2% | +1.8% | +0.0% | +0.0% | +0.1% | +0.1% / +0.2% |
+| 10 | mean-CVaR | +10.3% | +7.2% | +0.8% | -0.5% | -0.6% | +0.2% / -1.0% |
+| 10 | deterministic | +0.5% | +2.8% | +0.1% | +2.8% | +2.7% | +1.0% / +2.2% |
+| 30 | BRL | +2.1% | +2.8% | +0.4% | +1.6% | +1.5% | +0.6% / +0.2% |
+| 60 | BRL | +4.7% | +4.1% | +0.3% | +1.2% | +1.0% | +0.4% / -0.1% |
+
+* Quality under the objective each arm optimises: BRL's own-criterion gap to the best plan of any arm is 0 where it is proven (raw: 0.0% at N = 10, 3.9-5.8% at N = 30-60 where it times out on the larger instances; polished 0.00-0.03%). The raw baselines are 1-12% above the best plan under their own criterion (CVaR 11-12%) because of the pricing limit; after polishing all arms are within 0.2% of the best known plan, so the polished table is the fair one for plan quality. Local search improved 62 of 255 starting plans (mean 0.2%, max 5.4%). It supplies no optimality proof.
+* Out-of-sample: **BRL does not beat SAA or the other baselines on the held-out mean or the 95th percentile on these data.** Its plans are 0.3-5% worse on the mean and 1-3% worse in the upper tail in the polished comparison. It uses fewer late routes only at N = 10 (0.20 vs 0.24 of routes late), at a higher mean cost. The p-box worst case with N = 10 or 30 days is conservative (DKW band plus the support cap), so BRL buys robustness the in-law test days do not reward.
+* Where BRL helps: when the future is worse than the training days. On the shifted law with N = 10 BRL has a 2.3% lower 95th percentile and 2.5% lower CVaR90 than the SAA plan (raw plans: -4.7% / -4.9%) for +1.3% to +3.3% in the mean. With N >= 30 the advantage disappears (+0.2% / -0.1%). It cannot be claimed beyond this stress test.
+* The deterministic plan is the worst for the upper tail (+2.0% to +3.1% in the 95th percentile) and has the highest share of late routes (0.28-0.30).
+* Cost: BRL proves optimality in seconds where the scenario criteria cannot, which is the only dimension on which it clearly wins.
+
+### B1. Label counts of the three dominance rules (central figure `figures/brl_bench_labels.png`, `results/brl_bench_labels_summary.csv`)
+
+Duals are those of the root column generation with exact BRL pricing (ng-8, 150 s limit per instance, final duals; 9 metro cities with n = 22, 30, 40, 60, 80 customer zones and 13 public instances, Cairo has only 41 zones so n = 60, 80 do not exist there). Each rule then prices once with those duals, with a cap of 3e8 dominance comparisons (a capped value is a lower bound, hollow in the figure). Median over the cities of labels kept:
+
+| n (metro) | window (BRL) | no window | quantile-vector | no window / window | qv / window | capped (window / nowin / qv, of 8-9) |
+|---|---|---|---|---|---|---|
+| 22 | 2,070 | 6,450 | 12,700 | 2.6 | 4.2 | 0 / 0 / 1 |
+| 30 | 4,190 | 9,740 | 26,200 | 2.9 | 6.3 | 0 / 0 / 2 |
+| 40 | 7,920 | 21,600 | 49,300 | 2.0 | 4.6 | 0 / 1 / 4 |
+| 60 | 15,800 | 38,100 | 83,400 | 2.2 | 3.9 | 0 / 2 / 6 |
+| 80 | 24,500 | 52,600 | 88,000 | 1.8 | 2.8 | 0 / 3 / 6 |
+
+Public instances (Solomon 25-100, Augerat 31-79): window / nowin / qv kept 3,700-39,000 / 26,000-109,000 / 76,000-140,000; ratio no-window/window 1.6-14, qv/window 2.7-23 (largest at 25-45 customers, 16-23). Where a rule is capped the ratio is a lower bound, so the figures understate its true size, and in the metro rows the qv ratios beyond n = 40 are mostly censored. The reductions are therefore **2-6x against no window and 3-20x against quantile-vector dominance in this study**, smaller than the "10-100x" of the earlier random-instance tests (`theory/new_algorithm_B/results.md`), and they shrink with n on the metro instances (the window label count grows by about a factor 12 from 22 to 80 customers, qv hits the cap). Comparison counts show the same: the window rule needs 3e5 comparisons at n = 22 and 5.8e7 at n = 80, qv hits 3e8 from n = 60. The completion window is the reason BRL finishes pricing at 100-customer Solomon only when the cap allows: BRL itself hit the 3e8 cap on 3 of 3 Solomon-100 instances. Time per call is not comparable across rules when capped (a qv comparison is much cheaper than a stop-loss comparison).
+
+Root column generation with exact BRL pricing (`results/brl_bench_scale.csv`): converged for 9/9 metro at n = 22, 30, 40 (median 3, 9, 41 s), 3/8 at n = 60 and 2/8 at n = 80 within 150 s; public: 2/3 Solomon-25, 1/3 Solomon-50, 0/3 Solomon-100, Augerat 31 and 44 and 59 converged (9, 9, 50 s), n = 79 not.
+
+### B2. Scale-up devices at the root (10 instances, 200 s limit; `results/brl_bench_devices*.csv`)
+
+| device | speed-up vs fixed ng-8 (median; min-max) | bound | note |
+|---|---|---|---|
+| heuristic-first pricing (5 labels per node) | 2.2x (1.2-5.6) | LP identical to 1e-16 on 9 pairs | no loss; exact calls still prove convergence; also converges on solomon50/R101 in 24 s where ng-8 hits the limit |
+| completion bound | 0.99x | identical | prunes about 2% of the comparisons; negligible. The bound is weak because ng-routes may repeat customers, so the dual gain of the remaining capacity is bounded by capacity x best dual per unit |
+| ng-4 (fixed) | 1.9x (1.6-3.1) | weaker, up to 0.9% below ng-8 | valid but loses bound quality |
+| DSSR from ng-2, elementary pricing | 0.6x median (0.2-4.2) | elementary LP, up to 1.7e-4 higher than ng-8 | faster on solomon25/R101 (4x), slower elsewhere; unresolved within 800 s on solomon50/R101 and 700 s on A-n45-k6 |
+| DSSR + heuristic + bound | 0.75x (0.25-4.3) | as DSSR | same |
+
+### B3. Full branch-and-price as the instance grows (1800 s limit; `results/brl_bench_bpscale.csv`, `figures/brl_bench_bpscale.png`)
+
+Configurations: `exact` = ng-8, exact pricing; `devices` = ng-4 start with cycle enlargement, heuristic-first pricing, completion bound. Both prove the same optimum whenever both finish.
+
+| instance | n | exact | devices |
+|---|---|---|---|
+| London | 30 | optimal, 13 s | optimal, 14 s |
+| London | 40 | optimal, 559 s | optimal, 234 s |
+| London | 60 | limit, 126.167, no valid bound | same value, no valid bound |
+| London | 80 | limit, 170.86, no valid bound | 170.44 |
+| New York | 30 | optimal, 36 s | optimal, 15 s |
+| New York | 40 | **limit**, 70.3495 | **optimal, 1387 s** |
+| Cairo | 30 / 40 | optimal 17 s / limit, gap 4e-5 | optimal 20 s / limit, gap 3e-5 |
+| New Delhi | 60 | limit, 153.08, no valid bound | same |
+| Solomon R101 (25 customers) | 25 | optimal, 8 s | optimal, 2 s |
+| Augerat A-n32-k5 | 31 | limit, gap 0.26% (9,256 nodes) | limit, gap 0.30% (6,827 nodes) |
+
+"No valid bound" means that a pricing call hit the comparison cap that sizes calls to the remaining time, so no bound is reported. **Where exact methods stop:** proof of optimality is routine up to 30 zones (all nine metro instances at n = 22 earlier, 30 here), reached up to 40 for London and New York, and lost at 40 for Cairo (0.004%) and from 60 zones. On the CVRP Augerat A-n32-k5 the method stops at a 0.26% gap with 31 customers: only 25% of the time is pricing, the rest is master LPs over 63,000 columns and Python bookkeeping, and no cuts (capacity, subset-row) are implemented. The devices halve the time at 40 zones (London 2.4x), double it at 30 (New York 2.4x) and prove New York at 40 where the exact configuration does not; the gains depend on the instance and the loss in optimality is zero by construction (heuristic columns only, the bound only comes from exact calls).
+
+### What BRL does and does not beat (summary)
+
+* Beats: the exact certified optimum of its own criterion in seconds on 25-customer instances where scenario-based labelling (SAA, Wasserstein, CVaR) cannot finish even with N = 10 days; 2-20x fewer labels than weaker dominance rules; scenario baselines need heuristic pricing to produce plans.
+* Does not beat: SAA or Wasserstein plans on held-out mean or 95th percentile on in-law test days (0.3-5% worse mean, 1-3% worse upper tail at N = 10-60), and it is conservative in the criterion; its advantage is a lower upper tail under a worse-than-training future when N is small (10 days). It does not scale to 60 or more customers with a proof under the plain branch-and-price here, and its CVRP behaviour (Augerat) is limited by the master problem, not the pricing.
+* Not done: exact reproduction of Zhang et al.; customer time windows; cuts; more than two data draws per cell; a time-window variant of any baseline. The completion-window bound is implemented and valid but gives no measurable pruning.
+
+Reproduce (about 14 hours of one core; resumable, finished jobs are skipped):
+```
+export OMP_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+bash experiments/run_brl_bench_all.sh        # pub, polish, shift, labels, devices, bpscale, summary
+python experiments/run_brl_bench.py summary   # tables and figures only
+python -m pytest -q                           # 179 passed
+```

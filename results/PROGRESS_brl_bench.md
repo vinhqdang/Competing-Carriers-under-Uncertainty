@@ -242,3 +242,16 @@
 - 2026-10-26 15:11:54 stage bpscale: 0 of 24 jobs already done, 24 to run
 - 2026-10-26 15:13:08 stage bpscale: 5/24 jobs run in this call, last metro_NewYork_n30_exact (36s)
 - 2026-10-26 16:14:00 stage bpscale: 10/24 jobs run in this call, last augerat_A_A-n32-k5_n31_devices (1800s)
+- 2026-10-26 17:50:21 stage bpscale: 15/24 jobs run in this call, last metro_Cairo_n40_exact (1800s)
+- 2026-10-26 18:20:58 stage pub: 255 of 255 jobs already done, 0 to run
+- 2026-10-26 18:20:59 stage polish: 255 of 255 jobs already done, 0 to run
+- 2026-10-26 18:21:00 stage shift: 510 of 510 jobs already done, 0 to run
+- 2026-10-26 18:21:01 stage labels: 58 of 58 jobs already done, 0 to run
+- 2026-10-26 18:21:02 stage devices: 40 of 60 jobs already done, 20 to run
+- 2026-10-26 18:26:44 stage devices: 5/20 jobs run in this call, last metro_NewYork_n30_dssr2 (202s)
+- 2026-10-26 18:38:54 stage devices: 10/20 jobs run in this call, last metro_Berlin_n30_combo (263s)
+- 2026-10-26 18:55:46 stage devices: 15/20 jobs run in this call, last solomon50_R101_n50_dssr2 (809s)
+- 2026-10-26 19:34:35 stage devices: 20/20 jobs run in this call, last augerat_A_A-n45-k6_n44_combo (740s)
+- 2026-10-26 19:34:36 stage bpscale: 16 of 22 jobs already done, 6 to run
+- 2026-10-26 22:04:37 stage bpscale: 5/6 jobs run in this call, last metro_London_n80_exact (1800s)
+- 2026-10-26 22:34:37 stage bpscale: 6/6 jobs run in this call, last metro_London_n80_devices (1800s)
