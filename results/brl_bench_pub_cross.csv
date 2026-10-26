@@ -1,0 +1,16 @@
+N,plan from,under brl,under saa,under wass,under cvar,under det
+10,"BRL (p-box, unknown dependence)",1.3061e-15,4.3223,4.5113,3.3402,5.5697
+10,SAA (expected cost),4.6852,1.8239,1.8551,2.4044,2.0026
+10,Wasserstein type-1,6.5959,4.9192,4.8167,4.6469,5.4594
+10,"mean-CVaR (0.5, 0.8)",12.822,12.209,12.232,11.136,13.338
+10,deterministic mean,5.5804,2.271,2.2894,4.1796,1.0471
+30,"BRL (p-box, unknown dependence)",3.9007,5.1719,5.2815,6.039,5.1259
+30,SAA (expected cost),4.5402,3.5164,3.4054,3.9322,3.1327
+30,Wasserstein type-1,6.7653,6.008,5.9388,6.0821,6.2748
+30,"mean-CVaR (0.5, 0.8)",11.903,13.238,13.141,12.277,13.948
+30,deterministic mean,4.4323,3.1668,3.2558,5.252,1.9161
+60,"BRL (p-box, unknown dependence)",5.7952,7.293,7.159,7.5376,7.5716
+60,SAA (expected cost),3.738,2.8946,2.8703,3.6028,2.9407
+60,Wasserstein type-1,5.5028,5.5662,5.5686,5.5337,5.8634
+60,"mean-CVaR (0.5, 0.8)",12.879,13.384,13.528,12.442,14.295
+60,deterministic mean,3.82,2.7363,2.7937,5.2312,1.2391

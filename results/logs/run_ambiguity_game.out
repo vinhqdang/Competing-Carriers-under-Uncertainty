@@ -8,3 +8,84 @@ London seed 0 wass_th: served 0.327 welfare 1309.2 true 1353.4 regret 0 155s
 /home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
   row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
 London seed 0 wass_e0.5: served 0.253 welfare 914.9 true 1121.8 regret 0 149s
+London seed 1 pbox: served 0.198 welfare 624.8 true 945.1 regret 1.1e-13 353s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 1 saa: served 0.366 welfare 1495.2 true 1435.5 regret 0 74s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 1 wass_th: served 0.313 welfare 1277.2 true 1358.0 regret 0 107s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 1 wass_e0.5: served 0.238 welfare 925.2 true 1126.3 regret 0 126s
+London seed 2 pbox: served 0.148 welfare 453.8 true 760.7 regret 0 245s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 2 saa: served 0.363 welfare 1559.9 true 1658.2 regret 1.1e-13 56s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 2 wass_th: served 0.276 welfare 1074.9 true 1308.3 regret 0 86s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 2 wass_e0.5: served 0.240 welfare 869.9 true 1210.0 regret 0 102s
+BuenosAires seed 0 pbox: served 0.337 welfare 252.2 true 292.0 regret 0 248s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 0 saa: served 0.661 welfare 496.8 true 485.7 regret 2.8e-14 84s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 0 wass_th: served 0.614 welfare 441.7 true 465.5 regret 0 125s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 0 wass_e0.5: served 0.481 welfare 342.2 true 393.4 regret 0 136s
+BuenosAires seed 1 pbox: served 0.343 welfare 275.2 true 314.3 regret 0 419s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 1 saa: served 0.658 welfare 525.8 true 517.4 regret 0 57s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 1 wass_th: served 0.545 welfare 418.1 true 444.7 regret 0 90s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 1 wass_e0.5: served 0.371 welfare 296.3 true 340.8 regret 0 107s
+BuenosAires seed 2 pbox: served 0.396 welfare 289.5 true 325.1 regret 0 469s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 2 saa: served 0.685 welfare 495.9 true 481.1 regret 0 99s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 2 wass_th: served 0.548 welfare 386.2 true 407.1 regret 0 142s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+BuenosAires seed 2 wass_e0.5: served 0.440 welfare 313.1 true 365.8 regret 0 146s
+NewDelhi seed 0 pbox: served 0.248 welfare 74.6 true 98.7 regret 0 68s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 0 saa: served 0.433 welfare 144.4 true 146.2 regret 0 59s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 0 wass_th: served 0.354 welfare 112.1 true 131.3 regret 0 73s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 0 wass_e0.5: served 0.382 welfare 105.4 true 136.7 regret 0 67s
+NewDelhi seed 1 pbox: served 0.270 welfare 85.8 true 114.3 regret 0 202s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 1 saa: served 0.469 welfare 173.5 true 169.2 regret 1.4e-14 69s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 1 wass_th: served 0.402 welfare 141.9 true 160.2 regret 0 90s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 1 wass_e0.5: served 0.373 welfare 122.4 true 150.3 regret 2.8e-14 64s
+NewDelhi seed 2 pbox: served 0.259 welfare 87.5 true 108.4 regret 0 636s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 2 saa: served 0.525 welfare 186.1 true 169.9 regret 1.4e-14 70s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+NewDelhi seed 2 wass_th: served 0.485 welfare 153.9 true 160.2 regret 0 101s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+NewDelhi seed 2 wass_e0.5: served 0.424 welfare 129.2 true 149.5 regret 1.4e-14 76s

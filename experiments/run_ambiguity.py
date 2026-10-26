@@ -163,9 +163,52 @@ def run(regime: str, cities, ns, draws, d0: int = 0) -> None:
         progress(f"run {regime}: draw {k} complete for {len(cities)} cities, elapsed {(time.time() - t00) / 60:.1f} min this call")
 
 
+SHIFTS = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0]
+
+
+def shiftsweep(cities) -> None:
+    """Re-evaluate every stored plan of the base regime under a common additive congestion shock delta (no re-planning).
+    results/ambiguity_shift_sweep.csv: expected cost and CVaR_0.95 of the daily cost per plan and delta."""
+    out = RES / "ambiguity_shift_sweep.csv"
+    if out.exists():
+        print("shift sweep already done")
+        return
+    rows = []
+    for city in cities:
+        f = part_path("base", city)
+        if not f.exists():
+            continue
+        M = A.load_metro(city)
+        Z = M.true
+        ls = M.loss
+        pl = A.Planner(M)
+        cache = {}
+
+        def rvec(r, d):
+            key = (r, d)
+            v = cache.get(key)
+            if v is None:
+                tau, svc = pl.tau_of(r)
+                T = Z @ tau + d * tau.sum() + svc
+                v = A.phi(T, ls)
+                cache[key] = v
+            return v
+
+        df = pd.read_csv(f)
+        for rec in df.itertuples():
+            sol = [tuple(int(x) for x in r.split("-")) for r in rec.plan.split(";")]
+            for d in SHIFTS:
+                D = sum(rvec(r, d) for r in sol)
+                rows.append(dict(city=city, n=rec.n, draw=rec.draw, criterion=rec.criterion, delta=d, exp=float(D.mean()), cvar95=A.cvar_of(D, 0.95)))
+        cache.clear()
+        print("shift sweep", city, flush=True)
+    atomic_csv(out, pd.DataFrame(rows))
+    progress(f"shift sweep done ({len(rows)} rows)")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["validate", "oracle", "run", "game", "summary", "pipeline"])
+    ap.add_argument("cmd", choices=["validate", "oracle", "run", "game", "summary", "pipeline", "shiftsweep"])
     ap.add_argument("rest", nargs="*")
     ap.add_argument("--regime", default="base", choices=list(REGIMES))
     ap.add_argument("--draws", type=int, default=20)
@@ -179,6 +222,8 @@ def main():
         oracle(a.cities)
     elif a.cmd == "run":
         run(a.regime, a.cities, a.ns, a.draws, a.draw0)
+    elif a.cmd == "shiftsweep":
+        shiftsweep(a.cities)
     elif a.cmd == "pipeline":  # everything of the metro study, resumable
         validate() if not (RES / "ambiguity_validation.csv").exists() else None
         oracle(a.cities)

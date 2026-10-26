@@ -1,0 +1,18 @@
+{
+ "inst": "solomon25/R101",
+ "N": 10,
+ "rep": 0,
+ "arm": "saa_ls",
+ "src": "polish",
+ "status": "shift",
+ "shift_oos_mean": 1115.986871333371,
+ "shift_oos_p95": 1659.2650734179506,
+ "shift_oos_cvar90": 1730.9754184826882,
+ "shift_oos_overtime": 21.151506175161355,
+ "shift_oos_late_route_frac": 0.2185,
+ "shift_oos_late_day_frac": 0.3695,
+ "shift_oos_mean_time": 822.5323528078869,
+ "shift_n_routes": 4,
+ "job": "polish_solomon25_R101_N10_r0_saa_ls",
+ "wall_job": 0.0038323402404785156
+}

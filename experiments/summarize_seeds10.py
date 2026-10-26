@@ -153,7 +153,8 @@ def derive(r):
     r["pos"] = -so_e3 / r["w_ne_best"] if r["w_ne_best"] > 0 else np.nan
     r["poa_worst"] = -so_e3 / r["w_ne_worst"] if r["w_ne_worst"] > 0 else np.nan
     r["gap_unpriced_pct"] = 100 * (sc0 - so_e3) / abs(so_e3)  # (W_SO - W_NE)/W_SO in percent, E3 optimum
-    r["so_gap_pct_of_abs"] = 100 * (sc0 - r["sc_so_best"]) / abs(sc0)
+    r["so_gap_pct_of_abs"] = 100 * (sc0 - so_e3) / abs(sc0)
+    r["so_best_gap_pct_of_abs"] = 100 * (sc0 - r["sc_so_best"]) / abs(sc0)
     if "sc_priced_e3" in r:
         r["priced_gap_pct"] = 100 * (r["sc_priced_e3"] - so_e3) / abs(so_e3)
         r["poa_priced"] = -so_e3 / -r["sc_priced_e3"] if r["sc_priced_e3"] < 0 else np.nan
@@ -176,20 +177,17 @@ def derive(r):
     for k in ("arp", "arp_msa", "mct_br", "mct_so"):
         if f"sc_{k}" in r:
             r[f"{k}_vs_dip_gain"] = r[f"{k}_gain_pct"] / r["dip_gain_pct"] if r["dip_gain_pct"] >= MIN_GAIN_PCT else np.nan
-    # gain share against the social optimum: (SC_unpriced - SC_method) / (SC_unpriced - SC_social optimum)
-    den = sc0 - r["sc_so_best"]
-    ok = r["so_gap_pct_of_abs"] >= MIN_SO_GAP_PCT
+    # gain share against the social optimum: (SC_unpriced - SC_method) / (SC_unpriced - SC_social optimum).
+    # Primary: the E3 social optimum (column generation + rounding, exact oracle).  'best': the best social cost found (E3 optimum, DIP's
+    # multi-start target, DIP profile); DIP implements its own target, so its share against 'best' is 1 by construction.
     meth = {"grid": r.get("sc_grid_best"), "dip": r["sc_dip"], "arp": r.get("sc_arp"), "arp_msa": r.get("sc_arp_msa"),
             "mct_br": r.get("sc_mct_br"), "mct_so": r.get("sc_mct_so"), "grid_cong": r.get("sc_congestion_only"),
             "grid_delivery": r.get("sc_delivery_only")}
-    for k, v in meth.items():
-        r[f"so_share_{k}"] = (sc0 - v) / den if (v is not None and np.isfinite(v) and ok) else np.nan
-    # the same with the E3 optimum (without DIP's multi-start improvement)
-    den3 = sc0 - so_e3
-    ok3 = 100 * den3 / abs(sc0) >= MIN_SO_GAP_PCT
-    for k in ("grid", "dip", "arp"):
-        v = meth[k]
-        r[f"so_share_e3_{k}"] = (sc0 - v) / den3 if (v is not None and np.isfinite(v) and ok3) else np.nan
+    for tag, so in (("", so_e3), ("best_", r["sc_so_best"])):
+        den = sc0 - so
+        ok = 100 * den / abs(sc0) >= MIN_SO_GAP_PCT
+        for k, v in meth.items():
+            r[f"so_share_{tag}{k}"] = (sc0 - v) / den if (v is not None and np.isfinite(v) and ok) else np.nan
     r["grid_lower_bound"] = r.get("grid_mode") == "coarse"
     return r
 

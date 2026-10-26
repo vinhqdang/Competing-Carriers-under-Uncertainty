@@ -1,0 +1,18 @@
+{
+ "inst": "augerat_A/A-n34-k5",
+ "N": 60,
+ "rep": 1,
+ "arm": "saa",
+ "src": "pub",
+ "status": "shift",
+ "shift_oos_mean": 2282.305639572151,
+ "shift_oos_p95": 3791.425721276384,
+ "shift_oos_cvar90": 4010.715250108,
+ "shift_oos_overtime": 233.38782958130875,
+ "shift_oos_late_route_frac": 0.5643571428571429,
+ "shift_oos_late_day_frac": 0.94,
+ "shift_oos_mean_time": 1282.6121508282247,
+ "shift_n_routes": 7,
+ "job": "pub_augerat_A_A-n34-k5_N60_r1_saa",
+ "wall_job": 0.006313800811767578
+}

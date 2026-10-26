@@ -130,7 +130,7 @@ def city_table(df: pd.DataFrame, regime: str, law: str) -> pd.DataFrame:
 
 
 def md_table(df: pd.DataFrame, floatfmt: str = "{:.2f}") -> str:
-    cols = list(df.columns)
+    cols = [str(c) for c in df.columns]
     lines = ["| " + " | ".join(cols) + " |", "|" + "|".join("---" for _ in cols) + "|"]
     for r in df.itertuples(index=False):
         cells = []
@@ -176,7 +176,7 @@ def game_tables():
             continue
         ne = k.loc["NE_zmc"]
         so = k.loc["SO_main"]
-        eq = k.loc[[x for x in k.index if x.startswith("NE_")]]
+        eq = k.loc[[x for x in k.index if str(x).startswith("NE_")]]
         rows.append(dict(city=city, seed=seed, criterion=crit, eps=ne["eps"], served_share=ne.served_share, vehicles=ne.vehicles,
                          welfare_model=ne.welfare, welfare_true=ne.welfare_true, routing_cost_model=ne.routing_cost,
                          routing_cost_true=ne.routing_cost_true, so_served_share=so.served_share, so_welfare_model=so.welfare,
@@ -227,13 +227,14 @@ def figures(df: pd.DataFrame, tabs: dict, pairs: pd.DataFrame, gagg: pd.DataFram
         ax[1].plot(s.n, s.true_cvar95_pct_mean, color=COL[c], marker="o", ms=3, lw=1.2)
         ax[2].plot(s.n, s.disappointment_pct_mean, color=COL[c], marker="o", ms=3, lw=1.2)
     ax[0].set_title("regret of expected cost (% of best known)")
-    ax[1].set_title("upper tail: CVaR 0.95 of daily cost (% over best known mean)")
-    ax[2].set_title("disappointment: criterion value minus realised cost (%)")
+    ax[1].set_title("upper tail: CVaR 0.95 (% over best mean)")
+    ax[2].set_title("disappointment (% of realised cost)")
     for a in ax:
         a.set_xlabel("training days n")
         a.set_xscale("log")
         a.set_xticks([10, 20, 30, 60])
         a.set_xticklabels([10, 20, 30, 60])
+        a.minorticks_off()
     ax[2].axhline(0, color="grey", lw=0.6)
     ax[0].legend(fontsize=6, frameon=False)
     fig.tight_layout()
@@ -293,6 +294,7 @@ def figures(df: pd.DataFrame, tabs: dict, pairs: pd.DataFrame, gagg: pd.DataFram
         ax.set_xscale("log")
         ax.set_xticks([10, 20, 30, 60])
         ax.set_xticklabels([10, 20, 30, 60])
+        ax.minorticks_off()
         ax.set_xlabel("training days n")
         ax.set_ylabel("regret minus SAA regret (pp), 95% CI over draws")
         ax.legend(fontsize=6, frameon=False)
@@ -324,6 +326,63 @@ def figures(df: pd.DataFrame, tabs: dict, pairs: pd.DataFrame, gagg: pd.DataFram
 
 
 # ---------------------------------------------------------------------------------------------------------------
+# shift sweep (stored plans re-evaluated under a common congestion shock)
+# ---------------------------------------------------------------------------------------------------------------
+
+
+def shift_summary():
+    f = RES / "ambiguity_shift_sweep.csv"
+    if not f.exists():
+        return None
+    from scipy import stats
+
+    d = pd.read_csv(f)
+    ref = d[d.criterion == "saa"].rename(columns={"exp": "exp0", "cvar95": "cvar0"})[["city", "n", "draw", "delta", "exp0", "cvar0"]]
+    m = d.merge(ref, on=["city", "n", "draw", "delta"])
+    m["d_exp_pct"] = 100 * (m.exp - m.exp0) / m.exp0
+    m["d_cvar_pct"] = 100 * (m.cvar95 - m.cvar0) / m.cvar0
+    dl = m.groupby(["criterion", "n", "delta", "draw"])[["d_exp_pct", "d_cvar_pct"]].mean().reset_index()
+    rows = []
+    for (c, n, de), g in dl.groupby(["criterion", "n", "delta"]):
+        row = dict(criterion=c, n=n, delta=de)
+        for k in ("d_exp_pct", "d_cvar_pct"):
+            x = g[k].to_numpy()
+            se = x.std(ddof=1) / np.sqrt(len(x)) if len(x) > 2 else np.nan
+            tc = stats.t.ppf(0.975, len(x) - 1) if len(x) > 2 else np.nan
+            row[k] = x.mean()
+            row[k + "_lo"] = x.mean() - tc * se
+            row[k + "_hi"] = x.mean() + tc * se
+        rows.append(row)
+    out = pd.DataFrame(rows)
+    out.to_csv(RES / "ambiguity_shift_summary.csv", index=False, float_format="%.5g")
+    return out
+
+
+def shift_figure(sh):
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    plt.rcParams.update({"font.size": 8, "axes.spines.top": False, "axes.spines.right": False})
+    fig, ax = plt.subplots(2, 2, figsize=(9, 5.6), sharex=True)
+    for j, n in enumerate((20, 60)):
+        for c in ["wass_cv", "cvar90", "pbox_ud_80", "pbox_ud_95", "pbox_ud_99", "pbox_ud_emp", "pbox_ind_95"]:
+            s = sh[(sh.criterion == c) & (sh.n == n)].sort_values("delta")
+            if s.empty:
+                continue
+            ax[0, j].plot(s.delta, s.d_exp_pct, color=COL[c], marker="o", ms=3, lw=1.2, label=LABEL[c])
+            ax[1, j].plot(s.delta, s.d_cvar_pct, color=COL[c], marker="o", ms=3, lw=1.2)
+        ax[0, j].axhline(0, color="grey", lw=0.6)
+        ax[1, j].axhline(0, color="grey", lw=0.6)
+        ax[0, j].set_title(f"n = {n} training days")
+        ax[1, j].set_xlabel("common congestion shock added at test time (multiplier units)")
+    ax[0, 0].set_ylabel("expected cost vs SAA plan (%)")
+    ax[1, 0].set_ylabel("CVaR 0.95 of daily cost vs SAA plan (%)")
+    ax[0, 0].legend(fontsize=6, frameon=False)
+    fig.tight_layout()
+    fig.savefig(FIG / "ambiguity_shift_sweep.png", dpi=170)
+    plt.close(fig)
 
 
 def main():
@@ -352,7 +411,10 @@ def main():
         by_seed.to_csv(RES / "ambiguity_game_by_seed.csv", index=False, float_format="%.6g")
         gagg.to_csv(RES / "ambiguity_game_summary.csv", index=False, float_format="%.6g")
     figures(df, tabs, pairs, gagg)
-    write_md(df, tabs, pairs, gagg, by_seed)
+    sh = shift_summary()
+    if sh is not None:
+        shift_figure(sh)
+    write_md(df, tabs, pairs, gagg, by_seed, sh)
     print("summary written", len(df), "plan rows")
 
 
@@ -372,7 +434,7 @@ def first_n(pr: pd.DataFrame, flag: str) -> dict:
     return out
 
 
-def write_md(df, tabs, pairs, gagg, by_seed):
+def write_md(df, tabs, pairs, gagg, by_seed, sh=None):
     L = []
     nd = df[df.regime == "base"].draw.nunique()
     L.append("# Why probability boxes: out-of-sample comparison of ambiguity criteria (generated by experiments/run_ambiguity_summary.py)\n")
@@ -411,6 +473,13 @@ def write_md(df, tabs, pairs, gagg, by_seed):
     cc = ct[(ct.regime == "base") & (ct.law == "true") & (ct.n == 60) & ct.criterion.isin(["saa", "wass_cv", "cvar90", "pbox_ud_80", "pbox_ud_95", "pbox_ud_99", "pbox_ud_emp", "pbox_ind_95"])]
     L.append(md_table(cc.pivot(index="criterion", columns="city", values="true_regret_pct_mean").reset_index()) + "\n")
     L.append(md_table(cc.pivot(index="criterion", columns="city", values="true_p_ot_day_mean").reset_index(), "{:.3f}") + "\n")
+    if sh is not None:
+        for n in (20, 60):
+            for k, ttl in (("d_exp_pct", "expected cost"), ("d_cvar_pct", "CVaR 0.95 of the daily cost")):
+                s2 = sh[(sh.n == n) & sh.criterion.isin(["wass_cv", "cvar90", "pbox_ud_80", "pbox_ud_95", "pbox_ud_99", "pbox_ud_emp", "pbox_ind_95"])]
+                pv = s2.pivot(index="criterion", columns="delta", values=k).reset_index()
+                L.append(f"### Shift sweep, n = {n}: {ttl} of the plan relative to the SAA plan (%, negative = better than SAA), shock delta in columns\n")
+                L.append(md_table(pv) + "\n")
     if gagg is not None:
         L.append("### Game: unpriced equilibrium and price of anarchy with other carrier criteria (mean over seeds)\n")
         cols = ["city", "criterion", "n_seeds", "served_share", "vehicles", "welfare_model", "welfare_true", "routing_cost_model", "routing_cost_true", "curse_pct", "so_served_share", "poa_model", "poa_true", "poa_worst_true", "max_regret"]

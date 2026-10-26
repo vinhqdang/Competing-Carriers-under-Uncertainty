@@ -1,0 +1,18 @@
+{
+ "inst": "solomon50/R101",
+ "N": 10,
+ "rep": 0,
+ "arm": "det",
+ "src": "pub",
+ "status": "shift",
+ "shift_oos_mean": 2099.7070472639566,
+ "shift_oos_p95": 3113.6286945200814,
+ "shift_oos_cvar90": 3286.645651519085,
+ "shift_oos_overtime": 82.33326438976398,
+ "shift_oos_late_route_frac": 0.37407142857142855,
+ "shift_oos_late_day_frac": 0.7645,
+ "shift_oos_mean_time": 1450.2072540946644,
+ "shift_n_routes": 7,
+ "job": "pub_solomon50_R101_N10_r0_det",
+ "wall_job": 0.008964300155639648
+}

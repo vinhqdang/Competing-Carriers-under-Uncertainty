@@ -1021,3 +1021,85 @@ python experiments/run_arp_tiny.py --n 30 && python experiments/run_arp_rates.py
 python experiments/run_arp.py summary && python experiments/plot_arp.py
 python -m pytest -q
 ```
+
+
+## Why probability boxes: p-box against SAA, Wasserstein and CVaR (out-of-sample), and the game under other criteria
+
+Question a referee will ask: why DKW p-boxes with unknown dependence rather than plain SAA, a type-1 Wasserstein ball or CVaR, when the p-box criterion is 10-45% above the true expected cost? Code: `src/ccu/ambiguity.py` (criteria, planner, evaluation), `src/ccu/ambiguity_game.py` (carrier oracle for sample-based criteria), `experiments/run_ambiguity.py` (+ `run_ambiguity_game.py`, `run_ambiguity_summary.py`), `tests/test_ambiguity.py`. Outputs: `results/ambiguity_*.csv`, `results/ambiguity_summary.md` (all tables), `figures/ambiguity_*.png`; log `results/PROGRESS_ambiguity.md`.
+Reproduce (about 5 h on one core for the metro runs, 1.5 h for the game, resumable): `nohup taskset -c 0 python experiments/run_ambiguity.py pipeline &`, `python experiments/run_ambiguity.py game London BuenosAires NewDelhi`, `python experiments/run_ambiguity.py shiftsweep`, `python experiments/run_ambiguity.py summary`.
+
+### Design (what is and is not comparable)
+
+* **Instances.** The nine metro instances of the BRL study (`real_instances.build`, seed 0, 22 customer zones, partition, same loss `2 + 1*T + 3*overtime` in driver-hours). The true law is the instance's common-factor lognormal law; the held-out test set is the instance's **20000** true-law days (the instance holds 20000, not 2000).
+* **Training data.** n = 10, 20, 30, 60 days, K = 20 independent draws per city (nested: the n-day sample is the first n days of the draw's 60 days). Tables average over the nine cities first, then take mean and sd over the 20 draws.
+* **Criteria** (route-additive, so one planner serves all): `saa`; `wass_*`: closed form `SAA + eps (gamma+rho) max_k tau_k` (`ccu.robust`) on a grid eps in {0, .02, .05, .1, .25, .5, 1} chosen by 3-fold cross-validation on the training days (`wass_cv`, the plan is re-optimised on each training fold and scored by held-out SAA cost), at the theory radius `wass_th = sigma sqrt(2 ln(1/0.05)/n)` (the sqrt-n rate of the one-dimensional projection the loss depends on) and at the dimension-dependent Fournier-Guillin rate `wass_fg = sigma n^(-1/9)`; `cvar80`, `cvar90`: route-wise CVaR of the route loss over the training days; `pbox_ud_80/90/95/99`: DKW band with confidence 0.80...0.99, unknown dependence (BRL, comonotone upper expectation); `pbox_ind_80/95`: the same worst marginals but independent sectors (Monte Carlo, common random numbers), to isolate the value of the unknown-dependence worst case; `pbox_ud_emp`, `pbox_ind_emp`: empirical marginals without a band (comonotone / independent), to separate the band from the dependence worst case.
+* **Planner (the same for every criterion).** Clarke-Wright and seeded multi-start, relocate / 2-opt / swap / 2-opt* descent, ruin-and-recreate, then a set-partitioning MILP over every route the search evaluated (reduced-cost fixing from the LP). It is a heuristic, not branch-and-price. **Validation against the exact branch-and-price** of `results/bp_metro_<city>.json` (p-box 0.95 criterion on the instance's own 60 days, `results/ambiguity_validation.csv`): optimal in 8 of 9 instances, 0.10% above the optimum in Paris. The search alone, without the MILP, was up to 0.9% above (Berlin); that is why the MILP step is used. Optimisation error is therefore small against the 1-9% differences below, but it is not zero and it is not identical across criteria.
+* **Metrics** on the test law: expected cost; upper tail = CVaR 0.95 of the daily total plan cost; probability that at least one route runs overtime on a day and expected overtime hours per day; *disappointment* = criterion value minus realised expected cost (positive = conservative); *regret* = expected cost minus the best known plan for that law (the plan optimised on the 20000 test days, or any plan found in any run if cheaper), in percent of that cost. Plans are partitions; the number of routes is reported too (`ambiguity_plans.csv`).
+
+### Result 1: in-distribution (true law), mean (sd over 20 draws), nine cities
+
+Regret of the expected cost, %:
+
+| criterion | n=10 | n=20 | n=30 | n=60 |
+|---|---|---|---|---|
+| SAA | 0.38 (0.22) | 0.27 (0.19) | 0.22 (0.13) | 0.16 (0.08) |
+| Wasserstein, CV | 0.43 (0.22) | 0.26 (0.13) | 0.20 (0.08) | 0.15 (0.09) |
+| Wasserstein, theory radius | 1.51 (0.27) | 1.05 (0.23) | 0.82 (0.19) | 0.51 (0.15) |
+| CVaR 0.9 | 2.44 (0.89) | 2.47 (0.88) | 2.43 (0.74) | 2.88 (0.64) |
+| p-box UD 0.80 | 6.05 (0.54) | 4.56 (0.52) | 3.90 (0.25) | 1.56 (0.40) |
+| p-box UD 0.95 | 7.90 (0.33) | 5.12 (0.24) | 4.79 (0.43) | 2.59 (0.48) |
+| p-box UD 0.99 | 8.91 (0.97) | 6.30 (0.76) | 5.06 (0.10) | 4.10 (0.31) |
+| p-box independent 0.95 | 5.95 (0.97) | 3.82 (0.55) | 3.23 (0.21) | 1.56 (0.51) |
+| comonotone, no band | 0.31 (0.22) | 0.09 (0.05) | 0.09 (0.06) | 0.05 (0.02) |
+
+CVaR 0.95 of the daily cost (% over the best known expected cost) and probability of overtime on a day (n = 20 | n = 60): SAA 38.8 / 38.0 and 0.15 / 0.13; Wasserstein-CV 39.1 / 38.0 and 0.14 / 0.13; CVaR 0.9 34.6 / 32.5 and 0.06 / 0.04; p-box UD 0.80 33.9 / 34.3 and 0.07 / 0.09; p-box UD 0.95 34.5 / 33.1 and 0.07 / 0.08; p-box UD 0.99 35.8 / 33.2 and 0.08 / 0.06; independent 0.95 31.9 / 32.7 and 0.05 / 0.08. Disappointment (%): SAA -0.1 / 0.0 (in-sample optimism of 0-0.2% at these n; sd 0.5-1.2), Wasserstein-CV +2.7 / +2.6, p-box UD 0.80 +29 / +20, UD 0.95 +35 / +24, UD 0.99 +40 / +27.
+
+* **Expected cost: the p-box loses, and the DKW band is the reason.** Against SAA the paired regret difference (draw-level, 95% CI) of p-box UD 0.80 is +5.7 pp at n = 10, +4.3 at 20, +3.7 at 30, +1.4 at 60 (all CIs exclude 0); the p-box never becomes non-inferior within a 0.5 pp margin in the grid (n <= 60), and its regret falls roughly like the DKW half-width. The p-box without a band (empirical marginals, comonotone) is as good as SAA and slightly better (-0.07 to -0.18 pp, CI excludes 0 for n >= 20), with 15-20% fewer expected overtime hours than SAA and a slightly lower probability of overtime (0.11 against 0.13 at n = 60).
+* **Tail: the p-box and CVaR buy it, SAA and Wasserstein do not.** p-box UD and CVaR cut the probability of overtime by half to two thirds and the CVaR 0.95 by 3-5 pp relative to SAA at every n, at 1.4-8% expected cost. Wasserstein-CV is indistinguishable from SAA in cost, tail and overtime (paired difference within +-0.1 pp at all n): with a cross-validated radius the closed-form ball collapses to SAA because the CV objective only scores the mean. At the theory radius it costs +0.3 to +1.1 pp and does not improve the tail (it penalises the largest sector time, not the overtime).
+* **Disappointment.** SAA is calibrated on average here (the in-sample optimism of a plan chosen among a few thousand routes is small), the p-box overstates the realised cost by 20-40% at n <= 60 (this is the "10-45% above the true expected cost" of the paper; it shrinks with n like the DKW width), Wasserstein-CV by about 3%, CVaR (a different functional) by 14-22%.
+* **Heterogeneity.** The effect is carried by cities in which the shift constraint binds (London, Buenos Aires, New York, Berlin, Moscow); in Cairo, Bombay, New Delhi and Paris overtime is rare and all criteria give the same plan or a plan within 0.2% (per-city table in `ambiguity_summary.md`). Example n = 60 (regret %, probability of overtime on a day, SAA / p-box UD 0.80): New York 0.24 / 5.97 and 0.37 / 0.07; Buenos Aires 0.12 / 5.63 and 0.14 / 0.07; London 0.25 / 1.04 and 0.34 / 0.36 (London's overtime is dominated by the long routes the capacity forces).
+
+### Result 2: misspecification
+
+Regret (%, mean over cities and draws; the best known plan is re-optimised for each test law), n = 20 | n = 60:
+
+| criterion | true law | shock +0.2 | shock +0.4 | train light, test heavy-tailed | train and test heavy-tailed |
+|---|---|---|---|---|---|
+| SAA | 0.27 / 0.16 | 0.77 / 0.54 | 1.51 / 1.13 | 0.33 / 0.24 | 0.26 / 0.21 |
+| Wasserstein-CV | 0.26 / 0.15 | 0.78 / 0.52 | 1.55 / 1.13 | 0.31 / 0.24 | 0.28 / 0.22 |
+| CVaR 0.8 | 1.40 / 1.13 | 1.13 / 0.78 | 0.85 / 0.40 | 1.72 / 1.47 | 0.93 / 0.39 |
+| p-box UD 0.80 | 4.56 / 1.56 | 3.83 / 1.36 | 2.76 / 1.14 | 5.00 / 1.84 | 5.08 / 0.51 |
+| p-box UD 0.95 | 5.12 / 2.59 | 4.40 / 2.07 | 3.32 / 1.33 | 5.56 / 2.98 | 5.64 / 1.82 |
+| p-box independent 0.80 | 2.90 / 0.68 | 2.15 / 0.43 | 1.07 / 0.21 | 3.37 / 0.98 | 3.51 / 1.02 |
+
+* Shock: a common additive congestion shock at test time (`delta` in multiplier units, base multipliers about 1.4-1.6). Re-evaluating every stored plan (no re-planning, `ambiguity_shift_sweep.csv`, `ambiguity_shift_summary.csv`, `figures/ambiguity_shift_sweep.png`), the p-box UD 0.80 plan has the same expected cost as the SAA plan at delta about 0.4 (n = 60) to 0.5 (n = 20), and is better beyond: -2.8% at delta = 1.0 (n = 60), -4.6% (n = 20); p-box UD 0.95 crosses at about 0.55 (n = 20) and 0.45 (n = 60); the independent 0.95 p-box at about 0.3. Its CVaR 0.95 is 2.3-3% below the SAA plan's at delta = 0 and 4-9% below under shocks. Wasserstein-CV never crosses (it is SAA).
+* Heavy tails (Student-t with 3 df, same means and variances, support cap of the p-box left at 1 + 2 x peak congestion, so the cap is violated in the extreme tail): with light-tailed training days the picture is the in-distribution one. When the training days are themselves heavy-tailed the p-box at n = 60 loses little in expectation (0.51% against 0.21% for SAA) and its tail is 2.5 pp better; at n = 20 it still loses 5 pp (the band is wide). The robustness argument therefore works for large shifts of the *mean* (>= +0.4, i.e. about 25-30% more congestion everywhere), not for heavier tails of the same mean.
+* Where the p-box loses (honest list): every in-distribution case in expected cost; every n <= 60; moderate shocks (delta <= 0.3); heavy tails with light-tailed training days; cities with slack shifts, where it only adds fleet; high confidence levels (0.99) everywhere. Where it wins: tail and overtime at every n and under every misspecification tried; expected cost under shocks of at least +0.4-0.5 (+30% congestion) for confidence 0.80, and n = 60 or more.
+
+### Result 3: the game under other carrier criteria (E1/E3; London, Buenos Aires, New Delhi; 3 seeds)
+
+`RoutingGame` has a backward-compatible criterion switch (`build_city_game(..., criterion="pbox" | "saa" | "wass" | "cvar", eps=...)`; the default reproduces the published E1/E3 numbers, checked on London seed 0: welfare 631.778, SO 990.594). Sample-based criteria use `HeurPool` (exact BRL pricing on the empirical comonotone surrogate plus local search in the dual-prize space, integer packing as before). It is **a heuristic oracle without a certificate** (`bound_valid = False`); it matches complete enumeration on tiny games (`tests/test_ambiguity.py`), and the equilibria are verified against an independent fresh-pool run of the same oracle (regret <= 1.2e-13 in all 36 runs), not against an exact oracle. `welfare_true` re-prices the routes with the true expected loss (5000 draws of the instance's law); the model welfare uses the carriers' own criterion. Carriers use the same 30 observed days. `wass_th` has eps = 0.20-0.29, `wass_e0.5` eps = 0.5. Mean over seeds 0, 1, 2 (`ambiguity_game_summary.csv`, `figures/ambiguity_game.png`):
+
+| city | criterion | served share (NE) | vehicles | welfare (true-law cost) | PoA (model) | PoA (true-law cost) | in-sample cost vs true (%) |
+|---|---|---|---|---|---|---|---|
+| London | p-box | 0.18 | 6.7 | 868 | 1.66 | 2.06 | +22.7 |
+| London | SAA | 0.38 | 11.3 | 1560 | 1.55 | 1.52 | -1.1 |
+| London | Wasserstein theory | 0.31 | 9.0 | 1340 | 1.66 | 1.75 | +5.4 |
+| London | Wasserstein 0.5 | 0.24 | 7.3 | 1153 | 1.68 | 1.88 | +14.1 |
+| Buenos Aires | p-box | 0.36 | 9.0 | 310 | 1.38 | 1.52 | +9.2 |
+| Buenos Aires | SAA | 0.67 | 13.7 | 495 | 1.19 | 1.17 | -1.5 |
+| Buenos Aires | Wasserstein theory | 0.57 | 11.7 | 439 | 1.28 | 1.31 | +3.6 |
+| Buenos Aires | Wasserstein 0.5 | 0.43 | 8.7 | 367 | 1.40 | 1.52 | +10.1 |
+| New Delhi | p-box | 0.26 | 10.0 | 107 | 1.18 | 1.35 | +12.9 |
+| New Delhi | SAA | 0.48 | 15.7 | 162 | 1.21 | 1.19 | -1.6 |
+| New Delhi | Wasserstein theory | 0.41 | 13.7 | 151 | 1.20 | 1.25 | +5.2 |
+| New Delhi | Wasserstein 0.5 | 0.39 | 13.0 | 146 | 1.25 | 1.25 | +9.3 |
+
+The game-level findings are **not** invariant to the imprecision model. The ordering of cities by PoA (London > Buenos Aires ~ New Delhi) and the finding of a large inefficiency in the three low-service cities survive for every criterion, but the *level* changes a lot: served share at the unpriced equilibrium doubles with SAA carriers (London 0.18 -> 0.38, Buenos Aires 0.36 -> 0.67, New Delhi 0.26 -> 0.48), the fleet grows 1.5-1.7x, the PoA measured with the true-law routing cost falls from 2.06 / 1.52 / 1.35 to 1.52 / 1.17 / 1.19, and in Buenos Aires the PoA is close to 1 for SAA. The p-box paper numbers describe carriers that behave as if routing were 10-23% more expensive than it is; this under-service is part of the "PoA" reported in E3. The model-based PoA (carrier criterion in both numerator and denominator) moves much less (London 1.66 vs 1.55, Buenos Aires 1.38 vs 1.19, New Delhi 1.18 vs 1.21).
+
+### Honest verdict and suggested wording
+
+* **Strongest honest argument for p-boxes:** they are the only criterion tested that reduces the probability of overtime and the upper tail (CVaR 0.95 by 3-5 pp, overtime probability by half) *and* has a stated guarantee: the criterion value is an upper bound on the true expected cost whenever the DKW band holds (disappointment is positive in every cell, +20% to +40% at n <= 60), whereas SAA is calibrated on average but gives no bound, and Wasserstein with a cross-validated radius is SAA in disguise. Under a common congestion shock of +0.4 or more (+25-30% congestion everywhere) the p-box 0.80 plan is also cheaper in expectation than the SAA plan. CVaR achieves a similar tail reduction at 1-3% expected cost and is the sharpest competitor; it has no dependence worst case and no bound.
+* **Regimes where they lose:** expected cost in distribution (1.4-9% regret, falling like the DKW width; non-inferior to SAA within 0.5 pp only for n > 60), moderate shocks, heavier tails of the same mean, cities where the shift constraint is slack, and high confidence levels. The unknown-dependence worst case is not what costs: the band is (comonotone with empirical marginals is as good as SAA; independent marginals with the band are 1.0-2.0 pp cheaper than comonotone UD at the same confidence, but have the same overtime and tail profile).
+* **Wording for the paper:** "We model travel-time ambiguity with DKW probability boxes and an unknown-dependence worst case because the resulting criterion is a conservative upper bound whose gap to the true expected cost shrinks with the sample size, and because it protects against the overtime tail. In an out-of-sample experiment on nine metropolitan instances (20 draws each, n = 10-60 days) the p-box plan has 1.4-9% higher expected cost than the SAA plan at n <= 60, halves the probability of overtime and lowers the CVaR 0.95 of the daily cost by 3-5%; it overtakes SAA in expected cost under a common congestion shock of about +0.4 (n = 60). A type-1 Wasserstein ball with cross-validated radius reproduces SAA, and a CVaR criterion matches the tail benefit without a bound. We do not claim that p-boxes minimise expected cost; the equilibrium results should be read as results for carriers who plan against a guaranteed upper bound: replacing them by SAA carriers doubles service at the unpriced equilibrium and lowers the price of anarchy (Table X)."
+* **Limits:** one slice per city (seed 0 of the BRL study), twenty draws; plans from a heuristic validated against branch-and-price in 9 instances (<= 0.1% gap); the shock and heavy-tail laws are one family each; the Wasserstein radius for the closed form is a convention (the sqrt-n and Fournier-Guillin rates have unspecified constants); the game uses a heuristic oracle without a certificate for SAA and Wasserstein carriers; CVaR is route-wise (an upper bound on the CVaR of the plan).

@@ -69,7 +69,7 @@ def parse_augerat(path: Path) -> dict:
             dems.append(float(p[1]))
     comment = d.get("COMMENT", "")
     import re
-    mo = re.search(r"Optimal value:\s*(\d+)", comment)
+    mo = re.search(r"(?:Optimal|Best) value:\s*(\d+)", comment)
     mk = re.search(r"Min no of trucks:\s*(\d+)", comment)
     return dict(name=d["NAME"], cap=float(d["CAPACITY"]), xy=np.array(coords), dem=np.array(dems),
                 svc=np.zeros(len(dems)), opt=float(mo.group(1)) if mo else np.nan, k=int(mk.group(1)) if mk else 1,
@@ -239,3 +239,82 @@ def evaluate_plan(spec: Spec, routes, test: np.ndarray) -> dict:
 def plan_costs(crit: dict, routes) -> dict:
     """The plan's value under each of the five criteria (train-data based)."""
     return {f"val_{k}": float(sum(inst.route_cost(r) for r in routes)) for k, inst in crit.items()}
+
+
+def local_search(inst, routes, tlim: float = 10.0):
+    """Relocate / swap / intra-route 2-opt descent on `inst.route_cost` (first improvement, memoised route costs).
+
+    Used to polish the plans of the baselines so that they are not limited by the pricing heuristic.  Customers stay
+    partitioned (all customers served) and the capacity is respected.  Returns (routes, value)."""
+    import time as _t
+    t0 = _t.perf_counter()
+    dem, cap = inst.dem, inst.cap
+    memo: dict = {}
+
+    def c(r):
+        r = tuple(r)
+        if not r:
+            return 0.0
+        v = memo.get(r)
+        if v is None:
+            v = memo[r] = inst.route_cost(r)
+        return v
+
+    sol = [list(r) for r in routes]
+    load = lambda r: float(dem[list(r)].sum()) if len(r) else 0.0  # noqa: E731
+    improved = True
+    while improved and _t.perf_counter() - t0 < tlim:
+        improved = False
+        for a in range(len(sol)):
+            if improved:
+                break
+            ra = sol[a]
+            ca = c(ra)
+            # intra-route 2-opt
+            for i in range(len(ra) - 1):
+                for j in range(i + 1, len(ra)):
+                    nr = ra[:i] + ra[i:j + 1][::-1] + ra[j + 1:]
+                    if c(nr) < ca - 1e-9:
+                        sol[a] = nr
+                        improved = True
+                        break
+                if improved:
+                    break
+            if improved:
+                break
+            # relocate and swap
+            for b in range(len(sol) + 1):
+                if b == a:
+                    continue
+                rb = sol[b] if b < len(sol) else []
+                cb = c(rb)
+                lb = load(rb)
+                for i, cust in enumerate(ra):
+                    rest = ra[:i] + ra[i + 1:]
+                    if lb + dem[cust] <= cap + 1e-9:
+                        for q in range(len(rb) + 1):
+                            nb = rb[:q] + [cust] + rb[q:]
+                            if c(rest) + c(nb) < ca + cb - 1e-9:
+                                sol[a] = rest
+                                if b < len(sol):
+                                    sol[b] = nb
+                                else:
+                                    sol.append(nb)
+                                improved = True
+                                break
+                    if improved:
+                        break
+                    for q, other in enumerate(rb):
+                        if load(rest) + dem[other] <= cap + 1e-9 and lb - dem[other] + dem[cust] <= cap + 1e-9:
+                            na = ra[:i] + [other] + ra[i + 1:]
+                            nb = rb[:q] + [cust] + rb[q + 1:]
+                            if c(na) + c(nb) < ca + cb - 1e-9:
+                                sol[a], sol[b] = na, nb
+                                improved = True
+                                break
+                    if improved:
+                        break
+                if improved:
+                    break
+        sol = [r for r in sol if r]
+    return [tuple(r) for r in sol], float(sum(c(r) for r in sol))

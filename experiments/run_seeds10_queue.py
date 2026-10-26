@@ -41,6 +41,28 @@ def is_done(phase, c, s):
 
 def job_list(phases):
     jobs = []
+    if os.environ.get("S10_ORDER") == "light_first":
+        # cheap work for the cities with the full grid first (headline), then the remaining heavy core jobs seed by seed
+        for s in NEW:
+            for c in FULL:
+                jobs.append(("core", c, s))
+        for s in NEW:
+            for c in FULL:
+                jobs += [("grid", c, s), ("arp", c, s)]
+        for s in NEW:
+            for c in CITIES:
+                jobs.append(("core", c, s))
+        for s in NEW:
+            for c in CITIES:
+                jobs.append(("arp", c, s))
+        for s in (0, 1, 2):
+            for c in CITIES:
+                if c not in ARP_OLD:
+                    jobs.append(("arp", c, s))
+        for s in NEW:
+            for c in COARSE:
+                jobs.append(("grid", c, s))
+        return [j for j in jobs if j[0] in phases]
     if "core" in phases:
         for s in NEW:
             for c in CITIES:
@@ -121,6 +143,21 @@ def main():
     print(time.strftime("%H:%M:%S"), len(jobs), "jobs to do", flush=True)
     progress()
 
+    def external():
+        """run_seeds10.py processes of an earlier scheduler (still running after a scheduler restart): {core: pid}"""
+        out = subprocess.run(["pgrep", "-f", "run_seeds10.py"], capture_output=True, text=True).stdout.split()
+        own = {p.pid for p, _, _ in running.values()}
+        ext = {}
+        for pid in out:
+            pid = int(pid)
+            if pid in own or pid == os.getpid():
+                continue
+            cmd = open(f"/proc/{pid}/cmdline").read().replace("\0", " ") if os.path.exists(f"/proc/{pid}/cmdline") else ""
+            if "run_seeds10.py" in cmd and "queue" not in cmd and "python" in cmd and "taskset" not in cmd:
+                aff = subprocess.run(["taskset", "-cp", str(pid)], capture_output=True, text=True).stdout.strip().split(":")[-1].strip()
+                ext[pid] = int(aff.split(",")[0].split("-")[0]) if aff else 0
+        return ext
+
     def reap():
         for core, (p, job, t0) in list(running.items()):
             if p.poll() is not None:
@@ -131,13 +168,16 @@ def main():
     for job in jobs:
         if is_done(*job):
             continue
-        while len(running) >= len(cores):
-            time.sleep(5)
+        while True:
             reap()
+            used = set(running) | set(external().values())
+            if len(used) < len(cores):
+                break
+            time.sleep(5)
         if deadline and time.time() > deadline:
             print("deadline reached, no new jobs", flush=True)
             break
-        core = [c for c in cores if c not in running][0]
+        core = [c for c in cores if c not in used][0]
         ph, c, s = job
         log = open(RES / "logs" / f"s10_{ph}_{c}_s{s}.log", "a")
         p = subprocess.Popen(["taskset", "-c", str(core), sys.executable, str(HERE / "run_seeds10.py"), c, str(s), ph], cwd=HERE, env=env,
