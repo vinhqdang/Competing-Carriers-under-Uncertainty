@@ -1,0 +1,7 @@
+Bombay 2 base -150.18 grid base -150.18
+Bombay 2 arp cycle 5 sc -156.47 path [-150.2, -145.4, -156.3, -156.5, -156.3, -156.5] calls 47 dip -156.47 16
+Bombay 2 arp_msa rounds 10 sc -156.4 path [-150.2, -145.4, -149.9, -153.4, -155.2, -156.4, -156.4, -156.4, -156.4, -156.4, -156.4] calls 72 dip -156.47 38
+Bombay 2 mct_br sc -155.63 monotone True calls 10 12
+Bombay 2 mct_so sc -155.99 calls 49 e3 SO -155.7
+Bombay 2 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 1.4210854715202004e-14}, 'arp_msa': {'max_regret': 0.0, 'max_regret_fresh': 1.4210854715202004e-14}, 'mct_br': {'max_regret': 0.0}, 'mct_so': {'max_regret': 0.0}}
+Bombay 2 finished 204

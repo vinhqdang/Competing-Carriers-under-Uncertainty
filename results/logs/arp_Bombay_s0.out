@@ -1,0 +1,6 @@
+Bombay 0 base -144.34 grid base -144.34
+Bombay 0 arp fixed_point 7 sc -147.75 path [-144.3, -131.2, -147.7, -144.0, -147.7, -145.1, -147.7, -147.7] calls 65 dip -148.12 41
+Bombay 0 mct_br sc -147.75 monotone True calls 9 2
+Bombay 0 mct_so sc -147.41 calls 51 e3 SO -147.75
+Bombay 0 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 0.0}, 'mct_br': {'max_regret': 0.0}, 'mct_so': {'max_regret': 0.0}}
+Bombay 0 finished 88

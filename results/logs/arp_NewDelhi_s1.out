@@ -1,0 +1,6 @@
+NewDelhi 1 base -85.84 grid base -85.84
+NewDelhi 1 arp fixed_point 3 sc -104.58 path [-85.8, -84.3, -104.6, -104.6] calls 27 dip -105.91 3
+NewDelhi 1 mct_br sc -105.96 monotone True calls 10 1
+NewDelhi 1 mct_so sc -104.74 calls 51 e3 SO -105.91
+NewDelhi 1 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 1.4210854715202004e-14}, 'mct_br': {'max_regret': 1.4210854715202004e-14}, 'mct_so': {'max_regret': 0.0}}
+NewDelhi 1 finished 29

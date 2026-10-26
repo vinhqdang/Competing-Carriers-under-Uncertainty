@@ -955,3 +955,69 @@ python experiments/dip_tiny.py --n 30                                       # ti
 python experiments/run_dip.py summary && python experiments/dip_report.py && python experiments/plot_dip.py
 python -m pytest -q tests/test_dip.py
 ```
+
+
+## Aggregate-response pricing
+
+Date: 2026-10-26. The city's charges from observed zone aggregates alone (`src/ccu/arp.py`, `experiments/run_arp.py`,
+`run_arp_tiny.py`, `run_arp_rates.py`, `plot_arp.py`; method, proofs and numbers in `theory/new_algorithm_D/{algorithm.md,theory.tex,results.md}`).
+
+**Problem.** The grid and DIP need the carriers' routing oracle. Here the city knows only its own slopes (b, g, r) and observes, after posting
+a per-delivery-equivalent charge u (uniform per-delivery charge plus zone congestion charges, as in DIP), the equilibrium zone aggregates:
+deliveries Q_z and the number n_z of active carriers.
+
+**Method.** Flat rule (ARP): u_z <- (1 - theta) u_z + theta [kappa_z Q_z - (m_z/2) dbar_z], the Pigou term at the observed aggregate minus a half-lot
+Cournot subsidy, dbar_z the mean lot learned from the observations (Q_z when n_z = 1, the jump of Q_z when n_z changes by one, else Q_z/n_z,
+else the city-mean observed lot); the carriers best-respond day to day from their current plans; stop at a fixed point or a repeated state.
+Marginal tariff (ARP-M): bill T_z(q_i, Q) = kappa_z q_i (Q_z - q_i) - (b_z/2) q_i^2 on own deliveries and the zone total, no iteration.
+
+**Theory** (`theory.tex`). In the convexified game the equilibrium aggregate is the proximal map of the carriers' aggregate value function,
+Q(u) = grad F*(-u); the leader's problem is the Fenchel dual min_u F*(-u) + g*(u) whose gradient (u + m dbar/2)/kappa - Q(u) is the observation;
+the flat rule is gradient descent on it and contracts at ratio rho = max_z kappa_z/(b_z + kappa_z) (plain) or rho/(2 + rho) (damped),
+independently of Z, N and the routing data; its fixed point minimises SC-bar plus DIP's lot-asymmetry term. Pure game: every fixed point is a
+unilateral social optimum up to lot asymmetry; the iteration stays within sup ||e||_kappa/(1 - rho) of the convexified fixed point; the response
+map identifies the convexified value function up to a constant (and not the pure optimum: explicit example). Credal carriers: a Gamma-maximin
+surcharge shifts the fixed point and needs no delta; under E-admissibility the target is in ICNE_E(delta) once the charge is within the surcharge
+band of an implementing charge. Marginal tariff: the social cost is the exact potential, every social optimum is an equilibrium, best responses
+never raise SC. Constants verified numerically on 48 convexified tiny games (`results/arp_rates.csv`, the damped bound is tight).
+
+**Protocol.** Exact oracle (branch-and-price 20 s, retry 120 s), `n_cust = 22`, seeds 0-2, London, Buenos Aires, New Delhi, Mumbai (12 runs); the
+carriers' oracle calls while the method runs are counted (the unpriced equilibrium is the common status quo and is not); references from
+`results/summary_dip.csv`. Tiny games: the 210 instances of `dip_tiny.py` with exhaustive enumeration and the exact optimistic leader optimum.
+
+**Results** (`results/summary_arp.csv`, `figures/arp_calls_vs_gain.png`, `figures/arp_paths.png`; gain share = gain / best exact grid gain):
+
+| method | information | gain share, mean (range) | equals DIP within 2% | calls (range) |
+|---|---|---|---|---|
+| grid (E2, exact points) | oracle | 1.00 | - | 537-2419 |
+| DIP | oracle | 1.34 (1.04-3.25) | 12/12 | 105-221 |
+| ARP flat | (Q_z, n_z) | 1.25 (0.91-2.93) | 5/12 | 22-67 (3-7 rounds) |
+| tariff + carriers' BR | own q, Q_z | 1.25 (0.99-2.93) | 6/12 | 8-14 |
+| tariff + E3 solver | oracle | 1.23 (0.92-2.63) | 5/12 | 39-51 |
+
+* ARP reached an exact fixed point in 6 runs (3 rounds in 5 of them) and a two-charge cycle in 6; the one clear miss is New Delhi seed 0
+  (0.91 against DIP's 1.23, rho = 0.40). All returned profiles are exact equilibria of the posted charges (fresh-oracle regret 0).
+  Wall-clock 2-41 s against DIP's 20-376 s (median ratio 0.04).
+* The tariff with the carriers' own best responses reaches 99-293% of the grid's gain with about ten calls and never raised the social cost
+  along the way (monotone in 12/12, as the theorem says). With the E3 solver it reproduces the E3 social optimum in 5 runs; DIP's multi-start
+  polish is what it lacks elsewhere.
+* Tiny games (`results/arp_tiny.csv`, `figures/arp_tiny.png`): mean share of the exact optimal gain ARP 0.56 (hits the optimum in 35%, cycles in
+  44/210 games, worse than the unpriced equilibrium in 9/136: entry into never-served zones under the guessed subsidy), tariff + BR 0.80,
+  tariff + solver 0.94, DIP 0.97, grid 0.83. Knowing the lots does not help ARP (0.63): the aggregate does not carry the information about
+  which profile is socially good. Under the tariff the equilibria are exactly the unilateral social optima (210/210); no method has a
+  worst-equilibrium guarantee.
+
+**Novelty (honest).** The central step, charge the externality at the observed aggregate and iterate, is classical (Yang, Meng, Lee 2004;
+adaptive incentive design, Maheshwari, Kulkarni, Wu, Sastry 2022 for atomic Cournot with continuous strategies; marginal-contribution
+tariffs, Sandholm 2002, Wolpert-Tumer 1999). New: the proximal identity and the instance-free rates in the lumpy NP-hard game, the fixed-point,
+neighbourhood and identification results, the credal absorption of the leader's error, and the lumpy tariff theorem that makes DIP's
+implementation step unnecessary. Verdict: incremental; stronger than DIP in information and cost, not in quality.
+
+**Reproduce.**
+```
+export OMP_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+ARP_PAR=3 experiments/run_arp_queue.sh London BuenosAires NewDelhi Bombay   # 12 runs, resumable
+python experiments/run_arp_tiny.py --n 30 && python experiments/run_arp_rates.py
+python experiments/run_arp.py summary && python experiments/plot_arp.py
+python -m pytest -q
+```

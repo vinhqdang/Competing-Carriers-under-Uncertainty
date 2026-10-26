@@ -1,0 +1,265 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\ip}[2]{\langle #1,#2\rangle}
+\newcommand{\Qbar}{\bar Q}
+\newcommand{\qbar}{\bar q}
+\newcommand{\dbar}{\bar d}
+\newcommand{\SC}{\mathrm{SC}}
+\newcommand{\SCbar}{\overline{\mathrm{SC}}}
+\newcommand{\Phibar}{\overline{\Phi}}
+\newcommand{\NE}{\mathrm{NE}}
+\newcommand{\ICNE}{\mathrm{ICNE}}
+\newcommand{\norm}[2]{\|#1\|_{#2}}
+\newcommand{\PROVED}{{\normalfont\textsc{[proved]}}}
+\newcommand{\CLASSICAL}{{\normalfont\textsc{[classical]}}}
+\newcommand{\NUMERIC}{{\normalfont\textsc{[numerically checked]}}}
+
+\title{Aggregate-response pricing:\\ the city's charges from observed zone aggregates alone,\\ with the equilibrium response as a proximal map}
+\author{Quang-Vinh Dang\\ British University Vietnam, Hung Yen, Vietnam\\ \texttt{vinh.dq4@buv.edu.vn} \quad ORCID 0000-0002-3877-8024}
+\date{Theory notes, direction D}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The city of the competing-carrier model (\texttt{theory/main.tex}, D1; \texttt{theory/new\_algorithm\_C}) sets per-delivery and congestion charges for $N$ carriers whose plans come from an NP-hard routing oracle. Dual implementation pricing (DIP) computes near-optimal charges but needs the carriers' own oracle: it solves their routing problems, which a real city cannot do. Here the city observes only the zone aggregates that the carriers' equilibrium produces, deliveries $Q_z$ and the number $n_z$ of active carriers, and nothing else. We prove that in the convexified game the equilibrium aggregate is the proximal map of the carriers' aggregate value function, $Q(u)=\nabla F^*(-u)$ (Theorem~\ref{thm:resolvent}), so that the leader's problem is a strongly convex dual problem whose gradient is exactly the observed quantity $(u+\tfrac m2\dbar)/\kappa-Q(u)$. The Pigou--Cournot update $u\leftarrow\kappa Q-\tfrac m2\dbar$ is therefore a gradient step, and it contracts at ratio $\rho=\max_z\kappa_z/(b_z+\kappa_z)<1$ in the $\kappa^{-1}$-norm, for every instance, independently of the number of zones, carriers, customers and of the routing structure; the damped step $2/(2+\rho)$ contracts at ratio $\rho/(2+\rho)$ (Theorem~\ref{thm:rate}). Its fixed point is the exact minimiser of the convexified social cost plus the lot-asymmetry term of DIP (Theorem~\ref{thm:fixed}). In the pure, lumpy game every fixed point is a unilateral social optimum up to lot asymmetry (Theorem~\ref{thm:purefixed}), the iteration stays within an explicit neighbourhood of the convexified optimum (Theorem~\ref{thm:neigh}), and the response map identifies the convexified value function up to a constant, so the convexified optimum is the most that any observation-only scheme can target (Theorem~\ref{thm:ident}). Belief imprecision of the carriers is absorbed: a $\Gamma$-maximin surcharge only shifts the fixed point (Proposition~\ref{prop:gamma}), and under E-admissibility of width $\delta$ the iteration implements a pure target exactly as soon as it is within the surcharge band of an implementing charge (Proposition~\ref{prop:eadm}). The limit of re-tangenting at every transaction is the realised-aggregate tariff $T_z(q,Q)=\kappa_z q(Q-q)-\tfrac{b_z}2q^2$, under which the social cost is the exact potential of the carriers' game (Theorem~\ref{thm:mct}); it needs no target, no oracle and no iteration, every social optimum is an equilibrium under it, and the carriers' own best responses never raise the social cost. Section~\ref{sec:prior} says what is classical (trial-and-error marginal-cost pricing, adaptive incentive design, marginal-contribution tariffs) and what is new (the proximal identity and its instance-free rates, the lumpy fixed-point and identification results, the credal absorption of the leader's error). Experiments are in \texttt{results.md}.
+\end{abstract}
+
+\section{Setting}\label{sec:setting}
+
+We use the game and notation of \texttt{theory/new\_algorithm\_C/theory.tex} (DIP), restated for completeness.
+
+\begin{assumption}[City game, D1; \texttt{src/ccu/zmc\_brl.py}]\label{ass:game}
+Zones $z\in[Z]$, carriers $i\in[N]$. Carrier $i$ has customer zones $C_i\subseteq[Z]$ with lot sizes $d_{iz}>0$ for $z\in C_i$ ($d_{iz}=0$ otherwise) and a finite plan set $\cP_i$. A plan $p$ serves a set $S(p)\subseteq C_i$ (all-or-nothing lots) with routes of routing cost $R_i(p)\ge0$ (the BRL upper expectation). Deliveries are $q_{iz}(p)=d_{iz}\mathbf 1[z\in S(p)]$ and vehicle-hours $\tau_{iz}(p)=r\,q_{iz}(p)$ for one ratio $r>0$. Inverse demand is $\alpha_z-b_zQ_z$ and the congestion cost is $g_zX_z$ per vehicle-hour, with $Q=\sum_iq_i$ and $X=rQ$. The city posts a per-delivery-equivalent charge $u\in\R^Z$ (Proposition~1 of DIP: a uniform per-delivery charge plus non-negative zone congestion charges realise every $u$). Carrier $i$'s cost at the pure profile $\sigma$ is
+\[J^u_i(p;\sigma_{-i})=R_i(p)+\sum_zq_{iz}(p)\big(-\alpha_z+m_z(d_{iz}+Q_{-i,z})+u_z\big),\qquad m_z=b_z+\kappa_z,\ \kappa_z=g_zr^2,\]
+and the social cost (charges are transfers) is $\SC(\sigma)=\sum_iR_i(\sigma_i)+\sum_z\big[-\alpha_zQ_z+\tfrac{m^S_z}{2}Q_z^2\big]$ with $m^S_z=b_z+2\kappa_z$.
+\end{assumption}
+
+Throughout, $q_{iz}^2=d_{iz}q_{iz}$ because $q_{iz}\in\{0,d_{iz}\}$. The game has the exact potential (D1, Monderer--Shapley)
+\begin{equation}\label{eq:pot}
+\Phi_u(\sigma)=\sum_iR_i(\sigma_i)+\sum_z\Big[-\alpha_zQ_z+\tfrac{m_z}{2}\big(Q_z^2+\textstyle\sum_iq_{iz}^2\big)+u_zQ_z\Big].
+\end{equation}
+For $\dbar\in\R^Z$ put $L_{\dbar}(\sigma)=\sum_{i,z}\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}$ (lot asymmetry) and $E_{\dbar}=\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\dbar_z|d_{iz}$.
+
+\begin{lemma}[Potential--welfare identity; DIP Lemma 2]\label{lem:id}\PROVED\
+For every $Q^\circ,\dbar\in\R^Z$ and $u=\kappa\odot Q^\circ-\tfrac m2\odot\dbar+v$,
+\begin{equation}\label{eq:id}
+\Phi_u(\sigma)=\SC(\sigma)-\sum_z\tfrac{\kappa_z}{2}(Q_z-Q^\circ_z)^2+L_{\dbar}(\sigma)+\ip{v}{Q}+\sum_z\tfrac{\kappa_z}{2}(Q^\circ_z)^2 .
+\end{equation}
+\end{lemma}
+\begin{proof}
+$\Phi_u-\SC=\sum_z[\tfrac{m_z}{2}\sum_id_{iz}q_{iz}-\tfrac{\kappa_z}{2}Q_z^2+u_zQ_z]$ because $m^S_z-m_z=\kappa_z$ and $q_{iz}^2=d_{iz}q_{iz}$. Insert $u_z$, complete the square $-\tfrac{\kappa_z}{2}Q_z^2+\kappa_zQ_z^\circ Q_z=-\tfrac{\kappa_z}{2}(Q_z-Q_z^\circ)^2+\tfrac{\kappa_z}{2}(Q_z^\circ)^2$ and write $\tfrac{m_z}{2}\sum_id_{iz}q_{iz}-\tfrac{m_z}{2}\dbar_zQ_z=\sum_i\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}$.
+\end{proof}
+
+\paragraph{What the city sees.} The city knows the demand and congestion slopes $b,g,r$ (hence $\kappa,m$) and nothing about $R_i$, $\cP_i$ or $d_{iz}$. After posting $u$ it observes the zone aggregates of the equilibrium the carriers settle in: $Q_z$ and $n_z=\#\{i:q_{iz}>0\}$.
+
+\paragraph{The rule.} With an estimate $\dbar$ of the mean lot (Section~\ref{sec:lots}),
+\begin{equation}\label{eq:rule}
+u^{t+1}_z=(1-\theta_z)u^t_z+\theta_z\Big[\kappa_zQ^t_z-\tfrac{m_z}{2}\dbar_z\Big],\qquad\theta_z\in(0,1].
+\end{equation}
+$\theta=1$ is the plain Pigou--Cournot fixed-point iteration (DIP's tangent charge evaluated at the observed aggregate instead of the computed target).
+
+\section{The convexified game: the response is a proximal map}\label{sec:convex}
+
+Let $\cX=\prod_i\Delta(\cP_i)$, $\qbar_i(x_i)=\mathbb E_{x_i}q_i$, $\Qbar(x)=\sum_i\qbar_i(x_i)$ and $\cQ=\Qbar(\cX)$, a polytope in $\R^Z_{\ge0}$. The convexified potential and social cost are (DIP, Section 3)
+\begin{align*}\Phibar_u(x)&=\sum_i\mathbb E_{x_i}\Big[R_i+\sum_zq_{iz}\big(-\alpha_z+u_z+\tfrac{m_z}{2}d_{iz}\big)\Big]+\sum_z\tfrac{m_z}{2}\Qbar_z^2,\\
+\SCbar(x)&=\sum_i\mathbb E_{x_i}\Big[R_i-\sum_z\alpha_zq_{iz}\Big]+\sum_z\tfrac{m^S_z}{2}\Qbar_z^2 .\end{align*}
+Their minimisers are the convexified equilibria and the convexified social optima. Fix a reference $\dbar$ and define, for $Q\in\cQ$,
+\begin{equation}\label{eq:G}
+G(Q)=\min\Big\{\sum_i\mathbb E_{x_i}\Big[R_i+\sum_z\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}\Big]:\ x\in\cX,\ \Qbar(x)=Q\Big\},
+\end{equation}
+the carriers' \emph{aggregate value function}, and
+\begin{equation}\label{eq:F}
+F(Q)=G(Q)+\sum_z\Big[-\alpha_zQ_z+\tfrac{m_z}{2}Q_z^2+\tfrac{m_z}{2}\dbar_zQ_z\Big]+\iota_{\cQ}(Q),\qquad
+g(Q)=\sum_z\Big[\tfrac{\kappa_z}{2}Q_z^2-\tfrac{m_z}{2}\dbar_zQ_z\Big].
+\end{equation}
+For $v\in\R^Z$ and a positive vector $w$ write $\norm{v}{w}^2=\sum_zw_zv_z^2$ and $\ip{v}{v'}_w=\sum_zw_zv_zv_z'$.
+
+\begin{lemma}\label{lem:F}\PROVED\
+$G$ is convex and piecewise linear on $\cQ$. $F$ is proper, closed, and strongly convex with modulus $1$ in the norm $\norm{\cdot}{m}$: $F-\tfrac12\norm{\cdot}{m}^2$ is convex. Moreover
+\[\min_{x\in\cX}\Phibar_u(x)=\min_{Q}\ F(Q)+\ip{u}{Q},\qquad \min_{x\in\cX}\big[\SCbar(x)+L_{\dbar}(x)\big]=\min_Q\ F(Q)+g(Q),\]
+where $L_{\dbar}(x)=\sum_{i,z}\tfrac{m_z}{2}(d_{iz}-\dbar_z)\qbar_{iz}(x_i)$, and in both cases $x$ is a minimiser on the left if and only if $\Qbar(x)$ is a minimiser on the right and $x$ attains the minimum in \eqref{eq:G} at $Q=\Qbar(x)$.
+\end{lemma}
+\begin{proof}
+$G$ is the optimal value of a linear program in $x$ whose right-hand side $Q$ enters through the equality constraint $\Qbar(x)=Q$; such a value function is convex and piecewise linear on the set of right-hand sides for which the program is feasible, which is $\cQ$. The quadratic part of $F$ is $\tfrac12\norm{Q}{m}^2$, the rest is convex, so $F-\tfrac12\norm{\cdot}{m}^2=G+\text{linear}+\iota_\cQ$ is convex; $F$ is closed because $G$ is continuous on the closed set $\cQ$. For the two identities, substitute $\sum_i\mathbb E_{x_i}\tfrac{m_z}{2}d_{iz}q_{iz}=\sum_i\mathbb E_{x_i}\tfrac{m_z}{2}(d_{iz}-\dbar_z)q_{iz}+\tfrac{m_z}{2}\dbar_z\Qbar_z$ in $\Phibar_u$, and $\tfrac{m^S_z}{2}=\tfrac{m_z}{2}+\tfrac{\kappa_z}{2}$ in $\SCbar+L_{\dbar}$; in both the objective is a function of $x$ only through $\Qbar(x)$ plus the quantity minimised in \eqref{eq:G}, so minimising over $x$ equals minimising over $Q\in\cQ$ the value $G(Q)$ plus the known function of $Q$, and the minimisers correspond as stated.
+\end{proof}
+
+\begin{theorem}[The equilibrium response is a proximal map]\label{thm:resolvent}\PROVED\
+For every $u\in\R^Z$ the convexified equilibria under charge $u$ share one aggregate
+\[Q(u)=\arg\min_Q\big\{F(Q)+\ip{u}{Q}\big\}=\nabla F^*(-u),\]
+where $F^*$ is the convex conjugate of $F$, which is finite and differentiable on $\R^Z$. The response map is a contraction from the dual to the primal metric:
+\begin{equation}\label{eq:lip}
+\norm{Q(u_1)-Q(u_2)}{m}\le\norm{u_1-u_2}{m^{-1}}\qquad\text{for all }u_1,u_2 .
+\end{equation}
+Equivalently, $Q(u)=\mathrm{prox}$ of $G+\text{linear}$ in the $m$-metric: $Q(u)=\arg\min_Q G(Q)+\tfrac12\norm{Q-m^{-1}\odot(\alpha-\tfrac m2\dbar-u)}{m}^2$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:F}, $F+\ip{u}{\cdot}$ is strongly convex on the compact set $\cQ$, so it has a unique minimiser $Q(u)$, and every convexified equilibrium $x$ has $\Qbar(x)=Q(u)$. For a closed proper strongly convex $F$ the conjugate $F^*(y)=\sup_Q\{\ip{y}{Q}-F(Q)\}$ is finite (the domain of $F$ is bounded) and differentiable with $\nabla F^*(y)=\arg\max_Q\{\ip yQ-F(Q)\}$ (Rockafellar, Theorem~26.3); with $y=-u$ this is $Q(u)$. For \eqref{eq:lip}, the optimality conditions read $-u_k\in\partial F(Q_k)$, $k=1,2$. Strong convexity with modulus $1$ in $\norm{\cdot}{m}$ gives, for all subgradients, $\ip{(-u_1)-(-u_2)}{Q_1-Q_2}\ge\norm{Q_1-Q_2}{m}^2$ (apply the monotonicity of $\partial(F-\tfrac12\norm{\cdot}{m}^2)$ and $\partial\tfrac12\norm{\cdot}{m}^2=m\odot\cdot$). By the Cauchy--Schwarz inequality in the $m$-inner product, $\ip{u_2-u_1}{Q_1-Q_2}=\ip{m^{-1}\odot(u_2-u_1)}{Q_1-Q_2}_m\le\norm{u_2-u_1}{m^{-1}}\norm{Q_1-Q_2}{m}$, and \eqref{eq:lip} follows. The prox form is \eqref{eq:F} with the square completed.
+\end{proof}
+
+\begin{remark}[Link to ZMC]
+In the zone-market-clearing view (\texttt{theory/new\_algorithm\_A}) the equilibrium is a price $\lambda$ at which the carriers' pricing answers clear every zone. Theorem~\ref{thm:resolvent} is the same object seen from the city: the city's instrument $u$ is a shift of the zone price, the response $Q(u)$ is the gradient of the concave value function $u\mapsto-\min_x\Phibar_u(x)$, and the fixed-point equation of Theorem~\ref{thm:fixed} is a supply line $u=\kappa Q-\tfrac m2\dbar$ against the response curve. The bracketed secant of ZMC could therefore be used by the leader; we use the gradient structure instead, because it gives the instance-free rate below.
+\end{remark}
+
+\begin{theorem}[Fixed point and dual problem]\label{thm:fixed}\PROVED\
+Let $D(u)=F^*(-u)+g^*(u)$ with $g^*(u)=\sum_z\frac{(u_z+\frac{m_z}{2}\dbar_z)^2}{2\kappa_z}$. Then
+\begin{enumerate}[label=(\alph*)]
+\item $D$ is finite, differentiable and strongly convex, with $\nabla D(u)=-Q(u)+\kappa^{-1}\odot\big(u+\tfrac m2\dbar\big)$: the gradient of the leader's dual objective is observable from the aggregate alone.
+\item $\min_Q\{F(Q)+g(Q)\}=-\min_uD(u)$, and $u^*$ minimises $D$ if and only if it is the unique fixed point of the tangent map $T(u)=\kappa\odot Q(u)-\tfrac m2\odot\dbar$. Its response $Q^\infty=Q(u^*)$ is the minimiser of $F+g$, i.e.\ of $\SCbar+L_{\dbar}$ over $\cX$ (Lemma~\ref{lem:F}).
+\item Welfare of the fixed point: every convexified equilibrium $x^\infty$ under $u^*$ satisfies $\SCbar(x^\infty)\le\min_x\SCbar(x)+E_{\dbar}$; with symmetric lots within zones ($d_{iz}=\dbar_z$ for all $i$ with $z\in C_i$) it is a convexified social optimum.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) $F^*(-\cdot)$ is finite and differentiable by Theorem~\ref{thm:resolvent} with gradient $-Q(u)$; $g^*$ is the conjugate of the quadratic $g$, $g^*(u)=\sup_Q\{\ip uQ-g(Q)\}=\sum_z(u_z+\tfrac{m_z}{2}\dbar_z)^2/(2\kappa_z)$ (maximise coordinatewise), with gradient $\kappa^{-1}\odot(u+\tfrac m2\dbar)$ and Hessian $\mathrm{diag}(1/\kappa)$, so $D$ is strongly convex.
+(b) Fenchel duality (Rockafellar, Corollary~31.2.1): $\inf_Q\{F(Q)+g(Q)\}=\sup_y\{-F^*(y)-g^*(-y)\}$ holds with attainment on the right because $g$ is finite and continuous everywhere; with $y=-u$ the right side is $-\inf_uD(u)$. $D$ is differentiable and strongly convex, so its minimiser $u^*$ is unique and characterised by $\nabla D(u^*)=0$, i.e.\ $u^*=\kappa\odot Q(u^*)-\tfrac m2\odot\dbar=T(u^*)$. Any fixed point of $T$ is a zero of $\nabla D$, hence the minimiser. At the saddle point the primal minimiser is $Q^\infty=\nabla F^*(-u^*)=Q(u^*)$ (Rockafellar, Theorem~31.3), and it minimises $F+g$, which is $\min\{\SCbar+L_{\dbar}\}$ by Lemma~\ref{lem:F}.
+(c) Let $x^*$ minimise $\SCbar$. By (b), $\SCbar(x^\infty)+L_{\dbar}(x^\infty)\le\SCbar(x^*)+L_{\dbar}(x^*)$, so $\SCbar(x^\infty)-\SCbar(x^*)\le L_{\dbar}(x^*)-L_{\dbar}(x^\infty)\le\sum_{i,z}\tfrac{m_z}{2}|d_{iz}-\dbar_z|\,|\qbar^*_{iz}-\qbar^\infty_{iz}|\le E_{\dbar}$ because $\qbar_{iz}\in[0,d_{iz}]$. With symmetric lots $L_{\dbar}\equiv0$.
+\end{proof}
+
+\begin{theorem}[Instance-free contraction rates]\label{thm:rate}\PROVED\
+Let $\rho=\max_z\kappa_z/m_z=\max_zg_zr^2/(b_z+g_zr^2)<1$ over the zones with a lot, and let $u^*$ be the fixed point of Theorem~\ref{thm:fixed}. In the convexified game, the rule \eqref{eq:rule} with a common $\theta$ satisfies:
+\begin{enumerate}[label=(\alph*)]
+\item \emph{(plain, $\theta=1$)} $\norm{u^{t+1}-u^*}{\kappa^{-1}}\le\rho\,\norm{u^t-u^*}{\kappa^{-1}}$ for every $t$ and every starting charge;
+\item \emph{(damped, $0<\theta\le\frac{2}{2+\rho}$)} $\norm{u^{t+1}-u^*}{\kappa^{-1}}\le\sqrt{1-\tfrac{2\theta(1+\rho)}{2+\rho}}\ \norm{u^t-u^*}{\kappa^{-1}}$; at $\theta=\frac{2}{2+\rho}$ the ratio is $\frac{\rho}{2+\rho}<\frac13$.
+\end{enumerate}
+The ratios depend on the instance only through $\rho$: not on $Z$, $N$, the number of customers, the lots, the routing costs or the p-boxes. After $t$ rounds the charge is within $\rho^t\norm{u^0-u^*}{\kappa^{-1}}$ of the fixed point, and the equilibrium aggregate within $\sqrt{\rho}\,\rho^t\norm{u^0-u^*}{\kappa^{-1}}$ of $Q^\infty$ in the $\norm{\cdot}{m}$ norm.
+\end{theorem}
+\begin{proof}
+Let $K=\mathrm{diag}(\kappa)$ and consider $\R^Z$ with the inner product $\ip{\cdot}{\cdot}_{\kappa^{-1}}$. The gradient of $D$ with respect to this inner product is $K\nabla D(u)=u+\tfrac m2\dbar-\kappa\odot Q(u)$, so the rule \eqref{eq:rule} is $u^{t+1}=u^t-\theta\,K\nabla D(u^t)$: gradient descent on $D$ with step $\theta$ in the $\kappa^{-1}$-geometry.
+
+\emph{Two constants.} Since $\kappa_z\le\rho m_z$ and $1/m_z\le\rho/\kappa_z$ for every active zone, \eqref{eq:lip} gives
+\[\norm{Q(u_1)-Q(u_2)}{\kappa}\le\sqrt\rho\,\norm{Q(u_1)-Q(u_2)}{m}\le\sqrt\rho\,\norm{u_1-u_2}{m^{-1}}\le\rho\,\norm{u_1-u_2}{\kappa^{-1}}.\]
+Hence $u\mapsto\kappa\odot Q(u)$ is $\rho$-Lipschitz from $\norm{\cdot}{\kappa^{-1}}$ to itself (note $\norm{\kappa\odot v}{\kappa^{-1}}=\norm v\kappa$), $K\nabla D$ is $(1+\rho)$-Lipschitz, and $D$ is strongly convex with modulus $1$ in this geometry ($g^*$ contributes the identity, $F^*(-\cdot)$ is convex).
+
+(a) $T(u)=\kappa\odot Q(u)-\tfrac m2\dbar$ is $\rho$-Lipschitz in $\norm\cdot{\kappa^{-1}}$ and $u^*=T(u^*)$, so $\norm{u^{t+1}-u^*}{\kappa^{-1}}=\norm{T(u^t)-T(u^*)}{\kappa^{-1}}\le\rho\norm{u^t-u^*}{\kappa^{-1}}$.
+
+(b) For a function that is $\mu$-strongly convex with $L$-Lipschitz gradient in a Euclidean geometry, gradient descent with step $\theta\le2/(\mu+L)$ satisfies $\norm{u^{t+1}-u^*}{}^2\le\big(1-\tfrac{2\theta\mu L}{\mu+L}\big)\norm{u^t-u^*}{}^2$ (Nesterov, \emph{Introductory Lectures}, Theorem~2.1.15; the proof uses only the inequality $\ip{\nabla D(u)-\nabla D(u^*)}{u-u^*}\ge\frac{\mu L}{\mu+L}\norm{u-u^*}{}^2+\frac1{\mu+L}\norm{\nabla D(u)-\nabla D(u^*)}{}^2$, valid in any inner-product space). With $\mu=1$, $L=1+\rho$ the factor is $1-2\theta(1+\rho)/(2+\rho)$; at $\theta=2/(2+\rho)$ it equals $1-4(1+\rho)/(2+\rho)^2=\rho^2/(2+\rho)^2$.
+
+The last claim follows from (a) and $\norm{Q(u)-Q(u^*)}{m}\le\norm{u-u^*}{m^{-1}}\le\sqrt\rho\norm{u-u^*}{\kappa^{-1}}$.
+\end{proof}
+
+\begin{remark}
+The plain iteration is the classical trial-and-error implementation of marginal-cost pricing (Yang, Meng and Lee 2004) transferred to a Cournot market with lumpy lots; its proof of convergence there uses the method of successive averages and gives no rate. The rate $\rho$ comes from the Cournot slope $b_z$: without the demand side ($b=0$) one has $\rho=1$ and no contraction, which is why the nonatomic routing literature needs averaging. In the city games $\rho$ is $0.03$--$0.4$ (\texttt{results.md}), so two or three rounds bring the charge within a few percent of its fixed point.
+\end{remark}
+
+\section{The pure, lumpy game}\label{sec:pure}
+
+In the pure game the carriers settle, after a charge is posted, in some pure equilibrium $\sigma^t\in\NE(u^t)$ (in the experiments: best-response dynamics from the previous profile, a descent of $\Phi_{u^t}$), and the city observes $Q^t=Q(\sigma^t)$. Pure responses are set-valued and piecewise constant, so a fixed point need not exist. Two things can be said exactly.
+
+\begin{theorem}[Fixed points are unilateral social optima up to lot asymmetry]\label{thm:purefixed}\PROVED\
+Let $\sigma\in\NE(u)$ with $u=\kappa\odot Q(\sigma)-\tfrac m2\odot\dbar+v$. Then for every carrier $i$ and every plan $p\in\cP_i$, with $\sigma'=(p,\sigma_{-i})$ and $\Delta Q=Q(\sigma')-Q(\sigma)$,
+\[\SC(\sigma')\ \ge\ \SC(\sigma)+\big[L_{\dbar}(\sigma)-L_{\dbar}(\sigma')\big]+\sum_z\tfrac{\kappa_z}{2}\Delta Q_z^2-\ip{v}{\Delta Q}.\]
+At an exact fixed point ($v=0$) with symmetric lots, no carrier can lower the social cost unilaterally; in general the possible unilateral gain is at most $L_{\dbar}(\sigma')-L_{\dbar}(\sigma)\le\sum_z\tfrac{m_z}{2}|d_{iz}-\dbar_z|d_{iz}$, the asymmetry of the deviating carrier's own lots.
+\end{theorem}
+\begin{proof}
+Apply Lemma~\ref{lem:id} with $Q^\circ=Q(\sigma)$. Since $\sigma$ is an equilibrium, $\Phi_u(\sigma)\le\Phi_u(\sigma')$ (Monderer--Shapley: a unilateral deviation changes $\Phi_u$ by the deviator's cost change). The $(Q-Q^\circ)^2$ term vanishes at $\sigma$ and equals $\sum_z\tfrac{\kappa_z}{2}\Delta Q_z^2$ at $\sigma'$; rearranging \eqref{eq:id} for $\sigma$ and $\sigma'$ gives the inequality. The last bound uses $|q_{iz}(p)-q_{iz}(\sigma_i)|\le d_{iz}$.
+\end{proof}
+
+\begin{theorem}[The pure iteration stays near the convexified fixed point]\label{thm:neigh}\PROVED\
+Run the plain rule on the pure game and let $e^t=Q^t-Q(u^t)$ be the gap between the observed pure aggregate and the convexified response. Then
+\[\norm{u^{t+1}-u^*}{\kappa^{-1}}\le\rho\,\norm{u^t-u^*}{\kappa^{-1}}+\norm{e^t}{\kappa},\qquad\limsup_t\norm{u^t-u^*}{\kappa^{-1}}\le\frac{\sup_t\norm{e^t}{\kappa}}{1-\rho}.\]
+If the carriers settle in a potential-minimising equilibrium, $\sigma^t\in\arg\min_\sigma\Phi_{u^t}(\sigma)$, then $\norm{e^t}{m}\le\sqrt{2\eta_t}$ with $\eta_t=\Phi_{u^t}(\sigma^t)-\min_{x\in\cX}\Phibar_{u^t}(x)\ge0$ the rounding gap of the potential, and $\norm{e^t}\kappa\le\sqrt{2\rho\,\eta_t}$.
+\end{theorem}
+\begin{proof}
+$u^{t+1}=\kappa\odot Q^t-\tfrac m2\dbar=T(u^t)+\kappa\odot e^t$ and $u^*=T(u^*)$, so the first inequality follows from Theorem~\ref{thm:rate}(a) and $\norm{\kappa\odot e}{\kappa^{-1}}=\norm e\kappa$; iterate it for the limsup. For the gap bound, let $h=F+\ip{u^t}{\cdot}$, which is strongly convex with modulus $1$ in $\norm\cdot m$ and minimised at $Q(u^t)$, so $h(Q)\ge h(Q(u^t))+\tfrac12\norm{Q-Q(u^t)}{m}^2$ for all $Q\in\cQ$. The pure profile $\sigma^t$ is a point of $\cX$ with $\Qbar=Q^t$, so $\Phibar_{u^t}(\sigma^t)\ge h(Q^t)$ by \eqref{eq:G}, while $\min_x\Phibar_{u^t}=h(Q(u^t))$ by Lemma~\ref{lem:F}; and $\Phi_{u^t}(\sigma^t)=\Phibar_{u^t}(\sigma^t)$ at a pure profile. Hence $\eta_t\ge\tfrac12\norm{e^t}{m}^2$, and $\norm{e^t}\kappa\le\sqrt\rho\norm{e^t}m$.
+\end{proof}
+
+$\eta_t$ is observed, not predicted; the a priori bounds of \texttt{main.tex} (Theorem on D1 rounding, $\eta\le\tfrac12\min\{N,d_L\}R_M^2$) apply to the potential minimiser only. For other pure equilibria no bound holds, and the experiments report what the carriers' dynamics select.
+
+\begin{theorem}[What aggregate observations identify]\label{thm:ident}\PROVED\
+\begin{enumerate}[label=(\alph*)]
+\item The convexified response map $u\mapsto Q(u)$ on $\R^Z$ determines $F$, hence $G$, up to an additive constant. Two instances with the same $(b,g,r)$ and the same response map have the same convexified social optimum aggregate and the same fixed point $u^*$.
+\item The pure social optimum is not determined by the convexified response map: there are two instances with identical $F$ whose pure social optima differ in aggregate and in value (Example~\ref{ex:ident}).
+\end{enumerate}
+Consequently the fixed point of Theorem~\ref{thm:fixed} (the minimiser of $\SCbar+L_{\dbar}$) is the most that any scheme using the convexified response can target, and the plain rule reaches it at the rate of Theorem~\ref{thm:rate}.
+\end{theorem}
+\begin{proof}
+(a) By Theorem~\ref{thm:resolvent}, $Q=Q(u)$ if and only if $-u\in\partial F(Q)$. $F$ is polyhedral plus a quadratic on the polytope $\cQ$, so $\partial F(Q)\ne\emptyset$ for every $Q\in\cQ$ (Rockafellar, Theorem~23.10 applied to the polyhedral part, the quadratic part being differentiable). Therefore the graph of the response map, $\{(u,Q(u))\}$, is the graph of $-\partial F$ restricted to $\cQ$, and $\cQ=\{Q(u):u\in\R^Z\}$. A closed proper convex function is determined by its subdifferential up to an additive constant (Rockafellar, Theorem~24.9). The convexified optimum minimises $F+g$ with $g$ known, and $u^*$ is the unique zero of $\nabla D$, both unchanged by a constant shift of $F$.
+(b) Example~\ref{ex:ident}.
+\end{proof}
+
+\begin{example}\label{ex:ident}\PROVED\
+One zone, $\kappa=0$ (no congestion), slope $b=m$, intercept $\alpha$, reference $\dbar=d$. Instance A: two carriers, each with the lot $d$ and the plans ``stay out'' ($R=0$) and ``serve'' ($R=r$). Instance B: one carrier with the lot $2d$ and the plans ``stay out'' ($R=0$) and ``serve'' ($R=2r-md^2$), with $r>md^2/2$. In both, $\cQ=[0,2d]$ and $G$ is linear: $G_A(Q)=\tfrac{r}{d}Q+0$ (the own term $\tfrac m2(d-\dbar)q$ vanishes) and $G_B(Q)=\tfrac{2r-md^2}{2d}Q+\tfrac m2(2d-d)Q=\tfrac rdQ$. So $F_A=F_B$ and the response maps coincide. The pure social costs are $\SC_A(Q)=\tfrac rdQ-\alpha Q+\tfrac m2Q^2$ on $Q\in\{0,d,2d\}$ and $\SC_B(Q)=(2r-md^2)\mathbf 1[Q=2d]-\alpha Q+\tfrac m2Q^2$ on $Q\in\{0,2d\}$. Choose $\alpha=\tfrac rd+md$: then $Q=d$ is the unique minimiser of the continuous relaxation $F+g$ and the unique pure optimum of A, with value $\SC_A(d)=r-\alpha d+\tfrac m2d^2=-\tfrac m2d^2$ (and $\SC_A(0)=\SC_A(2d)=0$), while B has the unique pure optimum $Q=2d$ with value $\SC_B(2d)=2r-md^2-2\alpha d+2md^2=-md^2$. The optima differ in aggregate and in value although nothing observable in the convexified game differs.
+\end{example}
+
+\section{Carriers with imprecise beliefs}\label{sec:credal}
+
+\begin{proposition}[$\Gamma$-maximin surcharge]\label{prop:gamma}\PROVED\
+Under $\Gamma$-maximin beliefs of width $\delta$ about the rivals' aggregate (\texttt{main.tex}, Lemma on mixtures), carrier $i$'s cost gains the surcharge $\delta\sum_kM_kw_ka_{ik}(p)=\ip{\hat s(\delta)}{q_i(p)}$ with $\hat s_z(\delta)=\delta(b_zw_{z,Q}+g_zr\,w_{z,X})$, linear in the deliveries. Hence the response of the $\delta$-game to the charge $u$ is the response of the precise game to $u+\hat s(\delta)$, the rule \eqref{eq:rule} needs no knowledge of $\delta$ and contracts at the rates of Theorem~\ref{thm:rate}, and its fixed point $u^*_\delta$ is the unique solution of $u=T(u+\hat s(\delta))$; its response minimises $\SCbar+L_{\dbar}+\ip{\hat s(\delta)}{\Qbar}$. If the city knows $\hat s(\delta)$ (it knows $w$ and $\delta$), posting $u-\hat s(\delta)$ instead of $u$ reproduces the precise fixed point exactly, as in DIP's Theorem~12. Otherwise the loss in $\SCbar+L_{\dbar}$ relative to the precise fixed point is at most $\tfrac12\norm{\hat s(\delta)}{m^{-1}}^2$.
+\end{proposition}
+\begin{proof}
+The surcharge is a per-delivery charge, so the $\delta$-game under $u$ is the precise game under $u+\hat s$ (DIP, Theorem~12). The map $u\mapsto T(u+\hat s)$ is $\rho$-Lipschitz, so the plain rule contracts as before; a fixed point $u^*_\delta$ makes $w=u^*_\delta+\hat s$ a zero of $\nabla D_{\hat s}$ with $D_{\hat s}(w)=F^*(-w)+g^*(w-\hat s)$, the dual of $\min_Q F(Q)+g(Q)+\ip{\hat s}{Q}$, which is unique by strong convexity. For the loss, let $Q_0$ and $Q_\delta$ be the minimisers of $H=F+g$ and of $H+\ip{\hat s}{\cdot}$; both functions are strongly convex with modulus $1$ in $\norm\cdot m$. Strong convexity of $H+\ip{\hat s}\cdot$ at its minimiser $Q_\delta$ gives $H(Q_0)+\ip{\hat s}{Q_0}\ge H(Q_\delta)+\ip{\hat s}{Q_\delta}+\tfrac12\norm{Q_0-Q_\delta}m^2$, i.e.\ $H(Q_\delta)-H(Q_0)\le\ip{\hat s}{Q_0-Q_\delta}-\tfrac12\norm{Q_0-Q_\delta}m^2\le\norm{\hat s}{m^{-1}}\norm{Q_0-Q_\delta}m-\tfrac12\norm{Q_0-Q_\delta}m^2\le\tfrac12\norm{\hat s}{m^{-1}}^2$. By Lemma~\ref{lem:F}, $H$ is $\SCbar+L_{\dbar}$ minimised over the profiles with the given aggregate.
+\end{proof}
+
+\begin{proposition}[E-admissible absorption of the leader's error]\label{prop:eadm}\PROVED\
+Let $\sigma^*$ be a pure Nash equilibrium under the charge $u^*$ (precise beliefs). Let the carriers hold credal boxes of width $\delta$ around the realised rival aggregate (\texttt{main.tex}, Assumption on credal sets, weights $w$) and let $\hat s(\delta)$ be as in Proposition~\ref{prop:gamma}. Write $\hat w_z=b_zw_{z,Q}+g_zr\,w_{z,X}$, so that $\hat s_z(\delta)=\delta\hat w_z$. If a posted charge $u$ satisfies, for every zone $z$ and every carrier $i$ with $z\in C_i$,
+\[|u_z-u^*_z|\le\hat s_z(\delta)\quad\text{and}\quad\Big(u_z\le u^*_z\ \text{ or }\ Q_{-i,z}(\sigma^*)\ge(u_z-u^*_z)\,\frac{\max\{w_{z,Q},\,w_{z,X}/r\}}{\hat w_z}\Big),\]
+then $\sigma^*\in\ICNE_E(\delta)$ under $u$: each carrier's plan is optimal for some belief in its box. In particular the plain rule, started anywhere in the convexified game, places $\sigma^*$ in $\ICNE_E(\delta)$ as soon as $\rho^t\norm{u^0-u^*}{\kappa^{-1}}\le\min_z\hat s_z(\delta)/\sqrt{\kappa_z}$, i.e.\ after $\lceil\log(\norm{u^0-u^*}{\kappa^{-1}}\max_z\sqrt{\kappa_z}/\hat s_z(\delta))/\log(1/\rho)\rceil$ rounds.
+\end{proposition}
+\begin{proof}
+Carrier $i$'s cost of a plan $p$ at the charge $u$ and the belief $(\mu_Q,\mu_X)$ about the rivals' zone deliveries and hours is $R_i(p)+\sum_zq_{iz}(p)\big(-\alpha_z+m_zd_{iz}+b_z\mu_{Q,z}+g_zr\mu_{X,z}+u_z\big)$. Write $\Delta_z=u_z-u^*_z$ and pick the belief $\mu_{Q,z}=Q_{-i,z}-\Delta_z w_{z,Q}/\hat w_z$, $\mu_{X,z}=X_{-i,z}-\Delta_z w_{z,X}/\hat w_z$. Then $b_z\mu_{Q,z}+g_zr\mu_{X,z}+u_z=b_zQ_{-i,z}+g_zrX_{-i,z}-\Delta_z(b_zw_{z,Q}+g_zrw_{z,X})/\hat w_z+u_z=b_zQ_{-i,z}+g_zrX_{-i,z}+u^*_z$, so the cost of every plan at this belief and charge $u$ equals its cost at the realised aggregate and charge $u^*$, where $\sigma^*_i$ is optimal. The belief lies in the box because $|\mu_{Q,z}-Q_{-i,z}|=|\Delta_z|w_{z,Q}/\hat w_z\le\delta w_{z,Q}$ and $|\mu_{X,z}-X_{-i,z}|=|\Delta_z|w_{z,X}/\hat w_z\le\delta w_{z,X}$ exactly when $|\Delta_z|\le\delta\hat w_z=\hat s_z(\delta)$. It is nonnegative when $\Delta_z\le0$; when $\Delta_z>0$ it needs $Q_{-i,z}\ge\Delta_zw_{z,Q}/\hat w_z$ and $X_{-i,z}=rQ_{-i,z}\ge\Delta_zw_{z,X}/\hat w_z$, both implied by the stated condition. Hence $\sigma^*_i$ is E-admissible for every $i$ (\texttt{main.tex}, reduction of the credal set to its mean box). The round count follows from Theorem~\ref{thm:rate}(a) and $|u_z-u^*_z|\le\sqrt{\kappa_z}\norm{u-u^*}{\kappa^{-1}}$.
+\end{proof}
+
+\section{The limit of re-tangenting: the realised-aggregate tariff}\label{sec:mct}
+
+The flat rule charges every delivery in $z$ the externality $\kappa_zQ_z$ at the observed aggregate minus a half-lot subsidy estimated from $n_z$. The exact externality of carrier $i$'s lot on the others is $\kappa_zd_{iz}Q_{-i,z}$ and its market-power wedge is $\tfrac{b_z}{2}d_{iz}^2$; both are functions of its own deliveries and of the zone total, so an anonymous nonlinear tariff can charge them exactly.
+
+\begin{theorem}[Marginal tariff]\label{thm:mct}\PROVED\ (the mechanism is classical: Wolpert--Tumer 1999, Sandholm 2002, Marden--Wierman 2013; the lumpy form and its consequences for the city game are stated here)
+Let every carrier pay, in every zone, $T_z(q_{iz},Q_z)=\kappa_zq_{iz}(Q_z-q_{iz})-\tfrac{b_z}{2}q_{iz}^2$. Then:
+\begin{enumerate}[label=(\alph*)]
+\item for all $i$, $p$ and $\sigma_{-i}$: $J^T_i(p;\sigma_{-i})=\SC(p,\sigma_{-i})-\SC(\emptyset_i,\sigma_{-i})$, so $\SC$ is an exact potential of the tariff game;
+\item the pure equilibria are exactly the profiles that no single carrier can improve socially; every social optimum is a pure equilibrium (price of stability $1$); best-response dynamics from any profile never increase $\SC$ and stop in finitely many steps at such an equilibrium;
+\item given the rivals, the tariff is linear in the carrier's own service indicators, so a best response is one call of the routing oracle with the zone prices shifted by $\kappa_zQ_{-i,z}-\tfrac{b_z}{2}d_{iz}$;
+\item the tariff equals the flat fixed-point charge with the carrier's own lot in place of $\dbar_z$ minus the own-congestion rebate $\tfrac{\kappa_z}{2}d_{iz}^2$: $T_z(d_{iz},Q_z)=d_{iz}\big(\kappa_zQ_z-\tfrac{m_z}{2}d_{iz}\big)-\tfrac{\kappa_z}{2}d_{iz}^2$. The city's net revenue is $\sum_z[\kappa_zQ_z^2-(\kappa_z+\tfrac{b_z}{2})\sum_iq_{iz}^2]$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) $J^T_i(p;\sigma_{-i})=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+m_zd_{iz}+m_zQ_{-i,z}+\kappa_zQ_{-i,z}-\tfrac{b_z}{2}d_{iz}\big)=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+\tfrac{m^S_z}{2}d_{iz}+m^S_zQ_{-i,z}\big)$, using $q_{iz}^2=d_{iz}q_{iz}$, $m_z-\tfrac{b_z}2=\tfrac{m^S_z}{2}$ and $m_z+\kappa_z=m^S_z$. On the other side, $\SC(p,\sigma_{-i})-\SC(\emptyset_i,\sigma_{-i})=R_i(p)+\sum_z\big[-\alpha_zq_{iz}+\tfrac{m^S_z}{2}\big((q_{iz}+Q_{-i,z})^2-Q_{-i,z}^2\big)\big]=R_i(p)+\sum_zq_{iz}\big(-\alpha_z+\tfrac{m^S_z}{2}d_{iz}+m^S_zQ_{-i,z}\big)$. The two agree, and the right side differs from $\SC(p,\sigma_{-i})$ by a term independent of $p$, which is the definition of an exact potential.
+(b) Monderer--Shapley for the potential $\SC$ on a finite profile set.
+(c) Immediate from the first expression in (a).
+(d) $\kappa_zd(Q_z-d)-\tfrac{b_z}2d^2=d(\kappa_zQ_z-\tfrac{m_z}{2}d)-\tfrac{\kappa_z}{2}d^2$ since $\kappa_z+\tfrac{b_z}{2}=\tfrac{m_z}2+\tfrac{\kappa_z}2$; summing $T_z$ over carriers gives the revenue.
+\end{proof}
+
+\begin{remark}
+Under the tariff the whole machinery of DIP (social target, cutting planes, fallback) is unnecessary: the target is an equilibrium by (b), for any lot asymmetry. What remains is equilibrium selection, which is now a pure optimisation question about the potential $\SC$: the carriers' best-response dynamics from the status quo reach a unilateral social optimum that is never worse than the status quo (observation-only), and the potential-minimising solver of E3 (ZMC on the social-cost potential) reaches the same profile DIP would implement, with no implementation step. The tariff needs the city to bill each carrier on its own zone deliveries, which any per-delivery charge needs too, and to know the zone total, which it observes.
+\end{remark}
+
+\section{Estimating the mean lot from the observation}\label{sec:lots}
+
+\begin{lemma}\label{lem:lots}\PROVED\
+(a) If lots are symmetric within zones, $Q_z/n_z=\dbar_z$ exactly in every served zone. (b) If between two observations $n_z$ changes by exactly one, $|Q_z^{t}-Q_z^{t-1}|$ is the lot of the carrier that entered or left; if $n_z=1$, $Q_z$ is the lot of the serving carrier. (c) For a zone never served the observation carries no information about its lots; the rule uses the mean observed lot of the city, and Theorem~\ref{thm:fixed}(c) bounds the cost of the error by $E_{\dbar}$ with $\dbar$ the vector actually used.
+\end{lemma}
+\begin{proof}
+(a) $Q_z=n_z\dbar_z$. (b) All other carriers' lots in $z$ are unchanged, so the difference of the sums is the changed term. (c) Nothing distinguishes two instances that differ only in the lots of a never-served zone. The bound is Theorem~\ref{thm:fixed}(c), whose proof holds for any reference vector.
+\end{proof}
+
+\section{Prior art and what is new}\label{sec:prior}
+
+\paragraph{Classical.} Marginal-cost pricing by trial and error on observed flows: Yang, Meng and Lee (TR-B 2004; method of successive averages, nonatomic networks, no rate); Han and Yang (2008), Ye, Yang and Tan (TR-B 2015, disequilibrium flows), Xu, Meng and Huang (TR-C 2016, global convergence), Zhou et al.\ (2015, Lagrangian-dual view with capacity constraints). Adaptive incentive design with two-timescale learning: Maheshwari, Kulkarni, Wu and Sastry (2022, atomic Cournot and quadratic aggregative games with continuous strategies; fixed points are socially optimal; convergence by stochastic approximation, no rate). Learning optimal taxes from equilibrium feedback in nonatomic congestion games: Cui, Fazel and Du (NeurIPS 2024). Linear convergence of projection-descent methods for Stackelberg aggregative games under strong monotonicity, with continuous follower strategies and a leader who knows the followers' responses: Li, Li, Li and Chen (IEEE TAC 2025). Marginal-contribution tariffs that make welfare the potential: Wolpert and Tumer (1999), Sandholm (REStud 2002; JET 2007, evolutionary implementation of Pigouvian pricing, nonatomic), Marden and Wierman (2013). Pigou--Cournot corrective taxes: Buchanan (1969), Barnett (1980). Convex duality, conjugates and proximal maps: Rockafellar (1970), Moreau (1965).
+
+\paragraph{New here.} (i) The identification of the convexified equilibrium-aggregate map of the lumpy Cournot--congestion routing game with a proximal map, $Q(u)=\nabla F^*(-u)$, and of the leader's problem with the strongly convex dual $D$ whose gradient is the observed aggregate (Theorems~\ref{thm:resolvent}--\ref{thm:fixed}); (ii) the instance-free contraction ratios $\rho$ and $\rho/(2+\rho)$ for the plain and damped Pigou--Cournot iteration, dimension-free and routing-free (Theorem~\ref{thm:rate}); (iii) the lumpy fixed-point property (Theorem~\ref{thm:purefixed}), the neighbourhood bound through the rounding gap (Theorem~\ref{thm:neigh}) and the identification limit with its example (Theorem~\ref{thm:ident}); (iv) the absorption of the leader's search error by the carriers' credal width (Proposition~\ref{prop:eadm}) and the surcharge shift of the fixed point (Proposition~\ref{prop:gamma}); (v) the lumpy form of the marginal tariff and the observation that it removes DIP's implementation step entirely (Theorem~\ref{thm:mct}). The central mechanism, charge the externality at the observed aggregate, is not new; its theory in this setting is.
+
+\paragraph{Not claimed.} No guarantee on which pure equilibrium the carriers select under a posted charge; no bound for pure equilibria that are not potential minimisers (Theorem~\ref{thm:neigh} is conditional); no result for D2; no pessimistic (worst-equilibrium) guarantee beyond Theorem~\ref{thm:mct}(b), which only says that every tariff equilibrium is a unilateral social optimum.
+
+\end{document}

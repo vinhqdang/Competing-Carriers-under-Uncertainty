@@ -1,0 +1,7 @@
+NewDelhi 0 base -74.63 grid base -74.63
+NewDelhi 0 arp cycle 5 sc -82.88 path [-74.6, -73.2, -82.9, -82.9, -82.9, -82.9] calls 53 dip -85.78 16
+NewDelhi 0 arp_msa rounds 10 sc -82.88 path [-74.6, -73.2, -80.7, -80.7, -80.7, -82.9, -82.9, -82.9, -82.9, -82.9, -82.9] calls 81 dip -85.78 22
+NewDelhi 0 mct_br sc -83.6 monotone True calls 11 1
+NewDelhi 0 mct_so sc -83.03 calls 51 e3 SO -85.78
+NewDelhi 0 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 0.0}, 'arp_msa': {'max_regret': 0.0, 'max_regret_fresh': 0.0}, 'mct_br': {'max_regret': 0.0}, 'mct_so': {'max_regret': 0.0}}
+NewDelhi 0 finished 60

@@ -1,0 +1,6 @@
+BuenosAires 2 base -289.48 grid base -289.48
+BuenosAires 2 arp fixed_point 3 sc -374.39 path [-289.5, -297.8, -374.4, -374.4] calls 23 dip -374.39 3
+BuenosAires 2 mct_br sc -374.39 monotone True calls 8 1
+BuenosAires 2 mct_so sc -374.39 calls 39 e3 SO -374.39
+BuenosAires 2 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 5.684341886080802e-14}, 'mct_br': {'max_regret': 0.0}, 'mct_so': {'max_regret': 0.0}}
+BuenosAires 2 finished 13

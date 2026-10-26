@@ -1,0 +1,7 @@
+London 1 base -624.79 grid base -624.79
+London 1 arp cycle 5 sc -882.37 path [-624.8, -672.7, -886.6, -882.4, -886.6, -882.4] calls 47 dip -907.75 2
+London 1 arp_msa rounds 10 sc -886.78 path [-624.8, -672.7, -831.9, -843.9, -876.9, -883.1, -882.1, -883.1, -886.8, -885.8, -886.8] calls 91 dip -907.75 4
+London 1 mct_br sc -886.78 monotone True calls 9 0
+London 1 mct_so sc -907.75 calls 50 e3 SO -907.75
+London 1 verify {'arp': {'max_regret': 0.0, 'max_regret_fresh': 0.0}, 'arp_msa': {'max_regret': 0.0, 'max_regret_fresh': 0.0}, 'mct_br': {'max_regret': 0.0}, 'mct_so': {'max_regret': 0.0}}
+London 1 finished 17
