@@ -1,0 +1,217 @@
+city,quantity,label,group,n_seeds,mean,sd,ci_lo,ci_hi,min,max,median,n_seeds_3,mean_3,sd_3,mean_new,lower_bound_grid
+NewDelhi,served_share0,unpriced served share,E1,4,0.275192,0.0335943,0.253617,0.307617,0.248355,0.323864,0.264275,3,0.258969,0.0106588,0.323864,False
+NewDelhi,slowdown_pct0,unpriced added slowdown (%),E1,4,4.04093,0.337325,3.74657,4.34046,3.63541,4.45679,4.03576,3,4.1761,0.247084,3.63541,False
+NewDelhi,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,False
+NewDelhi,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,10.3239,6.03551,5.03423,16.8984,5.03423,16.8984,9.03918,3,10.3239,6.03551,,False
+NewDelhi,gain_both_pct,two-instrument gain (% of |SC|),grid,3,14.4916,2.64904,12.1721,17.3783,12.1721,17.3783,13.9243,3,14.4916,2.64904,,False
+NewDelhi,share_delivery,delivery-only share of the combined gain,grid,3,0.678379,0.280541,0.413586,0.972383,0.413586,0.972383,0.649167,3,0.678379,0.280541,,False
+NewDelhi,poa_zmc,PoA (ZMC equilibrium),E3,4,1.16166,0.0533183,1.11857,1.21268,1.10541,1.23378,1.15372,3,1.18041,0.0464239,1.10541,False
+NewDelhi,pos,PoS (best equilibrium found),E3,4,1.15544,0.056576,1.11496,1.20646,1.10541,1.23378,1.14129,3,1.17212,0.0559685,1.10541,False
+NewDelhi,poa_worst,PoA (worst equilibrium found),E3,4,1.17513,0.0568039,1.13075,1.21952,1.11055,1.2417,1.17415,3,1.19666,0.0453752,1.11055,False
+NewDelhi,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,4,13.7823,3.88812,10.5642,17.46,9.53587,18.948,13.3227,3,15.1978,3.26416,9.53587,False
+NewDelhi,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,2.96462,1.68933,1.6254,4.86253,1.6254,4.86253,2.40595,3,2.96462,1.68933,,False
+NewDelhi,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,4,-0.0039646,0.00792919,-0.0118938,0,-0.0158584,0,0,3,0,0,-0.0158584,False
+NewDelhi,dip_gain_pct,DIP gain (% of |SC|),dip,4,16.1701,5.32567,11.8706,21.2676,10.5586,23.3776,15.372,3,18.0405,4.64239,10.5586,False
+NewDelhi,dip_vs_grid_gain,DIP gain / best grid gain,dip,3,1.23586,0.105285,1.13518,1.34522,1.13518,1.34522,1.22719,3,1.23586,0.105285,,False
+NewDelhi,dip_calls,DIP oracle calls,dip,4,132,9.89949,122.75,140.25,119,143,133,3,128.333,8.14453,143,False
+NewDelhi,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0531742,0.0034792,0.0492142,0.0557404,0.0492142,0.0557404,0.054568,3,0.0531742,0.0034792,,False
+NewDelhi,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.0531742,0.0034792,0.0492142,0.0557404,0.0492142,0.0557404,0.054568,3,0.0531742,0.0034792,,False
+NewDelhi,arp_gain_pct,ARP flat gain (% of |SC|),arp,3,15.8221,5.48751,11.0561,21.8213,11.0561,21.8213,14.5888,3,15.8221,5.48751,,False
+NewDelhi,arp_calls,ARP flat oracle calls,arp,3,46.6667,17.3877,27,60,27,60,53,3,46.6667,17.3877,,False
+NewDelhi,mct_br_gain_pct,marginal tariff + best responses gain (% of |SC|),arp,3,16.603,6.02852,12.0163,23.4312,12.0163,23.4312,14.3615,3,16.603,6.02852,,False
+NewDelhi,mct_so_gain_pct,marginal tariff + solver gain (% of |SC|),arp,3,16.3574,5.39717,11.2567,22.0088,11.2567,22.0088,15.8066,3,16.3574,5.39717,,False
+NewDelhi,arp_vs_dip_gain,ARP flat gain / DIP gain,arp,3,0.865515,0.108687,0.74016,0.933427,0.74016,0.933427,0.922957,3,0.865515,0.108687,,False
+NewDelhi,mct_br_vs_dip_gain,tariff + BR gain / DIP gain,arp,3,0.905102,0.0989717,0.80444,1.00229,0.80444,1.00229,0.908574,3,0.905102,0.0989717,,False
+NewDelhi,so_share_grid,gain share vs social optimum: grid-best,so,3,0.813054,0.0687883,0.743375,0.880916,0.743375,0.880916,0.814873,3,0.813054,0.0687883,,False
+NewDelhi,so_share_grid_cong,gain share vs social optimum: congestion-only,so,3,0,0,0,0,0,0,0,3,0,0,,False
+NewDelhi,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,3,0.543909,0.194425,0.33702,0.722845,0.33702,0.722845,0.571861,3,0.543909,0.194425,,False
+NewDelhi,so_share_dip,gain share vs social optimum: DIP,so,4,1,0,1,1,1,1,1,3,1,0,1,False
+NewDelhi,so_share_arp,gain share vs social optimum: ARP flat,so,3,0.865515,0.108687,0.74016,0.933427,0.74016,0.933427,0.922957,3,0.865515,0.108687,,False
+NewDelhi,so_share_mct_br,gain share vs social optimum: tariff + BR,so,3,0.905102,0.0989717,0.80444,1.00229,0.80444,1.00229,0.908574,3,0.905102,0.0989717,,False
+NewDelhi,so_share_mct_so,gain share vs social optimum: tariff + solver,so,3,0.898346,0.128737,0.753588,1,0.753588,1,0.94145,3,0.898346,0.128737,,False
+NewDelhi,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,4,16.1701,5.32567,11.8706,21.2676,10.5586,23.3776,15.372,3,18.0405,4.64239,10.5586,False
+Cairo,served_share0,unpriced served share,E1,3,1,0,1,1,1,1,1,3,1,0,,False
+Cairo,slowdown_pct0,unpriced added slowdown (%),E1,3,3.60951,0.0479529,3.5578,3.65251,3.5578,3.65251,3.61823,3,3.60951,0.0479529,,False
+Cairo,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Cairo,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Cairo,gain_both_pct,two-instrument gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Cairo,poa_zmc,PoA (ZMC equilibrium),E3,3,1,0,1,1,1,1,1,3,1,0,,False
+Cairo,pos,PoS (best equilibrium found),E3,3,1,0,1,1,1,1,1,3,1,0,,False
+Cairo,poa_worst,PoA (worst equilibrium found),E3,3,1,0,1,1,1,1,1,3,1,0,,False
+Cairo,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,0,0,0,0,0,0,0,3,0,0,,False
+Cairo,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,0,0,0,0,0,0,0,3,0,0,,False
+Cairo,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+Cairo,dip_gain_pct,DIP gain (% of |SC|),dip,3,0,0,0,0,0,0,0,3,0,0,,False
+Cairo,dip_calls,DIP oracle calls,dip,3,44.3333,0.57735,44,45,44,45,44,3,44.3333,0.57735,,False
+Cairo,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0233433,0.000538309,0.0228767,0.0239323,0.0228767,0.0239323,0.0232209,3,0.0233433,0.000538309,,False
+Cairo,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.10443,0.0171058,0.0847784,0.115979,0.0847784,0.115979,0.112532,3,0.10443,0.0171058,,False
+Cairo,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,0,0,0,0,0,0,0,3,0,0,,False
+Moscow,served_share0,unpriced served share,E1,3,0.990293,0.0035035,0.986792,0.993799,0.986792,0.993799,0.990287,3,0.990293,0.0035035,,False
+Moscow,slowdown_pct0,unpriced added slowdown (%),E1,3,17.5675,1.02513,16.5538,18.6037,16.5538,18.6037,17.5451,3,17.5675,1.02513,,False
+Moscow,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Moscow,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,0.214692,0.149461,0.125615,0.387244,0.125615,0.387244,0.131217,3,0.214692,0.149461,,True
+Moscow,gain_both_pct,two-instrument gain (% of |SC|),grid,3,0.214692,0.149461,0.125615,0.387244,0.125615,0.387244,0.131217,3,0.214692,0.149461,,True
+Moscow,poa_zmc,PoA (ZMC equilibrium),E3,3,1.00219,0.00145957,1.00131,1.00387,1.00131,1.00387,1.00138,3,1.00219,0.00145957,,False
+Moscow,pos,PoS (best equilibrium found),E3,3,1.00219,0.00145957,1.00131,1.00387,1.00131,1.00387,1.00138,3,1.00219,0.00145957,,False
+Moscow,poa_worst,PoA (worst equilibrium found),E3,3,1.00219,0.00145957,1.00131,1.00387,1.00131,1.00387,1.00138,3,1.00219,0.00145957,,False
+Moscow,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,0.218132,0.145198,0.131046,0.38575,0.131046,0.38575,0.137601,3,0.218132,0.145198,,False
+Moscow,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,0.0040529,0.00701983,0,0.0121587,0,0.0121587,0,3,0.0040529,0.00701983,,False
+Moscow,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+Moscow,dip_gain_pct,DIP gain (% of |SC|),dip,3,0.218751,0.145957,0.131217,0.387244,0.131217,0.387244,0.137791,3,0.218751,0.145957,,False
+Moscow,dip_calls,DIP oracle calls,dip,3,60.3333,10.0167,50,70,50,70,61,3,60.3333,10.0167,,False
+Moscow,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0252862,0.00425568,0.0208855,0.0293803,0.0208855,0.0293803,0.0255926,3,0.0252862,0.00425568,,False
+Moscow,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.144736,0.0204274,0.131579,0.168269,0.131579,0.168269,0.134361,3,0.144736,0.0204274,,False
+Moscow,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,0.218751,0.145957,0.131217,0.387244,0.131217,0.387244,0.137791,3,0.218751,0.145957,,False
+BuenosAires,served_share0,unpriced served share,E1,3,0.358513,0.0327973,0.336663,0.396226,0.336663,0.396226,0.34265,3,0.358513,0.0327973,,False
+BuenosAires,slowdown_pct0,unpriced added slowdown (%),E1,3,0.774554,0.0282175,0.749191,0.804949,0.749191,0.804949,0.769522,3,0.774554,0.0282175,,False
+BuenosAires,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,2.49088,3.48359,0.427715,6.51294,0.427715,6.51294,0.531992,3,2.49088,3.48359,,False
+BuenosAires,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,35.4479,7.15246,27.191,39.7379,27.191,39.7379,39.4146,3,35.4479,7.15246,,False
+BuenosAires,gain_both_pct,two-instrument gain (% of |SC|),grid,3,35.4479,7.15246,27.191,39.7379,27.191,39.7379,39.4146,3,35.4479,7.15246,,False
+BuenosAires,share_delivery,delivery-only share of the combined gain,grid,3,1,0,1,1,1,1,1,3,1,0,,False
+BuenosAires,poa_zmc,PoA (ZMC equilibrium),E3,3,1.37956,0.0749884,1.29331,1.42937,1.29331,1.42937,1.416,3,1.37956,0.0749884,,False
+BuenosAires,pos,PoS (best equilibrium found),E3,3,1.33394,0.0701634,1.27168,1.40997,1.27168,1.40997,1.32017,3,1.33394,0.0701634,,False
+BuenosAires,poa_worst,PoA (worst equilibrium found),E3,3,1.42598,0.116434,1.30788,1.54068,1.30788,1.54068,1.42937,3,1.42598,0.116434,,False
+BuenosAires,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,27.3655,4.07181,22.6793,30.0389,22.6793,30.0389,29.3783,3,27.3655,4.07181,,False
+BuenosAires,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,1.81123,0.590331,1.31474,2.46397,1.31474,2.46397,1.65498,3,1.81123,0.590331,,False
+BuenosAires,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+BuenosAires,dip_gain_pct,DIP gain (% of |SC|),dip,3,37.9559,7.49884,29.3314,42.9366,29.3314,42.9366,41.5996,3,37.9559,7.49884,,False
+BuenosAires,dip_vs_grid_gain,DIP gain / best grid gain,dip,3,1.07164,0.0221194,1.04685,1.08936,1.04685,1.08936,1.07872,3,1.07164,0.0221194,,False
+BuenosAires,dip_calls,DIP oracle calls,dip,3,116,9.53939,105,122,105,122,121,3,116,9.53939,,False
+BuenosAires,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0598641,0.00504814,0.0540401,0.062988,0.0540401,0.062988,0.0625641,3,0.0598641,0.00504814,,False
+BuenosAires,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.0598641,0.00504814,0.0540401,0.062988,0.0540401,0.062988,0.0625641,3,0.0598641,0.00504814,,False
+BuenosAires,arp_gain_pct,ARP flat gain (% of |SC|),arp,3,37.7686,7.31707,29.3314,42.3747,29.3314,42.3747,41.5996,3,37.7686,7.31707,,False
+BuenosAires,arp_calls,ARP flat oracle calls,arp,3,23,1,22,24,22,24,23,3,23,1,,False
+BuenosAires,mct_br_gain_pct,marginal tariff + best responses gain (% of |SC|),arp,3,37.7686,7.31707,29.3314,42.3747,29.3314,42.3747,41.5996,3,37.7686,7.31707,,False
+BuenosAires,mct_so_gain_pct,marginal tariff + solver gain (% of |SC|),arp,3,37.8795,7.42352,29.3314,42.7074,29.3314,42.7074,41.5996,3,37.8795,7.42352,,False
+BuenosAires,arp_vs_dip_gain,ARP flat gain / DIP gain,arp,3,0.995638,0.00755441,0.986915,1,0.986915,1,1,3,0.995638,0.00755441,,False
+BuenosAires,mct_br_vs_dip_gain,tariff + BR gain / DIP gain,arp,3,0.995638,0.00755441,0.986915,1,0.986915,1,1,3,0.995638,0.00755441,,False
+BuenosAires,so_share_grid,gain share vs social optimum: grid-best,so,3,0.933416,0.019441,0.917974,0.955248,0.917974,0.955248,0.927027,3,0.933416,0.019441,,False
+BuenosAires,so_share_grid_cong,gain share vs social optimum: congestion-only,so,3,0.0600355,0.0794701,0.0102817,0.151688,0.0102817,0.151688,0.0181373,3,0.0600355,0.0794701,,False
+BuenosAires,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,3,0.933416,0.019441,0.917974,0.955248,0.917974,0.955248,0.927027,3,0.933416,0.019441,,False
+BuenosAires,so_share_dip,gain share vs social optimum: DIP,so,3,1,0,1,1,1,1,1,3,1,0,,False
+BuenosAires,so_share_arp,gain share vs social optimum: ARP flat,so,3,0.995638,0.00755441,0.986915,1,0.986915,1,1,3,0.995638,0.00755441,,False
+BuenosAires,so_share_mct_br,gain share vs social optimum: tariff + BR,so,3,0.995638,0.00755441,0.986915,1,0.986915,1,1,3,0.995638,0.00755441,,False
+BuenosAires,so_share_mct_so,gain share vs social optimum: tariff + solver,so,3,0.998221,0.00308148,0.994663,1,0.994663,1,1,3,0.998221,0.00308148,,False
+BuenosAires,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,37.9559,7.49884,29.3314,42.9366,29.3314,42.9366,41.5996,3,37.9559,7.49884,,False
+NewYork,served_share0,unpriced served share,E1,3,0.989216,0.0024878,0.986706,0.991681,0.986706,0.991681,0.98926,3,0.989216,0.0024878,,False
+NewYork,slowdown_pct0,unpriced added slowdown (%),E1,3,7.75476,0.607936,7.27406,8.43815,7.27406,8.43815,7.55208,3,7.75476,0.607936,,False
+NewYork,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0.00447917,0.00775815,0,0.0134375,0,0.0134375,0,3,0.00447917,0.00775815,,True
+NewYork,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,0.351666,0.0976583,0.269248,0.459528,0.269248,0.459528,0.326223,3,0.351666,0.0976583,,True
+NewYork,gain_both_pct,two-instrument gain (% of |SC|),grid,3,0.351666,0.0976583,0.269248,0.459528,0.269248,0.459528,0.326223,3,0.351666,0.0976583,,True
+NewYork,poa_zmc,PoA (ZMC equilibrium),E3,3,1.00352,0.000976583,1.00269,1.0046,1.00269,1.0046,1.00326,3,1.00352,0.000976583,,False
+NewYork,pos,PoS (best equilibrium found),E3,3,1.00347,0.00103479,1.00256,1.0046,1.00256,1.0046,1.00326,3,1.00347,0.00103479,,False
+NewYork,poa_worst,PoA (worst equilibrium found),E3,3,1.00352,0.000976583,1.00269,1.0046,1.00269,1.0046,1.00326,3,1.00352,0.000976583,,False
+NewYork,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,0.350371,0.0969408,0.268525,0.457426,0.268525,0.457426,0.325162,3,0.350371,0.0969408,,False
+NewYork,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,0,0,0,0,0,0,0,3,0,0,,False
+NewYork,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+NewYork,dip_gain_pct,DIP gain (% of |SC|),dip,3,0.351666,0.0976583,0.269248,0.459528,0.269248,0.459528,0.326223,3,0.351666,0.0976583,,False
+NewYork,dip_calls,DIP oracle calls,dip,3,52,3.4641,50,56,50,56,50,3,52,3.4641,,False
+NewYork,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0273058,0.00201341,0.0260824,0.0296296,0.0260824,0.0296296,0.0262055,3,0.0273058,0.00201341,,False
+NewYork,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.225999,0.0161107,0.207407,0.235849,0.207407,0.235849,0.234742,3,0.225999,0.0161107,,False
+NewYork,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,0.351666,0.0976583,0.269248,0.459528,0.269248,0.459528,0.326223,3,0.351666,0.0976583,,False
+Bombay,served_share0,unpriced served share,E1,3,0.448318,0.0162615,0.430272,0.461835,0.430272,0.461835,0.452846,3,0.448318,0.0162615,,False
+Bombay,slowdown_pct0,unpriced added slowdown (%),E1,3,4.58778,0.353388,4.18018,4.8083,4.18018,4.8083,4.77486,3,4.58778,0.353388,,False
+Bombay,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Bombay,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,2.09091,1.53015,0.374111,3.311,0.374111,3.311,2.58761,3,2.09091,1.53015,,True
+Bombay,gain_both_pct,two-instrument gain (% of |SC|),grid,3,2.16055,1.24992,0.805725,3.26881,0.805725,3.26881,2.40711,3,2.16055,1.24992,,True
+Bombay,share_delivery,delivery-only share of the combined gain,grid,3,0.877144,0.461578,0.464316,1.37551,0.464316,1.37551,0.791607,3,0.877144,0.461578,,True
+Bombay,poa_zmc,PoA (ZMC equilibrium),E3,3,1.03233,0.00758251,1.02358,1.03675,1.02358,1.03675,1.03667,3,1.03233,0.00758251,,False
+Bombay,pos,PoS (best equilibrium found),E3,3,1.03233,0.00758251,1.02358,1.03675,1.02358,1.03675,1.03667,3,1.03233,0.00758251,,False
+Bombay,poa_worst,PoA (worst equilibrium found),E3,3,1.07706,0.0326031,1.04336,1.10844,1.04336,1.10844,1.07938,3,1.07706,0.0326031,,False
+Bombay,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,3.12838,0.714555,2.30329,3.54473,2.30329,3.54473,3.53711,3,3.12838,0.714555,,False
+Bombay,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,1.04102,0.582042,0.391789,1.51613,0.391789,1.51613,1.21515,3,1.04102,0.582042,,False
+Bombay,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,-0.346706,0.12975,-0.494553,-0.251785,-0.494553,-0.251785,-0.293778,3,-0.346706,0.12975,,False
+Bombay,dip_gain_pct,DIP gain (% of |SC|),dip,3,3.59147,0.852266,2.61532,4.18773,2.61532,4.18773,3.97136,3,3.59147,0.852266,,False
+Bombay,dip_vs_grid_gain,DIP gain / best grid gain,dip,3,1.90883,1.15867,1.19945,3.24592,1.19945,3.24592,1.28112,3,1.90883,1.15867,,False
+Bombay,dip_calls,DIP oracle calls,dip,3,149.667,16.773,139,169,139,169,141,3,149.667,16.773,,False
+Bombay,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0612871,0.00677568,0.0564765,0.0690359,0.0564765,0.0690359,0.0583489,3,0.0612871,0.00677568,,False
+Bombay,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.270144,0.0373114,0.237201,0.310662,0.237201,0.310662,0.26257,3,0.270144,0.0373114,,False
+Bombay,arp_gain_pct,ARP flat gain (% of |SC|),arp,3,3.40404,0.942937,2.3576,4.18773,2.3576,4.18773,3.66681,3,3.40404,0.942937,,False
+Bombay,arp_calls,ARP flat oracle calls,arp,3,47.3333,17.5024,30,65,30,65,47,3,47.3333,17.5024,,False
+Bombay,mct_br_gain_pct,marginal tariff + best responses gain (% of |SC|),arp,3,3.23901,0.764925,2.3576,3.72907,2.3576,3.72907,3.63038,3,3.23901,0.764925,,False
+Bombay,mct_so_gain_pct,marginal tariff + solver gain (% of |SC|),arp,3,3.1868,0.934272,2.12274,3.87276,2.12274,3.87276,3.56489,3,3.1868,0.934272,,False
+Bombay,arp_vs_dip_gain,ARP flat gain / DIP gain,arp,3,0.94159,0.0517515,0.901457,1,0.901457,1,0.923313,3,0.94159,0.0517515,,False
+Bombay,mct_br_vs_dip_gain,tariff + BR gain / DIP gain,arp,3,0.902452,0.0360495,0.86691,0.938989,0.86691,0.938989,0.901457,3,0.902452,0.0360495,,False
+Bombay,so_share_grid,gain share vs social optimum: grid-best,so,3,0.640789,0.289358,0.308079,0.833718,0.308079,0.833718,0.780569,3,0.640789,0.289358,,True
+Bombay,so_share_grid_cong,gain share vs social optimum: congestion-only,so,3,0,0,0,0,0,0,0,3,0,0,,True
+Bombay,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,3,0.531556,0.353339,0.143046,0.833718,0.143046,0.833718,0.617904,3,0.531556,0.353339,,True
+Bombay,so_share_dip,gain share vs social optimum: DIP,so,3,1,0,1,1,1,1,1,3,1,0,,False
+Bombay,so_share_arp,gain share vs social optimum: ARP flat,so,3,0.94159,0.0517515,0.901457,1,0.901457,1,0.923313,3,0.94159,0.0517515,,False
+Bombay,so_share_mct_br,gain share vs social optimum: tariff + BR,so,3,0.902452,0.0360495,0.86691,0.938989,0.86691,0.938989,0.901457,3,0.902452,0.0360495,,False
+Bombay,so_share_mct_so,gain share vs social optimum: tariff + solver,so,3,0.878031,0.059063,0.811656,0.924789,0.811656,0.924789,0.897649,3,0.878031,0.059063,,False
+Bombay,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,3.59147,0.852266,2.61532,4.18773,2.61532,4.18773,3.97136,3,3.59147,0.852266,,False
+London,served_share0,unpriced served share,E1,4,0.179226,0.0243372,0.159908,0.198544,0.147993,0.198882,0.185014,3,0.181694,0.0291876,0.171823,False
+London,slowdown_pct0,unpriced added slowdown (%),E1,4,6.71202,0.735572,6.02158,7.20161,5.64965,7.26584,6.9663,3,6.68429,0.898324,6.79522,False
+London,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,4,0.334295,0.668589,0,1.00288,0,1.33718,0,3,0.445726,0.77202,0,False
+London,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,4,48.9536,14.8447,35.5694,62.3128,30.7739,67.0833,48.9785,3,49.271,18.1644,48.0014,False
+London,gain_both_pct,two-instrument gain (% of |SC|),grid,4,60.4605,23.0435,41.5405,81.2232,34.4958,90.1107,58.6177,3,59.7224,28.1645,62.6747,False
+London,share_delivery,delivery-only share of the combined gain,grid,4,0.82951,0.0868183,0.755168,0.903852,0.744454,0.915597,0.828994,3,0.850719,0.0927747,0.765882,False
+London,poa_zmc,PoA (ZMC equilibrium),E3,4,1.66673,0.211161,1.51042,1.85022,1.45289,1.94431,1.63485,3,1.65505,0.257032,1.70176,False
+London,pos,PoS (best equilibrium found),E3,4,1.64678,0.230373,1.47052,1.83902,1.41792,1.94431,1.61244,3,1.62845,0.278554,1.70176,False
+London,poa_worst,PoA (worst equilibrium found),E3,4,1.7899,0.179038,1.63837,1.94143,1.61069,1.97875,1.78508,3,1.75183,0.198461,1.9041,False
+London,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,4,39.2997,7.42055,33.6879,45.4815,31.1714,48.5679,38.7298,3,38.6539,8.94953,41.2373,False
+London,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,4,3.87081,2.6862,1.82342,6.12689,1.4247,7.42847,3.31503,3,3.69177,3.26055,4.40791,False
+London,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,4,-0.122606,0.245211,-0.367817,0,-0.490423,0,0,3,-0.163474,0.283146,0,False
+London,dip_gain_pct,DIP gain (% of |SC|),dip,4,66.911,21.5352,51.0416,85.7373,45.2885,95.3848,63.4852,3,65.8227,26.24,70.1759,False
+London,dip_vs_grid_gain,DIP gain / best grid gain,dip,4,1.13301,0.124567,1.04974,1.24928,1.04094,1.31287,1.08911,3,1.13745,0.152175,1.11968,False
+London,dip_calls,DIP oracle calls,dip,4,194.75,23.0272,176,213.5,170,221,194,3,199,26.2107,182,False
+London,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,4,0.0820245,0.0100754,0.0738338,0.0902152,0.0715488,0.0938031,0.0813731,3,0.0839931,0.0113586,0.0761188,False
+London,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,4,0.0820245,0.0100754,0.0738338,0.0902152,0.0715488,0.0938031,0.0813731,3,0.0839931,0.0113586,0.0761188,False
+London,arp_gain_pct,ARP flat gain (% of |SC|),arp,4,63.6086,21.879,46.9501,83.8681,41.2257,93.1935,60.0077,3,63.437,26.7929,64.1234,False
+London,arp_calls,ARP flat oracle calls,arp,4,59.75,12.842,49,70.5,47,74,59,3,55,10.583,74,False
+London,mct_br_gain_pct,marginal tariff + best responses gain (% of |SC|),arp,4,64.8524,22.1143,48.012,85.0221,41.9322,94.4313,61.523,3,64.386,27.0603,66.2514,False
+London,mct_so_gain_pct,marginal tariff + solver gain (% of |SC|),arp,4,65.3928,20.0939,50.041,82.1835,45.2885,91.3135,62.4847,3,63.7985,24.298,70.1759,False
+London,arp_vs_dip_gain,ARP flat gain / DIP gain,arp,4,0.946294,0.0397048,0.912022,0.980566,0.910291,0.984106,0.945389,3,0.957141,0.0407276,0.913752,False
+London,mct_br_vs_dip_gain,tariff + BR gain / DIP gain,arp,4,0.964993,0.0356722,0.934983,0.995002,0.92589,1,0.96704,3,0.971965,0.0402133,0.944076,False
+London,so_share_grid,gain share vs social optimum: grid-best,so,4,0.890043,0.0902958,0.807444,0.952688,0.76169,0.960668,0.918908,3,0.889022,0.110561,0.893108,False
+London,so_share_grid_cong,gain share vs social optimum: congestion-only,so,4,0.00588603,0.0117721,0,0.0176581,0,0.0235441,0,3,0.00784803,0.0135932,0,False
+London,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,4,0.7366,0.0958795,0.681762,0.830692,0.679508,0.879585,0.693653,3,0.754128,0.109297,0.684016,False
+London,so_share_dip,gain share vs social optimum: DIP,so,4,1,0,1,1,1,1,1,3,1,0,1,False
+London,so_share_arp,gain share vs social optimum: ARP flat,so,4,0.946294,0.0397048,0.912022,0.980566,0.910291,0.984106,0.945389,3,0.957141,0.0407276,0.913752,False
+London,so_share_mct_br,gain share vs social optimum: tariff + BR,so,4,0.964993,0.0356722,0.934983,0.995002,0.92589,1,0.96704,3,0.971965,0.0402133,0.944076,False
+London,so_share_mct_so,gain share vs social optimum: tariff + solver,so,4,0.980521,0.0226978,0.961041,1,0.957317,1,0.982382,3,0.974027,0.0227993,1,False
+London,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,4,66.911,21.5352,51.0416,85.7373,45.2885,95.3848,63.4852,3,65.8227,26.24,70.1759,False
+Paris,served_share0,unpriced served share,E1,3,0.847115,0.0351774,0.820086,0.886888,0.820086,0.886888,0.83437,3,0.847115,0.0351774,,False
+Paris,slowdown_pct0,unpriced added slowdown (%),E1,3,4.99118,0.124317,4.84784,5.0695,4.84784,5.0695,5.05621,3,4.99118,0.124317,,False
+Paris,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0.0412137,0.0713841,0,0.123641,0,0.123641,0,3,0.0412137,0.0713841,,True
+Paris,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,3.47256,1.08353,2.77187,4.72058,2.77187,4.72058,2.92524,3,3.47256,1.08353,,True
+Paris,gain_both_pct,two-instrument gain (% of |SC|),grid,3,3.56919,1.02147,2.77187,4.72058,2.77187,4.72058,3.21513,3,3.56919,1.02147,,True
+Paris,share_delivery,delivery-only share of the combined gain,grid,3,0.969945,0.0520562,0.909836,1,0.909836,1,1,3,0.969945,0.0520562,,True
+Paris,poa_zmc,PoA (ZMC equilibrium),E3,3,1.03732,0.0110569,1.02821,1.04962,1.02821,1.04962,1.03414,3,1.03732,0.0110569,,False
+Paris,pos,PoS (best equilibrium found),E3,3,1.03073,0.0167287,1.01725,1.04945,1.01725,1.04945,1.02549,3,1.03073,0.0167287,,False
+Paris,poa_worst,PoA (worst equilibrium found),E3,3,1.03732,0.0110569,1.02821,1.04962,1.02821,1.04962,1.03414,3,1.03732,0.0110569,,False
+Paris,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,3.59058,1.02334,2.74328,4.72753,2.74328,4.72753,3.30092,3,3.59058,1.02334,,False
+Paris,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,0.156495,0.096344,0.0474533,0.230109,0.0474533,0.230109,0.191923,3,0.156495,0.096344,,False
+Paris,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+Paris,dip_gain_pct,DIP gain (% of |SC|),dip,3,3.73212,1.10569,2.82066,4.96211,2.82066,4.96211,3.4136,3,3.73212,1.10569,,False
+Paris,dip_vs_grid_gain,DIP gain / best grid gain,dip,3,1.0435,0.0230415,1.0176,1.06173,1.0176,1.06173,1.05116,3,1.0435,0.0230415,,False
+Paris,dip_calls,DIP oracle calls,dip,3,114.667,5.1316,109,119,109,119,116,3,114.667,5.1316,,False
+Paris,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0468846,0.00233803,0.0442757,0.0487905,0.0442757,0.0487905,0.0475875,3,0.0468846,0.00233803,,False
+Paris,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.22158,0.0082137,0.214567,0.230616,0.214567,0.230616,0.219557,3,0.22158,0.0082137,,False
+Paris,so_share_grid,gain share vs social optimum: grid-best,so,3,0.958628,0.021379,0.941858,0.982702,0.941858,0.982702,0.951326,3,0.958628,0.021379,,True
+Paris,so_share_grid_cong,gain share vs social optimum: congestion-only,so,3,0.0146114,0.0253076,0,0.0438341,0,0.0438341,0,3,0.0146114,0.0253076,,True
+Paris,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,3,0.930321,0.0654611,0.856936,0.982702,0.856936,0.982702,0.951326,3,0.930321,0.0654611,,True
+Paris,so_share_dip,gain share vs social optimum: DIP,so,3,1,0,1,1,1,1,1,3,1,0,,False
+Paris,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,3.73212,1.10569,2.82066,4.96211,2.82066,4.96211,3.4136,3,3.73212,1.10569,,False
+Berlin,served_share0,unpriced served share,E1,3,0.889027,0.0120608,0.87667,0.900768,0.87667,0.900768,0.889644,3,0.889027,0.0120608,,False
+Berlin,slowdown_pct0,unpriced added slowdown (%),E1,3,3.67836,0.0285459,3.6572,3.71083,3.6572,3.71083,3.66706,3,3.67836,0.0285459,,False
+Berlin,gain_congestion_only_pct,congestion-only gain (% of |SC|),grid,3,0,0,0,0,0,0,0,3,0,0,,True
+Berlin,gain_delivery_only_pct,delivery-only gain (% of |SC|),grid,3,1.85387,0.292493,1.58922,2.16792,1.58922,2.16792,1.80447,3,1.85387,0.292493,,True
+Berlin,gain_both_pct,two-instrument gain (% of |SC|),grid,3,1.97858,0.405906,1.58922,2.39922,1.58922,2.39922,1.94731,3,1.97858,0.405906,,True
+Berlin,share_delivery,delivery-only share of the combined gain,grid,3,0.943414,0.050343,0.903591,1,0.903591,1,0.92665,3,0.943414,0.050343,,True
+Berlin,poa_zmc,PoA (ZMC equilibrium),E3,3,1.02095,0.00504276,1.01644,1.0264,1.01644,1.0264,1.02002,3,1.02095,0.00504276,,False
+Berlin,pos,PoS (best equilibrium found),E3,3,1.01943,0.00274336,1.01644,1.02183,1.01644,1.02183,1.02002,3,1.01943,0.00274336,,False
+Berlin,poa_worst,PoA (worst equilibrium found),E3,3,1.02095,0.00504276,1.01644,1.0264,1.01644,1.0264,1.02002,3,1.02095,0.00504276,,False
+Berlin,gap_unpriced_pct,unpriced gap to the social optimum (% of W_SO),E3,3,2.05069,0.483164,1.61746,2.57174,1.61746,2.57174,1.96288,3,2.05069,0.483164,,False
+Berlin,priced_gap_pct,"priced gap, grid-best point (% of W_SO)",E3,3,0.189107,0.234236,0.0537951,0.45958,0.0537951,0.45958,0.053946,3,0.189107,0.234236,,False
+Berlin,dip_priced_gap_pct,"priced gap, DIP (% of W_SO)",dip,3,0,0,0,0,0,0,0,3,0,0,,False
+Berlin,dip_gain_pct,DIP gain (% of |SC|),dip,3,2.09529,0.504276,1.64405,2.63963,1.64405,2.63963,2.00218,3,2.09529,0.504276,,False
+Berlin,dip_vs_grid_gain,DIP gain / best grid gain,dip,3,1.05429,0.0398822,1.02818,1.1002,1.02818,1.1002,1.0345,3,1.05429,0.0398822,,False
+Berlin,dip_calls,DIP oracle calls,dip,3,107,14.7309,94,123,94,123,104,3,107,14.7309,,False
+Berlin,dip_calls_share63,DIP calls / calls of a 63-point grid,dip,3,0.0354601,0.00442659,0.0315909,0.0402872,0.0315909,0.0402872,0.0345021,3,0.0354601,0.00442659,,False
+Berlin,dip_calls_share_exact,DIP calls / calls of the exact grid points run,dip,3,0.171845,0.0214519,0.153094,0.195238,0.153094,0.195238,0.167203,3,0.171845,0.0214519,,False
+Berlin,so_share_grid,gain share vs social optimum: grid-best,so,3,0.949389,0.0351689,0.908925,0.972594,0.908925,0.972594,0.966648,3,0.949389,0.0351689,,True
+Berlin,so_share_grid_cong,gain share vs social optimum: congestion-only,so,3,0,0,0,0,0,0,0,3,0,0,,True
+Berlin,so_share_grid_delivery,gain share vs social optimum: delivery-only,so,3,0.896399,0.0727972,0.821296,0.966648,0.821296,0.966648,0.901254,3,0.896399,0.0727972,,True
+Berlin,so_share_dip,gain share vs social optimum: DIP,so,3,1,0,1,1,1,1,1,3,1,0,,False
+Berlin,so_gap_pct_of_abs,social-optimum gain (% of |SC|),so,3,2.09529,0.504276,1.64405,2.63963,1.64405,2.63963,2.00218,3,2.09529,0.504276,,False

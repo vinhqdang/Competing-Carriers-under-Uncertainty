@@ -1,0 +1,3 @@
+city,seed,e1_bp_calls,e1_time_s,e1_unproven,e1_retried,dip_bp_calls,dip_zmc_calls,dip_time_s,dip_unproven,dip_retried,verify_bp_calls,verify_time_s,ne_bp_calls,ne_time_s,ne_unproven,ne_retried,arp_bp_calls,arp_time_s,arp_unproven,grid_points_solved,grid_bp_calls,grid_time_s,grid_unproven,grid_retried,grid_max_regret,cert_regret_fresh
+NewDelhi,3,56,6.62488,0,0,126,143,44.573,0,0,5,0.861339,65,20.1844,0,0,,,,,,,,,,
+London,3,59,1.61892,0,0,158,182,22.942,0,0,5,0.21228,54,1.86373,0,0,138,12.9802,0,62,2003,102.289,0,0,1.13687e-13,0

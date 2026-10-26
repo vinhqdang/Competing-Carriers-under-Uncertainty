@@ -1,0 +1,60 @@
+claim,city,metric,threshold,value_3seeds,value_10seeds,n_seeds,ci_lo,ci_hi,holds_3,holds_10,verdict,note
+C2 congestion-only gain below 1.7% (maximum over seeds),NewDelhi,max over seeds (%),< 1.7,0,0,3,0,0,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0
+C1 delivery-only >= half of the combined gain (ratio of mean gains),NewDelhi,share,>= 0.5,0.712409,0.712409,3,0.413586,0.972383,True,True,"holds, CI crosses threshold",2 of 3 seeds have a per-seed share >= 0.5
+C2 congestion-only gain below 1.7% (maximum over seeds),Cairo,max over seeds (%),< 1.7,0,0,3,0,0,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid)
+C2 congestion-only gain below 1.7% (maximum over seeds),Moscow,max over seeds (%),< 1.7,0,0,3,0,0,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid)
+C2 congestion-only gain below 1.7% (maximum over seeds),BuenosAires,max over seeds (%),< 1.7,6.51294,6.51294,3,0.427715,6.51294,False,False,stable (fails),1 of 3 seeds at or above 1.7; mean 2.49
+C1 delivery-only >= half of the combined gain (ratio of mean gains),BuenosAires,share,>= 0.5,1,1,3,1,1,True,True,stable (holds),3 of 3 seeds have a per-seed share >= 0.5
+C2 congestion-only gain below 1.7% (maximum over seeds),NewYork,max over seeds (%),< 1.7,0.0134375,0.0134375,3,0,0.0134375,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0.00448; lower bound (reduced grid)
+C2 congestion-only gain below 1.7% (maximum over seeds),Bombay,max over seeds (%),< 1.7,0,0,3,0,0,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid)
+C1 delivery-only >= half of the combined gain (ratio of mean gains),Bombay,share,>= 0.5,0.967767,0.967767,3,0.464316,1.37551,True,True,"holds, CI crosses threshold",2 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid
+C2 congestion-only gain below 1.7% (maximum over seeds),London,max over seeds (%),< 1.7,1.33718,1.33718,4,0,1.00288,True,True,stable (holds),0 of 4 seeds at or above 1.7; mean 0.334
+C1 delivery-only >= half of the combined gain (ratio of mean gains),London,share,>= 0.5,0.824999,0.809679,4,0.753244,0.906498,True,True,stable (holds),4 of 4 seeds have a per-seed share >= 0.5
+C2 congestion-only gain below 1.7% (maximum over seeds),Paris,max over seeds (%),< 1.7,0.123641,0.123641,3,0,0.123641,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0.0412; lower bound (reduced grid)
+C1 delivery-only >= half of the combined gain (ratio of mean gains),Paris,share,>= 0.5,0.972927,0.972927,3,0.909836,1,True,True,stable (holds),3 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid
+C2 congestion-only gain below 1.7% (maximum over seeds),Berlin,max over seeds (%),< 1.7,0,0,3,0,0,True,True,stable (holds),0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid)
+C1 delivery-only >= half of the combined gain (ratio of mean gains),Berlin,share,>= 0.5,0.936968,0.936968,3,0.903591,1,True,True,stable (holds),3 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid
+C3 PoA ordering London > BuenosAires,London - BuenosAires,mean PoA difference,>= 0.0,0.27549,0.27549,3,0.0368892,0.650999,True,True,stable (holds),ordering holds in 3 of 3 seeds
+C3 PoA ordering BuenosAires > NewDelhi,BuenosAires - NewDelhi,mean PoA difference,>= 0.0,0.199153,0.199153,3,0.135248,0.279991,True,True,stable (holds),ordering holds in 3 of 3 seeds
+C3 PoA ordering London > Buenos Aires > New Delhi in each seed,three cities,share of seeds with the full ordering,= 1,1,1,3,,,True,True,stable (holds),3 of 3 seeds
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",NewDelhi,mean PoA (ZMC equilibrium),>= 1.1,1.18041,1.16166,4,1.11857,1.21268,True,True,stable (holds),max over seeds 1.234
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",Cairo,mean PoA (ZMC equilibrium),< 1.1,1,1,3,1,1,True,True,stable (holds),max over seeds 1.000
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",Moscow,mean PoA (ZMC equilibrium),< 1.1,1.00219,1.00219,3,1.00131,1.00387,True,True,stable (holds),max over seeds 1.004
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",BuenosAires,mean PoA (ZMC equilibrium),>= 1.1,1.37956,1.37956,3,1.29331,1.42937,True,True,stable (holds),max over seeds 1.429
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",NewYork,mean PoA (ZMC equilibrium),< 1.1,1.00352,1.00352,3,1.00269,1.0046,True,True,stable (holds),max over seeds 1.005
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",Bombay,mean PoA (ZMC equilibrium),< 1.1,1.03233,1.03233,3,1.02358,1.03675,True,True,stable (holds),max over seeds 1.037
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",London,mean PoA (ZMC equilibrium),>= 1.1,1.65505,1.66673,4,1.51042,1.85022,True,True,stable (holds),max over seeds 1.944
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",Paris,mean PoA (ZMC equilibrium),< 1.1,1.03732,1.03732,3,1.02821,1.04962,True,True,stable (holds),max over seeds 1.050
+"C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi",Berlin,mean PoA (ZMC equilibrium),< 1.1,1.02095,1.02095,3,1.01644,1.0264,True,True,stable (holds),max over seeds 1.026
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",NewDelhi,max over seeds (% of W_SO),< 7.5,4.86253,4.86253,3,1.6254,4.86253,True,True,stable (holds),mean 2.96; grid-best point
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",Cairo,max over seeds (% of W_SO),< 7.5,0,0,3,0,0,True,True,stable (holds),mean 0; grid-best point; reduced grid: upper bound
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",Moscow,max over seeds (% of W_SO),< 7.5,0.0121587,0.0121587,3,0,0.0121587,True,True,stable (holds),mean 0.00405; grid-best point; reduced grid: upper bound
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",BuenosAires,max over seeds (% of W_SO),< 7.5,2.46397,2.46397,3,1.31474,2.46397,True,True,stable (holds),mean 1.81; grid-best point
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",NewYork,max over seeds (% of W_SO),< 7.5,0,0,3,0,0,True,True,stable (holds),mean 0; grid-best point; reduced grid: upper bound
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",Bombay,max over seeds (% of W_SO),< 7.5,1.51613,1.51613,3,0.391789,1.51613,True,True,stable (holds),mean 1.04; grid-best point; reduced grid: upper bound
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",London,max over seeds (% of W_SO),< 7.5,7.42847,7.42847,4,1.82342,6.12689,True,True,stable (holds),mean 3.87; grid-best point
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",Paris,max over seeds (% of W_SO),< 7.5,0.230109,0.230109,3,0.0474533,0.230109,True,True,stable (holds),mean 0.156; grid-best point; reduced grid: upper bound
+"C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London)",Berlin,max over seeds (% of W_SO),< 7.5,0.45958,0.45958,3,0.0537951,0.45958,True,True,stable (holds),mean 0.189; grid-best point; reduced grid: upper bound
+C5 DIP gain >= best grid gain (share >= 1),NewDelhi,mean gain share,>= 1.0,1.23586,1.23586,3,1.13518,1.34522,True,True,stable (holds),min 1.14
+C5 DIP uses less than 10% of the calls of a 63-point grid,NewDelhi,mean call share,< 0.1,0.0531742,0.0531742,3,0.0492142,0.0557404,True,True,stable (holds),max 0.0557
+C5 DIP uses less than 10% of the calls of a 63-point grid,Cairo,mean call share,< 0.1,0.0233433,0.0233433,3,0.0228767,0.0239323,True,True,stable (holds),max 0.0239
+C5 DIP uses less than 10% of the calls of a 63-point grid,Moscow,mean call share,< 0.1,0.0252862,0.0252862,3,0.0208855,0.0293803,True,True,stable (holds),max 0.0294
+C5 DIP gain >= best grid gain (share >= 1),BuenosAires,mean gain share,>= 1.0,1.07164,1.07164,3,1.04685,1.08936,True,True,stable (holds),min 1.05
+C5 DIP uses less than 10% of the calls of a 63-point grid,BuenosAires,mean call share,< 0.1,0.0598641,0.0598641,3,0.0540401,0.062988,True,True,stable (holds),max 0.063
+C5 DIP uses less than 10% of the calls of a 63-point grid,NewYork,mean call share,< 0.1,0.0273058,0.0273058,3,0.0260824,0.0296296,True,True,stable (holds),max 0.0296
+C5 DIP gain >= best grid gain (share >= 1),Bombay,mean gain share,>= 1.0,1.90883,1.90883,3,1.19945,3.24592,True,True,stable (holds),min 1.2; against a lower-bound grid
+C5 DIP uses less than 10% of the calls of a 63-point grid,Bombay,mean call share,< 0.1,0.0612871,0.0612871,3,0.0564765,0.0690359,True,True,stable (holds),max 0.069
+C5 DIP gain >= best grid gain (share >= 1),London,mean gain share,>= 1.0,1.13745,1.13301,4,1.04974,1.24928,True,True,stable (holds),min 1.04
+C5 DIP uses less than 10% of the calls of a 63-point grid,London,mean call share,< 0.1,0.0839931,0.0820245,4,0.0738338,0.0902152,True,True,stable (holds),max 0.0938
+C5 DIP gain >= best grid gain (share >= 1),Paris,mean gain share,>= 1.0,1.0435,1.0435,3,1.0176,1.06173,True,True,stable (holds),min 1.02; against a lower-bound grid
+C5 DIP uses less than 10% of the calls of a 63-point grid,Paris,mean call share,< 0.1,0.0468846,0.0468846,3,0.0442757,0.0487905,True,True,stable (holds),max 0.0488
+C5 DIP gain >= best grid gain (share >= 1),Berlin,mean gain share,>= 1.0,1.05429,1.05429,3,1.02818,1.1002,True,True,stable (holds),min 1.03; against a lower-bound grid
+C5 DIP uses less than 10% of the calls of a 63-point grid,Berlin,mean call share,< 0.1,0.0354601,0.0354601,3,0.0315909,0.0402872,True,True,stable (holds),max 0.0403
+C6 ARP flat gain below DIP's gain (ratio < 1),NewDelhi,mean gain ratio,< 1.0,0.865515,0.865515,3,0.74016,0.933427,True,True,stable (holds),ratio >= 0.98 in 0 of 3 seeds
+C6 marginal tariff + BR gain below DIP's gain (ratio < 1),NewDelhi,mean gain ratio,< 1.0,0.905102,0.905102,3,0.80444,1.00229,True,True,"holds, CI crosses threshold",ratio >= 0.98 in 1 of 3 seeds
+C6 ARP flat gain below DIP's gain (ratio < 1),BuenosAires,mean gain ratio,< 1.0,0.995638,0.995638,3,0.986915,1,True,True,"holds, CI crosses threshold",ratio >= 0.98 in 3 of 3 seeds
+C6 marginal tariff + BR gain below DIP's gain (ratio < 1),BuenosAires,mean gain ratio,< 1.0,0.995638,0.995638,3,0.986915,1,True,True,"holds, CI crosses threshold",ratio >= 0.98 in 3 of 3 seeds
+C6 ARP flat gain below DIP's gain (ratio < 1),Bombay,mean gain ratio,< 1.0,0.94159,0.94159,3,0.901457,1,True,True,"holds, CI crosses threshold",ratio >= 0.98 in 1 of 3 seeds
+C6 marginal tariff + BR gain below DIP's gain (ratio < 1),Bombay,mean gain ratio,< 1.0,0.902452,0.902452,3,0.86691,0.938989,True,True,stable (holds),ratio >= 0.98 in 0 of 3 seeds
+C6 ARP flat gain below DIP's gain (ratio < 1),London,mean gain ratio,< 1.0,0.957141,0.946294,4,0.912022,0.980566,True,True,stable (holds),ratio >= 0.98 in 1 of 4 seeds
+C6 marginal tariff + BR gain below DIP's gain (ratio < 1),London,mean gain ratio,< 1.0,0.971965,0.964993,4,0.934983,0.995002,True,True,stable (holds),ratio >= 0.98 in 2 of 4 seeds

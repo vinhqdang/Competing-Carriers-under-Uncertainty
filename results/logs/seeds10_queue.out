@@ -1,0 +1,5 @@
+07:07:16 201 jobs to do
+07:07:16 started ('core', 'NewDelhi', 3) on core 0
+07:07:16 started ('core', 'Cairo', 3) on core 1
+07:08:36 finished ('core', 'NewDelhi', 3) rc 0 80s
+07:08:36 started ('core', 'Moscow', 3) on core 0
