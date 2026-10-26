@@ -19,6 +19,11 @@ import Mathlib
 
 open Finset
 
+set_option linter.unusedSectionVars false
+set_option linter.deprecated false
+
+noncomputable section
+
 namespace CCU
 namespace MT
 
@@ -118,7 +123,7 @@ theorem tariff_cost_linear (hl : Lumpy G) (σ : ∀ i, P i) (i : ι) (p : P i) :
   refine Finset.sum_congr rfl (fun z _ => ?_)
   have h := hl i p z
   simp only [tariff, Par.m, Par.mS]
-  linear_combination (-(π.b z + π.κ z)) * h
+  linear_combination (-(π.b z / 2)) * h
 
 /-- Exact potential: unilateral cost differences equal unilateral social-cost differences. -/
 theorem tariff_exact_potential (hl : Lumpy G) (σ : ∀ i, P i) (i : ι) (p p' : P i) :
@@ -150,7 +155,7 @@ theorem socialOpt_isNE (hl : Lumpy G) (σ : ∀ i, P i)
 /-- An improvement step of the tariff game: carrier `i` strictly lowers its own cost
 (in particular every best-response step with an improvement is one). -/
 def Step (σ τ : ∀ i, P i) : Prop :=
-  ∃ i (p : P i), τ = Function.update σ i p ∧ Jtar π G i p σ < Jtar π G i (σ i) σ
+  ∃ (i : ι) (p : P i), τ = Function.update σ i p ∧ Jtar π G i p σ < Jtar π G i (σ i) σ
 
 /-- **Theorem 9(b), dynamics, monotonicity.** Every improvement step strictly lowers `SC`. -/
 theorem step_lowers_SC (hl : Lumpy G) {σ τ : ∀ i, P i} (h : Step π G σ τ) :
@@ -177,7 +182,7 @@ theorem reaches_NE [∀ i, Finite (P i)] (hl : Lumpy G) (σ : ∀ i, P i) :
   haveI : Finite (∀ i, P i) := Pi.finite
   let r : (∀ i, P i) → (∀ i, P i) → Prop := fun a b => SCp π G a < SCp π G b
   haveI : IsTrans _ r := ⟨fun a b c h1 h2 => lt_trans h1 h2⟩
-  haveI : IsIrrefl _ r := ⟨fun a h => lt_irrefl _ h⟩
+  haveI : Std.Irrefl r := ⟨fun a h => lt_irrefl _ h⟩
   have hwf : WellFounded r := Finite.wellFounded_of_trans_of_irrefl r
   induction σ using hwf.induction with
   | _ σ ih =>
@@ -210,3 +215,5 @@ theorem tariff_revenue (z : Z) (qz : ι → ℝ) :
 
 end MT
 end CCU
+
+end

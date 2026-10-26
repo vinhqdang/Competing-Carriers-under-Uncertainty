@@ -128,7 +128,7 @@ theorem cycle_product_lower (Z) (s t : Fin Z → Bool) :
 - Proof: `choose`, `Finset.mul_sum`, `Finset.sum_add_distrib`, `omega`.
 - Still to add (medium): derive the zone regrets from the game, i.e. regret of a product strategy = sum of zone regrets. Use `Finset.sum_le_sum` and `Fintype.piFinset` for the max over product plans.
 
-## T8. Deterministic rounding bound (Theorem 6.1(b), second term, given T3). Status: to do. Realistic.
+## T8. Deterministic rounding bound (Theorem 6.1(b), second term, given T3). Status: DONE (per coordinate; `lean/CCU/Radius.lean`)
 
 Statement: given `y`, `σ`, `J` with `G.a j (σ j) = y j` for `j ∉ J`, `∑ y = ∑ abar`, and coordinate bounds `|a j (σ j) z - y j z| ≤ s j z` and `|a i (σ i) z - abar i z| ≤ r i z`, then `|rival σ i z - (Abar - abar i) z| ≤ ∑ j ∈ J, s j z + r i z`.
 
@@ -159,6 +159,16 @@ Algebra for the FOC characterisation and the sign of `∂_c(ℰ/β)`. The deriva
 ## Suggested order
 
 1. T1, T2, T3, T4, T5, T6, T7: done.
-2. T8 (about a week).
+2. T8: done (`CCU.Radius.second_term`, `decomp`, `first_term`).
 3. T9 and T10 (about a week).
 4. T12, then T11.
+
+## Extension: new_algorithm B, C, D and the radius bound (files under `lean/CCU/`)
+
+All modules build with `cd lean && lake build CCU`, contain no `sorry`, and use only `propext`, `Classical.choice`, `Quot.sound`. The table of theorems, files and statuses is in `lean/README.md`. Summary:
+
+- `DIP.lean` (new_algorithm_C): Prop 1(a),(b) (one instrument per zone); Lemma 2, the potential-welfare identity with the lot-asymmetry term, in the pure lumpy game and in the convexified game; Thm 5, exact implementation under symmetric lots (convex feasible set, first-order argument via `nonneg_of_forall_small`); Thm 7(a) polyhedron and best-response separation, and the counting bound of Thm 7(b). Missing: Thm 6 (the `(1+rho)E` bound), the LP step and 7(c).
+- `MarginalTariff.lean` (new_algorithm_D, Thm 9): `SC` is an exact potential under the tariff, equilibria = unilateral social optima, price of stability 1, improvement dynamics lower `SC`, cannot cycle and reach an equilibrium; the flat-charge identity and the revenue formula. Full statement.
+- `ARP.lean` (new_algorithm_D, Thm 1 and Thm 3): strong convexity gives the strong-monotonicity inequality and (lip); from it, the plain contraction with ratio rho, the damped contraction (ratio `1-theta`, at most the paper's, `rho/(2+rho)` at `theta=2/(2+rho)`), the iterate bounds and the aggregate bound, for an arbitrary (not only diagonal) response map. Missing: the conjugate `F*` and differentiability, Thm 2 (dual problem, existence of the fixed point).
+- `BRL.lean` (new_algorithm_B): the budget identity on a finite level grid (min attained), the inf-convolution split of the budget between two partial paths, the completion window, validity of functional dominance and the two counter-examples, quantile-vector dominance. The p-box and upper-prevision layer, integrality and the algorithm's exactness theorem are not formalised; the window lemma takes the slope conditions as hypotheses.
+- `Radius.lean` (main.tex Thm 6.1(b),(c)): the `(N-1)rho` term, the decomposition (eq:decomp) and the rounding bound `k sigma + rho`, per coordinate. Missing: Hoeffding, the LP construction.

@@ -16,6 +16,11 @@ import CCU.SegmentLimit
 
 open Finset
 
+set_option linter.unusedSectionVars false
+set_option linter.deprecated false
+
+noncomputable section
+
 namespace CCU
 namespace ARP
 
@@ -45,11 +50,11 @@ theorem lip_of_strongMono {m : Z → ℝ} (hm : ∀ z, 0 < m z) {Qf : (Z → ℝ
     have hz := hm z
     have : (u₂ z - u₁ z) * (Qf u₁ z - Qf u₂ z)
         = (m z)⁻¹ * (u₁ z - u₂ z) ^ 2 / 2 + m z * (Qf u₁ z - Qf u₂ z) ^ 2 / 2
-          - (m z)⁻¹ / 2 * (m z * (Qf u₁ z - Qf u₂ z) + (u₂ z - u₁ z)) ^ 2 := by
+          - (m z)⁻¹ / 2 * (m z * (Qf u₁ z - Qf u₂ z) - (u₂ z - u₁ z)) ^ 2 := by
       field_simp
       ring
     rw [this]
-    have : 0 ≤ (m z)⁻¹ / 2 * (m z * (Qf u₁ z - Qf u₂ z) + (u₂ z - u₁ z)) ^ 2 :=
+    have : 0 ≤ (m z)⁻¹ / 2 * (m z * (Qf u₁ z - Qf u₂ z) - (u₂ z - u₁ z)) ^ 2 :=
       mul_nonneg (by positivity) (sq_nonneg _)
     linarith
   have h1 := h u₁ u₂
@@ -65,7 +70,7 @@ theorem nm_le_rho_nk {m κ : Z → ℝ} (hm : ∀ z, 0 < m z) (hκ : ∀ z, 0 < 
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum (fun z _ => ?_)
   have h1 : (m z)⁻¹ ≤ ρ * (κ z)⁻¹ := by
-    rw [inv_eq_one_div, mul_one_div, div_le_div_iff₀ (hm z) (hκ z)]
+    rw [← div_eq_mul_inv, inv_eq_one_div, div_le_div_iff₀ (hm z) (hκ z)]
     linarith [hρ z]
   nlinarith [sq_nonneg (v z)]
 
@@ -191,12 +196,12 @@ theorem damped_ratio_opt {ρ : ℝ} (hρ0 : 0 ≤ ρ) : 1 - 2 / (2 + ρ) = ρ / 
 /-- `‖v‖_{κ⁻¹}`. -/
 noncomputable def nk (κ : Z → ℝ) (v : Z → ℝ) : ℝ := Real.sqrt (nk2 κ v)
 
-theorem nk_le_of_sq {κ : Z → ℝ} {v w : Z → ℝ} {λ' : ℝ} (hλ : 0 ≤ λ')
-    (h : nk2 κ v ≤ λ' ^ 2 * nk2 κ w) : nk κ v ≤ λ' * nk κ w := by
+theorem nk_le_of_sq {κ : Z → ℝ} {v w : Z → ℝ} {lam : ℝ} (hlam : 0 ≤ lam)
+    (h : nk2 κ v ≤ lam ^ 2 * nk2 κ w) : nk κ v ≤ lam * nk κ w := by
   unfold nk
-  calc Real.sqrt (nk2 κ v) ≤ Real.sqrt (λ' ^ 2 * nk2 κ w) := Real.sqrt_le_sqrt h
-    _ = λ' * Real.sqrt (nk2 κ w) := by
-      rw [Real.sqrt_mul (sq_nonneg λ'), Real.sqrt_sq hλ]
+  calc Real.sqrt (nk2 κ v) ≤ Real.sqrt (lam ^ 2 * nk2 κ w) := Real.sqrt_le_sqrt h
+    _ = lam * Real.sqrt (nk2 κ w) := by
+      rw [Real.sqrt_mul (sq_nonneg lam), Real.sqrt_sq hlam]
 
 /-- **Theorem 3(a), norm form:** `‖u⁺ - u*⁺‖ ≤ ρ ‖u - u*‖` for the plain step. -/
 theorem plain_contraction {b κ c : Z → ℝ} (hb : ∀ z, 0 < b z) (hκ : ∀ z, 0 < κ z)
@@ -221,7 +226,7 @@ theorem damped_contraction_paper {b κ c : Z → ℝ} (hb : ∀ z, 0 < b z) (hκ
     (u₁ u₂ : Z → ℝ) :
     nk κ (fun z => Tdamp θ κ c Qf u₁ z - Tdamp θ κ c Qf u₂ z)
       ≤ Real.sqrt (1 - 2 * θ * (1 + ρ) / (2 + ρ)) * nk κ (fun z => u₁ z - u₂ z) := by
-  have h1 := damped_contraction_sq hb hκ hρ0 hρ h hθ0 hθ u₁ u₂
+  have h1 := damped_contraction_sq (c := c) hb hκ hρ0 hρ h hθ0 hθ u₁ u₂
   have h2 := damped_factor_le hρ0 hθ0 hθ
   have h3 : nk2 κ (fun z => Tdamp θ κ c Qf u₁ z - Tdamp θ κ c Qf u₂ z)
       ≤ (Real.sqrt (1 - 2 * θ * (1 + ρ) / (2 + ρ))) ^ 2 * nk2 κ (fun z => u₁ z - u₂ z) := by
@@ -230,11 +235,11 @@ theorem damped_contraction_paper {b κ c : Z → ℝ} (hb : ∀ z, 0 < b z) (hκ
   exact nk_le_of_sq (Real.sqrt_nonneg _) h3
 
 /-- Iteration of a contraction with a fixed point: `‖u_t - u*‖ ≤ λ^t ‖u₀ - u*‖`. -/
-theorem iterate_bound {κ : Z → ℝ} (f : (Z → ℝ) → (Z → ℝ)) (ustar : Z → ℝ) {λ' : ℝ}
-    (hλ : 0 ≤ λ')
-    (hcontr : ∀ a b, nk κ (fun z => f a z - f b z) ≤ λ' * nk κ (fun z => a z - b z))
+theorem iterate_bound {κ : Z → ℝ} (f : (Z → ℝ) → (Z → ℝ)) (ustar : Z → ℝ) {lam : ℝ}
+    (hlam : 0 ≤ lam)
+    (hcontr : ∀ a b, nk κ (fun z => f a z - f b z) ≤ lam * nk κ (fun z => a z - b z))
     (hfix : f ustar = ustar) (u : ℕ → (Z → ℝ)) (hstep : ∀ t, u (t + 1) = f (u t)) :
-    ∀ t, nk κ (fun z => u t z - ustar z) ≤ λ' ^ t * nk κ (fun z => u 0 z - ustar z) := by
+    ∀ t, nk κ (fun z => u t z - ustar z) ≤ lam ^ t * nk κ (fun z => u 0 z - ustar z) := by
   intro t
   induction t with
   | zero => simp
@@ -244,10 +249,10 @@ theorem iterate_bound {κ : Z → ℝ} (f : (Z → ℝ) → (Z → ℝ)) (ustar 
       rw [hstep t, hfix]
     rw [e]
     calc nk κ (fun z => f (u t) z - f ustar z)
-        ≤ λ' * nk κ (fun z => u t z - ustar z) := hcontr _ _
-      _ ≤ λ' * (λ' ^ t * nk κ (fun z => u 0 z - ustar z)) :=
-          mul_le_mul_of_nonneg_left ih hλ
-      _ = λ' ^ (t + 1) * nk κ (fun z => u 0 z - ustar z) := by ring
+        ≤ lam * nk κ (fun z => u t z - ustar z) := hcontr _ _
+      _ ≤ lam * (lam ^ t * nk κ (fun z => u 0 z - ustar z)) :=
+          mul_le_mul_of_nonneg_left ih hlam
+      _ = lam ^ (t + 1) * nk κ (fun z => u 0 z - ustar z) := by ring
 
 /-- A fixed point of `T` is a fixed point of every damped step. -/
 theorem damp_fixed {κ c : Z → ℝ} {Qf : (Z → ℝ) → (Z → ℝ)} {ustar : Z → ℝ} (θ : ℝ)
@@ -276,7 +281,7 @@ theorem damped_rounds {b κ c : Z → ℝ} (hb : ∀ z, 0 < b z) (hκ : ∀ z, 0
   have hθ0 : 0 < 2 / (2 + ρ) := by positivity
   have hθ : 2 / (2 + ρ) * (2 + ρ) ≤ 2 := by
     rw [div_mul_cancel₀ _ hpos.ne']
-  have hc := damped_contraction hb hκ hρ0 hρ h hθ0 hθ
+  have hc := damped_contraction (c := c) hb hκ hρ0 hρ h hθ0 hθ
   rw [damped_ratio_opt hρ0] at hc
   exact iterate_bound (κ := κ) (Tdamp (2 / (2 + ρ)) κ c Qf) ustar (by positivity) hc
     (damp_fixed _ hfix) u hstep
@@ -328,7 +333,7 @@ theorem strong_convex_growth {𝒬 : Set (Z → ℝ)} (h𝒬 : Convex ℝ 𝒬) 
     refine nonneg_of_forall_small (B := (1 / 2) * ∑ z, m z * (Q₂ z - Q₁ z) ^ 2)
       (by linarith) (fun t ht0 ht1 => ?_)
     have hmem : (1 - t) • Q₁ + t • Q₂ ∈ 𝒬 := h𝒬 hQ₁ hQ₂ (by linarith) ht0.le (by ring)
-    have hc := hF.2 hQ₁ hQ₂ (a := 1 - t) (b := t) (by linarith) ht0.le (by ring)
+    have hc := hF.2 hQ₁ hQ₂ (by linarith : (0 : ℝ) ≤ 1 - t) ht0.le (by ring : (1 - t) + t = 1)
     have hm' := hmin _ hmem
     have e1 : ∀ z, ((1 - t) • Q₁ + t • Q₂) z = (1 - t) * Q₁ z + t * Q₂ z := fun z => by
       simp
@@ -361,3 +366,5 @@ theorem strongMono_of_strongConvex {𝒬 : Set (Z → ℝ)} (h𝒬 : Convex ℝ 
 
 end ARP
 end CCU
+
+end

@@ -16,6 +16,11 @@ import CCU.SegmentLimit
 
 open Finset
 
+set_option linter.unusedSectionVars false
+set_option linter.deprecated false
+
+noncomputable section
+
 namespace CCU
 namespace DIP
 
@@ -398,9 +403,10 @@ theorem card_nontrivial [∀ i, Fintype (P i)] [∀ i, DecidableEq (P i)] (σ : 
   rw [Fintype.card_sigma]
   refine Finset.sum_congr rfl (fun i _ => ?_)
   rw [Fintype.card_subtype_compl, Fintype.card_subtype_eq]
-  rfl
 
 end Polyhedron
 
 end DIP
 end CCU
+
+end

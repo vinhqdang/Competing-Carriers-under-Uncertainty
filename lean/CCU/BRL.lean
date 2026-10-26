@@ -18,6 +18,11 @@ import Mathlib
 
 open Finset
 
+set_option linter.unusedSectionVars false
+set_option linter.deprecated false
+
+noncomputable section
+
 namespace CCU
 namespace BRL
 
@@ -421,3 +426,5 @@ end Compare
 
 end BRL
 end CCU
+
+end
