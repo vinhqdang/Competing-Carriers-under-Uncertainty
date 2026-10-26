@@ -282,11 +282,12 @@ def devices_tables(out_md: list):
     df = load("devices")
     if df.empty:
         return
+    df["key"] = df.name + "@" + df.n.astype(str)
     df.to_csv(RES / "brl_bench_devices.csv", index=False, float_format="%.8g")
-    base = df[df.cfg == "base_ng8"].set_index("name")
+    base = df[df.cfg == "base_ng8"].set_index("key")
     rows = []
     for cfg, sub in df.groupby("cfg"):
-        s = sub.set_index("name")
+        s = sub.set_index("key")
         common = [i for i in s.index if i in base.index and (s.loc[i].get("status") is not None)]
         both = [i for i in common if s.loc[i, "status"] == "converged" and base.loc[i, "status"] == "converged"]
         sp = [base.loc[i, "time"] / s.loc[i, "time"] for i in both]
@@ -301,8 +302,8 @@ def devices_tables(out_md: list):
     out_md.append("\n## B2. Scale-up devices at the root (set-partitioning LP by column generation)\n")
     out_md.append(md_table(t, {"speedup_median": "{:.2f}", "speedup_min": "{:.2f}", "speedup_max": "{:.2f}", "lp_diff_max": "{:.2e}",
                                "time_total": "{:.0f}", "created_total": "{:.3g}"}))
-    piv = df.pivot_table(index="name", columns="cfg", values="time", aggfunc="first")
-    st = df.pivot_table(index="name", columns="cfg", values="status", aggfunc="first")
+    piv = df.pivot_table(index="key", columns="cfg", values="time", aggfunc="first")
+    st = df.pivot_table(index="key", columns="cfg", values="status", aggfunc="first")
     cell = piv.round(1).astype(str) + st.map(lambda s: "" if s == "converged" else "*")
     out_md.append("\nRoot time per instance in seconds (* = time limit or label cap before convergence):\n")
     out_md.append(md_table(cell.reset_index()))

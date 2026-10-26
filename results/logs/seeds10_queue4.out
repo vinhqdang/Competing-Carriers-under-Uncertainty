@@ -1,0 +1,17 @@
+15:45:57 64 jobs to do
+15:46:27 started ('core', 'Paris', 7) on core 1
+15:46:32 finished ('core', 'Paris', 7) rc 0 5s
+15:46:32 started ('core', 'Cairo', 8) on core 1
+15:46:37 finished ('core', 'Cairo', 8) rc 0 5s
+15:46:37 started ('core', 'Moscow', 8) on core 1
+16:07:16 finished ('core', 'Moscow', 8) rc 0 1238s
+16:07:16 started ('core', 'NewYork', 8) on core 1
+16:12:17 finished ('core', 'NewYork', 8) rc 0 301s
+16:12:17 started ('core', 'Bombay', 8) on core 1
+16:29:05 started ('core', 'Paris', 8) on core 0
+16:44:17 finished ('core', 'Paris', 8) rc 0 912s
+16:44:17 started ('core', 'Berlin', 8) on core 0
+16:52:08 finished ('core', 'Bombay', 8) rc 0 2392s
+deadline reached, no new jobs
+17:25:09 finished ('core', 'Berlin', 8) rc 0 2452s
+queue finished

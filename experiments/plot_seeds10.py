@@ -63,7 +63,8 @@ def save(fig, name):
 def main():
     runs = pd.read_csv(RES / "seeds10_runs.csv")
     n = runs.groupby("city").seed.nunique().min()
-    cap = f"filled: mean over all seeds with bootstrap 95% CI (n = {runs.seed.nunique()} seeds, min {n} per city); open: seeds 0-2; dots: seeds; * reduced exact grid (lower bound)"
+    cap = ("filled: mean with bootstrap 95% CI over all seeds; open: mean of seeds 0-2; dots: seeds. Grid quantities: 10 seeds for New Delhi, Buenos Aires, London; "
+           "seeds 0-2 only (reduced exact grid, lower bound) for the cities marked *. Equilibrium/DIP quantities: 8-10 seeds.")
     fig, ax = plt.subplots(1, 3, figsize=(13, 4.2))
     panel(ax[0], runs, "gain_congestion_only_pct", "Congestion-only gain (threshold 1.7%)", 1.7, "% of |SC|")
     panel(ax[1], runs, None, "Delivery-only share of the combined gain (ratio of means)", 0.5, "share", ratio=("gain_delivery_only_pct", "gain_both_pct"))
@@ -101,7 +102,7 @@ def main():
     panel(ax[1], runs, "so_share_arp", "", None, "", cities=cs, offset=0.0, color="#d98a1f", show_seeds=False, label="ARP flat")
     panel(ax[1], runs, "so_share_mct_br", "", None, "", cities=cs, offset=-0.2, color="#2e8b57", show_seeds=False, label="tariff + BR")
     ax[1].legend(loc="lower right", fontsize=7)
-    fig.text(0.01, 0.005, "gain share = (SC unpriced - SC method) / (SC unpriced - SC social optimum); " + cap[:110] + "; cities with social-optimum gap >= 2% only", fontsize=7, color="#555")
+    fig.text(0.01, 0.005, "gain share = (SC unpriced - SC method) / (SC unpriced - SC social optimum); " + "cities with social-optimum gap >= 2% only; ARP: 10 seeds in New Delhi, Buenos Aires, London", fontsize=7, color="#555")
     save(fig, "seeds10_forest_so_share.png")
 
 

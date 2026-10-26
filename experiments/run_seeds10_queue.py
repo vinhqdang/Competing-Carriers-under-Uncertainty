@@ -41,6 +41,21 @@ def is_done(phase, c, s):
 
 def job_list(phases):
     jobs = []
+    if os.environ.get("S10_ORDER") == "final":
+        # time budget: seeds 3-8 of every city, then ARP of the heavy cities, then seed 9 of the heavy cities (cheap first)
+        for s in range(3, 9):
+            for c in CITIES:
+                jobs.append(("core", c, s))
+        for c in ("Bombay", "Berlin", "NewYork", "Cairo", "Moscow", "Paris"):
+            for s in range(3, 9):
+                jobs.append(("arp", c, s))
+        for c in ("NewYork", "Cairo", "Bombay", "Moscow", "Berlin", "Paris"):
+            jobs.append(("core", c, 9))
+        for s in (0, 1, 2):
+            for c in CITIES:
+                if c not in ARP_OLD:
+                    jobs.append(("arp", c, s))
+        return [j for j in jobs if j[0] in phases]
     if os.environ.get("S10_ORDER") == "light_first":
         # cheap work for the cities with the full grid first (headline), then the remaining heavy core jobs seed by seed
         for s in NEW:

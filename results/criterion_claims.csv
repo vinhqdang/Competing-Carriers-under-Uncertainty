@@ -1,0 +1,10 @@
+city,seed,criterion,grid_points,gain_best_pct,best_config,best_theta,best_sfrac,gain_delivery_only_pct,best_sfrac_delivery_only,gain_congestion_only_pct,best_theta_congestion_only,gain_both_best_pct,delivery_share,congestion_share,subsidy_dominates,best_delivery_is_subsidy,dip_gain_true_pct,dip_ge_grid,dip_gain_share_of_grid,dip_calls_share_grid,dip_calls_share_63,dip_s_over_fee,dip_u_q_weighted_over_fee
+BuenosAires,0,saa,16,17.4765,both,16,-0.2,15.9548,-0.4,3.93546,1,17.4765,0.912926,0.225185,True,True,17.1004,False,0.978476,0.255765,0.0608965,-0.386228,-0.240363
+BuenosAires,1,saa,16,15.9384,both,1,-0.4,15.3543,-0.4,0.860102,1,15.9384,0.963354,0.0539643,True,True,16.6939,True,1.0474,0.243243,0.0579151,-0.378873,-0.272135
+BuenosAires,2,saa,16,14.0099,both,1,-0.4,13.2971,-0.4,4.36606,1,14.0099,0.949123,0.311641,True,True,14.6063,True,1.04257,0.256356,0.0610371,-0.42167,-0.237321
+London,0,saa,16,41.5827,both,4,-0.4,40.5451,-0.4,0,1,41.5827,0.975049,0,True,True,42.5756,True,1.02388,0.438017,0.10429,-0.389288,-0.261596
+London,1,saa,16,57.4903,both,4,-0.4,53.6562,-0.4,0,1,57.4903,0.933309,0,True,True,58.6967,True,1.02099,0.381188,0.0907591,-0.406473,-0.258322
+London,2,saa,16,50.42,both,4,-0.4,47.9566,-0.4,0,1,50.42,0.951143,0,True,True,54.4865,True,1.08065,0.397993,0.0947603,-0.397227,-0.249887
+NewDelhi,0,saa,16,19.2933,delivery_only,0,-0.2,19.2933,-0.2,0,1,17.9655,1,0,True,True,22.4838,True,1.16537,0.370732,0.0882695,-0.447713,-0.185453
+NewDelhi,1,saa,16,21.1585,both,1,-0.2,20.2871,-0.2,0,4,21.1585,0.958817,0,True,True,21.9102,True,1.03553,0.364238,0.0867234,-0.40367,-0.178799
+NewDelhi,2,saa,16,7.01514,delivery_only,0,-0.1,7.01514,-0.1,0,1,3.64193,1,0,True,True,12.1487,True,1.73179,0.416107,0.0990732,-0.498422,-0.166408

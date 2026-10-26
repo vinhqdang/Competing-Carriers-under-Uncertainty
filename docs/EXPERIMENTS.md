@@ -1,6 +1,8 @@
 # Game-theoretic experiments: ZMC with a BRL carrier oracle on nine city maps
 
 > **Update 2026-10-24.** The files in `results/` and `figures/` now come from the **exact (branch-and-price) oracle**, see the section "Exact oracle re-run" (after "Branch-and-price for BRL").
+>
+> **Update 2026-10-26.** The exact-oracle study was extended to ten seeds (0-9) for E1, E3, DIP and, for New Delhi, Buenos Aires and London, the full leader grid and ARP: see the section "Ten seeds" (end of this page). Several three-seed statements of Section 4a change there (congestion-only bound, PoA ordering in every seed).
 > The tables and numbers of Sections 4 and 4a below were written for the price-and-branch run (kept in `results/pb_old/`, `figures/pb_old/`) and are not updated; where the two differ, the exact re-run is the one to quote.
 
 All numbers come from the files in `results/` (CSV per experiment and city; `results/tables.md` holds every table of
@@ -1103,3 +1105,383 @@ The game-level findings are **not** invariant to the imprecision model. The orde
 * **Regimes where they lose:** expected cost in distribution (1.4-9% regret, falling like the DKW width; non-inferior to SAA within 0.5 pp only for n > 60), moderate shocks, heavier tails of the same mean, cities where the shift constraint is slack, and high confidence levels. The unknown-dependence worst case is not what costs: the band is (comonotone with empirical marginals is as good as SAA; independent marginals with the band are 1.0-2.0 pp cheaper than comonotone UD at the same confidence, but have the same overtime and tail profile).
 * **Wording for the paper:** "We model travel-time ambiguity with DKW probability boxes and an unknown-dependence worst case because the resulting criterion is a conservative upper bound whose gap to the true expected cost shrinks with the sample size, and because it protects against the overtime tail. In an out-of-sample experiment on nine metropolitan instances (20 draws each, n = 10-60 days) the p-box plan has 1.4-9% higher expected cost than the SAA plan at n <= 60, halves the probability of overtime and lowers the CVaR 0.95 of the daily cost by 3-5%; it overtakes SAA in expected cost under a common congestion shock of about +0.4 (n = 60). A type-1 Wasserstein ball with cross-validated radius reproduces SAA, and a CVaR criterion matches the tail benefit without a bound. We do not claim that p-boxes minimise expected cost; the equilibrium results should be read as results for carriers who plan against a guaranteed upper bound: replacing them by SAA carriers doubles service at the unpriced equilibrium and lowers the price of anarchy (Table X)."
 * **Limits:** one slice per city (seed 0 of the BRL study), twenty draws; plans from a heuristic validated against branch-and-price in 9 instances (<= 0.1% gap); the shock and heavy-tail laws are one family each; the Wasserstein radius for the closed form is a convention (the sqrt-n and Fournier-Guillin rates have unspecified constants); the game uses a heuristic oracle without a certificate for SAA and Wasserstein carriers; CVaR is route-wise (an upper bound on the CVaR of the plan).
+
+## Ten seeds
+
+Date: 2026-10-26. Reviewer-risk mitigation: the headline findings rested on three seeds (0-2). The exact-oracle study was extended to seeds 3-9
+(seed s re-draws depots, the 22 customer zones per carrier, the sectors and the 30 observed days, as before). Every number below is computed with the exact oracle
+(branch-and-price, 20 s per call, 120 s retry for best responses and regrets; the protocol of "Exact oracle re-run"). Code: `experiments/run_seeds10.py` (one
+city, one seed, phases `core`, `arp`, `grid`), the scheduler `run_seeds10_queue.py`, `summarize_seeds10.py`, `seeds10_report.py`, `plot_seeds10.py`, `seeds10_doc.py` (this section), `tests/test_seeds10.py`.
+Status and restarts: `results/PROGRESS_seeds10.md`. Outputs: `results/seeds10_runs.csv` (= `summary_seeds10.csv`, one row per city and seed, seeds 0-9),
+`seeds10_grid_points.csv`, `seeds10_oracle.csv`, `summary_seeds10_ci.csv` (n, mean, sd, bootstrap 95% CI, min, max, mean of seeds 0-2 per city and quantity),
+`seeds10_conclusions.csv`, `tables_seeds10*.md`, `figures/seeds10_forest_{gain,poa,dip_arp,so_share}.png`.
+
+**Statistics.** Per city and quantity: n seeds, mean, sd (n-1), percentile bootstrap 95% CI of the mean (10,000 resamples of the seeds, generator seed 20261026; ratio quantities such as
+the delivery-only share are also given as ratio of mean gains with a paired bootstrap). The seeds draw different games, so the CI describes the spread over the sampled slices, not calibration uncertainty.
+
+**Coverage.** Seeds 0-2 are the earlier runs (E1, E3, E2 exact points, DIP, ARP where it existed); seeds 3-9 are new.
+
+| city | E1 / E3 / DIP seeds | grid | ARP seeds | grid mode |
+|---|---|---|---|---|
+| NewDelhi | 0-9 (10) | 0-9 (10) | 0-9 (10) | full 63 points (all seeds) |
+| Cairo | 0-8 (9) | 0-2 (3) | - (0) | reduced exact set, seeds 0-2 only (lower bound) |
+| Moscow | 0-8 (9) | 0-2 (3) | - (0) | reduced exact set, seeds 0-2 only (lower bound) |
+| BuenosAires | 0-9 (10) | 0-9 (10) | 0-9 (10) | full 63 points (all seeds) |
+| NewYork | 0-8 (9) | 0-2 (3) | - (0) | reduced exact set, seeds 0-2 only (lower bound) |
+| Bombay | 0-8 (9) | 0-2 (3) | 0-4 (5) | reduced exact set, seeds 0-2 only (lower bound) |
+| London | 0-9 (10) | 0-9 (10) | 0-9 (10) | full 63 points (all seeds) |
+| Paris | 0-8 (9) | 0-2 (3) | - (0) | reduced exact set, seeds 0-2 only (lower bound) |
+| Berlin | 0-8 (9) | 0-2 (3) | - (0) | reduced exact set, seeds 0-2 only (lower bound) |
+
+**What was done and what was reduced (read before using any number).**
+* E1 (unpriced equilibrium, fresh-oracle certified), the social optimum (E3 'SO_main' = the first target of DIP: column generation + rounding), five further equilibria (best response from the empty
+  profile, from full service, from three random price vectors: PoS and worst-equilibrium PoA), DIP (charges, priced equilibrium, regrets against the pooled and a fresh exact oracle) and ARP (flat ARP, successive averages when it cycles, marginal tariff with best responses, marginal tariff with the E3 solver) were run for seeds 3-9.
+  The PoA uses the E3 social optimum as before (`W_SO / W_NE`). The E3 equilibrium set is the same six starts; the broad objective (background-delay proxy) and the E4 imprecision sweeps were **not** extended.
+* **E2 grid.** New Delhi, Buenos Aires and London: the **full 63-point exact grid for all seven new seeds** (so ten seeds). The other six cities: **no new grid points were run**. The planned coarse exact set (14 points per run,
+  `run_seeds10.py ... grid` for these cities: implemented but never run, hence untested) did not fit the time budget: the DIP stage alone costs 15-60 minutes per run in Paris, Bombay, Moscow, Cairo and Berlin (pricing calls hitting the 20 s limit), and the core phase (E1, DIP, further equilibria) used the whole budget of the two cores.
+  Consequently every grid-derived quantity of Cairo, Moscow, New York, Mumbai, Paris and Berlin (congestion-only, delivery-only and two-instrument gain, the delivery-only share, the priced gap measured at the grid-best point, DIP gain relative to the grid, gain share of the grid) still has **n = 3**
+  and is a **lower bound** of the 63-point grid value (marked * in the tables). Their equilibrium, PoA, PoS and DIP quantities have 8-9 seeds. Seed 9 of these six cities was not run (9 seeds: 0-8).
+* ARP: ten seeds for New Delhi, Buenos Aires and London; Mumbai seeds 0-4 (seeds 5-8 were not finished: its ARP runs take 10-20 minutes each); the other five cities have no ARP run. The claim "ARP versus DIP" is therefore a three-city claim at ten seeds.
+* The social optimum used for gain shares is the **E3 optimum** (exact oracle, convexified column generation + rounding + polish); it is not a proven global optimum. The same shares against the best social cost found
+  (minimum of the E3 optimum, DIP's multi-start target and the DIP profile) are in `seeds10_runs.csv` as `so_share_best_*`; DIP implements its own target, so its share against the best found is 1 by construction, which is why the E3 optimum is the primary reference (DIP can exceed 1 against it: in Mumbai the E3 optimum is 5% worse than DIP's target).
+  Shares are not reported where the social-optimum gain is below 0.5% of |SC| (Cairo, Moscow in most seeds, New York in most seeds).
+
+**Quantity by quantity** (mean (sd) [bootstrap 95% CI of the mean]; the first columns count seeds; * = reduced grid, grid quantities from seeds 0-2 only, lower bounds):
+
+| city | n (E1/E3/DIP) | PoA | PoA worst NE | DIP gain % | cong.-only % | del.-only % | both % | priced gap % | n (grid) |
+|---|---|---|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.18 (0.07) [1.14, 1.23] | 1.20 (0.06) [1.17, 1.24] | 18.3 (7.1) [14.2, 22.6] | 0.32 (0.93) [0.00, 0.91] | 12.1 (5.7) [8.9, 15.5] | 14.6 (5.0) [11.7, 17.6] | 2.95 (2.11) [1.79, 4.25] | 10 |
+| Cairo * | 9 | 1.00 (0.00) [1.00, 1.00] | 1.00 (0.00) [1.00, 1.00] | 0.0 (0.0) [0.0, 0.0] | 0.00 (0.00) [0.00, 0.00] | 0.0 (0.0) [0.0, 0.0] | 0.0 (0.0) [0.0, 0.0] | 0.00 (0.00) [0.00, 0.00] | 3 |
+| Moscow * | 9 | 1.00 (0.00) [1.00, 1.00] | 1.00 (0.00) [1.00, 1.00] | 0.2 (0.1) [0.1, 0.3] | 0.00 (0.00) [0.00, 0.00] | 0.2 (0.1) [0.1, 0.4] | 0.2 (0.1) [0.1, 0.4] | 0.00 (0.01) [0.00, 0.01] | 3 |
+| BuenosAires | 10 | 1.38 (0.07) [1.33, 1.42] | 1.43 (0.08) [1.38, 1.48] | 37.7 (7.4) [33.3, 41.9] | 2.36 (2.42) [1.02, 3.89] | 34.6 (6.9) [30.4, 38.5] | 35.4 (7.4) [31.1, 39.5] | 1.81 (0.83) [1.30, 2.29] | 10 |
+| NewYork * | 9 | 1.00 (0.00) [1.00, 1.00] | 1.00 (0.00) [1.00, 1.00] | 0.3 (0.2) [0.2, 0.5] | 0.00 (0.01) [0.00, 0.01] | 0.4 (0.1) [0.3, 0.5] | 0.4 (0.1) [0.3, 0.5] | 0.00 (0.00) [0.00, 0.00] | 3 |
+| Bombay * | 9 | 1.06 (0.02) [1.04, 1.07] | 1.10 (0.04) [1.08, 1.13] | 5.9 (2.4) [4.4, 7.3] | 0.00 (0.00) [0.00, 0.00] | 2.1 (1.5) [0.4, 3.3] | 2.2 (1.2) [0.8, 3.3] | 1.04 (0.58) [0.39, 1.52] | 3 |
+| London | 10 | 1.53 (0.22) [1.41, 1.66] | 1.63 (0.22) [1.50, 1.76] | 53.6 (21.6) [41.7, 66.7] | 1.12 (2.05) [0.00, 2.50] | 39.8 (18.9) [29.2, 51.1] | 48.4 (22.0) [36.3, 61.8] | 3.38 (2.50) [2.01, 4.89] | 10 |
+| Paris * | 9 | 1.03 (0.01) [1.03, 1.04] | 1.03 (0.01) [1.03, 1.04] | 3.0 (0.9) [2.5, 3.6] | 0.04 (0.07) [0.00, 0.12] | 3.5 (1.1) [2.8, 4.7] | 3.6 (1.0) [2.8, 4.7] | 0.16 (0.10) [0.05, 0.23] | 3 |
+| Berlin * | 9 | 1.02 (0.00) [1.02, 1.03] | 1.03 (0.01) [1.02, 1.03] | 2.3 (0.5) [2.0, 2.6] | 0.00 (0.00) [0.00, 0.00] | 1.9 (0.3) [1.6, 2.2] | 2.0 (0.4) [1.6, 2.4] | 0.19 (0.23) [0.05, 0.46] | 3 |
+
+Full per-quantity tables (n, mean, sd, CI, min..max and the mean of seeds 0-2 for comparison, 17 quantities including calls, ratios to DIP and gain shares against the social optimum):
+
+**congestion-only gain (% of |SC|)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.32 | 0.93 | [0.00, 0.91] | 0.00..2.94 | 0.00 |
+| Cairo * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+| Moscow * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+| BuenosAires | 10 | 2.36 | 2.42 | [1.02, 3.89] | 0.00..6.51 | 2.49 |
+| NewYork * | 3 | 0.00 | 0.01 | [0.00, 0.01] | 0.00..0.01 | 0.00 |
+| Bombay * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+| London | 10 | 1.12 | 2.05 | [0.00, 2.50] | 0.00..5.35 | 0.45 |
+| Paris * | 3 | 0.04 | 0.07 | [0.00, 0.12] | 0.00..0.12 | 0.04 |
+| Berlin * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+
+**delivery-only gain (%)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 12.1 | 5.7 | [8.9, 15.5] | 5.0..21.2 | 10.3 |
+| Cairo * | 3 | 0.0 | 0.0 | [0.0, 0.0] | 0.0..0.0 | 0.0 |
+| Moscow * | 3 | 0.2 | 0.1 | [0.1, 0.4] | 0.1..0.4 | 0.2 |
+| BuenosAires | 10 | 34.6 | 6.9 | [30.4, 38.5] | 25.4..41.9 | 35.4 |
+| NewYork * | 3 | 0.4 | 0.1 | [0.3, 0.5] | 0.3..0.5 | 0.4 |
+| Bombay * | 3 | 2.1 | 1.5 | [0.4, 3.3] | 0.4..3.3 | 2.1 |
+| London | 10 | 39.8 | 18.9 | [29.2, 51.1] | 18.0..69.7 | 49.3 |
+| Paris * | 3 | 3.5 | 1.1 | [2.8, 4.7] | 2.8..4.7 | 3.5 |
+| Berlin * | 3 | 1.9 | 0.3 | [1.6, 2.2] | 1.6..2.2 | 1.9 |
+
+**two-instrument gain (%)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 14.6 | 5.0 | [11.7, 17.6] | 7.5..22.4 | 14.5 |
+| Cairo * | 3 | 0.0 | 0.0 | [0.0, 0.0] | 0.0..0.0 | 0.0 |
+| Moscow * | 3 | 0.2 | 0.1 | [0.1, 0.4] | 0.1..0.4 | 0.2 |
+| BuenosAires | 10 | 35.4 | 7.4 | [31.1, 39.5] | 26.2..43.5 | 35.4 |
+| NewYork * | 3 | 0.4 | 0.1 | [0.3, 0.5] | 0.3..0.5 | 0.4 |
+| Bombay * | 3 | 2.2 | 1.2 | [0.8, 3.3] | 0.8..3.3 | 2.2 |
+| London | 10 | 48.4 | 22.0 | [36.3, 61.8] | 24.8..90.1 | 59.7 |
+| Paris * | 3 | 3.6 | 1.0 | [2.8, 4.7] | 2.8..4.7 | 3.6 |
+| Berlin * | 3 | 2.0 | 0.4 | [1.6, 2.4] | 1.6..2.4 | 2.0 |
+
+**delivery-only share of combined gain**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.81 | 0.20 | [0.69, 0.92] | 0.41..0.99 | 0.68 |
+| BuenosAires | 10 | 0.98 | 0.02 | [0.96, 0.99] | 0.94..1.00 | 1.00 |
+| Bombay * | 3 | 0.88 | 0.46 | [0.46, 1.38] | 0.46..1.38 | 0.88 |
+| London | 10 | 0.82 | 0.11 | [0.75, 0.88] | 0.65..0.97 | 0.85 |
+| Paris * | 3 | 0.97 | 0.05 | [0.91, 1.00] | 0.91..1.00 | 0.97 |
+| Berlin * | 3 | 0.94 | 0.05 | [0.90, 1.00] | 0.90..1.00 | 0.94 |
+
+**PoA (ZMC)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.183 | 0.071 | [1.142, 1.226] | 1.090..1.311 | 1.180 |
+| Cairo | 9 | 1.000 | 0.000 | [1.000, 1.000] | 1.000..1.000 | 1.000 |
+| Moscow | 9 | 1.002 | 0.001 | [1.001, 1.003] | 1.000..1.004 | 1.002 |
+| BuenosAires | 10 | 1.377 | 0.074 | [1.333, 1.419] | 1.280..1.459 | 1.380 |
+| NewYork | 9 | 1.003 | 0.002 | [1.002, 1.005] | 1.002..1.008 | 1.004 |
+| Bombay | 9 | 1.057 | 0.024 | [1.042, 1.072] | 1.024..1.091 | 1.032 |
+| London | 10 | 1.529 | 0.217 | [1.409, 1.660] | 1.253..1.944 | 1.655 |
+| Paris | 9 | 1.030 | 0.009 | [1.025, 1.036] | 1.018..1.050 | 1.037 |
+| Berlin | 9 | 1.023 | 0.005 | [1.020, 1.026] | 1.016..1.030 | 1.021 |
+
+**PoA (worst NE found)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.202 | 0.059 | [1.168, 1.239] | 1.111..1.317 | 1.197 |
+| Cairo | 9 | 1.000 | 0.000 | [1.000, 1.000] | 1.000..1.000 | 1.000 |
+| Moscow | 9 | 1.002 | 0.001 | [1.002, 1.003] | 1.001..1.004 | 1.002 |
+| BuenosAires | 10 | 1.432 | 0.083 | [1.382, 1.479] | 1.308..1.541 | 1.426 |
+| NewYork | 9 | 1.003 | 0.002 | [1.002, 1.005] | 1.002..1.008 | 1.004 |
+| Bombay | 9 | 1.104 | 0.037 | [1.082, 1.127] | 1.043..1.177 | 1.077 |
+| London | 10 | 1.630 | 0.218 | [1.505, 1.760] | 1.288..1.979 | 1.752 |
+| Paris | 9 | 1.035 | 0.007 | [1.031, 1.040] | 1.028..1.050 | 1.037 |
+| Berlin | 9 | 1.025 | 0.005 | [1.022, 1.029] | 1.016..1.034 | 1.021 |
+
+**PoS**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.176 | 0.072 | [1.135, 1.218] | 1.090..1.295 | 1.172 |
+| Cairo | 9 | 1.000 | 0.000 | [1.000, 1.000] | 1.000..1.000 | 1.000 |
+| Moscow | 9 | 1.002 | 0.001 | [1.001, 1.003] | 1.000..1.004 | 1.002 |
+| BuenosAires | 10 | 1.325 | 0.068 | [1.286, 1.366] | 1.244..1.410 | 1.334 |
+| NewYork | 9 | 1.003 | 0.002 | [1.002, 1.005] | 1.002..1.008 | 1.003 |
+| Bombay | 9 | 1.049 | 0.021 | [1.037, 1.063] | 1.024..1.089 | 1.032 |
+| London | 10 | 1.479 | 0.225 | [1.354, 1.618] | 1.138..1.944 | 1.628 |
+| Paris | 9 | 1.027 | 0.009 | [1.022, 1.033] | 1.017..1.049 | 1.031 |
+| Berlin | 9 | 1.022 | 0.004 | [1.020, 1.025] | 1.016..1.029 | 1.019 |
+
+**priced gap, grid-best (% of W_SO)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 2.95 | 2.11 | [1.79, 4.25] | 0.85..6.66 | 2.96 |
+| Cairo * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+| Moscow * | 3 | 0.00 | 0.01 | [0.00, 0.01] | 0.00..0.01 | 0.00 |
+| BuenosAires | 10 | 1.81 | 0.83 | [1.30, 2.29] | 0.11..3.21 | 1.81 |
+| NewYork * | 3 | 0.00 | 0.00 | [0.00, 0.00] | 0.00..0.00 | 0.00 |
+| Bombay * | 3 | 1.04 | 0.58 | [0.39, 1.52] | 0.39..1.52 | 1.04 |
+| London | 10 | 3.38 | 2.50 | [2.01, 4.89] | 0.64..7.43 | 3.69 |
+| Paris * | 3 | 0.16 | 0.10 | [0.05, 0.23] | 0.05..0.23 | 0.16 |
+| Berlin * | 3 | 0.19 | 0.23 | [0.05, 0.46] | 0.05..0.46 | 0.19 |
+
+**DIP gain (%)**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 18.3 | 7.1 | [14.2, 22.6] | 9.0..31.1 | 18.0 |
+| Cairo | 9 | 0.0 | 0.0 | [0.0, 0.0] | 0.0..0.0 | 0.0 |
+| Moscow | 9 | 0.2 | 0.1 | [0.1, 0.3] | 0.0..0.4 | 0.2 |
+| BuenosAires | 10 | 37.7 | 7.4 | [33.3, 41.9] | 28.0..45.9 | 38.0 |
+| NewYork | 9 | 0.3 | 0.2 | [0.2, 0.5] | 0.2..0.8 | 0.4 |
+| Bombay | 9 | 5.9 | 2.4 | [4.4, 7.3] | 2.6..9.1 | 3.6 |
+| London | 10 | 53.6 | 21.6 | [41.7, 66.7] | 26.1..95.4 | 65.8 |
+| Paris | 9 | 3.0 | 0.9 | [2.5, 3.6] | 1.8..5.0 | 3.7 |
+| Berlin | 9 | 2.3 | 0.5 | [2.0, 2.6] | 1.6..3.0 | 2.1 |
+
+**DIP gain / grid-best gain**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.23 | 0.11 | [1.17, 1.30] | 1.10..1.39 | 1.24 |
+| BuenosAires | 10 | 1.07 | 0.03 | [1.05, 1.08] | 1.01..1.11 | 1.07 |
+| Bombay * | 3 | 1.91 | 1.16 | [1.20, 3.25] | 1.20..3.25 | 1.91 |
+| London | 10 | 1.14 | 0.13 | [1.07, 1.22] | 1.02..1.42 | 1.14 |
+| Paris * | 3 | 1.04 | 0.02 | [1.02, 1.06] | 1.02..1.06 | 1.04 |
+| Berlin * | 3 | 1.05 | 0.04 | [1.03, 1.10] | 1.03..1.10 | 1.05 |
+
+**DIP calls / 63-point grid calls**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.057 | 0.005 | [0.054, 0.060] | 0.049..0.063 | 0.053 |
+| Cairo * | 3 | 0.023 | 0.001 | [0.023, 0.024] | 0.023..0.024 | 0.023 |
+| Moscow * | 3 | 0.025 | 0.004 | [0.021, 0.029] | 0.021..0.029 | 0.025 |
+| BuenosAires | 10 | 0.068 | 0.009 | [0.063, 0.074] | 0.054..0.082 | 0.060 |
+| NewYork * | 3 | 0.027 | 0.002 | [0.026, 0.030] | 0.026..0.030 | 0.027 |
+| Bombay * | 3 | 0.061 | 0.007 | [0.056, 0.069] | 0.056..0.069 | 0.061 |
+| London | 10 | 0.083 | 0.009 | [0.078, 0.089] | 0.072..0.099 | 0.084 |
+| Paris * | 3 | 0.047 | 0.002 | [0.044, 0.049] | 0.044..0.049 | 0.047 |
+| Berlin * | 3 | 0.035 | 0.004 | [0.032, 0.040] | 0.032..0.040 | 0.035 |
+
+**ARP flat gain / DIP gain**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.93 | 0.09 | [0.88, 0.98] | 0.74..1.05 | 0.87 |
+| BuenosAires | 10 | 0.99 | 0.01 | [0.99, 1.00] | 0.98..1.00 | 1.00 |
+| Bombay | 5 | 0.88 | 0.09 | [0.81, 0.95] | 0.78..1.00 | 0.94 |
+| London | 10 | 0.91 | 0.06 | [0.88, 0.94] | 0.80..0.98 | 0.96 |
+
+**tariff + BR gain / DIP gain**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.91 | 0.09 | [0.85, 0.96] | 0.71..1.00 | 0.91 |
+| BuenosAires | 10 | 0.99 | 0.01 | [0.99, 1.00] | 0.97..1.00 | 1.00 |
+| Bombay | 5 | 0.86 | 0.06 | [0.82, 0.91] | 0.79..0.94 | 0.90 |
+| London | 10 | 0.93 | 0.06 | [0.90, 0.97] | 0.81..1.00 | 0.97 |
+
+**gain share vs social optimum: grid-best**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.82 | 0.07 | [0.77, 0.86] | 0.72..0.91 | 0.81 |
+| BuenosAires | 10 | 0.94 | 0.03 | [0.92, 0.95] | 0.90..1.00 | 0.93 |
+| Bombay * | 3 | 0.71 | 0.32 | [0.34, 0.90] | 0.34..0.90 | 0.71 |
+| London | 10 | 0.90 | 0.09 | [0.85, 0.95] | 0.72..0.98 | 0.89 |
+| Paris * | 3 | 0.96 | 0.02 | [0.94, 0.98] | 0.94..0.98 | 0.96 |
+| Berlin * | 3 | 0.95 | 0.04 | [0.91, 0.97] | 0.91..0.97 | 0.95 |
+
+**gain share vs social optimum: DIP**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 1.00 | 0.00 | [1.00, 1.00] | 1.00..1.00 | 1.00 |
+| BuenosAires | 10 | 1.00 | 0.00 | [1.00, 1.00] | 1.00..1.00 | 1.00 |
+| NewYork | 1 | 1.00 | n/a | [1.00, 1.00] | 1.00..1.00 | n/a |
+| Bombay | 9 | 1.05 | 0.06 | [1.01, 1.09] | 1.00..1.14 | 1.11 |
+| London | 10 | 1.02 | 0.02 | [1.01, 1.03] | 1.00..1.05 | 1.00 |
+| Paris | 9 | 1.00 | 0.00 | [1.00, 1.00] | 1.00..1.00 | 1.00 |
+| Berlin | 9 | 1.00 | 0.00 | [1.00, 1.00] | 1.00..1.00 | 1.00 |
+
+**gain share vs social optimum: ARP flat**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.93 | 0.09 | [0.88, 0.98] | 0.74..1.06 | 0.87 |
+| BuenosAires | 10 | 1.00 | 0.01 | [0.99, 1.00] | 0.98..1.00 | 1.00 |
+| Bombay | 5 | 0.95 | 0.15 | [0.83, 1.06] | 0.78..1.14 | 1.05 |
+| London | 10 | 0.93 | 0.05 | [0.89, 0.96] | 0.82..1.00 | 0.96 |
+
+**gain share vs social optimum: tariff + BR**
+
+| city | n seeds | mean | sd | bootstrap 95% CI of the mean | min..max | mean of seeds 0-2 |
+|---|---|---|---|---|---|---|
+| NewDelhi | 10 | 0.91 | 0.09 | [0.85, 0.96] | 0.71..1.00 | 0.91 |
+| BuenosAires | 10 | 1.00 | 0.01 | [0.99, 1.00] | 0.97..1.00 | 1.00 |
+| Bombay | 5 | 0.92 | 0.11 | [0.84, 1.00] | 0.79..1.02 | 1.00 |
+| London | 10 | 0.95 | 0.06 | [0.91, 0.98] | 0.83..1.03 | 0.98 |
+
+
+**Which conclusions are stable and which are not** (checks in `seeds10_conclusions.csv`; the full table follows the text; "3 seeds" is the value over seeds 0-2 of the exact runs, "all seeds" over every seed available for that city):
+
+* **Congestion-only below 1.7% of |SC| (flipped / false).** At ten seeds the sample maximum is 6.5% in Buenos Aires (4 of 10 seeds at or above 1.7%; mean 2.4%, CI [1.0, 3.9]; seed 0 was already 6.5% in the exact run), 5.4% in London (2 of 10 seeds; mean 1.1%, CI [0.0, 2.5])
+  and 2.9% in New Delhi (1 of 10; mean 0.3%). The 3-seed statement that no city exceeds 1.7% is therefore false for the three cities that carry the headline. What survives is the ranking of the instruments: the congestion charge alone gains on average 0.3, 2.4 and 1.1% in these cities
+  against 12, 35 and 40% for the per-delivery instrument alone. For the six reduced-grid cities the congestion-only gain is below 0.15% in every one of the three seeds and a lower bound; nothing was learned about further seeds there.
+* **Delivery-only at least half of the combined gain (stable in the ratio of mean gains, not in every seed).** Ratio of mean gains: New Delhi 0.81 [0.69, 0.92], Buenos Aires 0.98 [0.96, 0.99], London 0.82 [0.75, 0.88]; every CI lies above 0.5. Per seed the share is below one half once
+  (New Delhi seed 0: 0.41) and at least 0.65 in all others; Buenos Aires and London are above 0.5 in every seed. The Mumbai ratio (0.97, CI [0.46, 1.38]) rests on three seeds of a reduced grid and its CI crosses 0.5: not established. Paris, Berlin (0.94-0.97) are three-seed lower-bound results.
+* **PoA ordering London > Buenos Aires > New Delhi (flipped as an every-seed statement; stable on average).** Buenos Aires > New Delhi holds in 10 of 10 seeds (mean difference 0.19, CI [0.14, 0.25]); London > Buenos Aires holds in 7 of 10 seeds (seeds 4, 6, 7 reverse it; mean difference 0.15, CI [0.01, 0.31]).
+  The mean PoA is London 1.53 [1.41, 1.66], Buenos Aires 1.38 [1.33, 1.42], New Delhi 1.18 [1.14, 1.23]: the ordering of the means holds but the London - Buenos Aires gap is the least certain part, and London's PoA varies from 1.25 to 1.94.
+  "PoA >= 1.10 only in these three cities" is stable (the mean PoA of the others is at most 1.06, CI upper end 1.07; Mumbai's worst equilibrium found is 1.10 [1.08, 1.13], i.e. on the line).
+* **Priced equilibrium close to the social optimum (stable as the 3-seed text was amended).** Priced gap (grid-best point, % of W_SO): New Delhi 2.9 [1.8, 4.3], Buenos Aires 1.8 [1.3, 2.3], London 3.4 [2.0, 4.9]; maxima 6.7, 3.2 and 7.4% (London seed 1, unchanged since the three-seed run). No seed exceeds 7.5%.
+  The other cities have 3-seed means below 1.1% (reduced grid: upper bounds of the gap).
+* **DIP against the grid (stable).** DIP's gain divided by the best 63-point grid gain: New Delhi 1.23 [1.17, 1.30], Buenos Aires 1.07 [1.05, 1.08], London 1.14 [1.07, 1.22]; every seed at or above 1.0 (minimum 1.10, 1.01, 1.02). Share of the calls of a 63-point grid: 5.7%, 6.8%, 8.3% (CIs below 10%, maxima 6.3, 8.2, 9.9%).
+  In the six other cities DIP uses 2-6% of the calls of a 63-point grid at 8-9 seeds (stable) and its gain relative to the lower-bound grid stays above 1 (3 seeds).
+* **ARP against DIP (stable, three cities).** ARP's flat rule reaches 0.93 [0.88, 0.98] of DIP's gain in New Delhi, 0.995 [0.990, 0.999] in Buenos Aires and 0.91 [0.88, 0.94] in London; the marginal tariff with best responses reaches 0.91, 0.995 and 0.93.
+  ARP matches DIP (ratio >= 0.98) in 3 of 10, 9 of 10 and 1 of 10 seeds. The "incremental, not stronger in quality" verdict holds; ARP never exceeded DIP by more than 6% in a single seed (New Delhi seed 3, 1.06).
+* **Gains against the social optimum.** Share of the social-optimum gain, (SC_unpriced - SC_method) / (SC_unpriced - SC_optimum), mean [CI]: the best grid point 0.82 [0.78, 0.86] in New Delhi, 0.94 [0.92, 0.96] in Buenos Aires, 0.91 [0.85, 0.95] in London (the grid leaves 6-18% of the optimal gain
+  on the table, in line with the priced gaps above); DIP 1.00 in all three (it implements the social target; 1.02 in London, where its multi-start target beats the E3 optimum); ARP flat 0.93, 0.995, 0.93; marginal tariff + best responses 0.91, 0.995, 0.95. The congestion-only point reaches 0.03 [0.00, 0.07] (New Delhi), 0.06 [0.03, 0.10] (Buenos Aires) and 0.04 [0.00, 0.09] (London) of the optimal gain (`so_share_grid_cong`).
+  In the cities where the unpriced equilibrium is within 0.5% of the optimum (Cairo, Moscow, New York mostly) the share is undefined and not reported.
+
+Claims table (3-seed value, all-seed value, bootstrap CI, verdict):
+
+| claim | city | metric | threshold | 3 seeds | all seeds | n | 95% CI | verdict | note |
+|---|---|---|---|---|---|---|---|---|---|
+| C2 congestion-only gain below 1.7% (maximum over seeds) | NewDelhi | max over seeds (%) | < 1.7 | 0 | 2.94 | 10 | [0, 0.913] | FLIPPED | 1 of 10 seeds at or above 1.7; mean 0.324 |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | NewDelhi | share | >= 0.5 | 0.712 | 0.825 | 10 | [0.696, 0.925] | stable (holds) | 9 of 10 seeds have a per-seed share >= 0.5 |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | Cairo | max over seeds (%) | < 1.7 | 0 | 0 | 3 | [0, 0] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid) |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | Moscow | max over seeds (%) | < 1.7 | 0 | 0 | 3 | [0, 0] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid) |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | BuenosAires | max over seeds (%) | < 1.7 | 6.51 | 6.51 | 10 | [1.02, 3.89] | stable (fails) | 4 of 10 seeds at or above 1.7; mean 2.36 |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | BuenosAires | share | >= 0.5 | 1 | 0.976 | 10 | [0.96, 0.991] | stable (holds) | 10 of 10 seeds have a per-seed share >= 0.5 |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | NewYork | max over seeds (%) | < 1.7 | 0.0134 | 0.0134 | 3 | [0, 0.0134] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0.00448; lower bound (reduced grid) |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | Bombay | max over seeds (%) | < 1.7 | 0 | 0 | 3 | [0, 0] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid) |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | Bombay | share | >= 0.5 | 0.968 | 0.968 | 3 | [0.464, 1.38] | holds, CI crosses threshold | 2 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | London | max over seeds (%) | < 1.7 | 1.34 | 5.35 | 10 | [0, 2.5] | FLIPPED | 2 of 10 seeds at or above 1.7; mean 1.12 |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | London | share | >= 0.5 | 0.825 | 0.822 | 10 | [0.756, 0.888] | stable (holds) | 10 of 10 seeds have a per-seed share >= 0.5 |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | Paris | max over seeds (%) | < 1.7 | 0.124 | 0.124 | 3 | [0, 0.124] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0.0412; lower bound (reduced grid) |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | Paris | share | >= 0.5 | 0.973 | 0.973 | 3 | [0.91, 1] | stable (holds) | 3 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid |
+| C2 congestion-only gain below 1.7% (maximum over seeds) | Berlin | max over seeds (%) | < 1.7 | 0 | 0 | 3 | [0, 0] | stable (holds) | 0 of 3 seeds at or above 1.7; mean 0; lower bound (reduced grid) |
+| C1 delivery-only >= half of the combined gain (ratio of mean gains) | Berlin | share | >= 0.5 | 0.937 | 0.937 | 3 | [0.904, 1] | stable (holds) | 3 of 3 seeds have a per-seed share >= 0.5; share can exceed 1 with a reduced grid |
+| C3 PoA ordering London > BuenosAires | London - BuenosAires | mean PoA difference | >= 0.0 | 0.275 | 0.152 | 10 | [0.00784, 0.311] | stable (holds) | ordering holds in 7 of 10 seeds |
+| C3 PoA ordering BuenosAires > NewDelhi | BuenosAires - NewDelhi | mean PoA difference | >= 0.0 | 0.199 | 0.194 | 10 | [0.142, 0.248] | stable (holds) | ordering holds in 10 of 10 seeds |
+| C3 PoA ordering London > Buenos Aires > New Delhi in each seed | three cities | share of seeds with the full ordering | = 1 | 1 | 0.7 | 10 | [n/a, n/a] | FLIPPED (not in every seed) | 7 of 10 seeds |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | NewDelhi | mean PoA (ZMC equilibrium) | >= 1.1 | 1.18 | 1.18 | 10 | [1.14, 1.23] | stable (holds) | max over seeds 1.311 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | Cairo | mean PoA (ZMC equilibrium) | < 1.1 | 1 | 1 | 9 | [1, 1] | stable (holds) | max over seeds 1.000 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | Moscow | mean PoA (ZMC equilibrium) | < 1.1 | 1 | 1 | 9 | [1, 1] | stable (holds) | max over seeds 1.004 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | BuenosAires | mean PoA (ZMC equilibrium) | >= 1.1 | 1.38 | 1.38 | 10 | [1.33, 1.42] | stable (holds) | max over seeds 1.459 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | NewYork | mean PoA (ZMC equilibrium) | < 1.1 | 1 | 1 | 9 | [1, 1] | stable (holds) | max over seeds 1.008 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | Bombay | mean PoA (ZMC equilibrium) | < 1.1 | 1.03 | 1.06 | 9 | [1.04, 1.07] | stable (holds) | max over seeds 1.091 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | London | mean PoA (ZMC equilibrium) | >= 1.1 | 1.66 | 1.53 | 10 | [1.41, 1.66] | stable (holds) | max over seeds 1.944 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | Paris | mean PoA (ZMC equilibrium) | < 1.1 | 1.04 | 1.03 | 9 | [1.03, 1.04] | stable (holds) | max over seeds 1.050 |
+| C3 PoA >= 1.10 only in London, Buenos Aires, New Delhi | Berlin | mean PoA (ZMC equilibrium) | < 1.1 | 1.02 | 1.02 | 9 | [1.02, 1.03] | stable (holds) | max over seeds 1.030 |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | NewDelhi | max over seeds (% of W_SO) | < 7.5 | 4.86 | 6.66 | 10 | [1.79, 4.25] | stable (holds) | mean 2.95; grid-best point |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | Cairo | max over seeds (% of W_SO) | < 7.5 | 0 | 0 | 3 | [0, 0] | stable (holds) | mean 0; grid-best point; reduced grid: upper bound |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | Moscow | max over seeds (% of W_SO) | < 7.5 | 0.0122 | 0.0122 | 3 | [0, 0.0122] | stable (holds) | mean 0.00405; grid-best point; reduced grid: upper bound |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | BuenosAires | max over seeds (% of W_SO) | < 7.5 | 2.46 | 3.21 | 10 | [1.3, 2.29] | stable (holds) | mean 1.81; grid-best point |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | NewYork | max over seeds (% of W_SO) | < 7.5 | 0 | 0 | 3 | [0, 0] | stable (holds) | mean 0; grid-best point; reduced grid: upper bound |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | Bombay | max over seeds (% of W_SO) | < 7.5 | 1.52 | 1.52 | 3 | [0.392, 1.52] | stable (holds) | mean 1.04; grid-best point; reduced grid: upper bound |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | London | max over seeds (% of W_SO) | < 7.5 | 7.43 | 7.43 | 10 | [2.01, 4.89] | stable (holds) | mean 3.38; grid-best point |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | Paris | max over seeds (% of W_SO) | < 7.5 | 0.23 | 0.23 | 3 | [0.0475, 0.23] | stable (holds) | mean 0.156; grid-best point; reduced grid: upper bound |
+| C4 priced equilibrium within 7.5% of the social optimum in every seed (3-seed maximum 7.43, London) | Berlin | max over seeds (% of W_SO) | < 7.5 | 0.46 | 0.46 | 3 | [0.0538, 0.46] | stable (holds) | mean 0.189; grid-best point; reduced grid: upper bound |
+| C5 DIP gain >= best grid gain (share >= 1) | NewDelhi | mean gain share | >= 1.0 | 1.24 | 1.23 | 10 | [1.17, 1.3] | stable (holds) | min 1.1 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | NewDelhi | mean call share | < 0.1 | 0.0532 | 0.0569 | 10 | [0.0542, 0.0596] | stable (holds) | max 0.0633 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | Cairo | mean call share | < 0.1 | 0.0233 | 0.0233 | 3 | [0.0229, 0.0239] | stable (holds) | max 0.0239 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | Moscow | mean call share | < 0.1 | 0.0253 | 0.0253 | 3 | [0.0209, 0.0294] | stable (holds) | max 0.0294 |
+| C5 DIP gain >= best grid gain (share >= 1) | BuenosAires | mean gain share | >= 1.0 | 1.07 | 1.07 | 10 | [1.05, 1.08] | stable (holds) | min 1.01 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | BuenosAires | mean call share | < 0.1 | 0.0599 | 0.0685 | 10 | [0.0635, 0.0736] | stable (holds) | max 0.0824 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | NewYork | mean call share | < 0.1 | 0.0273 | 0.0273 | 3 | [0.0261, 0.0296] | stable (holds) | max 0.0296 |
+| C5 DIP gain >= best grid gain (share >= 1) | Bombay | mean gain share | >= 1.0 | 1.91 | 1.91 | 3 | [1.2, 3.25] | stable (holds) | min 1.2; against a lower-bound grid |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | Bombay | mean call share | < 0.1 | 0.0613 | 0.0613 | 3 | [0.0565, 0.069] | stable (holds) | max 0.069 |
+| C5 DIP gain >= best grid gain (share >= 1) | London | mean gain share | >= 1.0 | 1.14 | 1.14 | 10 | [1.07, 1.22] | stable (holds) | min 1.02 |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | London | mean call share | < 0.1 | 0.084 | 0.0833 | 10 | [0.0783, 0.0886] | stable (holds) | max 0.099 |
+| C5 DIP gain >= best grid gain (share >= 1) | Paris | mean gain share | >= 1.0 | 1.04 | 1.04 | 3 | [1.02, 1.06] | stable (holds) | min 1.02; against a lower-bound grid |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | Paris | mean call share | < 0.1 | 0.0469 | 0.0469 | 3 | [0.0443, 0.0488] | stable (holds) | max 0.0488 |
+| C5 DIP gain >= best grid gain (share >= 1) | Berlin | mean gain share | >= 1.0 | 1.05 | 1.05 | 3 | [1.03, 1.1] | stable (holds) | min 1.03; against a lower-bound grid |
+| C5 DIP uses less than 10% of the calls of a 63-point grid | Berlin | mean call share | < 0.1 | 0.0355 | 0.0355 | 3 | [0.0316, 0.0403] | stable (holds) | max 0.0403 |
+| C6 ARP flat gain below DIP's gain (ratio < 1) | NewDelhi | mean gain ratio | < 1.0 | 0.866 | 0.933 | 10 | [0.878, 0.979] | stable (holds) | ratio >= 0.98 in 3 of 10 seeds |
+| C6 marginal tariff + BR gain below DIP's gain (ratio < 1) | NewDelhi | mean gain ratio | < 1.0 | 0.905 | 0.908 | 10 | [0.849, 0.959] | stable (holds) | ratio >= 0.98 in 3 of 10 seeds |
+| C6 ARP flat gain below DIP's gain (ratio < 1) | BuenosAires | mean gain ratio | < 1.0 | 0.996 | 0.995 | 10 | [0.99, 0.999] | stable (holds) | ratio >= 0.98 in 9 of 10 seeds |
+| C6 marginal tariff + BR gain below DIP's gain (ratio < 1) | BuenosAires | mean gain ratio | < 1.0 | 0.996 | 0.995 | 10 | [0.988, 0.999] | stable (holds) | ratio >= 0.98 in 9 of 10 seeds |
+| C6 ARP flat gain below DIP's gain (ratio < 1) | Bombay | mean gain ratio | < 1.0 | 0.942 | 0.884 | 5 | [0.814, 0.95] | stable (holds) | ratio >= 0.98 in 1 of 5 seeds |
+| C6 marginal tariff + BR gain below DIP's gain (ratio < 1) | Bombay | mean gain ratio | < 1.0 | 0.902 | 0.864 | 5 | [0.819, 0.91] | stable (holds) | ratio >= 0.98 in 0 of 5 seeds |
+| C6 ARP flat gain below DIP's gain (ratio < 1) | London | mean gain ratio | < 1.0 | 0.957 | 0.912 | 10 | [0.877, 0.944] | stable (holds) | ratio >= 0.98 in 1 of 10 seeds |
+| C6 marginal tariff + BR gain below DIP's gain (ratio < 1) | London | mean gain ratio | < 1.0 | 0.972 | 0.933 | 10 | [0.897, 0.966] | stable (holds) | ratio >= 0.98 in 3 of 10 seeds |
+
+Figures: `figures/seeds10_forest_gain.png` (congestion-only gain with the 1.7% line, delivery-only share with the 0.5 line, combined gain), `seeds10_forest_poa.png` (PoA, worst-equilibrium PoA, unpriced and priced gaps),
+`seeds10_forest_dip_arp.png` (DIP and ARP against the grid, call share), `seeds10_forest_so_share.png` (gain share against the social optimum). Filled marker: mean with bootstrap CI; open: mean of seeds 0-2; dots: seeds.
+
+**Oracle budget of the extension** (mean branch-and-price calls and seconds per run, seeds 3-9):
+
+| city | runs (seeds 3-9) | E1 calls | DIP calls (incl. social optimum) | further equilibria calls | ARP calls | grid calls | E1 time (s) | DIP time (s) |
+|---|---|---|---|---|---|---|---|---|
+| NewDelhi | 7 | 56 | 116 | 64 | 123 | 2115 | 5 | 128 |
+| Cairo | 6 | 32 | 19 | 24 | - | - | 223 | 512 |
+| Moscow | 6 | 55 | 26 | 29 | - | - | 187 | 342 |
+| BuenosAires | 7 | 45 | 122 | 48 | 63 | 1800 | 14 | 422 |
+| NewYork | 6 | 44 | 21 | 23 | - | - | 101 | 159 |
+| Bombay | 6 | 58 | 141 | 91 | 112 | - | 72 | 921 |
+| London | 7 | 56 | 166 | 58 | 118 | 2017 | 3 | 137 |
+| Paris | 6 | 56 | 99 | 49 | - | - | 170 | 1123 |
+| Berlin | 6 | 67 | 82 | 46 | - | - | 252 | 861 |
+
+Branch-and-price calls in seeds 3-9: 55046 (E1 2976, DIP with its social optimum 5156, regret verification 272, further equilibria 2764, ARP 2353, grids 41525); 611 of them are not proven optimal within 20 s (E1 99, DIP 436, further equilibria 29, ARP 10, grid 37); 311 best-response calls needed the 120 s retry. 1.11% of the calls are unproven; almost all of the DIP ones are pricing calls (they steer the column generation and are not retried, as in the earlier runs).
+Equilibria are verified as before: E1, DIP priced profiles: fresh-pool exact regret at most 1e-12 USD in every run; grid points: pooled exact regret at most 3e-13; the best 'both' point of every full grid is certified with the fresh oracle (regret at most 1.2e-13).
+
+**Restarts and scheduling.** The container was not restarted during the extension. The scheduler was restarted three times (four scheduler runs) to change the job order (results/PROGRESS_seeds10.md): the core phase ran at about seven city-seeds per hour (DIP of Paris, Moscow, Bombay and Cairo is slow), so the cheap work of the three full-grid cities (full grids, ARP) was moved ahead of the heavy cities' later seeds to protect the headline.
+The ARP job of Mumbai seed 5 was stopped by hand at the end (its stage file is partial and resumable). Every job is resumable (stage files in `results/seeds10_parts/`, atomic writes, per-job locks); a restarted scheduler continues with the unfinished jobs.
+
+**Reproduce.**
+```
+export OMP_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+nohup python experiments/run_seeds10_queue.py > results/logs/seeds10_queue.out 2>&1 &          # seeds 3-9, 2 cores, resumable (S10_ORDER=final|light_first changes the order)
+python experiments/run_seeds10.py London 3 core && python experiments/run_seeds10.py London 3 grid && python experiments/run_seeds10.py London 3 arp   # one city and seed
+python experiments/summarize_seeds10.py && python experiments/seeds10_report.py && python experiments/plot_seeds10.py && python experiments/seeds10_doc.py
+python -m pytest -q
+```

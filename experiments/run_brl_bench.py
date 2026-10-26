@@ -293,7 +293,7 @@ def stage_devices(args):
 
 BP_CONFIGS = {"exact": dict(ng_size=8), "devices": dict(ng_size=4, heur_first=5, lbprune=True)}
 BP_CELLS = [("metro/London", n) for n in (30, 40, 60, 80)] + [("metro/NewYork", n) for n in (30, 40)] + \
-    [("metro/Cairo", n) for n in (30, 40)] + [("metro/NewDelhi", 60)] + [("solomon25/R101", 25), ("augerat_A/A-n32-k5", 31), ("augerat_A/A-n60-k9", 59)]
+    [("metro/Cairo", n) for n in (30, 40)] + [("metro/NewDelhi", 60)] + [("solomon25/R101", 25), ("augerat_A/A-n32-k5", 31)]
 
 
 def bp_job(name: str, n: int, cfg: str, tl: float):

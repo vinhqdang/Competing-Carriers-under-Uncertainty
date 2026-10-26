@@ -501,7 +501,7 @@ def is_elementary(route) -> bool:
     return len(set(route)) == len(route)
 
 
-def price_dssr(inst, duals, ng, *, max_rounds: int = 60, **kw):
+def price_dssr(inst, duals, ng, *, max_rounds: int = 400, deadline: float = float("inf"), **kw):
     """Exact pricing for ELEMENTARY routes by DSSR-style growth of the ng-sets (`ng` is enlarged in place).
 
     Price with the current ng-sets; while the cheapest route found is not elementary, enlarge the ng-sets along its
@@ -515,12 +515,12 @@ def price_dssr(inst, duals, ng, *, max_rounds: int = 60, **kw):
         tot["kept"] = max(tot["kept"], st["kept"])
         tot["overflow"] = tot["overflow"] or st["overflow"]
         tot["rounds"] += 1
-        if not cols or is_elementary(cols[0][1]) or st["overflow"]:
+        if not cols or is_elementary(cols[0][1]) or st["overflow"] or time.perf_counter() > deadline:
             break
         if not cycle_augment(ng, cols[0][1]):
             break
     elem = [(rc, r) for rc, r in cols if is_elementary(r)]
-    tot["elementary_exact"] = bool(not cols or is_elementary(cols[0][1])) and not tot["overflow"]
+    tot["elementary_exact"] = bool(not cols or is_elementary(cols[0][1])) and not tot["overflow"]  # False: unresolved
     return best, elem, tot
 
 
@@ -537,6 +537,7 @@ def root_cg(inst, *, mode: str = "window", ng_size: int = 8, dssr: bool = False,
 
     n = inst.n
     ng = ng_masks_py(inst, ng_size)
+    ng_h = ng_masks_py(inst, max(ng_size, 8)) if dssr else ng  # heuristic calls use a roomy memory under DSSR
     cols = {(j,): inst.route_cost((j,)) for j in range(1, n + 1)}
     if init_cols:
         cols.update(init_cols)
@@ -552,6 +553,25 @@ def root_cg(inst, *, mode: str = "window", ng_size: int = 8, dssr: bool = False,
     duals = np.zeros(n + 1)
     status = "time_limit"
     it = 0
+    if dssr:  # warm start: a few heuristic-priced iterations (elementary columns only), so that the first exact DSSR call
+        # does not see the degenerate duals of the singleton master
+        for _ in range(25):
+            routes = list(cols)
+            A = np.zeros((n, len(routes)))
+            for k, r in enumerate(routes):
+                for j in r:
+                    A[j - 1, k] += 1.0
+            res = linprog(np.array([cols[r] for r in routes]), A_eq=A, b_eq=np.ones(n), bounds=(0, None), method="highs")
+            dl = np.concatenate([[0.0], res.eqlin.marginals])
+            b, cand, st = price(inst, dl, ng=ng_h, bcap_h=5, mode=mode, max_cols=max_cols, maxlab=maxlab)
+            theur += st["time"]
+            tprice += st["time"]
+            nhe += 1
+            add = [(rc, r) for rc, r in cand if r not in cols and rc < -tol * (1 + abs(res.fun)) and is_elementary(r)]
+            if not add:
+                break
+            for rc, r in add:
+                cols[r] = inst.route_cost(r)
     for it in range(1, max_iter + 1):
         routes = list(cols)
         A = np.zeros((n, len(routes)))
@@ -566,7 +586,7 @@ def root_cg(inst, *, mode: str = "window", ng_size: int = 8, dssr: bool = False,
         kw = dict(mode=mode, max_cols=max_cols, maxlab=maxlab, max_created=max_created, max_cmp=max_cmp)
         new = []
         if heur_first > 0:
-            b, cand, st = price(inst, duals, ng=ng, bcap_h=heur_first, **kw)
+            b, cand, st = price(inst, duals, ng=ng_h, bcap_h=heur_first, **kw)
             theur += st["time"]
             nhe += 1
             tprice += st["time"]
@@ -575,7 +595,10 @@ def root_cg(inst, *, mode: str = "window", ng_size: int = 8, dssr: bool = False,
         exact_call = not new
         if exact_call:
             if dssr:
-                best, cand, st = price_dssr(inst, duals, ng, lbprune=lbprune, spl=spl, **kw)
+                best, cand, st = price_dssr(inst, duals, ng, lbprune=lbprune, spl=spl, deadline=t0 + 4 * time_limit, **kw)
+                if not st["elementary_exact"]:
+                    status = "dssr_unresolved"
+                    break
             else:
                 best, cand, st = price(inst, duals, ng=ng, lbprune=lbprune, spl=spl, **kw)
             nex += 1
