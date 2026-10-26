@@ -942,7 +942,7 @@ def t_arp():
                      fmt(100 * r.mct_br_gain_share, 3), str(int(r.mct_br_calls)),
                      fmt(100 * r.mct_so_gain_share, 3), str(int(r.mct_so_calls)),
                      fmt(100 * r.dip_gain_share, 3), str(int(r.dip_calls)), str(int(r.grid_calls))])
-    write_table("tab_arp.tex", ["City", "seed", "$\\rho$", "ARP status / rounds", "ARP \\%", "calls", "tariff+BR \\%", "calls",
+    write_table("tab_arp.tex", ["City", "seed", "$\\varrho$", "ARP status / rounds", "ARP \\%", "calls", "tariff+BR \\%", "calls",
                                 "tariff+SO \\%", "calls", "DIP \\%", "calls", "grid calls"], rows, "lrrlrrrrrrrrr")
     macro("ArpRuns", str(len(d)))
     macro("ArpCities", ", ".join(NAME[c] for c in ORDER if c in set(d.city)))
@@ -1064,8 +1064,46 @@ def t_arp():
         macro("ArpRatesDampedMax", fmt((r.damped_step_ratio_max / r.rho_damped).max(), 3))
 
 
+def t_extra():
+    """Macros for the introduction and the full-grid subsets of the leader comparison."""
+    d = read("summary_dip.csv")
+    if d is not None:
+        f = d[(d.grid_oracle == "exact") & (d.grid_points == 63)]
+        macro("GridCallsFullMin", fmt(f.grid_calls.min(), 3))
+        macro("GridCallsFullMax", fmt(f.grid_calls.max(), 3))
+        macro("DipCallsFullMin", str(int(f.dip_calls.min())))
+        macro("DipCallsFullMax", str(int(f.dip_calls.max())))
+        macro("DipTimeFullMed", fmt((f.dip_time_s / f.grid_time_s).median(), 2))
+    a = read("summary_arp.csv")
+    if a is not None and d is not None:
+        full = set(d[(d.grid_oracle == "exact") & (d.grid_points == 63)].city)
+        f = a[a.city.isin(full)]
+        macro("ArpFullN", str(len(f)))
+        macro("ArpFullCities", ", ".join(NAME[c] for c in ORDER if c in full and c in set(a.city)))
+        for k, nm in (("arp", "ArpFullArp"), ("mct_br", "ArpFullMct"), ("dip", "ArpFullDip")):
+            macro(nm + "Min", fmt(100 * f[k + "_gain_share"].min(), 3))
+            macro(nm + "Max", fmt(100 * f[k + "_gain_share"].max(), 3))
+            macro(nm + "Mean", fmt(100 * f[k + "_gain_share"].mean(), 3))
+        macro("ArpFullCallsMin", str(int(f.arp_calls.min())))
+        macro("ArpFullCallsMax", str(int(f.arp_calls.max())))
+        macro("MctFullCallsMin", str(int(f.mct_br_calls.min())))
+        macro("MctFullCallsMax", str(int(f.mct_br_calls.max())))
+        macro("ArpFullStatusFixed", str(int((f.arp_status == "fixed_point").sum())))
+        macro("ArpFullEqualsDipN", str(int((f.arp_gain_share >= f.dip_gain_share - 0.02).sum())))
+        macro("MctFullEqualsDipN", str(int((f.mct_br_gain_share >= f.dip_gain_share - 0.02).sum())))
+        st = [[float(x) for x in str(v).split(";")] for v in a.arp_step_rel]
+        macro("ArpStepAMin", fmt(min(x[1] for x in st), 2))
+        macro("ArpStepAMax", fmt(max(x[1] for x in st), 2))
+        macro("ArpStepBMin", fmt(min(x[2] for x in st), 2))
+        macro("ArpStepBMax", fmt(max(x[2] for x in st), 2))
+        gap = 100 * (a.dip_gain_share - a.arp_gain_share)
+        macro("ArpDipGapMax", fmt(gap.max(), 2))
+        macro("ArpDipGapN", str(int((gap > 2).sum())))
+        macro("ArpFullBelowOneN", str(int((f.arp_gain_share < 1).sum())))
+
+
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip, t_arp):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip, t_arp, t_extra):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest

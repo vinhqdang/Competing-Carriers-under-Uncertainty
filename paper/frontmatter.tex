@@ -1,0 +1,19 @@
+% Template-dependent block: title, author, abstract, keywords.
+% Everything below is the only part that needs to change when the manuscript is moved to another journal template.
+\begin{frontmatter}
+
+\title{City charges for competing delivery carriers: exact best responses under probability-box travel times and leader pricing without equilibrium search}
+
+\author{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
+\ead{vinh.dq4@buv.edu.vn}
+\address{British University Vietnam, Hung Yen, Vietnam}
+
+\begin{abstract}
+A city that charges delivery carriers faces a bilevel problem with three stacked difficulties. Each carrier solves an NP-hard routing problem whose travel times are known only through probability boxes, with unknown dependence between road segments. The carriers compete in a Cournot-type game in which the price falls with total deliveries and travel times rise with vehicle density. The city's charges are usually found by solving one equilibrium per grid point, which costs about two thousand routing solves per city. We give three algorithms. Budget-resource labelling prices routes exactly under the dependence-robust criterion and, inside branch-and-price, makes each carrier's integer plan exact. Dual implementation pricing targets a social optimum and finds charges that make it an equilibrium by cutting planes whose separation step is one best response per carrier. Aggregate-response pricing sets charges from observed zone totals only and contracts at a rate that does not depend on the number of zones, carriers or routing data. On nine metropolitan areas built from OpenStreetMap and gridded population, three random draws each, dual implementation pricing used \DipFullCallsMin--\DipFullCallsMax\% of the grid's routing calls in the three cities with a full grid and reached \DipFullGainMin--\DipFullGainMax\% of its gain, partly because it uses zone-specific charges; aggregate-response pricing reached \ArpFullArpMin--\ArpFullArpMax\% there. Pure equilibria exist under exposure-based congestion, and deciding their existence is strongly NP-complete under vehicle-count congestion. Equilibria, charges and the price of anarchy vary strongly with the random draw of the city slice.
+\end{abstract}
+
+\begin{keyword}
+bilevel optimization \sep vehicle routing \sep imprecise probabilities \sep congestion games \sep branch-and-price \sep road pricing
+\end{keyword}
+
+\end{frontmatter}

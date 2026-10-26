@@ -1,5 +1,5 @@
-Competing delivery carriers modelled as a routing game with credal beliefs
-Pure imprecise equilibria always exist under exposure-based congestion
-Existence is NP-complete under vehicle-count congestion below a set width
-Exact route pricing for probability-box travel times with unknown dependence
-City charges computed by implementing a target optimum, without a grid
+Exact route pricing under probability boxes with unknown dependence
+Branch-and-price makes each carrier's integer routing plan exact
+City charges from best-response cuts need 5-9% of a grid's routing calls
+Charges from observed zone totals alone contract at an instance-free rate
+Nine metro maps, three seeds: charge and anarchy results depend on the seed

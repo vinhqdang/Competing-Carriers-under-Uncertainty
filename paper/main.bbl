@@ -1,4 +1,4 @@
-\begin{thebibliography}{104}
+\begin{thebibliography}{92}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -49,31 +49,13 @@
   (\bibinfo{year}{2024}) \bibinfo{pages}{1300--1318}.
   \DOIprefix\doi{10.1287/trsc.2024.0569}.
 %Type = Article
-\bibitem[{Gendreau et~al.(2016)Gendreau, Jabali, and Rei}]{Gendreau2016}
-\bibinfo{author}{M.~Gendreau}, \bibinfo{author}{O.~Jabali},
-  \bibinfo{author}{W.~Rei},
-\newblock \bibinfo{title}{Future research directions in stochastic vehicle
-  routing},
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{50}
-  (\bibinfo{year}{2016}) \bibinfo{pages}{1163--1173}.
-  \DOIprefix\doi{10.1287/trsc.2016.0709}.
-%Type = Article
-\bibitem[{Ghosal and Wiesemann(2020)}]{GhosalWiesemann2020}
-\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{W.~Wiesemann},
-\newblock \bibinfo{title}{The distributionally robust chance-constrained
-  vehicle routing problem},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{68}
-  (\bibinfo{year}{2020}) \bibinfo{pages}{716--732}.
-  \DOIprefix\doi{10.1287/opre.2019.1924}.
-%Type = Article
-\bibitem[{Zhang et~al.(2021)Zhang, Zhang, Lim, and Sim}]{Zhang2021}
-\bibinfo{author}{Y.~Zhang}, \bibinfo{author}{Z.~Zhang},
-  \bibinfo{author}{A.~Lim}, \bibinfo{author}{M.~Sim},
-\newblock \bibinfo{title}{Robust data-driven vehicle routing with time
-  windows},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{69}
-  (\bibinfo{year}{2021}) \bibinfo{pages}{469--485}.
-  \DOIprefix\doi{10.1287/opre.2020.2043}.
+\bibitem[{Meilijson and N{\'a}das(1979)}]{Meilijson1979}
+\bibinfo{author}{I.~Meilijson}, \bibinfo{author}{A.~N{\'a}das},
+\newblock \bibinfo{title}{Convex majorization with an application to the length
+  of critical paths},
+\newblock \bibinfo{journal}{Journal of Applied Probability}
+  \bibinfo{volume}{16} (\bibinfo{year}{1979}) \bibinfo{pages}{671--677}.
+  \DOIprefix\doi{10.2307/3213097}.
 %Type = Article
 \bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
 \bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
@@ -84,89 +66,90 @@
   (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
   \DOIprefix\doi{10.1287/opre.2021.0669}.
 %Type = Article
-\bibitem[{Gansterer and Hartl(2018)}]{GanstererHartl2018}
-\bibinfo{author}{M.~Gansterer}, \bibinfo{author}{R.~F. Hartl},
-\newblock \bibinfo{title}{Collaborative vehicle routing: A survey},
-\newblock \bibinfo{journal}{European Journal of Operational Research}
-  \bibinfo{volume}{268} (\bibinfo{year}{2018}) \bibinfo{pages}{1--12}.
-  \DOIprefix\doi{10.1016/j.ejor.2017.10.023}.
+\bibitem[{Buchanan(1969)}]{Buchanan1969}
+\bibinfo{author}{J.~M. Buchanan},
+\newblock \bibinfo{title}{External diseconomies, corrective taxes, and market
+  structure},
+\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{59}
+  (\bibinfo{year}{1969}) \bibinfo{pages}{174--177}.
+%Type = Incollection
+\bibitem[{Bergendorff et~al.(1997)Bergendorff, Hearn, and
+  Ramana}]{Bergendorff1997}
+\bibinfo{author}{P.~Bergendorff}, \bibinfo{author}{D.~W. Hearn},
+  \bibinfo{author}{M.~V. Ramana},
+\newblock \bibinfo{title}{Congestion toll pricing of traffic networks},
+\newblock in: \bibinfo{booktitle}{Network Optimization}, volume
+  \bibinfo{volume}{450} of \textit{\bibinfo{series}{Lecture Notes in Economics
+  and Mathematical Systems}}, \bibinfo{publisher}{Springer},
+  \bibinfo{address}{Berlin}, \bibinfo{year}{1997}, pp. \bibinfo{pages}{51--71}.
+  \DOIprefix\doi{10.1007/978-3-642-59179-2_4}.
 %Type = Article
-\bibitem[{Cleophas et~al.(2019)Cleophas, Cottrill, Ehmke, and
-  Tierney}]{Cleophas2019}
-\bibinfo{author}{C.~Cleophas}, \bibinfo{author}{C.~Cottrill},
-  \bibinfo{author}{J.~F. Ehmke}, \bibinfo{author}{K.~Tierney},
-\newblock \bibinfo{title}{Collaborative urban transportation: Recent advances
-  in theory and practice},
-\newblock \bibinfo{journal}{European Journal of Operational Research}
-  \bibinfo{volume}{273} (\bibinfo{year}{2019}) \bibinfo{pages}{801--816}.
-  \DOIprefix\doi{10.1016/j.ejor.2018.04.037}.
+\bibitem[{Ahuja and Orlin(2001)}]{Ahuja2001}
+\bibinfo{author}{R.~K. Ahuja}, \bibinfo{author}{J.~B. Orlin},
+\newblock \bibinfo{title}{Inverse optimization},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{49}
+  (\bibinfo{year}{2001}) \bibinfo{pages}{771--783}.
+  \DOIprefix\doi{10.1287/opre.49.5.771.10607}.
 %Type = Article
-\bibitem[{Los et~al.(2025)Los, Schulte, Gansterer, Hartl, Spaan, and
-  Negenborn}]{Los2025}
-\bibinfo{author}{J.~Los}, \bibinfo{author}{F.~Schulte},
-  \bibinfo{author}{M.~Gansterer}, \bibinfo{author}{R.~F. Hartl},
-  \bibinfo{author}{M.~T.~J. Spaan}, \bibinfo{author}{R.~R. Negenborn},
-\newblock \bibinfo{title}{Large-scale collaborative vehicle routing},
-\newblock \bibinfo{journal}{Annals of Operations Research}
-  \bibinfo{volume}{350} (\bibinfo{year}{2025}) \bibinfo{pages}{201--233}.
-  \DOIprefix\doi{10.1007/s10479-021-04504-3}.
+\bibitem[{Yang et~al.(2004)Yang, Meng, and Lee}]{Yang2004}
+\bibinfo{author}{H.~Yang}, \bibinfo{author}{Q.~Meng}, \bibinfo{author}{D.-H.
+  Lee},
+\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
+  pricing on networks in the absence of demand functions},
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{38} (\bibinfo{year}{2004}) \bibinfo{pages}{477--493}.
+  \DOIprefix\doi{10.1016/S0191-2615(03)00077-8}.
 %Type = Article
-\bibitem[{Taylor(2018)}]{Taylor2018}
-\bibinfo{author}{T.~A. Taylor},
-\newblock \bibinfo{title}{On-demand service platforms},
-\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
-  \bibinfo{volume}{20} (\bibinfo{year}{2018}) \bibinfo{pages}{704--720}.
-  \DOIprefix\doi{10.1287/msom.2017.0678}.
+\bibitem[{Wolpert and Tumer(2001)}]{Wolpert2001}
+\bibinfo{author}{D.~H. Wolpert}, \bibinfo{author}{K.~Tumer},
+\newblock \bibinfo{title}{Optimal payoff functions for members of collectives},
+\newblock \bibinfo{journal}{Advances in Complex Systems} \bibinfo{volume}{4}
+  (\bibinfo{year}{2001}) \bibinfo{pages}{265--279}.
+  \DOIprefix\doi{10.1142/S0219525901000188}.
 %Type = Article
-\bibitem[{Bernstein et~al.(2021)Bernstein, DeCroix, and Keskin}]{Bernstein2021}
-\bibinfo{author}{F.~Bernstein}, \bibinfo{author}{G.~A. DeCroix},
-  \bibinfo{author}{N.~B. Keskin},
-\newblock \bibinfo{title}{Competition between two-sided platforms under demand
-  and supply congestion effects},
-\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
-  \bibinfo{volume}{23} (\bibinfo{year}{2021}) \bibinfo{pages}{1043--1061}.
-  \DOIprefix\doi{10.1287/msom.2020.0866}.
+\bibitem[{Sandholm(2002)}]{Sandholm2002}
+\bibinfo{author}{W.~H. Sandholm},
+\newblock \bibinfo{title}{Evolutionary implementation and congestion pricing},
+\newblock \bibinfo{journal}{The Review of Economic Studies}
+  \bibinfo{volume}{69} (\bibinfo{year}{2002}) \bibinfo{pages}{667--689}.
+  \DOIprefix\doi{10.1111/1467-937X.t01-1-00026}.
+%Type = Inproceedings
+\bibitem[{Maheshwari et~al.(2022)Maheshwari, Kulkarni, Wu, and
+  Sastry}]{Maheshwari2022}
+\bibinfo{author}{C.~Maheshwari}, \bibinfo{author}{K.~Kulkarni},
+  \bibinfo{author}{M.~Wu}, \bibinfo{author}{S.~Sastry},
+\newblock \bibinfo{title}{Inducing social optimality in games via adaptive
+  incentive design},
+\newblock in: \bibinfo{booktitle}{2022 IEEE 61st Conference on Decision and
+  Control (CDC)}, \bibinfo{year}{2022}, pp. \bibinfo{pages}{2864--2869}.
+  \DOIprefix\doi{10.1109/CDC51059.2022.9992685},
+  \bibinfo{note}{arXiv:2204.05507}.
 %Type = Article
-\bibitem[{Benjaafar et~al.(2022)Benjaafar, Ding, Kong, and
-  Taylor}]{Benjaafar2022}
-\bibinfo{author}{S.~Benjaafar}, \bibinfo{author}{J.-Y. Ding},
-  \bibinfo{author}{G.~Kong}, \bibinfo{author}{T.~Taylor},
-\newblock \bibinfo{title}{Labor welfare in on-demand service platforms},
-\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
-  \bibinfo{volume}{24} (\bibinfo{year}{2022}) \bibinfo{pages}{110--124}.
-  \DOIprefix\doi{10.1287/msom.2020.0964}.
+\bibitem[{Liu et~al.(2023)Liu, Oudjane, and Wan}]{Liu2023}
+\bibinfo{author}{K.~Liu}, \bibinfo{author}{N.~Oudjane},
+  \bibinfo{author}{C.~Wan},
+\newblock \bibinfo{title}{Approximate {Nash} equilibria in large nonconvex
+  aggregative games},
+\newblock \bibinfo{journal}{Mathematics of Operations Research}
+  \bibinfo{volume}{48} (\bibinfo{year}{2023}) \bibinfo{pages}{1791--1809}.
+  \DOIprefix\doi{10.1287/moor.2022.1321}.
 %Type = Article
-\bibitem[{Catalano and Migliore(2014)}]{Catalano2014}
-\bibinfo{author}{M.~Catalano}, \bibinfo{author}{M.~Migliore},
-\newblock \bibinfo{title}{A {Stackelberg}-game approach to support the design
-  of logistic terminals},
-\newblock \bibinfo{journal}{Journal of Transport Geography}
-  \bibinfo{volume}{41} (\bibinfo{year}{2014}) \bibinfo{pages}{63--73}.
-  \DOIprefix\doi{10.1016/j.jtrangeo.2014.08.010}.
+\bibitem[{Apt et~al.(2022)Apt, Simon, and Wojtczak}]{Apt2022}
+\bibinfo{author}{K.~R. Apt}, \bibinfo{author}{S.~Simon},
+  \bibinfo{author}{D.~Wojtczak},
+\newblock \bibinfo{title}{Coordination games on weighted directed graphs},
+\newblock \bibinfo{journal}{Mathematics of Operations Research}
+  \bibinfo{volume}{47} (\bibinfo{year}{2022}) \bibinfo{pages}{995--1025}.
+  \DOIprefix\doi{10.1287/moor.2021.1159}.
 %Type = Article
-\bibitem[{Cerulli et~al.(2024)Cerulli, Archetti, Fern{\'a}ndez, and
-  Ljubi{\'c}}]{Cerulli2024}
-\bibinfo{author}{M.~Cerulli}, \bibinfo{author}{C.~Archetti},
-  \bibinfo{author}{E.~Fern{\'a}ndez}, \bibinfo{author}{I.~Ljubi{\'c}},
-\newblock \bibinfo{title}{A bilevel approach for compensation and routing
-  decisions in last-mile delivery},
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{58}
-  (\bibinfo{year}{2024}) \bibinfo{pages}{1076--1100}.
-  \DOIprefix\doi{10.1287/trsc.2023.0129}.
-%Type = Book
-\bibitem[{Walley(1991)}]{Walley1991}
-\bibinfo{author}{P.~Walley}, \bibinfo{title}{Statistical Reasoning with
-  Imprecise Probabilities}, \bibinfo{publisher}{Chapman and Hall},
-  \bibinfo{address}{London}, \bibinfo{year}{1991}.
-  \DOIprefix\doi{10.1007/978-1-4899-3472-7}.
-%Type = Article
-\bibitem[{Troffaes(2007)}]{Troffaes2007}
-\bibinfo{author}{M.~C.~M. Troffaes},
-\newblock \bibinfo{title}{Decision making under uncertainty using imprecise
-  probabilities},
-\newblock \bibinfo{journal}{International Journal of Approximate Reasoning}
-  \bibinfo{volume}{45} (\bibinfo{year}{2007}) \bibinfo{pages}{17--29}.
-  \DOIprefix\doi{10.1016/j.ijar.2006.06.001}.
+\bibitem[{Maheshwari et~al.(2026)Maheshwari, Kulkarni, Wu, and
+  Sastry}]{Maheshwari2026}
+\bibinfo{author}{C.~Maheshwari}, \bibinfo{author}{K.~Kulkarni},
+  \bibinfo{author}{M.~Wu}, \bibinfo{author}{S.~Sastry},
+\newblock \bibinfo{title}{Adaptive incentive design with learning agents},
+\newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
+  \bibinfo{volume}{71} (\bibinfo{year}{2026}) \bibinfo{pages}{3619--3633}.
+  \DOIprefix\doi{10.1109/TAC.2025.3643351}, \bibinfo{note}{arXiv:2405.16716}.
 %Type = Article
 \bibitem[{Figliozzi et~al.(2004)Figliozzi, Mahmassani, and
   Jaillet}]{Figliozzi2004}
@@ -206,6 +189,31 @@
   \bibinfo{volume}{300} (\bibinfo{year}{2026}) \bibinfo{pages}{110096}.
   \DOIprefix\doi{10.1016/j.ijpe.2026.110096}.
 %Type = Article
+\bibitem[{Taylor(2018)}]{Taylor2018}
+\bibinfo{author}{T.~A. Taylor},
+\newblock \bibinfo{title}{On-demand service platforms},
+\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
+  \bibinfo{volume}{20} (\bibinfo{year}{2018}) \bibinfo{pages}{704--720}.
+  \DOIprefix\doi{10.1287/msom.2017.0678}.
+%Type = Article
+\bibitem[{Bernstein et~al.(2021)Bernstein, DeCroix, and Keskin}]{Bernstein2021}
+\bibinfo{author}{F.~Bernstein}, \bibinfo{author}{G.~A. DeCroix},
+  \bibinfo{author}{N.~B. Keskin},
+\newblock \bibinfo{title}{Competition between two-sided platforms under demand
+  and supply congestion effects},
+\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
+  \bibinfo{volume}{23} (\bibinfo{year}{2021}) \bibinfo{pages}{1043--1061}.
+  \DOIprefix\doi{10.1287/msom.2020.0866}.
+%Type = Article
+\bibitem[{Benjaafar et~al.(2022)Benjaafar, Ding, Kong, and
+  Taylor}]{Benjaafar2022}
+\bibinfo{author}{S.~Benjaafar}, \bibinfo{author}{J.-Y. Ding},
+  \bibinfo{author}{G.~Kong}, \bibinfo{author}{T.~Taylor},
+\newblock \bibinfo{title}{Labor welfare in on-demand service platforms},
+\newblock \bibinfo{journal}{Manufacturing \& Service Operations Management}
+  \bibinfo{volume}{24} (\bibinfo{year}{2022}) \bibinfo{pages}{110--124}.
+  \DOIprefix\doi{10.1287/msom.2020.0964}.
+%Type = Article
 \bibitem[{Alnaggar et~al.(2021)Alnaggar, Gzara, and Bookbinder}]{Alnaggar2021}
 \bibinfo{author}{A.~Alnaggar}, \bibinfo{author}{F.~Gzara},
   \bibinfo{author}{J.~H. Bookbinder},
@@ -214,14 +222,6 @@
 \newblock \bibinfo{journal}{Omega} \bibinfo{volume}{98} (\bibinfo{year}{2021})
   \bibinfo{pages}{102139}. \DOIprefix\doi{10.1016/j.omega.2019.102139}.
 %Type = Article
-\bibitem[{Alnaggar et~al.(2024)Alnaggar, Gzara, and Bookbinder}]{Alnaggar2024}
-\bibinfo{author}{A.~Alnaggar}, \bibinfo{author}{F.~Gzara},
-  \bibinfo{author}{J.~H. Bookbinder},
-\newblock \bibinfo{title}{Compensation guarantees in crowdsourced delivery:
-  Impact on platform and driver welfare},
-\newblock \bibinfo{journal}{Omega} \bibinfo{volume}{122} (\bibinfo{year}{2024})
-  \bibinfo{pages}{102965}. \DOIprefix\doi{10.1016/j.omega.2023.102965}.
-%Type = Article
 \bibitem[{Mancini and Gansterer(2022)}]{Mancini2022}
 \bibinfo{author}{S.~Mancini}, \bibinfo{author}{M.~Gansterer},
 \newblock \bibinfo{title}{Bundle generation for last-mile delivery with
@@ -229,15 +229,23 @@
 \newblock \bibinfo{journal}{Omega} \bibinfo{volume}{108} (\bibinfo{year}{2022})
   \bibinfo{pages}{102582}. \DOIprefix\doi{10.1016/j.omega.2021.102582}.
 %Type = Article
-\bibitem[{Di~Puglia~Pugliese et~al.(2023)Di~Puglia~Pugliese, Ferone, Macrina,
-  Festa, and Guerriero}]{DiPuglia2023}
-\bibinfo{author}{L.~Di~Puglia~Pugliese}, \bibinfo{author}{D.~Ferone},
-  \bibinfo{author}{G.~Macrina}, \bibinfo{author}{P.~Festa},
-  \bibinfo{author}{F.~Guerriero},
-\newblock \bibinfo{title}{The crowd-shipping with penalty cost function and
-  uncertain travel times},
-\newblock \bibinfo{journal}{Omega} \bibinfo{volume}{115} (\bibinfo{year}{2023})
-  \bibinfo{pages}{102776}. \DOIprefix\doi{10.1016/j.omega.2022.102776}.
+\bibitem[{Cerulli et~al.(2024)Cerulli, Archetti, Fern{\'a}ndez, and
+  Ljubi{\'c}}]{Cerulli2024}
+\bibinfo{author}{M.~Cerulli}, \bibinfo{author}{C.~Archetti},
+  \bibinfo{author}{E.~Fern{\'a}ndez}, \bibinfo{author}{I.~Ljubi{\'c}},
+\newblock \bibinfo{title}{A bilevel approach for compensation and routing
+  decisions in last-mile delivery},
+\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{58}
+  (\bibinfo{year}{2024}) \bibinfo{pages}{1076--1100}.
+  \DOIprefix\doi{10.1287/trsc.2023.0129}.
+%Type = Article
+\bibitem[{Catalano and Migliore(2014)}]{Catalano2014}
+\bibinfo{author}{M.~Catalano}, \bibinfo{author}{M.~Migliore},
+\newblock \bibinfo{title}{A {Stackelberg}-game approach to support the design
+  of logistic terminals},
+\newblock \bibinfo{journal}{Journal of Transport Geography}
+  \bibinfo{volume}{41} (\bibinfo{year}{2014}) \bibinfo{pages}{63--73}.
+  \DOIprefix\doi{10.1016/j.jtrangeo.2014.08.010}.
 %Type = Article
 \bibitem[{Liu et~al.(2023)Liu, Ma, and Qian}]{LiuMaQian2023}
 \bibinfo{author}{J.~Liu}, \bibinfo{author}{W.~Ma}, \bibinfo{author}{S.~Qian},
@@ -247,31 +255,32 @@
   Technologies} \bibinfo{volume}{146} (\bibinfo{year}{2023})
   \bibinfo{pages}{103960}. \DOIprefix\doi{10.1016/j.trc.2022.103960}.
 %Type = Article
-\bibitem[{Guajardo and R{\"o}nnqvist(2016)}]{Guajardo2016}
-\bibinfo{author}{M.~Guajardo}, \bibinfo{author}{M.~R{\"o}nnqvist},
-\newblock \bibinfo{title}{A review on cost allocation methods in collaborative
-  transportation},
-\newblock \bibinfo{journal}{International Transactions in Operational Research}
-  \bibinfo{volume}{23} (\bibinfo{year}{2016}) \bibinfo{pages}{371--392}.
-  \DOIprefix\doi{10.1111/itor.12205}.
-%Type = Article
-\bibitem[{Gansterer et~al.(2020)Gansterer, Hartl, and
-  S{\"o}rensen}]{GanstererHartl2020omega}
+\bibitem[{Gansterer and Hartl(2018)}]{GanstererHartl2018}
 \bibinfo{author}{M.~Gansterer}, \bibinfo{author}{R.~F. Hartl},
-  \bibinfo{author}{K.~S{\"o}rensen},
-\newblock \bibinfo{title}{Pushing frontiers in auction-based transport
-  collaborations},
-\newblock \bibinfo{journal}{Omega} \bibinfo{volume}{94} (\bibinfo{year}{2020})
-  \bibinfo{pages}{102042}. \DOIprefix\doi{10.1016/j.omega.2019.01.011}.
+\newblock \bibinfo{title}{Collaborative vehicle routing: A survey},
+\newblock \bibinfo{journal}{European Journal of Operational Research}
+  \bibinfo{volume}{268} (\bibinfo{year}{2018}) \bibinfo{pages}{1--12}.
+  \DOIprefix\doi{10.1016/j.ejor.2017.10.023}.
 %Type = Article
-\bibitem[{Los et~al.(2020)Los, Schulte, Spaan, and Negenborn}]{Los2020}
+\bibitem[{Cleophas et~al.(2019)Cleophas, Cottrill, Ehmke, and
+  Tierney}]{Cleophas2019}
+\bibinfo{author}{C.~Cleophas}, \bibinfo{author}{C.~Cottrill},
+  \bibinfo{author}{J.~F. Ehmke}, \bibinfo{author}{K.~Tierney},
+\newblock \bibinfo{title}{Collaborative urban transportation: Recent advances
+  in theory and practice},
+\newblock \bibinfo{journal}{European Journal of Operational Research}
+  \bibinfo{volume}{273} (\bibinfo{year}{2019}) \bibinfo{pages}{801--816}.
+  \DOIprefix\doi{10.1016/j.ejor.2018.04.037}.
+%Type = Article
+\bibitem[{Los et~al.(2025)Los, Schulte, Gansterer, Hartl, Spaan, and
+  Negenborn}]{Los2025}
 \bibinfo{author}{J.~Los}, \bibinfo{author}{F.~Schulte},
+  \bibinfo{author}{M.~Gansterer}, \bibinfo{author}{R.~F. Hartl},
   \bibinfo{author}{M.~T.~J. Spaan}, \bibinfo{author}{R.~R. Negenborn},
-\newblock \bibinfo{title}{The value of information sharing for platform-based
-  collaborative vehicle routing},
-\newblock \bibinfo{journal}{Transportation Research Part E: Logistics and
-  Transportation Review} \bibinfo{volume}{141} (\bibinfo{year}{2020})
-  \bibinfo{pages}{102011}. \DOIprefix\doi{10.1016/j.tre.2020.102011}.
+\newblock \bibinfo{title}{Large-scale collaborative vehicle routing},
+\newblock \bibinfo{journal}{Annals of Operations Research}
+  \bibinfo{volume}{350} (\bibinfo{year}{2025}) \bibinfo{pages}{201--233}.
+  \DOIprefix\doi{10.1007/s10479-021-04504-3}.
 %Type = Article
 \bibitem[{Gounaris et~al.(2013)Gounaris, Wiesemann, and Floudas}]{Gounaris2013}
 \bibinfo{author}{C.~E. Gounaris}, \bibinfo{author}{W.~Wiesemann},
@@ -281,6 +290,23 @@
 \newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{61}
   (\bibinfo{year}{2013}) \bibinfo{pages}{677--693}.
   \DOIprefix\doi{10.1287/opre.1120.1136}.
+%Type = Article
+\bibitem[{Ghosal and Wiesemann(2020)}]{GhosalWiesemann2020}
+\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{W.~Wiesemann},
+\newblock \bibinfo{title}{The distributionally robust chance-constrained
+  vehicle routing problem},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{68}
+  (\bibinfo{year}{2020}) \bibinfo{pages}{716--732}.
+  \DOIprefix\doi{10.1287/opre.2019.1924}.
+%Type = Article
+\bibitem[{Zhang et~al.(2021)Zhang, Zhang, Lim, and Sim}]{Zhang2021}
+\bibinfo{author}{Y.~Zhang}, \bibinfo{author}{Z.~Zhang},
+  \bibinfo{author}{A.~Lim}, \bibinfo{author}{M.~Sim},
+\newblock \bibinfo{title}{Robust data-driven vehicle routing with time
+  windows},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{69}
+  (\bibinfo{year}{2021}) \bibinfo{pages}{469--485}.
+  \DOIprefix\doi{10.1287/opre.2020.2043}.
 %Type = Article
 \bibitem[{Jaillet et~al.(2016)Jaillet, Qi, and Sim}]{Jaillet2016}
 \bibinfo{author}{P.~Jaillet}, \bibinfo{author}{J.~Qi},
@@ -297,14 +323,6 @@
 \newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{50}
   (\bibinfo{year}{2016}) \bibinfo{pages}{608--626}.
   \DOIprefix\doi{10.1287/trsc.2014.0581}.
-%Type = Article
-\bibitem[{Meilijson and N{\'a}das(1979)}]{Meilijson1979}
-\bibinfo{author}{I.~Meilijson}, \bibinfo{author}{A.~N{\'a}das},
-\newblock \bibinfo{title}{Convex majorization with an application to the length
-  of critical paths},
-\newblock \bibinfo{journal}{Journal of Applied Probability}
-  \bibinfo{volume}{16} (\bibinfo{year}{1979}) \bibinfo{pages}{671--677}.
-  \DOIprefix\doi{10.2307/3213097}.
 %Type = Article
 \bibitem[{Kaas et~al.(2000)Kaas, Dhaene, and Goovaerts}]{Kaas2000}
 \bibinfo{author}{R.~Kaas}, \bibinfo{author}{J.~Dhaene}, \bibinfo{author}{M.~J.
@@ -352,52 +370,6 @@
   \bibinfo{volume}{12} (\bibinfo{year}{2012}) \bibinfo{pages}{561--587}.
   \DOIprefix\doi{10.1007/s11067-011-9167-6}.
 %Type = Article
-\bibitem[{Soeffker et~al.(2022)Soeffker, Ulmer, and Mattfeld}]{Soeffker2022}
-\bibinfo{author}{N.~Soeffker}, \bibinfo{author}{M.~W. Ulmer},
-  \bibinfo{author}{D.~C. Mattfeld},
-\newblock \bibinfo{title}{Stochastic dynamic vehicle routing in the light of
-  prescriptive analytics: A review},
-\newblock \bibinfo{journal}{European Journal of Operational Research}
-  \bibinfo{volume}{298} (\bibinfo{year}{2022}) \bibinfo{pages}{801--820}.
-  \DOIprefix\doi{10.1016/j.ejor.2021.07.014}.
-%Type = Article
-\bibitem[{Ulmer et~al.(2020)Ulmer, Goodson, Mattfeld, and Thomas}]{Ulmer2020}
-\bibinfo{author}{M.~W. Ulmer}, \bibinfo{author}{J.~C. Goodson},
-  \bibinfo{author}{D.~C. Mattfeld}, \bibinfo{author}{B.~W. Thomas},
-\newblock \bibinfo{title}{On modeling stochastic dynamic vehicle routing
-  problems},
-\newblock \bibinfo{journal}{EURO Journal on Transportation and Logistics}
-  \bibinfo{volume}{9} (\bibinfo{year}{2020}) \bibinfo{pages}{100008}.
-  \DOIprefix\doi{10.1016/j.ejtl.2020.100008}.
-%Type = Article
-\bibitem[{Hildebrandt et~al.(2023)Hildebrandt, Thomas, and
-  Ulmer}]{Hildebrandt2023}
-\bibinfo{author}{F.~D. Hildebrandt}, \bibinfo{author}{B.~W. Thomas},
-  \bibinfo{author}{M.~W. Ulmer},
-\newblock \bibinfo{title}{Opportunities for reinforcement learning in
-  stochastic dynamic vehicle routing},
-\newblock \bibinfo{journal}{Computers \& Operations Research}
-  \bibinfo{volume}{150} (\bibinfo{year}{2023}) \bibinfo{pages}{106071}.
-  \DOIprefix\doi{10.1016/j.cor.2022.106071}.
-%Type = Article
-\bibitem[{Mohajerin~Esfahani and Kuhn(2018)}]{MohajerinEsfahani2018}
-\bibinfo{author}{P.~Mohajerin~Esfahani}, \bibinfo{author}{D.~Kuhn},
-\newblock \bibinfo{title}{Data-driven distributionally robust optimization
-  using the {Wasserstein} metric: Performance guarantees and tractable
-  reformulations},
-\newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{171}
-  (\bibinfo{year}{2018}) \bibinfo{pages}{115--166}.
-  \DOIprefix\doi{10.1007/s10107-017-1172-1}.
-%Type = Article
-\bibitem[{Wang et~al.(2023)Wang, Yang, Yang, and Gao}]{Wang2023omega}
-\bibinfo{author}{W.~Wang}, \bibinfo{author}{K.~Yang},
-  \bibinfo{author}{L.~Yang}, \bibinfo{author}{Z.~Gao},
-\newblock \bibinfo{title}{Distributionally robust chance-constrained
-  programming for multi-period emergency resource allocation and vehicle
-  routing in disaster response operations},
-\newblock \bibinfo{journal}{Omega} \bibinfo{volume}{120} (\bibinfo{year}{2023})
-  \bibinfo{pages}{102915}. \DOIprefix\doi{10.1016/j.omega.2023.102915}.
-%Type = Article
 \bibitem[{Rosenthal(1973)}]{Rosenthal1973}
 \bibinfo{author}{R.~W. Rosenthal},
 \newblock \bibinfo{title}{A class of games possessing pure-strategy {Nash}
@@ -412,22 +384,6 @@
 \newblock \bibinfo{journal}{Games and Economic Behavior} \bibinfo{volume}{14}
   (\bibinfo{year}{1996}) \bibinfo{pages}{124--143}.
   \DOIprefix\doi{10.1006/game.1996.0044}.
-%Type = Article
-\bibitem[{Wardrop(1952)}]{Wardrop1952}
-\bibinfo{author}{J.~G. Wardrop},
-\newblock \bibinfo{title}{Some theoretical aspects of road traffic research},
-\newblock \bibinfo{journal}{Proceedings of the Institution of Civil Engineers}
-  \bibinfo{volume}{1} (\bibinfo{year}{1952}) \bibinfo{pages}{325--362}.
-  \DOIprefix\doi{10.1680/ipeds.1952.11259}.
-%Type = Article
-\bibitem[{Orda et~al.(1993)Orda, Rom, and Shimkin}]{Orda1993}
-\bibinfo{author}{A.~Orda}, \bibinfo{author}{R.~Rom},
-  \bibinfo{author}{N.~Shimkin},
-\newblock \bibinfo{title}{Competitive routing in multiuser communication
-  networks},
-\newblock \bibinfo{journal}{IEEE/ACM Transactions on Networking}
-  \bibinfo{volume}{1} (\bibinfo{year}{1993}) \bibinfo{pages}{510--521}.
-  \DOIprefix\doi{10.1109/90.251910}.
 %Type = Article
 \bibitem[{Roughgarden and Tardos(2002)}]{Roughgarden2002}
 \bibinfo{author}{T.~Roughgarden}, \bibinfo{author}{{\'E}.~Tardos},
@@ -452,22 +408,6 @@
   (\bibinfo{year}{2009}) \bibinfo{pages}{1421--1437}.
   \DOIprefix\doi{10.1287/opre.1080.0653}.
 %Type = Article
-\bibitem[{Facchinei and Kanzow(2010)}]{Facchinei2010}
-\bibinfo{author}{F.~Facchinei}, \bibinfo{author}{C.~Kanzow},
-\newblock \bibinfo{title}{Generalized {Nash} equilibrium problems},
-\newblock \bibinfo{journal}{Annals of Operations Research}
-  \bibinfo{volume}{175} (\bibinfo{year}{2010}) \bibinfo{pages}{177--211}.
-  \DOIprefix\doi{10.1007/s10479-009-0653-x}.
-%Type = Article
-\bibitem[{Liu et~al.(2023)Liu, Oudjane, and Wan}]{Liu2023}
-\bibinfo{author}{K.~Liu}, \bibinfo{author}{N.~Oudjane},
-  \bibinfo{author}{C.~Wan},
-\newblock \bibinfo{title}{Approximate {Nash} equilibria in large nonconvex
-  aggregative games},
-\newblock \bibinfo{journal}{Mathematics of Operations Research}
-  \bibinfo{volume}{48} (\bibinfo{year}{2023}) \bibinfo{pages}{1791--1809}.
-  \DOIprefix\doi{10.1287/moor.2022.1321}.
-%Type = Article
 \bibitem[{Starr(1969)}]{Starr1969}
 \bibinfo{author}{R.~M. Starr},
 \newblock \bibinfo{title}{Quasi-equilibria in markets with non-convex
@@ -475,33 +415,6 @@
 \newblock \bibinfo{journal}{Econometrica} \bibinfo{volume}{37}
   (\bibinfo{year}{1969}) \bibinfo{pages}{25--38}.
   \DOIprefix\doi{10.2307/1909201}.
-%Type = Article
-\bibitem[{Aubin and Ekeland(1976)}]{Aubin1976}
-\bibinfo{author}{J.~P. Aubin}, \bibinfo{author}{I.~Ekeland},
-\newblock \bibinfo{title}{Estimates of the duality gap in nonconvex
-  optimization},
-\newblock \bibinfo{journal}{Mathematics of Operations Research}
-  \bibinfo{volume}{1} (\bibinfo{year}{1976}) \bibinfo{pages}{225--245}.
-  \DOIprefix\doi{10.1287/moor.1.3.225}.
-%Type = Article
-\bibitem[{Udell and Boyd(2016)}]{Udell2016}
-\bibinfo{author}{M.~Udell}, \bibinfo{author}{S.~Boyd},
-\newblock \bibinfo{title}{Bounding duality gap for separable problems with
-  linear constraints},
-\newblock \bibinfo{journal}{Computational Optimization and Applications}
-  \bibinfo{volume}{64} (\bibinfo{year}{2016}) \bibinfo{pages}{355--378}.
-  \DOIprefix\doi{10.1007/s10589-015-9819-4}.
-%Type = Article
-\bibitem[{Bonnans et~al.(2023)Bonnans, Liu, Oudjane, Pfeiffer, and
-  Wan}]{Bonnans2023}
-\bibinfo{author}{J.~F. Bonnans}, \bibinfo{author}{K.~Liu},
-  \bibinfo{author}{N.~Oudjane}, \bibinfo{author}{L.~Pfeiffer},
-  \bibinfo{author}{C.~Wan},
-\newblock \bibinfo{title}{Large-scale nonconvex optimization: Randomization,
-  gap estimation, and numerical resolution},
-\newblock \bibinfo{journal}{SIAM Journal on Optimization} \bibinfo{volume}{33}
-  (\bibinfo{year}{2023}) \bibinfo{pages}{3083--3113}.
-  \DOIprefix\doi{10.1137/22M1488892}.
 %Type = Article
 \bibitem[{Kalai(2004)}]{Kalai2004}
 \bibinfo{author}{E.~Kalai},
@@ -546,13 +459,6 @@
   (\bibinfo{year}{2016}) \bibinfo{pages}{245--269}.
   \DOIprefix\doi{10.1007/s11238-015-9502-3}.
 %Type = Article
-\bibitem[{Stauber(2011)}]{Stauber2011}
-\bibinfo{author}{R.~Stauber},
-\newblock \bibinfo{title}{Knightian games and robustness to ambiguity},
-\newblock \bibinfo{journal}{Journal of Economic Theory} \bibinfo{volume}{146}
-  (\bibinfo{year}{2011}) \bibinfo{pages}{248--274}.
-  \DOIprefix\doi{10.1016/j.jet.2010.08.008}.
-%Type = Article
 \bibitem[{Aghassi and Bertsimas(2006)}]{Aghassi2006}
 \bibinfo{author}{M.~Aghassi}, \bibinfo{author}{D.~Bertsimas},
 \newblock \bibinfo{title}{Robust game theory},
@@ -576,15 +482,35 @@
   aggregative games}, \bibinfo{howpublished}{arXiv preprint 2604.23669},
   \bibinfo{year}{2026}.
 %Type = Article
-\bibitem[{Christodoulou et~al.(2011)Christodoulou, Koutsoupias, and
-  Spirakis}]{Christodoulou2011}
-\bibinfo{author}{G.~Christodoulou}, \bibinfo{author}{E.~Koutsoupias},
-  \bibinfo{author}{P.~G. Spirakis},
-\newblock \bibinfo{title}{On the performance of approximate equilibria in
-  congestion games},
-\newblock \bibinfo{journal}{Algorithmica} \bibinfo{volume}{61}
-  (\bibinfo{year}{2011}) \bibinfo{pages}{116--140}.
-  \DOIprefix\doi{10.1007/s00453-010-9449-2}.
+\bibitem[{Carvalho et~al.(2022)Carvalho, Lodi, and Pedroso}]{Carvalho2022}
+\bibinfo{author}{M.~Carvalho}, \bibinfo{author}{A.~Lodi},
+  \bibinfo{author}{J.~P. Pedroso},
+\newblock \bibinfo{title}{Computing equilibria for integer programming games},
+\newblock \bibinfo{journal}{European Journal of Operational Research}
+  \bibinfo{volume}{303} (\bibinfo{year}{2022}) \bibinfo{pages}{1057--1070}.
+  \DOIprefix\doi{10.1016/j.ejor.2022.03.048}.
+%Type = Article
+\bibitem[{Barnett(1980)}]{Barnett1980}
+\bibinfo{author}{A.~H. Barnett},
+\newblock \bibinfo{title}{The {Pigouvian} tax rule under monopoly},
+\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{70}
+  (\bibinfo{year}{1980}) \bibinfo{pages}{1037--1041}.
+%Type = Incollection
+\bibitem[{Hearn and Ramana(1998)}]{Hearn1998}
+\bibinfo{author}{D.~W. Hearn}, \bibinfo{author}{M.~V. Ramana},
+\newblock \bibinfo{title}{Solving congestion toll pricing models},
+\newblock in: \bibinfo{booktitle}{Equilibrium and Advanced Transportation
+  Modelling}, \bibinfo{publisher}{Springer}, \bibinfo{address}{Boston, MA},
+  \bibinfo{year}{1998}, pp. \bibinfo{pages}{109--124}.
+  \DOIprefix\doi{10.1007/978-1-4615-5757-9_6}.
+%Type = Article
+\bibitem[{Fotakis and Spirakis(2008)}]{Fotakis2008}
+\bibinfo{author}{D.~Fotakis}, \bibinfo{author}{P.~G. Spirakis},
+\newblock \bibinfo{title}{Cost-balancing tolls for atomic network congestion
+  games},
+\newblock \bibinfo{journal}{Internet Mathematics} \bibinfo{volume}{5}
+  (\bibinfo{year}{2008}) \bibinfo{pages}{343--363}.
+  \DOIprefix\doi{10.1080/15427951.2008.10129175}.
 %Type = Article
 \bibitem[{Bhaskar et~al.(2019)Bhaskar, Ligett, Schulman, and
   Swamy}]{Bhaskar2019}
@@ -596,21 +522,22 @@
   (\bibinfo{year}{2019}) \bibinfo{pages}{533--569}.
   \DOIprefix\doi{10.1016/j.geb.2018.02.009}.
 %Type = Article
-\bibitem[{Apt et~al.(2022)Apt, Simon, and Wojtczak}]{Apt2022}
-\bibinfo{author}{K.~R. Apt}, \bibinfo{author}{S.~Simon},
-  \bibinfo{author}{D.~Wojtczak},
-\newblock \bibinfo{title}{Coordination games on weighted directed graphs},
-\newblock \bibinfo{journal}{Mathematics of Operations Research}
-  \bibinfo{volume}{47} (\bibinfo{year}{2022}) \bibinfo{pages}{995--1025}.
-  \DOIprefix\doi{10.1287/moor.2021.1159}.
+\bibitem[{Wang(2009)}]{Wang2009}
+\bibinfo{author}{L.~Wang},
+\newblock \bibinfo{title}{Cutting plane algorithms for the inverse mixed
+  integer linear programming problem},
+\newblock \bibinfo{journal}{Operations Research Letters} \bibinfo{volume}{37}
+  (\bibinfo{year}{2009}) \bibinfo{pages}{114--116}.
+  \DOIprefix\doi{10.1016/j.orl.2008.12.001}.
 %Type = Article
-\bibitem[{Carvalho et~al.(2022)Carvalho, Lodi, and Pedroso}]{Carvalho2022}
-\bibinfo{author}{M.~Carvalho}, \bibinfo{author}{A.~Lodi},
-  \bibinfo{author}{J.~P. Pedroso},
-\newblock \bibinfo{title}{Computing equilibria for integer programming games},
-\newblock \bibinfo{journal}{European Journal of Operational Research}
-  \bibinfo{volume}{303} (\bibinfo{year}{2022}) \bibinfo{pages}{1057--1070}.
-  \DOIprefix\doi{10.1016/j.ejor.2022.03.048}.
+\bibitem[{Bodur et~al.(2022)Bodur, Chan, and Zhu}]{Bodur2022}
+\bibinfo{author}{M.~Bodur}, \bibinfo{author}{T.~C.~Y. Chan},
+  \bibinfo{author}{I.~Y. Zhu},
+\newblock \bibinfo{title}{Inverse mixed integer optimization: Polyhedral
+  insights and trust region methods},
+\newblock \bibinfo{journal}{INFORMS Journal on Computing} \bibinfo{volume}{34}
+  (\bibinfo{year}{2022}) \bibinfo{pages}{1471--1488}.
+  \DOIprefix\doi{10.1287/ijoc.2021.1138}.
 %Type = Article
 \bibitem[{Dragotto and Scatamacchia(2023)}]{Dragotto2023}
 \bibinfo{author}{G.~Dragotto}, \bibinfo{author}{R.~Scatamacchia},
@@ -619,6 +546,27 @@
 \newblock \bibinfo{journal}{INFORMS Journal on Computing} \bibinfo{volume}{35}
   (\bibinfo{year}{2023}) \bibinfo{pages}{1143--1160}.
   \DOIprefix\doi{10.1287/ijoc.2022.0282}.
+%Type = Misc
+\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
+\bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
+  \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
+  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
+  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
+  \bibinfo{year}{2025}.
+%Type = Article
+\bibitem[{Marden and Wierman(2013)}]{Marden2013}
+\bibinfo{author}{J.~R. Marden}, \bibinfo{author}{A.~Wierman},
+\newblock \bibinfo{title}{Distributed welfare games},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{61}
+  (\bibinfo{year}{2013}) \bibinfo{pages}{155--168}.
+  \DOIprefix\doi{10.1287/opre.1120.1137}.
+%Type = Misc
+\bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
+\bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
+  \bibinfo{author}{N.~Kiyavash}, \bibinfo{author}{P.~Thiran},
+  \bibinfo{title}{Zeroth-order {Stackelberg} control in combinatorial
+  congestion games}, \bibinfo{howpublished}{arXiv preprint 2602.23277},
+  \bibinfo{year}{2026}.
 %Type = Article
 \bibitem[{Dvoretzky et~al.(1956)Dvoretzky, Kiefer, and Wolfowitz}]{DKW1956}
 \bibinfo{author}{A.~Dvoretzky}, \bibinfo{author}{J.~Kiefer},
@@ -636,6 +584,43 @@
 \newblock \bibinfo{journal}{The Annals of Probability} \bibinfo{volume}{18}
   (\bibinfo{year}{1990}) \bibinfo{pages}{1269--1283}.
   \DOIprefix\doi{10.1214/aop/1176990746}.
+%Type = Article
+\bibitem[{Baldacci et~al.(2011)Baldacci, Mingozzi, and Roberti}]{Baldacci2011}
+\bibinfo{author}{R.~Baldacci}, \bibinfo{author}{A.~Mingozzi},
+  \bibinfo{author}{R.~Roberti},
+\newblock \bibinfo{title}{New route relaxation and pricing strategies for the
+  vehicle routing problem},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{59}
+  (\bibinfo{year}{2011}) \bibinfo{pages}{1269--1283}.
+  \DOIprefix\doi{10.1287/opre.1110.0975}.
+%Type = Article
+\bibitem[{Feillet et~al.(2004)Feillet, Dejax, Gendreau, and
+  Gueguen}]{Feillet2004}
+\bibinfo{author}{D.~Feillet}, \bibinfo{author}{P.~Dejax},
+  \bibinfo{author}{M.~Gendreau}, \bibinfo{author}{C.~Gueguen},
+\newblock \bibinfo{title}{An exact algorithm for the elementary shortest path
+  problem with resource constraints: Application to some vehicle routing
+  problems},
+\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{44}
+  (\bibinfo{year}{2004}) \bibinfo{pages}{216--229}.
+  \DOIprefix\doi{10.1002/net.20033}.
+%Type = Incollection
+\bibitem[{Irnich and Desaulniers(2005)}]{Irnich2005}
+\bibinfo{author}{S.~Irnich}, \bibinfo{author}{G.~Desaulniers},
+\newblock \bibinfo{title}{Shortest path problems with resource constraints},
+\newblock in: \bibinfo{editor}{G.~Desaulniers},
+  \bibinfo{editor}{J.~Desrosiers}, \bibinfo{editor}{M.~M. Solomon} (Eds.),
+  \bibinfo{booktitle}{Column Generation}, \bibinfo{publisher}{Springer},
+  \bibinfo{address}{Boston, MA}, \bibinfo{year}{2005}, pp.
+  \bibinfo{pages}{33--65}. \DOIprefix\doi{10.1007/0-387-25486-2_2}.
+%Type = Article
+\bibitem[{Troffaes(2007)}]{Troffaes2007}
+\bibinfo{author}{M.~C.~M. Troffaes},
+\newblock \bibinfo{title}{Decision making under uncertainty using imprecise
+  probabilities},
+\newblock \bibinfo{journal}{International Journal of Approximate Reasoning}
+  \bibinfo{volume}{45} (\bibinfo{year}{2007}) \bibinfo{pages}{17--29}.
+  \DOIprefix\doi{10.1016/j.ijar.2006.06.001}.
 %Type = Article
 \bibitem[{Nash(1951)}]{Nash1951}
 \bibinfo{author}{J.~Nash},
@@ -693,126 +678,57 @@
   Conference on Machine Learning (ICML 2003)}, \bibinfo{year}{2003}, pp.
   \bibinfo{pages}{536--543}.
 %Type = Article
-\bibitem[{Baldacci et~al.(2011)Baldacci, Mingozzi, and Roberti}]{Baldacci2011}
-\bibinfo{author}{R.~Baldacci}, \bibinfo{author}{A.~Mingozzi},
-  \bibinfo{author}{R.~Roberti},
-\newblock \bibinfo{title}{New route relaxation and pricing strategies for the
-  vehicle routing problem},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{59}
-  (\bibinfo{year}{2011}) \bibinfo{pages}{1269--1283}.
-  \DOIprefix\doi{10.1287/opre.1110.0975}.
+\bibitem[{Aubin and Ekeland(1976)}]{Aubin1976}
+\bibinfo{author}{J.~P. Aubin}, \bibinfo{author}{I.~Ekeland},
+\newblock \bibinfo{title}{Estimates of the duality gap in nonconvex
+  optimization},
+\newblock \bibinfo{journal}{Mathematics of Operations Research}
+  \bibinfo{volume}{1} (\bibinfo{year}{1976}) \bibinfo{pages}{225--245}.
+  \DOIprefix\doi{10.1287/moor.1.3.225}.
 %Type = Article
-\bibitem[{Feillet et~al.(2004)Feillet, Dejax, Gendreau, and
-  Gueguen}]{Feillet2004}
-\bibinfo{author}{D.~Feillet}, \bibinfo{author}{P.~Dejax},
-  \bibinfo{author}{M.~Gendreau}, \bibinfo{author}{C.~Gueguen},
-\newblock \bibinfo{title}{An exact algorithm for the elementary shortest path
-  problem with resource constraints: Application to some vehicle routing
-  problems},
-\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{44}
-  (\bibinfo{year}{2004}) \bibinfo{pages}{216--229}.
-  \DOIprefix\doi{10.1002/net.20033}.
-%Type = Incollection
-\bibitem[{Irnich and Desaulniers(2005)}]{Irnich2005}
-\bibinfo{author}{S.~Irnich}, \bibinfo{author}{G.~Desaulniers},
-\newblock \bibinfo{title}{Shortest path problems with resource constraints},
-\newblock in: \bibinfo{editor}{G.~Desaulniers},
-  \bibinfo{editor}{J.~Desrosiers}, \bibinfo{editor}{M.~M. Solomon} (Eds.),
-  \bibinfo{booktitle}{Column Generation}, \bibinfo{publisher}{Springer},
-  \bibinfo{address}{Boston, MA}, \bibinfo{year}{2005}, pp.
-  \bibinfo{pages}{33--65}. \DOIprefix\doi{10.1007/0-387-25486-2_2}.
+\bibitem[{Udell and Boyd(2016)}]{Udell2016}
+\bibinfo{author}{M.~Udell}, \bibinfo{author}{S.~Boyd},
+\newblock \bibinfo{title}{Bounding duality gap for separable problems with
+  linear constraints},
+\newblock \bibinfo{journal}{Computational Optimization and Applications}
+  \bibinfo{volume}{64} (\bibinfo{year}{2016}) \bibinfo{pages}{355--378}.
+  \DOIprefix\doi{10.1007/s10589-015-9819-4}.
 %Type = Article
-\bibitem[{Buchanan(1969)}]{Buchanan1969}
-\bibinfo{author}{J.~M. Buchanan},
-\newblock \bibinfo{title}{External diseconomies, corrective taxes, and market
-  structure},
-\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{59}
-  (\bibinfo{year}{1969}) \bibinfo{pages}{174--177}.
+\bibitem[{Bonnans et~al.(2023)Bonnans, Liu, Oudjane, Pfeiffer, and
+  Wan}]{Bonnans2023}
+\bibinfo{author}{J.~F. Bonnans}, \bibinfo{author}{K.~Liu},
+  \bibinfo{author}{N.~Oudjane}, \bibinfo{author}{L.~Pfeiffer},
+  \bibinfo{author}{C.~Wan},
+\newblock \bibinfo{title}{Large-scale nonconvex optimization: Randomization,
+  gap estimation, and numerical resolution},
+\newblock \bibinfo{journal}{SIAM Journal on Optimization} \bibinfo{volume}{33}
+  (\bibinfo{year}{2023}) \bibinfo{pages}{3083--3113}.
+  \DOIprefix\doi{10.1137/22M1488892}.
 %Type = Article
-\bibitem[{Barnett(1980)}]{Barnett1980}
-\bibinfo{author}{A.~H. Barnett},
-\newblock \bibinfo{title}{The {Pigouvian} tax rule under monopoly},
-\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{70}
-  (\bibinfo{year}{1980}) \bibinfo{pages}{1037--1041}.
-%Type = Article
-\bibitem[{Wolpert and Tumer(2001)}]{Wolpert2001}
-\bibinfo{author}{D.~H. Wolpert}, \bibinfo{author}{K.~Tumer},
-\newblock \bibinfo{title}{Optimal payoff functions for members of collectives},
-\newblock \bibinfo{journal}{Advances in Complex Systems} \bibinfo{volume}{4}
-  (\bibinfo{year}{2001}) \bibinfo{pages}{265--279}.
-  \DOIprefix\doi{10.1142/S0219525901000188}.
-%Type = Article
-\bibitem[{Marden and Wierman(2013)}]{Marden2013}
-\bibinfo{author}{J.~R. Marden}, \bibinfo{author}{A.~Wierman},
-\newblock \bibinfo{title}{Distributed welfare games},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{61}
-  (\bibinfo{year}{2013}) \bibinfo{pages}{155--168}.
-  \DOIprefix\doi{10.1287/opre.1120.1137}.
-%Type = Incollection
-\bibitem[{Bergendorff et~al.(1997)Bergendorff, Hearn, and
-  Ramana}]{Bergendorff1997}
-\bibinfo{author}{P.~Bergendorff}, \bibinfo{author}{D.~W. Hearn},
-  \bibinfo{author}{M.~V. Ramana},
-\newblock \bibinfo{title}{Congestion toll pricing of traffic networks},
-\newblock in: \bibinfo{booktitle}{Network Optimization}, volume
-  \bibinfo{volume}{450} of \textit{\bibinfo{series}{Lecture Notes in Economics
-  and Mathematical Systems}}, \bibinfo{publisher}{Springer},
-  \bibinfo{address}{Berlin}, \bibinfo{year}{1997}, pp. \bibinfo{pages}{51--71}.
-  \DOIprefix\doi{10.1007/978-3-642-59179-2_4}.
-%Type = Incollection
-\bibitem[{Hearn and Ramana(1998)}]{Hearn1998}
-\bibinfo{author}{D.~W. Hearn}, \bibinfo{author}{M.~V. Ramana},
-\newblock \bibinfo{title}{Solving congestion toll pricing models},
-\newblock in: \bibinfo{booktitle}{Equilibrium and Advanced Transportation
-  Modelling}, \bibinfo{publisher}{Springer}, \bibinfo{address}{Boston, MA},
-  \bibinfo{year}{1998}, pp. \bibinfo{pages}{109--124}.
-  \DOIprefix\doi{10.1007/978-1-4615-5757-9_6}.
-%Type = Article
-\bibitem[{Ahuja and Orlin(2001)}]{Ahuja2001}
-\bibinfo{author}{R.~K. Ahuja}, \bibinfo{author}{J.~B. Orlin},
-\newblock \bibinfo{title}{Inverse optimization},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{49}
-  (\bibinfo{year}{2001}) \bibinfo{pages}{771--783}.
-  \DOIprefix\doi{10.1287/opre.49.5.771.10607}.
-%Type = Article
-\bibitem[{Fotakis and Spirakis(2008)}]{Fotakis2008}
-\bibinfo{author}{D.~Fotakis}, \bibinfo{author}{P.~G. Spirakis},
-\newblock \bibinfo{title}{Cost-balancing tolls for atomic network congestion
-  games},
-\newblock \bibinfo{journal}{Internet Mathematics} \bibinfo{volume}{5}
-  (\bibinfo{year}{2008}) \bibinfo{pages}{343--363}.
-  \DOIprefix\doi{10.1080/15427951.2008.10129175}.
-%Type = Article
-\bibitem[{Wang(2009)}]{Wang2009}
-\bibinfo{author}{L.~Wang},
-\newblock \bibinfo{title}{Cutting plane algorithms for the inverse mixed
-  integer linear programming problem},
-\newblock \bibinfo{journal}{Operations Research Letters} \bibinfo{volume}{37}
-  (\bibinfo{year}{2009}) \bibinfo{pages}{114--116}.
-  \DOIprefix\doi{10.1016/j.orl.2008.12.001}.
-%Type = Article
-\bibitem[{Bodur et~al.(2022)Bodur, Chan, and Zhu}]{Bodur2022}
-\bibinfo{author}{M.~Bodur}, \bibinfo{author}{T.~C.~Y. Chan},
-  \bibinfo{author}{I.~Y. Zhu},
-\newblock \bibinfo{title}{Inverse mixed integer optimization: Polyhedral
-  insights and trust region methods},
-\newblock \bibinfo{journal}{INFORMS Journal on Computing} \bibinfo{volume}{34}
-  (\bibinfo{year}{2022}) \bibinfo{pages}{1471--1488}.
-  \DOIprefix\doi{10.1287/ijoc.2021.1138}.
+\bibitem[{Haklay and Weber(2008)}]{Haklay2008}
+\bibinfo{author}{M.~Haklay}, \bibinfo{author}{P.~Weber},
+\newblock \bibinfo{title}{{OpenStreetMap}: User-generated street maps},
+\newblock \bibinfo{journal}{IEEE Pervasive Computing} \bibinfo{volume}{7}
+  (\bibinfo{year}{2008}) \bibinfo{pages}{12--18}.
+  \DOIprefix\doi{10.1109/MPRV.2008.80}.
 %Type = Misc
-\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
-\bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
-  \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
-  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
-  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
-  \bibinfo{year}{2025}.
+\bibitem[{Schiavina et~al.(2023)Schiavina, Freire, and MacManus}]{GHSPOP2023}
+\bibinfo{author}{M.~Schiavina}, \bibinfo{author}{S.~Freire},
+  \bibinfo{author}{K.~MacManus}, \bibinfo{title}{{GHS-POP R2023A} -- {GHS}
+  population grid multitemporal (1975--2030)}, \bibinfo{howpublished}{European
+  Commission, Joint Research Centre (JRC), dataset}, \bibinfo{year}{2023}.
+  \DOIprefix\doi{10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE}.
 %Type = Misc
-\bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
-\bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
-  \bibinfo{author}{N.~Kiyavash}, \bibinfo{author}{P.~Thiran},
-  \bibinfo{title}{Zeroth-order {Stackelberg} control in combinatorial
-  congestion games}, \bibinfo{howpublished}{arXiv preprint 2602.23277},
-  \bibinfo{year}{2026}.
+\bibitem[{{TomTom}(2026)}]{TomTom2025}
+\bibinfo{author}{{TomTom}}, \bibinfo{title}{{TomTom} traffic index 2025},
+  \bibinfo{howpublished}{\url{https://www.tomtom.com/traffic-index/}, accessed
+  23 October 2026}, \bibinfo{year}{2026}.
+%Type = Techreport
+\bibitem[{{Bureau of Public Roads}(1964)}]{BPR1964}
+\bibinfo{author}{{Bureau of Public Roads}}, \bibinfo{title}{Traffic Assignment
+  Manual for Application with a Large, High Speed Computer},
+  \bibinfo{type}{Technical Report}, U.S. Department of Commerce, Urban Planning
+  Division, \bibinfo{address}{Washington, DC}, \bibinfo{year}{1964}.
 %Type = Article
 \bibitem[{Briant et~al.(2008)Briant, Lemar{\'e}chal, Meurdesoif, Michel,
   Perrot, and Vanderbeck}]{Briant2008}
@@ -842,35 +758,16 @@
 \newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{179}
   (\bibinfo{year}{2020}) \bibinfo{pages}{343--384}.
   \DOIprefix\doi{10.1007/s10107-018-1334-9}.
-%Type = Article
-\bibitem[{Haklay and Weber(2008)}]{Haklay2008}
-\bibinfo{author}{M.~Haklay}, \bibinfo{author}{P.~Weber},
-\newblock \bibinfo{title}{{OpenStreetMap}: User-generated street maps},
-\newblock \bibinfo{journal}{IEEE Pervasive Computing} \bibinfo{volume}{7}
-  (\bibinfo{year}{2008}) \bibinfo{pages}{12--18}.
-  \DOIprefix\doi{10.1109/MPRV.2008.80}.
-%Type = Misc
-\bibitem[{Schiavina et~al.(2023)Schiavina, Freire, and MacManus}]{GHSPOP2023}
-\bibinfo{author}{M.~Schiavina}, \bibinfo{author}{S.~Freire},
-  \bibinfo{author}{K.~MacManus}, \bibinfo{title}{{GHS-POP R2023A} -- {GHS}
-  population grid multitemporal (1975--2030)}, \bibinfo{howpublished}{European
-  Commission, Joint Research Centre (JRC), dataset}, \bibinfo{year}{2023}.
-  \DOIprefix\doi{10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE}.
-%Type = Misc
-\bibitem[{{TomTom}(2026)}]{TomTom2025}
-\bibinfo{author}{{TomTom}}, \bibinfo{title}{{TomTom} traffic index 2025},
-  \bibinfo{howpublished}{\url{https://www.tomtom.com/traffic-index/}, accessed
-  23 October 2026}, \bibinfo{year}{2026}.
-%Type = Techreport
-\bibitem[{{Bureau of Public Roads}(1964)}]{BPR1964}
-\bibinfo{author}{{Bureau of Public Roads}}, \bibinfo{title}{Traffic Assignment
-  Manual for Application with a Large, High Speed Computer},
-  \bibinfo{type}{Technical Report}, U.S. Department of Commerce, Urban Planning
-  Division, \bibinfo{address}{Washington, DC}, \bibinfo{year}{1964}.
 %Type = Book
 \bibitem[{Rockafellar(1970)}]{Rockafellar1970}
 \bibinfo{author}{R.~T. Rockafellar}, \bibinfo{title}{Convex Analysis},
   \bibinfo{publisher}{Princeton University Press}, \bibinfo{address}{Princeton,
   NJ}, \bibinfo{year}{1970}. \DOIprefix\doi{10.1515/9781400873173}.
+%Type = Book
+\bibitem[{Nesterov(2004)}]{Nesterov2004}
+\bibinfo{author}{Y.~Nesterov}, \bibinfo{title}{Introductory Lectures on Convex
+  Optimization: A Basic Course}, \bibinfo{publisher}{Kluwer Academic
+  Publishers}, \bibinfo{address}{Boston, MA}, \bibinfo{year}{2004}.
+  \DOIprefix\doi{10.1007/978-1-4419-8853-9}.
 
 \end{thebibliography}

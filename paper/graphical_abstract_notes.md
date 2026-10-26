@@ -1,24 +1,12 @@
-# Suggested graphical abstract
+# Graphical abstract note
 
-Built only from existing figures and results of the manuscript; no new result.
+Built only from existing figures and generated results; no new result. Left to right, white background, three panels.
 
-Layout: three panels, left to right, on a white background.
+1. **Problem** (schematic, no numbers). City leader with a zone-charge dial above three to six carrier depots on a zone grid; each carrier has routes with a probability box on every arc. Caption: "Each carrier solves an NP-hard routing problem; carriers compete and congest; the city sets charges." The zone grid can be cropped from one panel of `figures/overview_equilibria_light.png`.
+2. **Methods** (three short text lines): BRL, exact best responses under probability boxes with unknown dependence; DIP, charges from best-response cuts; ARP, charges from observed zone totals only.
+3. **Evidence**: `figures/arp_calls_vs_gain.png` (gain relative to the best exact grid point against routing-oracle calls, log scale; grid, DIP, ARP and tariff variants). Caption: "Leader methods need a fraction of the grid's routing calls; gains above 100% partly reflect zone-specific charges."
 
-1. **Model** (schematic, no numbers). Several carrier depots on a city zone grid, each with a few routes;
-   a city leader above them with two dials, "congestion charge per vehicle-hour" and "per-delivery charge";
-   each carrier holds a box of beliefs (travel-time probability box, rival activity box).
-   The city grid can be cropped from one panel of `figures/overview_equilibria_light.png` (e.g. Paris, seed 0).
-2. **Theory** (text panel, three lines, statements from Section 4):
-   exposure-based congestion: pure imprecise equilibria at every belief width;
-   vehicle-count congestion: existence NP-complete below an explicit width;
-   enough imprecision makes a rounded mixed equilibrium an exact pure equilibrium.
-3. **Leader method** (optional fourth panel): `figures/dip_charges_London.png` (left half: DIP's zone charges per delivery,
-   in units of the fee), captioned "Zone charges from dual implementation pricing; the target is an exact equilibrium".
-4. **Evidence**: the left half of `figures/E2_instruments.png` (main objective, gain of the leader's best
-   charge by instrument, mean over three seeds with spread bars), captioned
-   "Nine cities, three seeds each: a per-delivery subsidy captures most of the gain; a congestion charge alone captures little."
-
-Notes for the author:
-- Keep the spread bars; the London and New Delhi gains vary widely between seeds.
-- Do not use the broad-objective panel: its shut-down optima are an artifact of a proxy.
-- Omega's graphical abstract guidance (image size, file type) should be checked on the journal's Guide for Authors.
+Notes for the author
+- Keep the log-scale call axis; it is the main message of the figure.
+- Do not use the broad-objective panels (shut-down optima are an artifact of a proxy).
+- Check image size and file-type rules in the Guide for Authors of the chosen journal.

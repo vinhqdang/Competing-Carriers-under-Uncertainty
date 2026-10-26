@@ -253,3 +253,4 @@ theory/new_algorithm_C/*.out
 theory/new_algorithm_D/*.aux
 theory/new_algorithm_D/*.log
 theory/new_algorithm_D/*.out
+paper/frontmatter.aux
