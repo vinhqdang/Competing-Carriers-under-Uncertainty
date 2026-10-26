@@ -689,19 +689,17 @@ Coverage per city and seed (E2: grid points solved with the exact oracle out of 
 | city | s0: E1 / E2 exact pts / E3 / E4 exact rows | s1: E1 / E2 exact pts / E3 / E4 exact rows | s2: E1 / E2 exact pts / E3 / E4 exact rows |
 |---|---|---|---|
 | New Delhi | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
-| Cairo | x / 13/63 / x / 6/12 | x / 17/63 / x / 6/12 | x / 13/63 / x / . |
-| Moscow | x / 12/63 / x / 6/12 | x / 10/63 / x / 6/12 | x / . / . / . |
+| Cairo | x / 13/63 / x / 6/12 | x / 17/63 / x / 6/12 | x / 13/63 / x / 6/12 |
+| Moscow | x / 12/63 / x / 6/12 | x / 10/63 / x / 6/12 | x / 11/63 / x / 6/12 |
 | Buenos Aires | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
-| New York | x / 7/63 / x / 6/12 | x / 7/63 / x / 6/12 | x / . / . / . |
+| New York | x / 7/63 / x / 6/12 | x / 7/63 / x / 6/12 | x / 9/63 / x / 6/12 |
 | Mumbai | x / 15/63 / x / 12/12 | x / 14/63 / x / 12/12 | x / 14/63 / x / 12/12 |
 | London | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 | x / 63/63 / x / 12/12 |
-| Paris | x / 14/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / 13/63 / x / . |
-| Berlin | x / 13/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / . / . / . |
+| Paris | x / 14/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / 13/63 / x / 6/12 |
+| Berlin | x / 13/63 / x / 6/12 | x / 13/63 / x / 6/12 | x / 13/63 / x / 6/12 |
 
-* **E1 base: all nine cities and three seeds, exact** (certified with the fresh exact oracle). The sensitivity scenarios (the `sens` rows of `E1_<city>.csv`) were **not** re-run: they keep their
-  price-and-branch values and carry `oracle = pb`; `summarize.py` compares them with the price-and-branch base case of the same seed.
-* **E3: exact for 24 of 27 city/seeds** (Cairo, Paris, Buenos Aires, London, New Delhi, Mumbai: three seeds; New York, Moscow, Berlin: seeds 0 and 1). Seed 2 of New York, Moscow and Berlin was not finished in time and is absent from the exact files
-  (the new three-seed tables then average two seeds for these cities, `n_seeds` says so; the old values of their seed 2 are in `results/pb_old/`). In New York, Moscow and Berlin the SO benchmark of the *broad* objective (`SO_broad`) was computed with price-and-branch (`oracle = pb` in that row);
+* **E1 base: all nine cities and three seeds, exact** (certified with the fresh exact oracle). The E1 sensitivity scenarios were re-run with the exact oracle for all nine cities in the final run; `summarize.py` compares them with the price-and-branch base case of the same seed.
+* **E3: exact for all 27 city/seeds** (final state 2026-10-26, 108 of 108 results complete; seed 2 of New York, Moscow and Berlin was finished in a later run). In New York, Moscow and Berlin the SO benchmark of the *broad* objective (`SO_broad`) was computed with price-and-branch (`oracle = pb` in that row);
   everything else in E3 is exact.
 * **E2 grid: complete 63-point exact grid for Buenos Aires, London and New Delhi; for Cairo, Paris, Berlin, New York, Moscow and Mumbai only a subset of the grid is exact**, chosen by screening with the price-and-branch grid of the same city and seed: the exact oracle is applied at (0, 0) and
   at the two best points of every (objective, configuration) among the three charge configurations (`CCU_E2_MODE=minimal`). The other grid points keep their price-and-branch row (`oracle = pb`, copied from `results/pb_old`).
@@ -709,7 +707,7 @@ Coverage per city and seed (E2: grid points solved with the exact oracle out of 
   (the exact grid is a subset), and shares of delivery-only in the two-instrument gain can exceed 1 when the best two-instrument point was not among the exact points (Mumbai seed 1: 1.38). No local refinement was done (the first, abandoned, version also evaluated the grid neighbours of the best point, so Cairo, Paris, Mumbai, Moscow and Berlin seeds contain a few more exact points than the minimal set; the number of exact points is in the coverage table).
   The leader's best points, E2best, E2cert and the priced equilibria of E3 are all exact equilibria of the exact game.
 * **E4: complete for New Delhi, Buenos Aires, London and Mumbai (12 widths, exact); for Cairo, Paris, Berlin, New York and Moscow six widths are exact (p-box alpha in {2, 0.05, 1e-4}, i.e. eps = 0, base, widest; credal delta in {0, 0.2, 0.8}) and the others keep price-and-branch rows (`oracle = pb`, ignored by `summarize.py`)**.
-  Seeds: see the coverage table (a dot means the seed was not re-run exactly; it is then absent from the new tables).
+  Seeds: all three seeds of every city are covered (see the coverage table).
 
 **Oracle calls proven optimal.**
 
@@ -831,7 +829,7 @@ Gains are in percent of |social cost| of the unpriced equilibrium, main objectiv
 * **Berlin**: E1 welfare -0.14%; seed-0 PoA 1.014 -> 1.020 (equilibrium welfare -0.53%, the equilibrium found by `run_bp.py game` earlier); Paris: welfare +0.09%, Cairo +0.09%.
 * New York and Moscow: the equilibria differ in the second digit only; New York seed 2 base case has 6 unproven calls (gap bound 4.8 USD on a welfare of 20,000), see above.
 
-**Caveats.** (1) The exact oracle is exact for the elementary problem with the proven bound only where the call is proven optimal; unproven calls are quantified above (largest gap 8.5 USD). (2) The reduced grids make the E2 gains of Cairo, Paris, Berlin, New York, Moscow and Mumbai lower bounds. (3) The equilibrium is not unique; PoS/PoA use the equilibria found from six starting points, as before.
+**Caveats.** (1) The exact oracle is exact for the elementary problem with the proven bound only where the call is proven optimal; unproven calls are quantified above (largest gap 14.1 USD). (2) The reduced grids make the E2 gains of Cairo, Paris, Berlin, New York, Moscow and Mumbai lower bounds. (3) The equilibrium is not unique; PoS/PoA use the equilibria found from six starting points, as before.
 (4) Two oracle protocols were used for the pricing calls (retry on all calls, or on best responses only, see Protocol); the equilibria and their verification are the same in both. (5) The E1 sensitivity and the E5/E6/verification runs of Section 4 were not re-run.
 Run time: 6 h 25 min (10:34-16:59) wall-clock on 3 processes for E1, E2/E3, E4 and the 27 regret checks of the old equilibria (price-and-branch needed about 3 hours of one core in total for the same files, excluding the sensitivity runs).
 
