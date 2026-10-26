@@ -400,10 +400,23 @@ class RoutePool:
         for j in range(1, inst.n + 1):
             self._add((j,))
 
+    def _cost(self, r: tuple) -> float:
+        """Route cost of a column (exact p-box upper expectation); subclasses with another criterion override this."""
+        return self.inst.route_cost(r)
+
+    def _price(self, duals: np.ndarray):
+        """Pricing step of the column generation: (best reduced cost, [(rc, route)], stats); `overflow` marks an
+        uncertified bound.  Subclasses with another criterion override this."""
+        return espprc(self.inst, duals, ng=self.ng, max_cols=40)
+
+    def fresh(self) -> "RoutePool":
+        """Empty pool with elementary routes (independent verification of an oracle answer)."""
+        return RoutePool(self.inst, ng_size=self.inst.n)
+
     def _add(self, r: tuple) -> bool:
         if r in self.cols:
             return False
-        self.cols[r] = self.inst.route_cost(r)
+        self.cols[r] = self._cost(r)
         return True
 
     def reset(self):
@@ -437,7 +450,7 @@ class RoutePool:
             lp = float(res.fun)
             u = -res.ineqlin.marginals  # >= 0
             duals = np.concatenate([[0.0], -(u + kap[1:])])
-            best, new, st = espprc(inst, duals, ng=ng, max_cols=40)
+            best, new, st = self._price(duals)
             npr += 1
             ptime += st["time"]
             self.calls += 1

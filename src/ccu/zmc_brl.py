@@ -287,10 +287,10 @@ class RoutingGame:
             if hit is not None:
                 return hit
         if fresh:
-            pool = brl.RoutePool(cr.inst, ng_size=cr.inst.n)  # elementary routes, empty pool
+            pool = cr.pool.fresh()  # elementary routes, empty pool
         else:
             pool = cr.pool
-        if self.bp_time and integer:
+        if self.bp_time and integer and getattr(cr.pool, "exact", True):
             # exact integer step (ccu.bp): branch-and-price on the pool columns; res.lp is the global lower bound
             tol = gap if rho == 1.0 else 1e-8
             st = self._st
@@ -397,6 +397,10 @@ class RoutingGame:
             revs.append(rev)
             charges.append(ch)
         bgc = float(np.sum(self.bg * X))
+        extra = {}
+        if getattr(self, "true_cost", None):
+            rt = float(sum(self.true_route_cost(i, r) for i, p in enumerate(prof) for r in p.routes))
+            extra = dict(routing_cost_true=rt, welfare_true=cs - cong - rt, social_cost_true=-(cs - cong - rt))
         act = qfull > 0
         access = np.where(act, q / np.where(act, qfull, 1.0), np.nan)
         return dict(
@@ -408,7 +412,36 @@ class RoutingGame:
             social_cost=-W, welfare=W, consumer_surplus=cs, congestion_cost=cong, routing_cost=route,
             bg_delay_cost=bgc, social_cost_broad=-W + bgc,
             gini_access=gini(access[act]), gini_price=gini(price[q > 0]),
-            q_z=q, X_z=X, price_z=price, slow_z=slow, access_z=access)
+            q_z=q, X_z=X, price_z=price, slow_z=slow, access_z=access, **extra)
+
+    def install_true_cost(self, rng, n_true: int = 5000):
+        """True-law routing cost of a route (expected loss over `n_true` days of the multiplier law of the instance)."""
+        from .ambiguity import make_saa
+
+        law = getattr(self, "law", None)
+        self.true_cost = None
+        if law is None:
+            return
+        K = len(law["m"])
+        gg = rng.standard_normal((n_true, 1))
+        ee = rng.standard_normal((n_true, K))
+        X = law["m"][None] * np.exp(law["sc"] * gg + law["ss"] * ee - 0.5 * (law["sc"] ** 2 + law["ss"] ** 2))
+        self._true_crit = [make_saa(cr.inst.loss, X, "true") for cr in self.carriers]
+        self._true_idx = [{int(z): j + 1 for j, z in enumerate(cr.zones)} for cr in self.carriers]
+        self._true_cache: dict = {}
+        self.true_cost = True
+
+    def true_route_cost(self, i, zone_route) -> float:
+        key = (i, tuple(zone_route))
+        v = self._true_cache.get(key)
+        if v is None:
+            cr = self.carriers[i]
+            r = tuple(self._true_idx[i][z] for z in zone_route)
+            p = (0, *r, 0)
+            tau = cr.inst.tau[list(p[:-1]), list(p[1:])].sum(0)
+            v = float(self._true_crit[i].fn(tau, float(cr.inst.svc[list(r)].sum())))
+            self._true_cache[key] = v
+        return v
 
     def exposure_of(self, prof):
         return sum(p.a for p in prof)
@@ -431,13 +464,20 @@ def gini(x):
 
 def build_city_game(city: str, *, overrides: dict | None = None, n_cust: int = 12, K: int = 9, ndays: int = 30,
                     alpha_dkw: float = 0.05, seed: int = 0, ng_size: int = 8, min_sep_km: float = 3.0,
-                    pce: float = 1.5, bg_hours: float = 1.0, reach: float = 0.4, N_override: int | None = None) -> RoutingGame:
+                    pce: float = 1.5, bg_hours: float = 1.0, reach: float = 0.4, N_override: int | None = None,
+                    criterion: str = "pbox", eps: float | None = None, cvar_alpha: float = 0.9, n_true: int = 5000) -> RoutingGame:
     """Calibrated game on a real city map.
 
     Reused conventions: p-box construction, sectors, loss (fixed 2, gamma 1, rho 3 driver-hour units, shift deadline)
     from theory/new_algorithm_B/real_instances.py; inverse demand alpha = 1.5 * fee, b = alpha / (2 * full demand)
     from theory/new_algorithm_A/core.py; depots from geo.select_depot_sites.
     New assumptions are flagged NEW in the comments and listed in docs/EXPERIMENTS.md.
+
+    `criterion` selects the carriers' route criterion: "pbox" (default, DKW p-box with unknown dependence, exact BRL
+    oracle), or the sample-based "saa", "wass" (type-1 Wasserstein ball, closed form; `eps` in multiplier units, default
+    the theory radius of `ambiguity.wass_radius`) and "cvar" (`cvar_alpha`), which use the heuristic oracle of
+    `ccu.ambiguity_game` on the same observed days.  Whatever the criterion, `RoutingGame.evaluate` also reports the
+    routing cost under the true multiplier law (`routing_cost_true`, `welfare_true`).
     """
     from .geo import select_depot_sites
 
@@ -499,6 +539,7 @@ def build_city_game(city: str, *, overrides: dict | None = None, n_cust: int = 1
     sc, ss = 0.7 * s, math.sqrt(max(s * s - (0.7 * s) ** 2, 0.0))
     g_ = rng.standard_normal((ndays, 1))
     e_ = rng.standard_normal((ndays, K))
+    law = dict(m=m.copy(), sc=sc, ss=ss, xmax=1 + 2 * peak)
     days = m[None] * np.exp(sc * g_ + ss * e_ - 0.5 * (sc * sc + ss * ss))
     xmax = 1 + 2 * peak
     qfs = [brl.dkw_upper_quantile(days[:, k], alpha_dkw, xmax) for k in range(K)]
@@ -523,7 +564,14 @@ def build_city_game(city: str, *, overrides: dict | None = None, n_cust: int = 1
         svc = np.concatenate([[0.0], h * 3600.0])
         dem = np.concatenate([[0.0], d])
         inst = brl.RoutingInstance(n, tau, svc, dem, float(cap), Qk, wl, loss)
-        pool = brl.RoutePool(inst, ng_size=ng_size)
+        if criterion == "pbox":
+            pool = brl.RoutePool(inst, ng_size=ng_size)
+        else:
+            from .ambiguity import wass_radius
+            from .ambiguity_game import HeurPool
+
+            e_used = (wass_radius(days, "sqrt") if eps is None else float(eps)) if criterion == "wass" else 0.0
+            pool = HeurPool(inst, days, criterion, eps=e_used, alpha=cvar_alpha, xmax=xmax, ng_size=ng_size)
         carriers.append(CarrierData(depots[i], c, d, h, inst, pool, share[i]))
         np.add.at(Xfull, c, h)
         np.add.at(Qfull, c, d)
@@ -546,9 +594,12 @@ def build_city_game(city: str, *, overrides: dict | None = None, n_cust: int = 1
                 overlap=float(np.mean([np.mean([(Qfull[z] > carriers[i].d[j]) for j, z in enumerate(carriers[i].zones)])
                                        for i in range(N)])), full_slowdown=float((cz * Xfull)[Xfull > 0].mean()),
                 share=share.tolist(), peak=peak, ndays=ndays, K=K, ng_size=ng_size)
+    meta["criterion"] = criterion
     g = RoutingGame(Z, carriers, alpha, b, gc, gamma_h, bg=bg, name=city, meta=meta)
     g.ng_size = ng_size
-    if os.environ.get("CCU_BP_TIME"):  # exact integer step for every oracle call (experiments/run_exact.py)
+    g.law = law
+    g.install_true_cost(np.random.default_rng([seed, 777]), n_true)
+    if criterion == "pbox" and os.environ.get("CCU_BP_TIME"):  # exact integer step for every oracle call (experiments/run_exact.py)
         g.bp_time = float(os.environ["CCU_BP_TIME"])
         g.bp_retry = float(os.environ.get("CCU_BP_RETRY", "0")) or None
     return g

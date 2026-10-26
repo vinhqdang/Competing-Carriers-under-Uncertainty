@@ -3,3 +3,5 @@
 07:07:16 started ('core', 'Cairo', 3) on core 1
 07:08:36 finished ('core', 'NewDelhi', 3) rc 0 80s
 07:08:36 started ('core', 'Moscow', 3) on core 0
+07:18:56 finished ('core', 'Cairo', 3) rc 0 700s
+07:18:56 started ('core', 'BuenosAires', 3) on core 1

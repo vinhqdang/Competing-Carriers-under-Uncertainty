@@ -120,7 +120,7 @@ def _final_cost(S, w, L0, gamma, rho, Tmax, fixed, wass, risk, alpha, lam, buf):
 
 @njit(cache=True)
 def _kernel(n, L, L0, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng_lo, ng_hi, duals, maxlab, bcap, kcols, tol_rc,
-            allow, mode, tie, wass, risk, alpha, lam, bcap_h, lbprune, spl, rmax, max_created, max_cmp):
+            allow, mode, tie, wass, risk, alpha, lam, bcap_h, lbprune, spl, rmax, max_created, max_cmp, maxlen):
     wl = 1 if mode == 2 else L + 1
     Sarr = np.empty((maxlab, L))
     WSarr = np.empty((maxlab, wl))
@@ -305,13 +305,13 @@ def _kernel(n, L, L0, arcS, dem, cap, w, wsuf, gamma, rho, Tmax, fixed, Cmin, ng
     kept = 0
     for j in range(1, n + 1):
         kept += bc[j]
-    routes = np.zeros((kcols, n), np.int32)
+    routes = np.zeros((kcols, maxlen), np.int32)
     rlen = np.zeros(kcols, np.int32)
     for c in range(kcols):
         lab = cand_lab[c]
         if lab < 0:
             continue
-        tmp = np.empty(n + 2, np.int32)
+        tmp = np.empty(maxlen, np.int32)
         m = 0
         x = lab
         while x >= 0 and node[x] != 0:
@@ -442,12 +442,14 @@ def price(inst, duals: np.ndarray, *, mode: str = "window", ng: np.ndarray | Non
             spl = sp_levels(inst, allow)
     else:
         spl = np.zeros((n + 1, L0))
+    pdem = dem[1:][dem[1:] > 0]
+    maxlen = int(min(float(inst.cap) / float(pdem.min()) + 2, 4 * n + 4)) if len(pdem) else n + 2
     t0 = time.perf_counter()
     out = _kernel(n, L, L0, inst.arcS, dem, float(inst.cap), np.asarray(inst.w, float), inst.wsuf, ls.gamma, ls.rho,
                   ls.Tmax, ls.fixed + fixed_shift, np.asarray(Cmin, float), ng_lo, ng_hi, duals, maxlab, bcap,
                   max_cols, tol_rc, np.asarray(allow, np.bool_), MODES[mode], _tie(inst), float(getattr(inst, "wass", 0.0)),
                   int(getattr(inst, "risk", 0)), float(getattr(inst, "alpha", 0.8)), float(getattr(inst, "lam", 0.5)),
-                  int(bcap_h), bool(lbprune), np.asarray(spl, float), rmax, int(max_created), int(max_cmp))
+                  int(bcap_h), bool(lbprune), np.asarray(spl, float), rmax, int(max_created), int(max_cmp), maxlen)
     best, crc, rts, rl, created, kept, overflow, ncmp, npruned, nheur = out
     res = []
     for c in np.argsort(crc):

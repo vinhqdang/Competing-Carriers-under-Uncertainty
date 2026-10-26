@@ -1,0 +1,53 @@
+NewDelhi true 47.6015 1s
+NewDelhi shift20 50.2715 1s
+NewDelhi shift40 52.96 1s
+NewDelhi heavy 47.7284 1s
+Cairo true 36.5834 2s
+Cairo shift20 38.0619 2s
+Cairo shift40 39.5404 1s
+Cairo heavy 36.5855 1s
+Moscow true 33.0588 2s
+Moscow shift20 34.9462 1s
+Moscow shift40 37.0127 1s
+Moscow heavy 32.9942 2s
+BuenosAires true 34.7125 2s
+BuenosAires shift20 36.9505 2s
+BuenosAires shift40 39.5328 2s
+BuenosAires heavy 34.6138 3s
+NewYork true 33.8462 4s
+NewYork shift20 35.937 3s
+NewYork shift40 38.213 2s
+NewYork heavy 33.311 4s
+Bombay true 47.8901 1s
+Bombay shift20 50.4915 1s
+Bombay shift40 53.0928 1s
+Bombay heavy 48.0956 1s
+London true 35.5157 2s
+London shift20 38.9044 3s
+London shift40 43.2684 3s
+London heavy 35.2086 2s
+Paris true 31.6305 2s
+Paris shift20 33.235 2s
+Paris shift40 34.8406 2s
+Paris heavy 31.6331 2s
+Berlin true 38.5606 3s
+Berlin shift20 42.5021 3s
+Berlin shift40 48.0946 4s
+Berlin heavy 38.35 4s
+base draw 0 NewDelhi n=10: 11.8s (elapsed 0.2 min)
+base draw 0 NewDelhi n=20: 11.5s (elapsed 0.4 min)
+base draw 0 NewDelhi n=30: 12.4s (elapsed 0.6 min)
+base draw 0 NewDelhi n=60: 14.9s (elapsed 0.8 min)
+base draw 0 Cairo n=10: 22.0s (elapsed 1.2 min)
+HighsMipSolverData::transformNewIntegerFeasibleSolution tmpSolver.run();
+base draw 0 Cairo n=20: 21.2s (elapsed 1.6 min)
+base draw 0 Cairo n=30: 21.4s (elapsed 1.9 min)
+base draw 0 Cairo n=60: 23.6s (elapsed 2.3 min)
+base draw 0 Moscow n=10: 27.2s (elapsed 2.8 min)
+base draw 0 Moscow n=20: 26.7s (elapsed 3.2 min)
+base draw 0 Moscow n=30: 19.4s (elapsed 3.5 min)
+base draw 0 Moscow n=60: 16.3s (elapsed 3.8 min)
+base draw 0 BuenosAires n=10: 27.0s (elapsed 4.3 min)
+base draw 0 BuenosAires n=20: 31.1s (elapsed 4.8 min)
+base draw 0 BuenosAires n=30: 29.9s (elapsed 5.3 min)
+base draw 0 BuenosAires n=60: 32.0s (elapsed 5.8 min)
