@@ -1,7 +1,7 @@
 """Generate the LaTeX tables and number macros of the manuscript from the result files.
 
 Run from any directory:  python paper/make_tables.py
-Inputs : results/summary_*.csv, data/parameters/city_parameters_wide.csv, data/processed/<city>/meta.json,
+Inputs : results/summary_*.csv, results/arp_*.csv, data/parameters/city_parameters_wide.csv, data/processed/<city>/meta.json,
          theory/new_algorithm_A/results.json (ZMC prototype), theory/new_algorithm_B/*.json(l) (BRL prototype).
 Outputs: paper/tables/*.tex (one table body per file) and paper/tables/macros.tex (numbers quoted in the text).
 
@@ -921,13 +921,151 @@ def t_cert():
     if not fs:
         return
     d = pd.concat([pd.read_csv(f) for f in fs], ignore_index=True)
-    macro("CertN", str(len(d)))
-    macro("CertRegretMax", fmt(d.regret_fresh.max()))
-    macro("CertRegretLPMax", fmt(d.regret_lp.max(), 2))
+    macro("VerBestN", str(len(d)))
+    macro("VerBestRegretMax", fmt(d.regret_fresh.max()))
+    macro("VerBestRegretLPMax", fmt(d.regret_lp.max(), 2))
+
+
+# ---------------------------------------------------------------- aggregate-response pricing (leader, observation only)
+def t_arp():
+    d = read("summary_arp.csv")
+    if d is None:
+        return
+    d = d.copy()
+    d["_o"] = d.city.map({c: i for i, c in enumerate(ORDER)})
+    d = d.sort_values(["_o", "seed"]).drop(columns="_o")
+    rows = []
+    for _, r in d.iterrows():
+        rows.append([NAME[r.city], str(int(r.seed)), fmt(r.rho, 2),
+                     ("fixed point" if r.arp_status == "fixed_point" else "cycle") + f" / {int(r.arp_rounds)}",
+                     fmt(100 * r.arp_gain_share, 3), str(int(r.arp_calls)),
+                     fmt(100 * r.mct_br_gain_share, 3), str(int(r.mct_br_calls)),
+                     fmt(100 * r.mct_so_gain_share, 3), str(int(r.mct_so_calls)),
+                     fmt(100 * r.dip_gain_share, 3), str(int(r.dip_calls)), str(int(r.grid_calls))])
+    write_table("tab_arp.tex", ["City", "seed", "$\\rho$", "ARP status / rounds", "ARP \\%", "calls", "tariff+BR \\%", "calls",
+                                "tariff+SO \\%", "calls", "DIP \\%", "calls", "grid calls"], rows, "lrrlrrrrrrrrr")
+    macro("ArpRuns", str(len(d)))
+    macro("ArpCities", ", ".join(NAME[c] for c in ORDER if c in set(d.city)))
+    macro("ArpNCities", str(d.city.nunique()))
+    macro("ArpRhoMin", fmt(d.rho.min(), 2))
+    macro("ArpRhoMax", fmt(d.rho.max(), 2))
+    macro("ArpGainMin", fmt(100 * d.arp_gain_share.min(), 3))
+    macro("ArpGainMax", fmt(100 * d.arp_gain_share.max(), 3))
+    macro("ArpGainMean", fmt(100 * d.arp_gain_share.mean(), 3))
+    macro("ArpCallsMin", str(int(d.arp_calls.min())))
+    macro("ArpCallsMax", str(int(d.arp_calls.max())))
+    macro("ArpRoundsMin", str(int(d.arp_rounds.min())))
+    macro("ArpRoundsMax", str(int(d.arp_rounds.max())))
+    fp = d[d.arp_status == "fixed_point"]
+    macro("ArpFixedN", str(len(fp)))
+    macro("ArpCycleN", str(int((d.arp_status != "fixed_point").sum())))
+    macro("ArpFixedThreeRoundsN", str(int((fp.arp_rounds <= 3).sum())))
+    tol = 0.02
+    macro("ArpEqualsDipN", str(int((d.arp_gain_share >= d.dip_gain_share - tol).sum())))
+    i = d.arp_gain_share.idxmin()
+    macro("ArpMissCase", f"{NAME[d.loc[i, 'city']]} seed {int(d.loc[i, 'seed'])}")
+    macro("ArpMissGain", fmt(100 * d.loc[i, "arp_gain_share"], 3))
+    macro("ArpMissDip", fmt(100 * d.loc[i, "dip_gain_share"], 3))
+    macro("ArpMissRho", fmt(d.loc[i, "rho"], 2))
+    macro("MctGainMin", fmt(100 * d.mct_br_gain_share.min(), 3))
+    macro("MctGainMax", fmt(100 * d.mct_br_gain_share.max(), 3))
+    macro("MctGainMean", fmt(100 * d.mct_br_gain_share.mean(), 3))
+    macro("MctCallsMin", str(int(d.mct_br_calls.min())))
+    macro("MctCallsMax", str(int(d.mct_br_calls.max())))
+    macro("MctMonotoneN", str(int(d.mct_br_monotone.astype(str).str.lower().eq("true").sum())))
+    macro("MctEqualsDipN", str(int((d.mct_br_gain_share >= d.dip_gain_share - tol).sum())))
+    macro("MctSoGainMin", fmt(100 * d.mct_so_gain_share.min(), 3))
+    macro("MctSoGainMax", fmt(100 * d.mct_so_gain_share.max(), 3))
+    macro("MctSoGainMean", fmt(100 * d.mct_so_gain_share.mean(), 3))
+    macro("MctSoCallsMin", str(int(d.mct_so_calls.min())))
+    macro("MctSoCallsMax", str(int(d.mct_so_calls.max())))
+    macro("MctSoEqualsDipN", str(int((d.mct_so_gain_share >= d.dip_gain_share - tol).sum())))
+    macro("ArpDipGainMin", fmt(100 * d.dip_gain_share.min(), 3))
+    macro("ArpDipGainMax", fmt(100 * d.dip_gain_share.max(), 3))
+    macro("ArpDipGainMean", fmt(100 * d.dip_gain_share.mean(), 3))
+    macro("ArpDipCallsMin", str(int(d.dip_calls.min())))
+    macro("ArpDipCallsMax", str(int(d.dip_calls.max())))
+    macro("ArpGridCallsMin", str(int(d.grid_calls.min())))
+    macro("ArpGridCallsMax", str(int(d.grid_calls.max())))
+    macro("ArpRegretMax", fmt(d.verify_arp_regret_fresh.max()))
+    macro("MctRegretMax", fmt(max(d.verify_mct_br_regret.max(), d.verify_mct_so_regret.max())))
+    macro("ArpTimeMin", fmt(d.arp_time_s.min(), 2))
+    macro("ArpTimeMax", fmt(d.arp_time_s.max(), 2))
+    macro("ArpTimeRatioMed", fmt((d.arp_time_s / d.dip_time_s).median(), 2))
+    macro("ArpSubsMin", fmt(-d.arp_s_over_fee.max(), 2))
+    macro("ArpSubsMax", fmt(-d.arp_s_over_fee.min(), 2))
+    macro("ArpDipSubsMin", fmt(-d.dip_s_over_fee.max(), 2))
+    macro("ArpDipSubsMax", fmt(-d.dip_s_over_fee.min(), 2))
+    macro("ArpPoAMin", fmt(d.poa_arp.min(), 3))
+    macro("ArpPoAMax", fmt(d.poa_arp.max(), 3))
+    macro("ArpUnproven", str(int(d.arp_bp_unproven.sum())))
+    msa = d.dropna(subset=["arp_msa_gain_share"])
+    macro("ArpMsaN", str(len(msa)))
+    macro("ArpMsaGainMin", fmt(100 * msa.arp_msa_gain_share.min(), 3) if len(msa) else "--")
+    macro("ArpMsaGainMax", fmt(100 * msa.arp_msa_gain_share.max(), 3) if len(msa) else "--")
+    # tiny games with exhaustive enumeration
+    t = read("arp_tiny.csv")
+    if t is not None:
+        pos = t[t.opt_zone < t.sc_ne - 1e-9].copy()
+        den = pos.sc_ne - pos.opt_zone
+        macro("ArpTinyN", str(len(t)))
+        macro("ArpTinyPosN", str(len(pos)))
+        macro("ArpTinyFixedN", str(int((t.arp_plain_status == "fixed_point").sum())))
+        macro("ArpTinyCycleN", str(int((t.arp_plain_status != "fixed_point").sum())))
+        macro("ArpTinyRoundsMean", fmt(t.arp_plain_rounds.mean(), 2))
+        macro("ArpTinyRoundsMax", str(int(t.arp_plain_rounds.max())))
+        macro("MctTinyMonotoneN", str(int(t.mct_br_monotone.astype(str).str.lower().eq("true").sum())))
+        macro("MctTinyBestIsSO", str(int((abs(t.mct_best_sc - t.sc_so) <= 1e-6).sum())))
+        meths = [("arp_plain_sc", "arp_plain_calls", "ARP flat (plain)", "$(Q_z,n_z)$"),
+                 ("arp_msa_sc", "arp_msa_calls", "ARP flat (successive averages)", "$(Q_z,n_z)$"),
+                 ("arp_known_sc", "arp_known_calls", "ARP flat, lots known", "$(Q_z,n_z)$ + lots"),
+                 ("mct_br_sc", "mct_br_calls", "tariff + carriers' best responses", "own $q$, $Q_z$"),
+                 ("mct_so_sc", "mct_so_calls", "tariff + potential solver", "oracle"),
+                 ("dip_sc", "dip_calls", "DIP", "oracle"),
+                 ("grid_selected", "grid_calls", "grid", "oracle")]
+        rows = []
+        keys = {"arp_plain_sc": "ArpTiny", "mct_br_sc": "MctTiny", "mct_so_sc": "MctSoTiny", "dip_sc": "DipArpTiny",
+                "grid_selected": "GridArpTiny", "arp_known_sc": "ArpKnownTiny", "arp_msa_sc": "ArpMsaTiny"}
+        for sc, calls, lab, info in meths:
+            sh = (pos.sc_ne - pos[sc]) / den
+            hit = (pos[sc] <= pos.opt_zone + 1e-6).mean()
+            worse = int((pos[sc] > pos.sc_ne + 1e-6).sum())
+            rows.append([lab, info, fmt(sh.mean(), 2), fmt(100 * hit, 2), str(worse), fmt(pos[calls].mean(), 2)])
+            k = keys[sc]
+            macro(k + "Share", fmt(sh.mean(), 2))
+            macro(k + "Hit", fmt(100 * hit, 2))
+            macro(k + "Worse", str(worse))
+            macro(k + "Calls", fmt(pos[calls].mean(), 2))
+        write_table("tab_arp_tiny.tex", ["Method", "city's information", "mean share", "optimum hit \\%", "worse than unpriced", "calls"],
+                    rows, "llrrrr")
+        parts = []
+        for g, x in pos.groupby("gcx"):
+            parts.append(f"{fmt(((x.sc_ne - x.arp_plain_sc) / (x.sc_ne - x.opt_zone)).mean(), 2)}")
+        macro("ArpTinyShareByCong", " / ".join(parts))
+        parts = []
+        for g, x in pos.groupby("gcx"):
+            parts.append(f"{fmt(((x.sc_ne - x.mct_br_sc) / (x.sc_ne - x.opt_zone)).mean(), 2)}")
+        macro("MctTinyShareByCong", " / ".join(parts))
+        parts = []
+        for g, x in pos.groupby("gcx"):
+            parts.append(f"{fmt(((x.sc_ne - x.dip_sc) / (x.sc_ne - x.opt_zone)).mean(), 2)}")
+        macro("DipTinyShareByCong", " / ".join(parts))
+        macro("ArpTinyCongLevels", ", ".join(str(int(g)) for g in sorted(pos.gcx.unique())))
+        macro("ArpTinyRhoMed", " / ".join(fmt(x.rho.median(), 2) for _, x in pos.groupby("gcx")))
+    r = read("arp_rates.csv")
+    if r is not None:
+        macro("ArpRatesN", str(len(r)))
+        macro("ArpRatesRhoMin", fmt(r.rho.min(), 2))
+        macro("ArpRatesRhoMax", fmt(r.rho.max(), 2))
+        macro("ArpRatesAllOK", "all" if bool(r[["ok_lip", "ok_T", "ok_plain", "ok_damped"]].all().all()) else "not all")
+        macro("ArpRatesLipMax", fmt(r.lipschitz_max.max(), 2))
+        macro("ArpRatesPlainMax", fmt((r.plain_step_ratio_max / r.rho).max(), 2))
+        macro("ArpRatesTMax", fmt((r.T_ratio_max / r.rho).max(), 2))
+        macro("ArpRatesDampedMax", fmt((r.damped_step_ratio_max / r.rho_damped).max(), 3))
 
 
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip, t_arp):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest
