@@ -627,6 +627,16 @@ class VBP(_bp.BranchAndPrice):
         self.n_exact = 0
         self.created = 0
         self.ncmp = 0
+        self.cmp_rate = 2e6  # dominance comparisons per second (running estimate; sizes the per-call cap)
+        self._deadline = float("inf")
+
+    def run(self, *, time_limit: float = 600.0, **kw):
+        self._deadline = time.perf_counter() + time_limit
+        return super().run(time_limit=time_limit, **kw)
+
+    def _cap(self) -> int:
+        rem = self._deadline - time.perf_counter()
+        return int(min(self.max_cmp, max(2e5, self.cmp_rate * max(rem, 0.0) * 0.8)))
 
     def _augment(self, r) -> bool:
         changed = cycle_augment(self.ng, r)
@@ -639,7 +649,7 @@ class VBP(_bp.BranchAndPrice):
 
     def _price(self, node, duals, Cmin, shift=0.0):
         kw = dict(mode=self.mode, ng=self.ng, max_cols=self.max_cols, allow=node.allow, Cmin=Cmin, fixed_shift=shift,
-                  maxlab=self.maxlab, max_created=self.max_created, max_cmp=self.max_cmp)
+                  maxlab=self.maxlab, max_created=self.max_created, max_cmp=self._cap())
         if self.heur_first > 0:
             b, cand, st = price(self.inst, duals, bcap_h=self.heur_first, **kw)
             self.t_heur += st["time"]
@@ -655,7 +665,24 @@ class VBP(_bp.BranchAndPrice):
         self.ptime += st["time"]
         self.created += st["created"]
         self.ncmp += st["ncmp"]
+        if st["time"] > 0.2 and st["ncmp"] > 1000 and not st["overflow"]:
+            self.cmp_rate = 0.5 * self.cmp_rate + 0.5 * st["ncmp"] / st["time"]
         self.max_labels = max(self.max_labels, st["kept"])
         if st["overflow"]:
             self.bound_valid = False
         return b, new
+
+
+def solve_variant(inst, *, mode: str = "window", time_limit: float = 120.0, ng_size: int = 8, heur_first: int = 0,
+                  lbprune: bool = False, node_limit: int = 100000, mip_time: float = 10.0, **kw):
+    """Partition branch-and-price with `VBP`; if the time limit hits before any incumbent exists, the MILP over the
+    generated columns (the singletons make it feasible) supplies an incumbent.  Returns (BPResult, VBP)."""
+    import math
+    b = VBP(inst, None, partition=True, mode=mode, ng_size=ng_size, heur_first=heur_first, lbprune=lbprune,
+            mip_time=mip_time, **kw)
+    r = b.run(time_limit=time_limit, node_limit=node_limit)
+    if not math.isfinite(r.value):  # no incumbent: bp.run's gap test is meaningless with UB = inf
+        b._milp(mip_time)
+        r.value, r.routes = b.UB, list(b.best_routes)
+        r.status = "time_limit" if r.status == "optimal" else r.status
+    return r, b

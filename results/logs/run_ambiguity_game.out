@@ -1,0 +1,10 @@
+London seed 0 pbox: served 0.199 welfare 631.8 true 899.4 regret 0 533s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 0 saa: served 0.401 welfare 1705.6 true 1585.1 regret 0 111s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 0 wass_th: served 0.327 welfare 1309.2 true 1353.4 regret 0 155s
+/home/user/Competing-Carriers-under-Uncertainty/experiments/common.py:60: RuntimeWarning: All-NaN slice encountered
+  row["max_regret_lp"] = float(np.nanmax(g._last_regret_lp))
+London seed 0 wass_e0.5: served 0.253 welfare 914.9 true 1121.8 regret 0 149s
