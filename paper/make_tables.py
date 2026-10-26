@@ -280,7 +280,8 @@ def t_e2():
     for c in ORDER:
         z = mat[(mat.city == c) & (~mat.city.isin(red2))]
         if len(z):
-            fparts.append(f"{NAME[c]} {fmt(z.share.min(), 2)}--{fmt(z.share.max(), 2)}")
+            lo_, hi_ = fmt(z.share.min(), 2), fmt(z.share.max(), 2)
+            fparts.append(f"{NAME[c]} {lo_}" + (f"--{hi_}" if lo_ != hi_ else " in every seed"))
     macro("EtwoShareFullRanges", ", ".join(fparts))
     macro("EtwoShareAboveOne", ", ".join(f"{NAME[r.city]} seed {int(r.seed)}" for _, r in mat[mat.share > 1.0001].iterrows()) or "none")
     mb = mat[mat.city == "Bombay"].sort_values("seed")
@@ -731,6 +732,7 @@ def t_exact():
         have = set(zip(e3.city, e3.seed))
         miss = [f"{NAME[c]} seed {s}" for c in ORDER for s in range(3) if (c, s) not in have]
         macro("ExEthreeMissing", ", ".join(miss) if miss else "none")
+        macro("ExEthreeMissingClause", f" (missing: {', '.join(miss)})" if miss else "")
     e4 = d[d.experiment == "E4"]
     macro("ExEfourN", str(len(e4)))
     g4 = e4.groupby("city").rows_exact
@@ -742,6 +744,7 @@ def t_exact():
     have4 = set(zip(e4.city, e4.seed))
     miss4 = [f"{NAME[c]} seed {s}" for c in ORDER for s in range(3) if (c, s) not in have4]
     macro("ExEfourMissing", ", ".join(miss4) if miss4 else "none")
+    macro("ExEfourMissingClause", f" (missing: {', '.join(miss4)})" if miss4 else "")
     macro("ExTotalDone", str(len(e1) + len(e2) + (len(e3) if e3 is not None else 0) + len(e4)))
     # coverage table
     rows = []
@@ -842,6 +845,9 @@ def t_dip():
     write_table("tab_dip.tex", ["City", "grid pts", "gain share", "calls \\% (grid run)", "calls \\% (63 pts)", "rounds",
                                 "exact", "PoA grid", "PoA DIP"], rows, "lrrrrrrrr")
     macro("DipRuns", str(len(d)))
+    pb = d[d.grid_oracle != "exact"]
+    macro("DipPbCases", ", ".join(f"{NAME[r.city]} seed {int(r.seed)}" for _, r in pb.iterrows()) or "none")
+    macro("DipPbN", str(len(pb)))
     f = d[d.full]
     macro("DipFullN", str(len(f)))
     macro("DipFullCities", ", ".join(NAME[c] for c in ORDER if c in set(f.city)))
