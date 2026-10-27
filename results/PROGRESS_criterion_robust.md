@@ -857,3 +857,253 @@
 - 2026-10-26 22:30:48 Moscow s2 wass_th stage so done: served=0.997 (115s)
 - 2026-10-26 22:35:55 NewYork s2 wass_th stage ne done: served=0.996 (307s)
 - 2026-10-26 22:36:09 NewYork s2 wass_th stage so done: served=0.996 (321s)
+- 2026-10-26 22:41:00 Cairo s2 wass_th stage ne done: served=0.996 (291s)
+- 2026-10-26 22:42:29 Cairo s2 wass_th stage so done: served=0.996 (380s)
+- 2026-10-26 22:50:00 Paris s2 wass_th stage ne done: served=0.924 (451s)
+- 2026-10-26 22:51:41 Paris s2 wass_th stage so done: served=0.924 (552s)
+- 2026-10-26 22:58:53 Berlin s2 wass_th stage ne done: served=0.933 (431s)
+- 2026-10-26 23:00:04 Berlin s2 wass_th stage so done: served=0.933 (502s)
+- 2026-10-26 23:01:16 Moscow s1 wass_th stage dip done: served=1.000 (72s)
+- 2026-10-26 23:05:34 NewYork s1 wass_th stage dip done: served=1.000 (258s)
+- 2026-10-26 23:06:53 Cairo s1 wass_th stage dip done: served=1.000 (79s)
+- 2026-10-26 23:15:55 Paris s1 wass_th stage dip done: served=0.926 (542s)
+- 2026-10-26 23:25:19 Berlin s1 wass_th stage dip done: served=0.944 (564s)
+- 2026-10-26 23:26:35 Moscow s2 wass_th stage dip done: served=0.997 (76s)
+- 2026-10-26 23:29:55 NewYork s2 wass_th stage dip done: served=0.996 (200s)
+- 2026-10-26 23:31:30 Cairo s2 wass_th stage dip done: served=0.996 (95s)
+- 2026-10-26 23:39:34 Paris s2 wass_th stage dip done: served=0.924 (484s)
+- 2026-10-26 23:51:03 Berlin s2 wass_th stage dip done: served=0.933 (689s)
+- 2026-10-26 23:53:52 cv Moscow s0: radii [0.05, 0.0, 0.0, 0.05, 0.25]
+- 2026-10-26 23:55:27 Moscow s0 wass_cv stage ne done: served=1.000 (263s)
+- 2026-10-26 23:55:32 Moscow s0 wass_cv stage so done: served=1.000 (267s)
+- 2026-10-26 23:59:08 Moscow s0 pbox stage ne done: served=0.990 (7s)
+- 2026-10-26 23:59:09 Moscow s0 pbox stage so done: served=0.990 (8s)
+- 2026-10-26 23:59:29 NewYork s0 pbox stage ne done: served=0.992 (20s)
+- 2026-10-26 23:59:30 NewYork s0 pbox stage so done: served=0.992 (21s)
+- 2026-10-27 00:01:51 Cairo s0 pbox stage ne done: served=1.000 (141s)
+- 2026-10-27 00:02:18 Cairo s0 pbox stage so done: served=1.000 (168s)
+- 2026-10-27 00:03:14 Paris s0 pbox stage ne done: served=0.880 (56s)
+- 2026-10-27 00:03:28 Paris s0 pbox stage so done: served=0.880 (69s)
+- 2026-10-27 00:04:29 Berlin s0 pbox stage ne done: served=0.884 (61s)
+- 2026-10-27 00:04:46 Berlin s0 pbox stage so done: served=0.884 (78s)
+- 2026-10-27 00:04:55 Moscow s1 pbox stage ne done: served=0.994 (9s)
+- 2026-10-27 00:04:56 Moscow s1 pbox stage so done: served=0.994 (11s)
+- 2026-10-27 00:05:45 NewYork s1 pbox stage ne done: served=0.989 (49s)
+- 2026-10-27 00:05:47 NewYork s1 pbox stage so done: served=0.989 (51s)
+- 2026-10-27 00:06:51 Cairo s1 pbox stage ne done: served=1.000 (64s)
+- 2026-10-27 00:06:56 Cairo s1 pbox stage so done: served=1.000 (69s)
+- 2026-10-27 00:07:29 Paris s1 pbox stage ne done: served=0.820 (33s)
+- 2026-10-27 00:07:46 Paris s1 pbox stage so done: served=0.820 (49s)
+- 2026-10-27 00:08:43 Berlin s1 pbox stage ne done: served=0.901 (57s)
+- 2026-10-27 00:08:57 Berlin s1 pbox stage so done: served=0.901 (71s)
+- 2026-10-27 00:09:05 Moscow s2 pbox stage ne done: served=0.987 (8s)
+- 2026-10-27 00:09:06 Moscow s2 pbox stage so done: served=0.987 (9s)
+- 2026-10-27 00:09:32 NewYork s2 pbox stage ne done: served=0.987 (26s)
+- 2026-10-27 00:09:34 NewYork s2 pbox stage so done: served=0.987 (28s)
+- 2026-10-27 00:11:26 Cairo s2 pbox stage ne done: served=1.000 (112s)
+- 2026-10-27 00:11:44 Cairo s2 pbox stage so done: served=1.000 (130s)
+- 2026-10-27 00:12:50 Paris s2 pbox stage ne done: served=0.834 (66s)
+- 2026-10-27 00:13:05 Paris s2 pbox stage so done: served=0.834 (81s)
+- 2026-10-27 00:13:54 Berlin s2 pbox stage ne done: served=0.890 (49s)
+- 2026-10-27 00:14:05 Berlin s2 pbox stage so done: served=0.890 (60s)
+- 2026-10-27 00:14:11 Moscow s0 pbox stage dip done: served=0.990 (6s)
+- 2026-10-27 00:14:32 NewYork s0 pbox stage dip done: served=0.992 (21s)
+- 2026-10-27 00:15:26 Cairo s0 pbox stage dip done: served=1.000 (54s)
+- 2026-10-27 00:17:20 Paris s0 pbox stage dip done: served=0.880 (114s)
+- 2026-10-27 00:19:26 Berlin s0 pbox stage dip done: served=0.884 (126s)
+- 2026-10-27 00:19:32 Moscow s1 pbox stage dip done: served=0.994 (6s)
+- 2026-10-27 00:20:22 NewYork s1 pbox stage dip done: served=0.989 (50s)
+- 2026-10-27 00:20:59 Cairo s1 pbox stage dip done: served=1.000 (37s)
+- 2026-10-27 00:22:35 Paris s1 pbox stage dip done: served=0.820 (96s)
+- 2026-10-27 00:24:25 Berlin s1 pbox stage dip done: served=0.901 (110s)
+- 2026-10-27 00:24:32 Moscow s2 pbox stage dip done: served=0.987 (7s)
+- 2026-10-27 00:24:53 NewYork s2 pbox stage dip done: served=0.987 (21s)
+- 2026-10-27 00:25:47 Cairo s2 pbox stage dip done: served=1.000 (53s)
+- 2026-10-27 00:27:43 Paris s2 pbox stage dip done: served=0.834 (116s)
+- 2026-10-27 00:29:28 Berlin s2 pbox stage dip done: served=0.890 (106s)
+- 2026-10-27 00:34:38 gridx London s0 saa sfrac=-1.0 sc_true=-1963.18 served=0.993
+- 2026-10-27 00:34:50 gridx London s0 saa sfrac=-0.8 sc_true=-1996.13 served=0.986
+- 2026-10-27 00:34:56 gridx London s0 saa sfrac=-0.5 sc_true=-2108.21 served=0.953
+- 2026-10-27 00:35:00 gridx London s0 saa sfrac=-0.3 sc_true=-2225.11 served=0.875
+- 2026-10-27 00:35:00 London s0 saa stage gridx done: served=0.401 (41s)
+- 2026-10-27 00:35:16 gridx BuenosAires s0 saa sfrac=-1.0 sc_true=-550.59 served=1.000
+- 2026-10-27 00:35:24 gridx BuenosAires s0 saa sfrac=-0.8 sc_true=-553.50 served=1.000
+- 2026-10-27 00:35:28 gridx BuenosAires s0 saa sfrac=-0.5 sc_true=-565.91 served=0.961
+- 2026-10-27 00:35:32 gridx BuenosAires s0 saa sfrac=-0.3 sc_true=-566.40 served=0.939
+- 2026-10-27 00:35:32 BuenosAires s0 saa stage gridx done: served=0.661 (32s)
+- 2026-10-27 00:35:42 gridx NewDelhi s0 saa sfrac=-1.0 sc_true=-142.96 served=0.993
+- 2026-10-27 00:35:47 gridx NewDelhi s0 saa sfrac=-0.8 sc_true=-151.54 served=0.981
+- 2026-10-27 00:35:51 gridx NewDelhi s0 saa sfrac=-0.5 sc_true=-156.33 served=0.954
+- 2026-10-27 00:35:53 gridx NewDelhi s0 saa sfrac=-0.3 sc_true=-168.78 served=0.822
+- 2026-10-27 00:35:53 NewDelhi s0 saa stage gridx done: served=0.433 (21s)
+- 2026-10-27 00:36:12 gridx London s1 saa sfrac=-1.0 sc_true=-2004.91 served=0.974
+- 2026-10-27 00:36:21 gridx London s1 saa sfrac=-0.8 sc_true=-2065.24 served=0.963
+- 2026-10-27 00:36:26 gridx London s1 saa sfrac=-0.5 sc_true=-2170.45 served=0.913
+- 2026-10-27 00:36:29 gridx London s1 saa sfrac=-0.3 sc_true=-2208.00 served=0.841
+- 2026-10-27 00:36:29 London s1 saa stage gridx done: served=0.366 (36s)
+- 2026-10-27 00:36:41 gridx BuenosAires s1 saa sfrac=-1.0 sc_true=-596.08 served=0.983
+- 2026-10-27 00:36:44 gridx BuenosAires s1 saa sfrac=-0.8 sc_true=-596.08 served=0.983
+- 2026-10-27 00:36:48 gridx BuenosAires s1 saa sfrac=-0.5 sc_true=-596.32 served=0.983
+- 2026-10-27 00:36:51 gridx BuenosAires s1 saa sfrac=-0.3 sc_true=-599.07 served=0.937
+- 2026-10-27 00:36:51 BuenosAires s1 saa stage gridx done: served=0.658 (22s)
+- 2026-10-27 00:37:03 gridx NewDelhi s1 saa sfrac=-1.0 sc_true=-168.73 served=0.997
+- 2026-10-27 00:37:14 gridx NewDelhi s1 saa sfrac=-0.8 sc_true=-172.86 served=0.989
+- 2026-10-27 00:37:22 gridx NewDelhi s1 saa sfrac=-0.5 sc_true=-183.74 served=0.971
+- 2026-10-27 00:37:26 gridx NewDelhi s1 saa sfrac=-0.3 sc_true=-192.19 served=0.908
+- 2026-10-27 00:37:26 NewDelhi s1 saa stage gridx done: served=0.469 (34s)
+- 2026-10-27 00:37:36 gridx London s2 saa sfrac=-1.0 sc_true=-2274.96 served=0.994
+- 2026-10-27 00:37:39 gridx London s2 saa sfrac=-0.8 sc_true=-2297.67 served=0.991
+- 2026-10-27 00:37:42 gridx London s2 saa sfrac=-0.5 sc_true=-2470.14 served=0.930
+- 2026-10-27 00:37:44 gridx London s2 saa sfrac=-0.3 sc_true=-2480.78 served=0.846
+- 2026-10-27 00:37:44 London s2 saa stage gridx done: served=0.363 (18s)
+- 2026-10-27 00:38:06 gridx BuenosAires s2 saa sfrac=-1.0 sc_true=-518.93 served=0.992
+- 2026-10-27 00:38:15 gridx BuenosAires s2 saa sfrac=-0.8 sc_true=-526.05 served=0.984
+- 2026-10-27 00:38:19 gridx BuenosAires s2 saa sfrac=-0.5 sc_true=-547.77 served=0.957
+- 2026-10-27 00:38:23 gridx BuenosAires s2 saa sfrac=-0.3 sc_true=-550.02 served=0.933
+- 2026-10-27 00:38:23 BuenosAires s2 saa stage gridx done: served=0.685 (40s)
+- 2026-10-27 00:38:31 gridx NewDelhi s2 saa sfrac=-1.0 sc_true=-150.37 served=0.997
+- 2026-10-27 00:38:37 gridx NewDelhi s2 saa sfrac=-0.8 sc_true=-158.18 served=0.987
+- 2026-10-27 00:38:42 gridx NewDelhi s2 saa sfrac=-0.5 sc_true=-162.30 served=0.981
+- 2026-10-27 00:38:45 gridx NewDelhi s2 saa sfrac=-0.3 sc_true=-170.59 served=0.955
+- 2026-10-27 00:38:45 NewDelhi s2 saa stage gridx done: served=0.525 (22s)
+- 2026-10-27 00:39:11 gridx London s0 wass_th sfrac=-1.0 sc_true=-1960.69 served=0.993
+- 2026-10-27 00:39:23 gridx London s0 wass_th sfrac=-0.8 sc_true=-2012.48 served=0.979
+- 2026-10-27 00:39:31 gridx London s0 wass_th sfrac=-0.5 sc_true=-2173.33 served=0.926
+- 2026-10-27 00:39:37 gridx London s0 wass_th sfrac=-0.3 sc_true=-2157.69 served=0.837
+- 2026-10-27 00:39:37 London s0 wass_th stage gridx done: served=0.327 (52s)
+- 2026-10-27 00:40:00 gridx BuenosAires s0 wass_th sfrac=-1.0 sc_true=-554.34 served=0.991
+- 2026-10-27 00:40:09 gridx BuenosAires s0 wass_th sfrac=-0.8 sc_true=-554.34 served=0.991
+- 2026-10-27 00:40:16 gridx BuenosAires s0 wass_th sfrac=-0.5 sc_true=-563.26 served=0.961
+- 2026-10-27 00:40:21 gridx BuenosAires s0 wass_th sfrac=-0.3 sc_true=-564.22 served=0.922
+- 2026-10-27 00:40:21 BuenosAires s0 wass_th stage gridx done: served=0.614 (44s)
+- 2026-10-27 00:40:33 gridx NewDelhi s0 wass_th sfrac=-1.0 sc_true=-143.04 served=0.993
+- 2026-10-27 00:40:40 gridx NewDelhi s0 wass_th sfrac=-0.8 sc_true=-147.21 served=0.985
+- 2026-10-27 00:40:44 gridx NewDelhi s0 wass_th sfrac=-0.5 sc_true=-162.49 served=0.888
+- 2026-10-27 00:40:47 gridx NewDelhi s0 wass_th sfrac=-0.3 sc_true=-166.74 served=0.738
+- 2026-10-27 00:40:47 NewDelhi s0 wass_th stage gridx done: served=0.354 (26s)
+- 2026-10-27 00:41:09 gridx London s1 wass_th sfrac=-1.0 sc_true=-2015.45 served=0.970
+- 2026-10-27 00:41:15 gridx London s1 wass_th sfrac=-0.8 sc_true=-2090.42 served=0.950
+- 2026-10-27 00:41:20 gridx London s1 wass_th sfrac=-0.5 sc_true=-2205.04 served=0.890
+- 2026-10-27 00:41:24 gridx London s1 wass_th sfrac=-0.3 sc_true=-2196.07 served=0.791
+- 2026-10-27 00:41:24 London s1 wass_th stage gridx done: served=0.313 (37s)
+- 2026-10-27 00:41:45 gridx BuenosAires s1 wass_th sfrac=-1.0 sc_true=-582.11 served=0.983
+- 2026-10-27 00:41:55 gridx BuenosAires s1 wass_th sfrac=-0.8 sc_true=-583.37 served=0.983
+- 2026-10-27 00:42:01 gridx BuenosAires s1 wass_th sfrac=-0.5 sc_true=-592.15 served=0.941
+- 2026-10-27 00:42:06 gridx BuenosAires s1 wass_th sfrac=-0.3 sc_true=-596.97 served=0.892
+- 2026-10-27 00:42:06 BuenosAires s1 wass_th stage gridx done: served=0.545 (41s)
+- 2026-10-27 00:42:29 gridx NewDelhi s1 wass_th sfrac=-1.0 sc_true=-167.12 served=0.993
+- 2026-10-27 00:42:52 gridx NewDelhi s1 wass_th sfrac=-0.8 sc_true=-172.38 served=0.987
+- 2026-10-27 00:43:06 gridx NewDelhi s1 wass_th sfrac=-0.5 sc_true=-184.13 served=0.954
+- 2026-10-27 00:43:12 gridx NewDelhi s1 wass_th sfrac=-0.3 sc_true=-194.15 served=0.850
+- 2026-10-27 00:43:12 NewDelhi s1 wass_th stage gridx done: served=0.402 (66s)
+- 2026-10-27 00:43:23 gridx London s2 wass_th sfrac=-1.0 sc_true=-2325.60 served=0.982
+- 2026-10-27 00:43:28 gridx London s2 wass_th sfrac=-0.8 sc_true=-2400.51 served=0.962
+- 2026-10-27 00:43:32 gridx London s2 wass_th sfrac=-0.5 sc_true=-2428.49 served=0.917
+- 2026-10-27 00:43:35 gridx London s2 wass_th sfrac=-0.3 sc_true=-2343.21 served=0.747
+- 2026-10-27 00:43:35 London s2 wass_th stage gridx done: served=0.276 (23s)
+- 2026-10-27 00:44:01 gridx BuenosAires s2 wass_th sfrac=-1.0 sc_true=-515.63 served=0.991
+- 2026-10-27 00:44:12 gridx BuenosAires s2 wass_th sfrac=-0.8 sc_true=-538.62 served=0.968
+- 2026-10-27 00:44:18 gridx BuenosAires s2 wass_th sfrac=-0.5 sc_true=-544.54 served=0.959
+- 2026-10-27 00:44:25 gridx BuenosAires s2 wass_th sfrac=-0.3 sc_true=-552.85 served=0.924
+- 2026-10-27 00:44:25 BuenosAires s2 wass_th stage gridx done: served=0.548 (50s)
+- 2026-10-27 00:44:45 gridx NewDelhi s2 wass_th sfrac=-1.0 sc_true=-154.21 served=0.984
+- 2026-10-27 00:44:59 gridx NewDelhi s2 wass_th sfrac=-0.8 sc_true=-154.12 served=0.987
+- 2026-10-27 00:45:06 gridx NewDelhi s2 wass_th sfrac=-0.5 sc_true=-162.21 served=0.961
+- 2026-10-27 00:45:12 gridx NewDelhi s2 wass_th sfrac=-0.3 sc_true=-174.12 served=0.873
+- 2026-10-27 00:45:12 NewDelhi s2 wass_th stage gridx done: served=0.485 (47s)
+- 2026-10-27 00:45:41 gridx London s0 wass_cv sfrac=-1.0 sc_true=-1967.00 served=0.990
+- 2026-10-27 00:45:51 gridx London s0 wass_cv sfrac=-0.8 sc_true=-2029.58 served=0.983
+- 2026-10-27 00:45:56 gridx London s0 wass_cv sfrac=-0.5 sc_true=-2214.94 served=0.925
+- 2026-10-27 00:46:03 gridx London s0 wass_cv sfrac=-0.3 sc_true=-2211.79 served=0.856
+- 2026-10-27 00:46:03 London s0 wass_cv stage gridx done: served=0.335 (51s)
+- 2026-10-27 00:46:26 gridx BuenosAires s0 wass_cv sfrac=-1.0 sc_true=-547.27 served=1.000
+- 2026-10-27 00:46:39 gridx BuenosAires s0 wass_cv sfrac=-0.8 sc_true=-550.41 served=0.986
+- 2026-10-27 00:46:47 gridx BuenosAires s0 wass_cv sfrac=-0.5 sc_true=-556.71 served=0.938
+- 2026-10-27 00:46:53 gridx BuenosAires s0 wass_cv sfrac=-0.3 sc_true=-553.25 served=0.895
+- 2026-10-27 00:46:53 BuenosAires s0 wass_cv stage gridx done: served=0.519 (50s)
+- 2026-10-27 00:47:02 gridx NewDelhi s0 wass_cv sfrac=-1.0 sc_true=-147.97 served=0.989
+- 2026-10-27 00:47:08 gridx NewDelhi s0 wass_cv sfrac=-0.8 sc_true=-149.36 served=0.988
+- 2026-10-27 00:47:12 gridx NewDelhi s0 wass_cv sfrac=-0.5 sc_true=-159.28 served=0.942
+- 2026-10-27 00:47:15 gridx NewDelhi s0 wass_cv sfrac=-0.3 sc_true=-165.63 served=0.829
+- 2026-10-27 00:47:15 NewDelhi s0 wass_cv stage gridx done: served=0.417 (22s)
+- 2026-10-27 00:47:37 gridx London s1 wass_cv sfrac=-1.0 sc_true=-1981.86 served=0.981
+- 2026-10-27 00:47:48 gridx London s1 wass_cv sfrac=-0.8 sc_true=-2099.77 served=0.951
+- 2026-10-27 00:47:53 gridx London s1 wass_cv sfrac=-0.5 sc_true=-2194.84 served=0.895
+- 2026-10-27 00:47:56 gridx London s1 wass_cv sfrac=-0.3 sc_true=-2236.67 served=0.821
+- 2026-10-27 00:47:56 London s1 wass_cv stage gridx done: served=0.348 (41s)
+- 2026-10-27 00:48:08 gridx BuenosAires s1 wass_cv sfrac=-1.0 sc_true=-596.59 served=0.983
+- 2026-10-27 00:48:12 gridx BuenosAires s1 wass_cv sfrac=-0.8 sc_true=-596.59 served=0.983
+- 2026-10-27 00:48:17 gridx BuenosAires s1 wass_cv sfrac=-0.5 sc_true=-598.01 served=0.983
+- 2026-10-27 00:48:19 gridx BuenosAires s1 wass_cv sfrac=-0.3 sc_true=-598.64 served=0.912
+- 2026-10-27 00:48:19 BuenosAires s1 wass_cv stage gridx done: served=0.620 (23s)
+- 2026-10-27 00:48:35 gridx NewDelhi s1 wass_cv sfrac=-1.0 sc_true=-168.77 served=0.997
+- 2026-10-27 00:48:54 gridx NewDelhi s1 wass_cv sfrac=-0.8 sc_true=-171.38 served=0.994
+- 2026-10-27 00:49:06 gridx NewDelhi s1 wass_cv sfrac=-0.5 sc_true=-180.30 served=0.979
+- 2026-10-27 00:49:13 gridx NewDelhi s1 wass_cv sfrac=-0.3 sc_true=-194.21 served=0.881
+- 2026-10-27 00:49:13 NewDelhi s1 wass_cv stage gridx done: served=0.435 (54s)
+- 2026-10-27 00:49:24 gridx London s2 wass_cv sfrac=-1.0 sc_true=-2305.18 served=0.990
+- 2026-10-27 00:49:28 gridx London s2 wass_cv sfrac=-0.8 sc_true=-2380.08 served=0.971
+- 2026-10-27 00:49:31 gridx London s2 wass_cv sfrac=-0.5 sc_true=-2463.73 served=0.930
+- 2026-10-27 00:49:33 gridx London s2 wass_cv sfrac=-0.3 sc_true=-2418.25 served=0.808
+- 2026-10-27 00:49:33 London s2 wass_cv stage gridx done: served=0.292 (21s)
+- 2026-10-27 00:49:57 gridx BuenosAires s2 wass_cv sfrac=-1.0 sc_true=-533.21 served=0.978
+- 2026-10-27 00:50:05 gridx BuenosAires s2 wass_cv sfrac=-0.8 sc_true=-542.12 served=0.969
+- 2026-10-27 00:50:12 gridx BuenosAires s2 wass_cv sfrac=-0.5 sc_true=-544.21 served=0.965
+- 2026-10-27 00:50:17 gridx BuenosAires s2 wass_cv sfrac=-0.3 sc_true=-550.51 served=0.934
+- 2026-10-27 00:50:17 BuenosAires s2 wass_cv stage gridx done: served=0.601 (44s)
+- 2026-10-27 00:50:31 gridx NewDelhi s2 wass_cv sfrac=-1.0 sc_true=-156.80 served=0.987
+- 2026-10-27 00:50:44 gridx NewDelhi s2 wass_cv sfrac=-0.8 sc_true=-156.10 served=0.987
+- 2026-10-27 00:50:51 gridx NewDelhi s2 wass_cv sfrac=-0.5 sc_true=-156.73 served=0.987
+- 2026-10-27 00:50:57 gridx NewDelhi s2 wass_cv sfrac=-0.3 sc_true=-168.18 served=0.902
+- 2026-10-27 00:50:57 NewDelhi s2 wass_cv stage gridx done: served=0.522 (40s)
+- 2026-10-27 00:50:59 gridx London s0 pbox sfrac=-1.0 sc_true=-2076.39 served=0.898
+- 2026-10-27 00:51:00 gridx London s0 pbox sfrac=-0.8 sc_true=-2092.43 served=0.860
+- 2026-10-27 00:51:01 gridx London s0 pbox sfrac=-0.5 sc_true=-2011.32 served=0.676
+- 2026-10-27 00:51:02 gridx London s0 pbox sfrac=-0.3 sc_true=-1714.47 served=0.485
+- 2026-10-27 00:51:02 London s0 pbox stage gridx done: served=0.199 (5s)
+- 2026-10-27 00:51:04 gridx BuenosAires s0 pbox sfrac=-1.0 sc_true=-497.96 served=0.975
+- 2026-10-27 00:51:06 gridx BuenosAires s0 pbox sfrac=-0.8 sc_true=-489.41 served=0.957
+- 2026-10-27 00:51:07 gridx BuenosAires s0 pbox sfrac=-0.5 sc_true=-473.85 served=0.816
+- 2026-10-27 00:51:08 gridx BuenosAires s0 pbox sfrac=-0.3 sc_true=-465.13 served=0.754
+- 2026-10-27 00:51:08 BuenosAires s0 pbox stage gridx done: served=0.377 (6s)
+- 2026-10-27 00:51:10 gridx NewDelhi s0 pbox sfrac=-1.0 sc_true=-131.89 served=0.905
+- 2026-10-27 00:51:11 gridx NewDelhi s0 pbox sfrac=-0.8 sc_true=-131.76 served=0.874
+- 2026-10-27 00:51:12 gridx NewDelhi s0 pbox sfrac=-0.5 sc_true=-151.01 served=0.664
+- 2026-10-27 00:51:12 gridx NewDelhi s0 pbox sfrac=-0.3 sc_true=-134.83 served=0.466
+- 2026-10-27 00:51:12 NewDelhi s0 pbox stage gridx done: served=0.248 (4s)
+- 2026-10-27 00:51:14 gridx London s1 pbox sfrac=-1.0 sc_true=-2102.68 served=0.855
+- 2026-10-27 00:51:15 gridx London s1 pbox sfrac=-0.8 sc_true=-2167.37 served=0.824
+- 2026-10-27 00:51:16 gridx London s1 pbox sfrac=-0.5 sc_true=-2070.41 served=0.668
+- 2026-10-27 00:51:16 gridx London s1 pbox sfrac=-0.3 sc_true=-1600.12 served=0.439
+- 2026-10-27 00:51:16 London s1 pbox stage gridx done: served=0.198 (4s)
+- 2026-10-27 00:51:18 gridx BuenosAires s1 pbox sfrac=-1.0 sc_true=-534.30 served=0.945
+- 2026-10-27 00:51:19 gridx BuenosAires s1 pbox sfrac=-0.8 sc_true=-547.94 served=0.909
+- 2026-10-27 00:51:21 gridx BuenosAires s1 pbox sfrac=-0.5 sc_true=-523.52 served=0.854
+- 2026-10-27 00:51:21 gridx BuenosAires s1 pbox sfrac=-0.3 sc_true=-500.28 served=0.693
+- 2026-10-27 00:51:21 BuenosAires s1 pbox stage gridx done: served=0.343 (5s)
+- 2026-10-27 00:51:23 gridx NewDelhi s1 pbox sfrac=-1.0 sc_true=-147.71 served=0.962
+- 2026-10-27 00:51:24 gridx NewDelhi s1 pbox sfrac=-0.8 sc_true=-160.02 served=0.892
+- 2026-10-27 00:51:25 gridx NewDelhi s1 pbox sfrac=-0.5 sc_true=-179.30 served=0.672
+- 2026-10-27 00:51:26 gridx NewDelhi s1 pbox sfrac=-0.3 sc_true=-171.69 served=0.533
+- 2026-10-27 00:51:26 NewDelhi s1 pbox stage gridx done: served=0.270 (5s)
+- 2026-10-27 00:51:27 gridx London s2 pbox sfrac=-1.0 sc_true=-2297.50 served=0.931
+- 2026-10-27 00:51:28 gridx London s2 pbox sfrac=-0.8 sc_true=-2316.43 served=0.873
+- 2026-10-27 00:51:29 gridx London s2 pbox sfrac=-0.5 sc_true=-2167.79 served=0.623
+- 2026-10-27 00:51:30 gridx London s2 pbox sfrac=-0.3 sc_true=-1914.61 served=0.482
+- 2026-10-27 00:51:30 London s2 pbox stage gridx done: served=0.148 (4s)
+- 2026-10-27 00:51:31 gridx BuenosAires s2 pbox sfrac=-1.0 sc_true=-487.07 served=0.942
+- 2026-10-27 00:51:32 gridx BuenosAires s2 pbox sfrac=-0.8 sc_true=-494.16 served=0.925
+- 2026-10-27 00:51:33 gridx BuenosAires s2 pbox sfrac=-0.5 sc_true=-494.63 served=0.840
+- 2026-10-27 00:51:34 gridx BuenosAires s2 pbox sfrac=-0.3 sc_true=-463.03 served=0.701
+- 2026-10-27 00:51:34 BuenosAires s2 pbox stage gridx done: served=0.382 (5s)
+- 2026-10-27 00:51:36 gridx NewDelhi s2 pbox sfrac=-1.0 sc_true=-134.34 served=0.941
+- 2026-10-27 00:51:37 gridx NewDelhi s2 pbox sfrac=-0.8 sc_true=-144.29 served=0.900
+- 2026-10-27 00:51:38 gridx NewDelhi s2 pbox sfrac=-0.5 sc_true=-157.17 served=0.701
+- 2026-10-27 00:51:39 gridx NewDelhi s2 pbox sfrac=-0.3 sc_true=-150.58 served=0.507
+- 2026-10-27 00:51:39 NewDelhi s2 pbox stage gridx done: served=0.259 (5s)
+- 2026-10-27 00:57:11 cv NewYork s0: radii [0.05, 0.05, 0.0, 0.0]
+- 2026-10-27 01:00:30 NewYork s0 wass_cv stage ne done: served=1.000 (527s)
+- 2026-10-27 01:00:39 NewYork s0 wass_cv stage so done: served=1.000 (536s)
+- 2026-10-27 01:01:26 cv Cairo s0: radii [0.05, 0.0, 0.0, 0.0]
+- 2026-10-27 01:04:11 Cairo s0 wass_cv stage ne done: served=1.000 (212s)
+- 2026-10-27 01:04:58 Cairo s0 wass_cv stage so done: served=1.000 (258s)

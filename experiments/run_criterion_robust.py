@@ -24,6 +24,7 @@ resumable).  Stages
   grid    coarse leader grid (about 17 points) on London, Buenos Aires, New Delhi: (0,0), delivery-only axis, congestion-only axis,
           two-instrument points around the best delivery-only subsidy and DIP's subsidy.  Same family as E2:
           u_z = sfrac * fee + theta * gc_z * X_z^NE (X^NE = unpriced equilibrium).
+  gridx   extra delivery-only points (sfrac in SFRAC_EXT) so that the best uniform per-delivery charge is bracketed for every criterion.
   imprec  Gamma-maximin width delta in {0.2, 0.8} of the rivals' aggregate (as E4), unpriced equilibrium (focus cities).
 """
 from __future__ import annotations
@@ -54,9 +55,10 @@ FOCUS = ["London", "BuenosAires", "NewDelhi"]
 LOW_SERVICE = set(FOCUS)
 CRITERIA = ["saa", "wass_th", "wass_cv", "pbox"]
 EPS_GRID = [0.0, 0.05, 0.25, 1.0]  # coarse subset of the metro study's grid (0, .02, .05, .1, .25, .5, 1): one pool solve costs 5-10 s
-STAGES = ["ne", "so", "dip", "grid", "imprec"]
+STAGES = ["ne", "so", "dip", "grid", "gridx", "imprec"]
 THETAS_AX = [1.0, 4.0, 16.0]
 SFRAC_AX = [-0.6, -0.4, -0.2, -0.1, -0.05, 0.2]
+SFRAC_EXT = [-1.0, -0.8, -0.5, -0.3]  # extra delivery-only points: the p-box optimum lies beyond the base axis (-0.6)
 SFRAC_GRID = [-0.6, -0.4, -0.2, -0.1, -0.05, 0.0, 0.1, 0.2, 0.4, 0.6]
 DELTAS = [0.2, 0.8]
 NCUST = 22
@@ -313,12 +315,32 @@ def stage_grid(g, P, path: Path, city, seed, crit):
     jdump(path, P)
 
 
+def stage_gridx(g, P, path: Path, city, seed, crit):
+    fee = g.meta["params"]["delivery_fee_usd"]
+    Z = g.Z
+    lam0 = np.array(P["ne"]["eqs"][0]["lam"])
+    G = P.setdefault("gridx", {})
+    for sf in SFRAC_EXT:
+        if str(sf) in G:
+            continue
+        toll = np.zeros(2 * Z)
+        toll[:Z] = sf * fee
+        g.set_charges(toll=toll)
+        o = solve_ne(g, rounds=6, lam0=lam0, certify="oracle")
+        G[str(sf)] = dict(metrics(o["eval"]), theta=0.0, sfrac=sf, max_regret=float(o["row"]["max_regret"]), calls=int(o["row"]["calls"]),
+                          converged=bool(o["row"]["converged"]))
+        g.set_charges()
+        jdump(path, P)
+        log(f"gridx {city} s{seed} {crit} sfrac={sf} sc_true={G[str(sf)]['social_cost_true']:.2f} served={G[str(sf)]['served_share']:.3f}")
+
+
 # ------------------------------------------------------------------------------------------------ driver
 def run_unit(city, seed, crit, stages):
     path = part_path(city, seed, crit)
     P = load_part(city, seed, crit)
     need = [s for s in stages if (s in ("ne", "so", "dip", "imprec") and s not in P) or
-            (s == "grid" and city in LOW_SERVICE and "gridcert" not in P)]
+            (s == "grid" and city in LOW_SERVICE and "gridcert" not in P) or
+            (s == "gridx" and city in LOW_SERVICE and len(P.get("gridx", {})) < len(SFRAC_EXT))]
     if crit == "wass_cv" and "eps_cv" not in P and need:
         pass
     if not need:
@@ -333,7 +355,8 @@ def run_unit(city, seed, crit, stages):
             log(f"cv {city} s{seed}: radii {e}")
         if all(e == 0.0 for e in P["eps_cv"]):  # identical to the SAA game
             S = load_part(city, seed, "saa")
-            if all(s in S for s in need if s != "grid") and ("grid" not in need or "gridcert" in S):
+            if all(s in S for s in need if s not in ("grid", "gridx")) and ("grid" not in need or "gridcert" in S) and \
+                    ("gridx" not in need or len(S.get("gridx", {})) == len(SFRAC_EXT)):
                 P.update({k: v for k, v in S.items() if k not in ("eps_cv", "cv_scores")})
                 P["same_as_saa"] = True
                 jdump(path, P)
@@ -356,6 +379,8 @@ def run_unit(city, seed, crit, stages):
             stage_imprec(g, P)
         elif st == "grid" and city in LOW_SERVICE and "gridcert" not in P and "ne" in P and "dip" in P:
             stage_grid(g, P, path, city, seed, crit)
+        elif st == "gridx" and city in LOW_SERVICE and "ne" in P and len(P.get("gridx", {})) < len(SFRAC_EXT):
+            stage_gridx(g, P, path, city, seed, crit)
         else:
             continue
         jdump(path, P)
@@ -374,7 +399,7 @@ def cmd_run(a):
         print("another run_criterion_robust job holds the lock", flush=True)
         return
     # stage-major order: all cheap stages everywhere first, then the policy stages, then the grid
-    waves = [(["ne", "so"], a.cities), (["dip"], a.cities), (["grid", "imprec"], [c for c in a.cities if c in LOW_SERVICE])]
+    waves = [(["ne", "so"], a.cities), (["dip"], a.cities), (["grid", "gridx", "imprec"], [c for c in a.cities if c in LOW_SERVICE])]
     waves = [([s for s in ws if s in a.stages], cs) for ws, cs in waves]
     for crit in a.criteria:
         for ws, cs in waves:
