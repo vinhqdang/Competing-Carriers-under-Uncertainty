@@ -67,7 +67,7 @@ def _unit(sc0, scs, served, grid=None):
     P["dip"] = dict(eq, status="exact", rounds=1, n_cuts=0, sc_model=scs, social_cost_true=scs, calls=30, calls_so=20, time_s=1.0,
                     s_over_fee=-0.4, u_mean_over_fee=-0.3, u_q_weighted_over_fee=-0.3, u_min_over_fee=-0.4, u_max_over_fee=-0.1, t_max=0.0,
                     slope_fee_over_nz=-0.375, corr_fee_over_nz=-0.99, n_active=5, verify_regret_pooled=0.0, verify_regret_fresh=0.0,
-                    verify_target_fresh=0.0, loss_bound=0.0, welfare_true=-scs)
+                    verify_target_fresh=0.0, loss_bound=0.0, welfare_true=-scs, fee=1.0)
     if grid:
         G = {}
         for (th, sf), sc in grid.items():

@@ -1584,3 +1584,83 @@ bash experiments/run_brl_bench_all.sh        # pub, polish, shift, labels, devic
 python experiments/run_brl_bench.py summary   # tables and figures only
 python -m pytest -q                           # 179 passed
 ```
+
+## Robustness to the carriers' criterion
+
+Question: the game results of the paper (unpriced equilibrium, PoA, leader's charges) were computed with carriers who plan against p-box worst-case route costs; the out-of-sample study ("Why probability boxes", Result 3) showed that the served share roughly doubles with SAA carriers. Which policy conclusions survive when the carriers use SAA or a Wasserstein criterion? Code: `experiments/run_criterion_robust.py` (resumable, atomic writes; stages `ne so dip dipfix grid gridx imprec`), `experiments/criterion_summary.py` (tables, figures), `results/criterion_queue.sh` and `criterion_queue2.sh` (the order in which it was run), `tests/test_criterion_robust.py`. Outputs: `results/criterion_unpriced.csv`, `criterion_dip.csv`, `criterion_grid.csv`, `criterion_claims.csv`, `criterion_imprecision.csv`, `criterion_pbox_check.csv`, `criterion_dip_charges_*.csv`, `summary_criterion.csv`, `results/criterion_summary.md` (all tables, claim verdicts), `figures/criterion_{served,poa,subsidy,gain,grid_claims}.png`; per-unit state in `results/criterion_parts/`; log `results/PROGRESS_criterion_robust.md`. Reproduce (one core, about 20 h): `nohup taskset -c 1 results/criterion_queue.sh &`, then `results/criterion_queue2.sh`, `python experiments/run_criterion_robust.py run --stages dipfix`, `python experiments/run_criterion_robust.py summary`.
+
+### Design
+
+* Nine cities, seeds 0, 1, 2 (22 customer zones, the same 30 observed days as the published runs). Criteria: p-box (the paper; here with the price-and-branch oracle, not the exact branch-and-price: the unpriced welfare matches the published exact numbers to 3 digits in 9 of 12 city-seeds, and differs in Buenos Aires seeds 0 and 2 and slightly in New Delhi, which is equilibrium selection; `criterion_pbox_check.csv`); SAA (expected cost on the 30 days); Wasserstein with cross-validated radius (one radius per carrier, grid {0, 0.05, 0.25, 1}, 3 folds of 20/10 days, score = held-out SAA cost of the carrier's full-service plan); Wasserstein at the theory radius (0.20-0.29).
+* SAA and Wasserstein carriers use `HeurPool`, a heuristic oracle without a certificate. Every unpriced equilibrium is verified against an independent fresh pool (regret <= 5e-13 in all 3 x 77 runs). **The CV radius does not collapse to SAA here**: in the game, with 20 training days per fold, 43 of 107 carrier-radii are 0, 43 are 0.05, 19 are 0.25 and 2 are 1.0. Wasserstein-CV games therefore lie between SAA and the theory radius. CV was not run for Paris and Berlin seeds 1 and 2 (one game takes 20-40 min); there n = 1.
+* Metrics. 'true' = routes re-priced with the true law (5000 draws of the instance's law), 'model' = the carriers' own criterion. PoA = W(SO)/W(unpriced equilibrium); PoS uses the best of three equilibria (ZMC, best-response dynamics from the empty profile and from full service). Gain = 100 (SC0 - SC)/|SC0| of the priced equilibrium.
+* DIP (`src/ccu/dip.py`) needs the carriers' best responses; with SAA and Wasserstein carriers these come from the heuristic oracle, so DIP's target is an equilibrium only with respect to that oracle. Verification: the priced profile is checked against an independent fresh pool. In 59 of 104 units the fresh pool found improving deviations of the raw DIP profile (median 0.2, maximum 58 USD, at most 0.3% of welfare; also for the price-and-branch p-box, whose pooled oracle is not exact); stage `dipfix` runs best-response dynamics from the profile under the same charges until the fresh pool finds none, and the reported gains are those of the polished profiles (largest change of a gain 5.5 pp, of a model gain 1.5 pp; fresh regret <= 1e-12 in all 104 units; 88 profiles were changed). Charges are unchanged.
+* Coarse grid (London, Buenos Aires, New Delhi): 16 points per game, `u_z = sfrac * fee + theta * gc_z X_z^NE`: (0,0); delivery-only sfrac in {-0.6, -0.4, -0.2, -0.1, -0.05, +0.2}; congestion-only theta in {1, 4, 16}; two-instrument points theta in {1, 4, 16} at the best delivery-only sfrac and at DIP's s/fee snapped to the E2 grid (a neighbour is added when they coincide); plus the extra delivery-only points {-1.0, -0.8, -0.5, -0.3} (`gridx`) because the p-box optimum under the true-law objective lies beyond -0.6. It is a coarser grid than the 63-point E2 grid; "DIP / grid gain" is therefore easier to meet than in the published comparison. The leader's objective is evaluated twice: with the carriers' own cost ('model', the paper's objective) and with the true-law cost.
+
+### Result 1: unpriced equilibrium and PoA (mean over seeds; sd in `criterion_summary.md`)
+
+| city | criterion | served share | vehicles | welfare (true) | PoA true | PoA model | PoS true |
+|---|---|---|---|---|---|---|---|
+| London | p-box | 0.18 | 6.7 | 868 | 2.06 | 1.66 | 2.01 |
+| London | SAA | 0.38 | 11.3 | 1560 | 1.52 | 1.55 | 1.50 |
+| London | Wass. CV | 0.32 | 9.7 | 1393 | 1.69 | 1.65 | 1.67 |
+| London | Wass. theory | 0.31 | 9.0 | 1340 | 1.75 | 1.66 | 1.72 |
+| Buenos Aires | p-box | 0.37 | 9.3 | 314 | 1.49 | 1.36 | 1.46 |
+| Buenos Aires | SAA | 0.67 | 13.7 | 495 | 1.16 | 1.19 | 1.14 |
+| Buenos Aires | Wass. CV | 0.58 | 11.7 | 451 | 1.27 | 1.23 | 1.21 |
+| Buenos Aires | Wass. theory | 0.57 | 11.7 | 439 | 1.31 | 1.28 | 1.25 |
+| New Delhi | p-box | 0.26 | 10.0 | 107 | 1.35 | 1.18 | 1.31 |
+| New Delhi | SAA | 0.48 | 15.7 | 162 | 1.19 | 1.21 | 1.19 |
+| New Delhi | Wass. CV | 0.46 | 15.0 | 162 | 1.19 | 1.20 | 1.19 |
+| New Delhi | Wass. theory | 0.41 | 13.7 | 151 | 1.25 | 1.20 | 1.24 |
+| Mumbai | p-box / SAA | 0.45 / 0.57 | | | 1.09 / 1.06 | 1.03 / 1.06 | |
+| Paris | p-box / SAA | 0.84 / 0.93 | | | 1.06 / 1.02 | 1.04 / 1.02 | |
+| Berlin | p-box / SAA | 0.89 / 0.94 | | | 1.03 / 1.01 | 1.02 / 1.01 | |
+| Moscow, New York, Cairo | all four | 0.99-1.00 | | | 1.000-1.008 | 1.000-1.003 | |
+
+The three-city table reproduces the earlier `ambiguity_game` numbers (same games); the p-box PoA with true-law cost is 2.06 / 1.49 / 1.35 and with SAA 1.52 / 1.16 / 1.19. The model-cost PoA moves little (London 1.66 vs 1.55, Buenos Aires 1.36 vs 1.19, New Delhi 1.18 vs 1.21). Seed spread of the SAA served share: sd 0.02, 0.02, 0.05; of the PoA: 0.09, 0.02, 0.06 (p-box London PoA sd 0.47).
+
+### Result 2: the leader (DIP; coarse grid), mean over seeds
+
+| city | criterion | DIP gain % (true) | DIP gain % (model) | DIP u/fee (weighted) | DIP s/fee | slope of u_z on fee/n_z | best uniform charge / fee (model objective) | (true-law objective) | congestion-only gain % (model) | delivery share (model) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| London | p-box | 107.8 | 65.8 | -0.246 | -0.415 | -0.378 | -0.30 | -0.80 | 0.0 | 0.96 |
+| London | SAA | 51.1 | 53.2 | -0.257 | -0.398 | -0.362 | -0.33 | -0.33 | 0.0 | 0.98 |
+| London | Wass. CV | 68.0 | 63.8 | -0.259 | -0.400 | -0.364 | -0.40 | -0.47 | 0.0 | 0.95 |
+| London | Wass. theory | 71.8 | 65.4 | -0.260 | -0.406 | -0.364 | -0.30 | -0.40 | 0.6 | 0.94 |
+| Buenos Aires | p-box | 51.2 | 35.9 | -0.236 | -0.396 | -0.375 | -0.30 | -0.77 | 1.6 | 1.00 |
+| Buenos Aires | SAA | 16.0 | 18.5 | -0.250 | -0.396 | -0.373 | -0.30 | -0.30 | 3.3 | 0.99 |
+| Buenos Aires | Wass. CV | 26.6 | 23.5 | -0.250 | -0.396 | -0.374 | -0.23 | -0.37 | 3.0 | 1.00 |
+| Buenos Aires | Wass. theory | 30.4 | 28.0 | -0.248 | -0.396 | -0.374 | -0.40 | -0.30 | 2.0 | 1.00 |
+| New Delhi | p-box | 34.0 | 18.2 | -0.174 | -0.470 | -0.379 | -0.20 | -0.53 | 0.0 | 0.97 |
+| New Delhi | SAA | 18.4 | 20.7 | -0.177 | -0.450 | -0.364 | -0.23 | -0.17 | 0.0 | 1.00 |
+| New Delhi | Wass. CV | 18.5 | 19.4 | -0.178 | -0.450 | -0.366 | -0.20 | -0.20 | 1.4 | 0.88 |
+| New Delhi | Wass. theory | 24.6 | 19.2 | -0.179 | -0.455 | -0.368 | -0.20 | -0.27 | 0.0 | 0.74 |
+
+Other cities (DIP gain, true law, % of |SC|, p-box / SAA / Wass. theory): Mumbai 9.4 / 6.8 / 6.6; Paris 6.0 / 1.8 / 2.0; Berlin 3.5 / 1.1 / 1.2; Moscow 0.2 / -0.04 / -0.09; New York 0.6 / -0.11 / -0.02; Cairo -0.01 / -0.16 / -0.05 (Wass. CV: Moscow -0.11, New York -0.12, Cairo -0.08, Paris 1.5, Berlin 0.7 with n = 1). DIP uses 5-10% of the calls of a 63-point grid (28-37% of this 16-point grid; 120-260 oracle calls per game). Fresh-pool regret of the polished DIP profiles <= 1e-12 (heuristic-oracle caveat above).
+
+### Claim by claim (`criterion_summary.md`, section 4; rules are conventions of this study)
+
+| claim | p-box | SAA | Wass. CV | Wass. theory |
+|---|---|---|---|---|
+| Subsidy dominates: delivery-only >= half of the best grid gain and above congestion-only (ratio of mean gains per city) | holds (0.94-1.00) | holds (0.96-1.00) | holds (0.89-1.00) | holds (0.74-1.00; New Delhi 0.74-0.89) |
+| Congestion charge alone small (mean < 5% of |SC| and < 15% of delivery-only gain) | holds | holds, marginal (Buenos Aires: 3.3% against 18%, ratio 0.18) | holds | holds |
+| PoA >= 1.10 only in London, Buenos Aires, New Delhi | holds | holds (1.52 / 1.16 / 1.19; others <= 1.06) | holds | holds |
+| per-delivery charge u_z ~ -0.375 fee/n_z | holds (slope -0.362 to -0.379) | holds (-0.361 to -0.373) | holds | holds |
+| DIP matches the grid gain with a small share of calls | holds | holds | holds | holds (ratio >= 0.98) |
+| optimal charge is a subsidy | holds | holds | holds | holds |
+| complete-service cities: nothing to fix | holds | holds | holds | holds |
+
+No claim flips. What changes is the level: served share doubles (London 0.18 -> 0.38), the true-law PoA falls (2.06 -> 1.52, 1.49 -> 1.16, 1.35 -> 1.19), the leader's true-law gain halves or more (London 108% -> 51%, Buenos Aires 51% -> 16%, New Delhi 34% -> 18%), and the ordering of Buenos Aires and New Delhi under the true-law PoA reverses with SAA (1.16 against 1.19, within seed spread 0.02-0.06; the paper's ordering is London > Buenos Aires > New Delhi). The Wasserstein criteria lie between SAA and p-box.
+
+**Size of the optimal subsidy.** The expectation that the subsidy shrinks with SAA carriers is supported only for the true-law objective. (i) DIP's charges are almost unchanged: weighted u/fee -0.246 / -0.236 / -0.174 (p-box) against -0.257 / -0.250 / -0.177 (SAA); minimum zone subsidy s/fee -0.415 / -0.396 / -0.470 against -0.398 / -0.396 / -0.450 (shrinks by at most 4%). DIP maximises the carriers' model social cost, and the subsidy offsets the Cournot markup (about 0.375 fee/n_z), which does not depend on the routing criterion. (ii) The best uniform charge on the grid, with the paper's own (model) objective, is also unchanged (London -0.30 -> -0.33, Buenos Aires -0.30 -> -0.30, New Delhi -0.20 -> -0.23). (iii) With the true-law objective the p-box carriers need a much larger subsidy to fix under-service caused by inflated costs: -0.80 / -0.77 / -0.53 of the fee against -0.33 / -0.30 / -0.17 with SAA carriers (a reduction of 55-68%; the p-box optimum is beyond the -0.6 end of the E2 axis). The sign (subsidy) never flips.
+
+**Imprecision width** (Gamma-maximin delta of the rivals' aggregate, unpriced equilibrium, delta = 0 / 0.2 / 0.8, served share, `criterion_imprecision.csv`; one common surcharge, so the effect is mechanical): London p-box 0.18 / 0.13 / 0.02, SAA 0.38 / 0.25 / 0.11; Buenos Aires p-box 0.37 / 0.29 / 0.13, SAA 0.67 / 0.32 / 0.10; New Delhi p-box 0.26 / 0.22 / 0.10, SAA 0.48 / 0.38 / 0.13. Service falls with the width under every criterion and the levels converge at delta = 0.8; the SAA drop is larger in relative terms because SAA starts higher.
+
+### Suggested wording
+
+"Carriers' route costs in the main text are p-box worst-case costs. As a robustness check we recomputed the unpriced equilibrium, the price of anarchy and the leader's charges for carriers who plan with the sample-average cost of the same 30 days or with a Wasserstein ball (cross-validated or theory radius), in all nine cities and three seeds. The qualitative findings are unchanged: the per-delivery subsidy delivers at least three quarters of the leader's gain, the congestion charge alone adds little, the price of anarchy exceeds 1.10 only in London, Buenos Aires and New Delhi, the optimal charge is a subsidy of about 0.375 fee/n_z, and dual implementation pricing matches the coarse-grid gain with 5-10% of the calls of a 63-point grid. The levels are not invariant: with sample-average carriers the served share at the unpriced equilibrium roughly doubles, the price of anarchy measured with the true expected cost falls (London 2.06 to 1.52, Buenos Aires 1.49 to 1.16, New Delhi 1.35 to 1.19), and the leader's gain falls by half or more. The subsidy that maximises the true-law welfare is 55-68% smaller, while the zone charges that maximise the carriers' own cost are unchanged."
+
+### Limits
+
+SAA and Wasserstein equilibria and DIP use a heuristic oracle without a certificate (verified against a fresh pool of the same oracle; raw DIP profiles needed polishing in 59 of 104 units); the p-box reference here uses price-and-branch, not the exact oracle (differs from the published numbers in Buenos Aires seeds 0 and 2); the cross-validated radius uses a 4-point grid and one carrier-level plan, differs from the metro study's CV (which collapsed to SAA), and was run for one seed only in Paris and Berlin; the coarse 16-point grid is coarser than the 63-point grid and the claims table uses conventions chosen here (thresholds in `criterion_summary.py`); three seeds only (the ten-seed section shows that three-seed statements about congestion-only gains can flip: the per-seed maximum of the congestion-only gain reaches 6.1% here); the p-box true-law gains are computed with equilibria selected by the ZMC protocol, other equilibria may exist.

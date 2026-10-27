@@ -24,19 +24,23 @@ Mean (sd over seeds 0, 1, 2).  p-box: the paper's carriers (price-and-branch ora
 | Bombay | Wasserstein (theory radius) | 3 | 0.56 (0.05) | 17.7 (2.5) | 196.7 (20.3) | 0.050 (0.005) | 1.06 (0.04) | 1.06 (0.03) | 1.06 (0.03) |
 | Paris | p-box | 3 | 0.84 (0.03) | 21.7 (1.5) | 5711.1 (467.6) | 0.050 (0.001) | 1.06 (0.02) | 1.04 (0.01) | 1.06 (0.02) |
 | Paris | SAA | 3 | 0.93 (0.00) | 19.7 (0.6) | 6259.2 (443.8) | 0.048 (0.001) | 1.02 (0.00) | 1.02 (0.01) | 1.02 (0.01) |
+| Paris | Wasserstein (CV radius) | 1 | 0.93 | 20.0 | 6568.7 | 0.047 | 1.01 | 1.02 | 1.01 |
 | Paris | Wasserstein (theory radius) | 3 | 0.93 (0.00) | 19.7 (0.6) | 6239.3 (448.0) | 0.049 (0.001) | 1.02 (0.01) | 1.02 (0.00) | 1.02 (0.01) |
 | Berlin | p-box | 3 | 0.89 (0.01) | 28.7 (0.6) | 9360.6 (292.1) | 0.037 (0.000) | 1.03 (0.01) | 1.02 (0.01) | 1.03 (0.01) |
 | Berlin | SAA | 3 | 0.94 (0.02) | 25.7 (0.6) | 9896.6 (325.4) | 0.037 (0.000) | 1.01 (0.01) | 1.01 (0.01) | 1.01 (0.01) |
+| Berlin | Wasserstein (CV radius) | 1 | 0.93 | 25.0 | 9632.4 | 0.037 | 1.01 | 1.01 | 1.01 |
 | Berlin | Wasserstein (theory radius) | 3 | 0.94 (0.01) | 25.3 (0.6) | 9854.4 (335.0) | 0.037 (0.001) | 1.02 (0.01) | 1.01 (0.01) | 1.02 (0.01) |
 | Moscow | p-box | 3 | 0.99 (0.00) | 37.7 (0.6) | 7187.6 (166.1) | 0.176 (0.010) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | Moscow | SAA | 3 | 1.00 (0.00) | 32.0 (0.0) | 7321.1 (133.0) | 0.175 (0.010) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
-| Moscow | Wasserstein (CV radius) | 1 | 1.00 | 32.0 | 7296.5 | 0.166 | 1.00 | 1.00 | 1.00 |
+| Moscow | Wasserstein (CV radius) | 3 | 1.00 (0.00) | 31.7 (0.6) | 7328.6 (134.0) | 0.175 (0.010) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | Moscow | Wasserstein (theory radius) | 3 | 1.00 (0.00) | 31.3 (0.6) | 7317.8 (139.9) | 0.175 (0.010) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | NewYork | p-box | 3 | 0.99 (0.00) | 27.3 (2.3) | 21327.9 (1490.0) | 0.078 (0.006) | 1.01 (0.00) | 1.00 (0.00) | 1.01 (0.00) |
 | NewYork | SAA | 3 | 1.00 (0.00) | 22.3 (1.5) | 21759.8 (1493.3) | 0.077 (0.006) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
+| NewYork | Wasserstein (CV radius) | 3 | 1.00 (0.00) | 22.3 (1.5) | 21770.8 (1487.8) | 0.077 (0.006) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | NewYork | Wasserstein (theory radius) | 3 | 1.00 (0.00) | 22.0 (2.0) | 21731.2 (1493.8) | 0.077 (0.006) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | Cairo | p-box | 3 | 1.00 (0.00) | 27.7 (0.6) | 1084.7 (20.7) | 0.036 (0.000) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | Cairo | SAA | 3 | 1.00 (0.00) | 27.3 (0.6) | 1085.6 (21.3) | 0.036 (0.000) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
+| Cairo | Wasserstein (CV radius) | 3 | 1.00 (0.00) | 27.3 (0.6) | 1085.3 (21.1) | 0.036 (0.000) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 | Cairo | Wasserstein (theory radius) | 3 | 1.00 (0.00) | 27.0 (1.0) | 1084.6 (22.5) | 0.036 (0.000) | 1.00 (0.00) | 1.00 (0.00) | 1.00 (0.00) |
 
 ### 2. Leader's charges by DIP
@@ -44,53 +48,58 @@ Mean (sd over seeds 0, 1, 2).  p-box: the paper's carriers (price-and-branch ora
 | city | criterion | n | gain % (true) | gain % (model) | gain (true, USD) | u/fee (weighted) | s/fee | slope vs fee/n_z | corr | calls |
 |---|---|---|---|---|---|---|---|---|---|---|
 | London | p-box | 3 | 107.84 (49.18) | 65.82 (26.24) | 905.2 (310.6) | -0.246 (0.010) | -0.415 (0.006) | -0.378 (0.002) | -0.984 (0.001) | 209 (33) |
-| London | SAA | 3 | 51.92 (8.36) | 54.13 (5.68) | 807.0 (118.4) | -0.257 (0.006) | -0.398 (0.009) | -0.362 (0.001) | -0.986 (0.004) | 245 (18) |
-| London | Wasserstein (CV radius) | 3 | 67.90 (11.67) | 64.27 (5.32) | 944.9 (151.9) | -0.259 (0.008) | -0.400 (0.008) | -0.364 (0.002) | -0.985 (0.004) | 240 (13) |
-| London | Wasserstein (theory radius) | 3 | 74.97 (15.05) | 66.15 (8.41) | 1001.7 (178.7) | -0.260 (0.006) | -0.406 (0.001) | -0.364 (0.002) | -0.984 (0.003) | 254 (7) |
-| BuenosAires | p-box | 3 | 52.27 (2.82) | 35.86 (5.53) | 164.2 (8.1) | -0.236 (0.025) | -0.396 (0.022) | -0.375 (0.001) | -0.999 (0.001) | 124 (12) |
-| BuenosAires | SAA | 3 | 16.13 (1.34) | 18.86 (2.05) | 79.9 (8.5) | -0.250 (0.019) | -0.396 (0.023) | -0.373 (0.001) | -0.999 (0.001) | 120 (3) |
-| BuenosAires | Wasserstein (CV radius) | 3 | 25.79 (6.65) | 23.63 (2.56) | 114.6 (19.6) | -0.250 (0.019) | -0.396 (0.023) | -0.374 (0.001) | -0.999 (0.001) | 126 (8) |
-| BuenosAires | Wasserstein (theory radius) | 3 | 30.49 (7.53) | 28.23 (5.78) | 132.8 (28.1) | -0.248 (0.017) | -0.396 (0.023) | -0.374 (0.000) | -0.999 (0.001) | 122 (18) |
+| London | SAA | 3 | 51.12 (8.05) | 53.17 (5.23) | 794.4 (111.2) | -0.257 (0.006) | -0.398 (0.009) | -0.362 (0.001) | -0.986 (0.004) | 245 (18) |
+| London | Wasserstein (CV radius) | 3 | 67.96 (11.70) | 63.76 (5.95) | 945.4 (151.2) | -0.259 (0.008) | -0.400 (0.008) | -0.364 (0.002) | -0.985 (0.004) | 240 (13) |
+| London | Wasserstein (theory radius) | 3 | 71.84 (13.02) | 65.42 (8.37) | 960.2 (152.8) | -0.260 (0.006) | -0.406 (0.001) | -0.364 (0.002) | -0.984 (0.003) | 254 (7) |
+| BuenosAires | p-box | 3 | 51.23 (4.60) | 35.87 (5.51) | 160.8 (13.6) | -0.236 (0.025) | -0.396 (0.022) | -0.375 (0.001) | -0.999 (0.001) | 124 (12) |
+| BuenosAires | SAA | 3 | 16.03 (1.95) | 18.47 (2.59) | 79.4 (10.6) | -0.250 (0.019) | -0.396 (0.023) | -0.373 (0.001) | -0.999 (0.001) | 120 (3) |
+| BuenosAires | Wasserstein (CV radius) | 3 | 26.55 (6.44) | 23.46 (2.65) | 117.9 (17.8) | -0.250 (0.019) | -0.396 (0.023) | -0.374 (0.001) | -0.999 (0.001) | 126 (8) |
+| BuenosAires | Wasserstein (theory radius) | 3 | 30.39 (7.38) | 27.95 (5.73) | 132.3 (27.7) | -0.248 (0.017) | -0.396 (0.023) | -0.374 (0.000) | -0.999 (0.001) | 122 (18) |
 | NewDelhi | p-box | 3 | 34.00 (6.52) | 18.18 (4.51) | 36.7 (9.3) | -0.174 (0.019) | -0.470 (0.026) | -0.379 (0.003) | -0.984 (0.008) | 125 (7) |
-| NewDelhi | SAA | 3 | 18.85 (5.81) | 21.31 (3.80) | 30.2 (8.5) | -0.177 (0.010) | -0.450 (0.047) | -0.364 (0.002) | -0.985 (0.007) | 232 (14) |
-| NewDelhi | Wasserstein (CV radius) | 3 | 18.16 (9.21) | 19.87 (7.12) | 28.8 (14.0) | -0.178 (0.006) | -0.450 (0.047) | -0.366 (0.003) | -0.986 (0.007) | 225 (28) |
-| NewDelhi | Wasserstein (theory radius) | 3 | 25.23 (7.66) | 20.23 (1.68) | 37.3 (8.6) | -0.179 (0.007) | -0.455 (0.048) | -0.368 (0.003) | -0.985 (0.006) | 262 (6) |
+| NewDelhi | SAA | 3 | 18.43 (5.78) | 20.72 (3.97) | 29.6 (8.8) | -0.177 (0.010) | -0.450 (0.047) | -0.364 (0.002) | -0.985 (0.007) | 232 (14) |
+| NewDelhi | Wasserstein (CV radius) | 3 | 18.49 (8.69) | 19.36 (7.44) | 29.4 (13.2) | -0.178 (0.006) | -0.450 (0.047) | -0.366 (0.003) | -0.986 (0.007) | 225 (28) |
+| NewDelhi | Wasserstein (theory radius) | 3 | 24.61 (6.59) | 19.18 (1.97) | 36.5 (7.8) | -0.179 (0.007) | -0.455 (0.048) | -0.368 (0.003) | -0.985 (0.006) | 262 (6) |
 | Bombay | p-box | 3 | 9.42 (3.39) | 3.54 (0.87) | 16.9 (6.7) | -0.116 (0.010) | -0.430 (0.036) | -0.374 (0.003) | -0.993 (0.002) | 150 (21) |
-| Bombay | SAA | 3 | 6.93 (2.22) | 7.20 (2.84) | 13.5 (3.0) | -0.123 (0.008) | -0.445 (0.046) | -0.367 (0.005) | -0.992 (0.003) | 181 (30) |
-| Bombay | Wasserstein (CV radius) | 3 | 7.29 (2.21) | 7.41 (2.09) | 14.2 (4.1) | -0.119 (0.010) | -0.429 (0.037) | -0.370 (0.003) | -0.994 (0.003) | 190 (52) |
-| Bombay | Wasserstein (theory radius) | 3 | 6.88 (3.73) | 5.81 (3.15) | 13.1 (5.8) | -0.120 (0.010) | -0.428 (0.038) | -0.368 (0.001) | -0.993 (0.003) | 197 (31) |
-| Paris | p-box | 3 | 5.98 (2.02) | 3.74 (1.07) | 341.3 (119.5) | -0.182 (0.019) | -0.380 (0.001) | -0.371 (0.000) | -0.999 (0.001) | 124 (28) |
-| Paris | SAA | 3 | 1.49 (0.34) | 1.57 (0.37) | 93.1 (20.6) | -0.186 (0.021) | -0.379 (0.002) | -0.370 (0.001) | -0.999 (0.000) | 113 (7) |
-| Paris | Wasserstein (theory radius) | 3 | 1.45 (0.84) | 1.42 (0.48) | 91.1 (55.2) | -0.186 (0.019) | -0.385 (0.011) | -0.370 (0.000) | -0.999 (0.000) | 108 (11) |
-| Berlin | p-box | 3 | 3.32 (1.33) | 1.87 (0.76) | 313.6 (134.5) | -0.187 (0.002) | -0.380 (0.001) | -0.371 (0.001) | -0.999 (0.000) | 104 (14) |
-| Berlin | SAA | 3 | 0.47 (0.63) | 0.50 (0.56) | 47.9 (64.7) | -0.188 (0.002) | -0.378 (0.002) | -0.370 (0.001) | -1.000 (0.000) | 117 (11) |
-| Berlin | Wasserstein (theory radius) | 3 | 0.48 (0.34) | 0.48 (0.13) | 47.7 (35.8) | -0.187 (0.003) | -0.379 (0.001) | -0.371 (0.000) | -1.000 (0.000) | 128 (5) |
+| Bombay | SAA | 3 | 6.75 (2.45) | 6.95 (2.99) | 13.1 (3.5) | -0.123 (0.008) | -0.445 (0.046) | -0.367 (0.005) | -0.992 (0.003) | 181 (30) |
+| Bombay | Wasserstein (CV radius) | 3 | 7.25 (2.30) | 7.43 (2.10) | 14.1 (4.3) | -0.119 (0.010) | -0.429 (0.037) | -0.370 (0.003) | -0.994 (0.003) | 190 (52) |
+| Bombay | Wasserstein (theory radius) | 3 | 6.56 (3.73) | 5.66 (3.23) | 12.5 (5.8) | -0.120 (0.010) | -0.428 (0.038) | -0.368 (0.001) | -0.993 (0.003) | 197 (31) |
+| Paris | p-box | 3 | 6.00 (2.06) | 3.74 (1.09) | 342.5 (121.8) | -0.182 (0.019) | -0.380 (0.001) | -0.371 (0.000) | -0.999 (0.001) | 124 (28) |
+| Paris | SAA | 3 | 1.75 (0.46) | 1.82 (0.43) | 109.7 (30.4) | -0.186 (0.021) | -0.379 (0.002) | -0.370 (0.001) | -0.999 (0.000) | 113 (7) |
+| Paris | Wasserstein (CV radius) | 1 | 1.49 | 1.61 | 98.1 | -0.184 | -0.378 | -0.370 | -0.998 | 97 |
+| Paris | Wasserstein (theory radius) | 3 | 1.96 (0.71) | 1.88 (0.55) | 121.6 (42.7) | -0.186 (0.019) | -0.385 (0.011) | -0.370 (0.000) | -0.999 (0.000) | 108 (11) |
+| Berlin | p-box | 3 | 3.53 (1.11) | 1.93 (0.71) | 332.7 (114.7) | -0.187 (0.002) | -0.380 (0.001) | -0.371 (0.001) | -0.999 (0.000) | 104 (14) |
+| Berlin | SAA | 3 | 1.12 (0.69) | 1.10 (0.70) | 111.4 (71.7) | -0.188 (0.002) | -0.378 (0.002) | -0.370 (0.001) | -1.000 (0.000) | 117 (11) |
+| Berlin | Wasserstein (CV radius) | 1 | 0.69 | 1.04 | 66.2 | -0.190 | -0.380 | -0.371 | -1.000 | 107 |
+| Berlin | Wasserstein (theory radius) | 3 | 1.17 (0.52) | 0.88 (0.32) | 115.9 (54.6) | -0.187 (0.003) | -0.379 (0.001) | -0.371 (0.000) | -1.000 (0.000) | 128 (5) |
 | Moscow | p-box | 3 | 0.20 (0.41) | 0.21 (0.13) | 14.0 (28.9) | -0.215 (0.014) | -0.373 (0.001) | -0.362 (0.001) | -0.998 (0.000) | 47 (2) |
-| Moscow | SAA | 3 | -0.06 (0.16) | -0.06 (0.13) | -4.8 (11.4) | -0.215 (0.014) | -0.373 (0.001) | -0.361 (0.001) | -0.998 (0.000) | 55 (10) |
-| Moscow | Wasserstein (theory radius) | 3 | -0.10 (0.23) | -0.09 (0.15) | -7.3 (16.6) | -0.215 (0.014) | -0.373 (0.001) | -0.361 (0.001) | -0.998 (0.000) | 48 (6) |
-| NewYork | p-box | 3 | 0.46 (0.12) | 0.31 (0.05) | 98.2 (17.8) | -0.228 (0.021) | -0.375 (0.001) | -0.371 (0.000) | -1.000 (0.000) | 44 (2) |
-| NewYork | SAA | 3 | -0.04 (0.07) | -0.02 (0.06) | -10.1 (15.9) | -0.228 (0.021) | -0.375 (0.000) | -0.371 (0.000) | -1.000 (0.000) | 44 (14) |
-| NewYork | Wasserstein (theory radius) | 3 | -0.30 (0.09) | -0.37 (0.08) | -65.0 (16.1) | -0.228 (0.021) | -0.375 (0.000) | -0.371 (0.000) | -1.000 (0.000) | 40 (7) |
-| Cairo | p-box | 3 | -0.00 (0.03) | -0.06 (0.03) | -0.0 (0.3) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 39 (5) |
-| Cairo | SAA | 3 | -0.17 (0.08) | -0.17 (0.09) | -1.8 (0.9) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 44 (7) |
-| Cairo | Wasserstein (theory radius) | 3 | -0.07 (0.03) | -0.08 (0.05) | -0.8 (0.4) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 43 (3) |
+| Moscow | SAA | 3 | -0.04 (0.09) | -0.03 (0.08) | -3.1 (6.2) | -0.215 (0.014) | -0.373 (0.001) | -0.361 (0.001) | -0.998 (0.000) | 55 (10) |
+| Moscow | Wasserstein (CV radius) | 3 | -0.11 (0.07) | -0.09 (0.07) | -7.9 (5.1) | -0.215 (0.014) | -0.373 (0.001) | -0.361 (0.001) | -0.998 (0.000) | 59 (16) |
+| Moscow | Wasserstein (theory radius) | 3 | -0.09 (0.18) | -0.08 (0.08) | -6.4 (13.0) | -0.215 (0.014) | -0.373 (0.001) | -0.361 (0.001) | -0.998 (0.000) | 48 (6) |
+| NewYork | p-box | 3 | 0.60 (0.35) | 0.33 (0.08) | 124.7 (63.5) | -0.228 (0.021) | -0.375 (0.001) | -0.371 (0.000) | -1.000 (0.000) | 44 (2) |
+| NewYork | SAA | 3 | -0.11 (0.08) | -0.10 (0.06) | -23.9 (18.8) | -0.228 (0.021) | -0.375 (0.000) | -0.371 (0.000) | -1.000 (0.000) | 44 (14) |
+| NewYork | Wasserstein (CV radius) | 3 | -0.12 (0.10) | -0.11 (0.11) | -26.0 (23.9) | -0.228 (0.021) | -0.375 (0.000) | -0.371 (0.000) | -1.000 (0.000) | 36 (8) |
+| NewYork | Wasserstein (theory radius) | 3 | -0.02 (0.23) | -0.08 (0.09) | -5.3 (52.5) | -0.228 (0.021) | -0.375 (0.000) | -0.371 (0.000) | -1.000 (0.000) | 40 (7) |
+| Cairo | p-box | 3 | -0.01 (0.05) | -0.04 (0.04) | -0.2 (0.5) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 39 (5) |
+| Cairo | SAA | 3 | -0.16 (0.20) | -0.16 (0.20) | -1.8 (2.2) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 44 (7) |
+| Cairo | Wasserstein (CV radius) | 3 | -0.08 (0.10) | -0.01 (0.02) | -0.8 (1.2) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 43 (6) |
+| Cairo | Wasserstein (theory radius) | 3 | -0.05 (0.19) | -0.06 (0.16) | -0.5 (2.1) | -0.115 (0.003) | -0.375 (0.000) | -0.373 (0.000) | -1.000 (0.000) | 43 (3) |
 
 ### 3a. Coarse leader grid, carriers' own cost (the paper's objective)
 
 | city | criterion | n | best gain % | delivery-only % | congestion-only % | delivery share | best uniform s/fee | DIP / grid gain | DIP calls / 63-point grid |
 |---|---|---|---|---|---|---|---|---|---|
 | London | p-box | 3 | 57.11 (27.25) | 53.44 (21.46) | 0.00 (0.00) | 0.96 (0.07) | -0.30 (0.00) | 1.19 (0.17) | 0.085 (0.013) |
-| London | SAA | 3 | 51.71 (7.33) | 50.54 (6.21) | 0.00 (0.00) | 0.98 (0.02) | -0.33 (0.06) | 1.05 (0.08) | 0.097 (0.007) |
-| London | Wasserstein (CV radius) | 3 | 62.03 (4.32) | 58.51 (1.15) | 0.00 (0.00) | 0.95 (0.06) | -0.40 (0.10) | 1.04 (0.01) | 0.095 (0.005) |
-| London | Wasserstein (theory radius) | 3 | 62.02 (7.55) | 57.88 (2.87) | 0.62 (1.07) | 0.94 (0.07) | -0.30 (0.10) | 1.07 (0.01) | 0.101 (0.003) |
+| London | SAA | 3 | 51.71 (7.33) | 50.54 (6.21) | 0.00 (0.00) | 0.98 (0.02) | -0.33 (0.06) | 1.03 (0.08) | 0.097 (0.007) |
+| London | Wasserstein (CV radius) | 3 | 62.03 (4.32) | 58.51 (1.15) | 0.00 (0.00) | 0.95 (0.06) | -0.40 (0.10) | 1.03 (0.02) | 0.095 (0.005) |
+| London | Wasserstein (theory radius) | 3 | 62.02 (7.55) | 57.88 (2.87) | 0.62 (1.07) | 0.94 (0.07) | -0.30 (0.10) | 1.05 (0.01) | 0.101 (0.003) |
 | BuenosAires | p-box | 3 | 34.67 (6.08) | 34.66 (6.09) | 1.60 (2.47) | 1.00 (0.00) | -0.30 (0.00) | 1.04 (0.02) | 0.063 (0.006) |
-| BuenosAires | SAA | 3 | 18.38 (1.90) | 18.27 (2.00) | 3.29 (2.15) | 0.99 (0.01) | -0.30 (0.00) | 1.03 (0.03) | 0.060 (0.002) |
-| BuenosAires | Wasserstein (CV radius) | 3 | 23.45 (2.77) | 23.45 (2.77) | 2.95 (2.56) | 1.00 (0.00) | -0.23 (0.06) | 1.01 (0.01) | 0.063 (0.004) |
-| BuenosAires | Wasserstein (theory radius) | 3 | 28.23 (6.22) | 28.17 (6.17) | 2.04 (3.53) | 1.00 (0.00) | -0.40 (0.17) | 1.00 (0.02) | 0.062 (0.009) |
+| BuenosAires | SAA | 3 | 18.38 (1.90) | 18.27 (2.00) | 3.29 (2.15) | 0.99 (0.01) | -0.30 (0.00) | 1.00 (0.04) | 0.060 (0.002) |
+| BuenosAires | Wasserstein (CV radius) | 3 | 23.45 (2.77) | 23.45 (2.77) | 2.95 (2.56) | 1.00 (0.00) | -0.23 (0.06) | 1.00 (0.01) | 0.063 (0.004) |
+| BuenosAires | Wasserstein (theory radius) | 3 | 28.23 (6.22) | 28.17 (6.17) | 2.04 (3.53) | 1.00 (0.00) | -0.40 (0.17) | 0.99 (0.03) | 0.062 (0.009) |
 | NewDelhi | p-box | 3 | 10.94 (5.62) | 10.66 (5.83) | 0.00 (0.00) | 0.97 (0.06) | -0.20 (0.00) | 1.80 (0.43) | 0.050 (0.003) |
-| NewDelhi | SAA | 3 | 17.80 (5.06) | 17.74 (5.08) | 0.00 (0.00) | 1.00 (0.00) | -0.23 (0.06) | 1.23 (0.15) | 0.091 (0.007) |
-| NewDelhi | Wasserstein (CV radius) | 3 | 17.34 (8.96) | 15.64 (8.62) | 1.40 (2.42) | 0.88 (0.09) | -0.20 (0.00) | 1.25 (0.29) | 0.088 (0.010) |
-| NewDelhi | Wasserstein (theory radius) | 3 | 15.40 (2.68) | 11.36 (2.07) | 0.00 (0.00) | 0.74 (0.05) | -0.20 (0.00) | 1.33 (0.13) | 0.103 (0.000) |
+| NewDelhi | SAA | 3 | 17.80 (5.06) | 17.74 (5.08) | 0.00 (0.00) | 1.00 (0.00) | -0.23 (0.06) | 1.19 (0.13) | 0.091 (0.007) |
+| NewDelhi | Wasserstein (CV radius) | 3 | 17.34 (8.96) | 15.64 (8.62) | 1.40 (2.42) | 0.88 (0.09) | -0.20 (0.00) | 1.20 (0.23) | 0.088 (0.010) |
+| NewDelhi | Wasserstein (theory radius) | 3 | 15.40 (2.68) | 11.36 (2.07) | 0.00 (0.00) | 0.74 (0.05) | -0.20 (0.00) | 1.26 (0.11) | 0.103 (0.000) |
 
 ### 3b. Coarse leader grid, true-law cost
 
@@ -119,8 +128,8 @@ A claim 'holds' when the rule in the first column is met in every city (and seed
 | Subsidy dominates: per city, delivery-only gain >= half the best grid gain (ratio of mean gains) and above the congestion-only gain (focus cities, 3 seeds) | HOLDS: model ratio of mean gains 0.94-1.00, per seed >= 0.5 in 9/9; true ratio of mean gains 0.99-1.00, per seed >= 0.5 in 9/9 | HOLDS: model ratio of mean gains 0.98-1.00, per seed >= 0.5 in 9/9; true ratio of mean gains 0.96-0.98, per seed >= 0.5 in 9/9 | HOLDS: model ratio of mean gains 0.90-1.00, per seed >= 0.5 in 9/9; true ratio of mean gains 0.89-1.00, per seed >= 0.5 in 8/9 | HOLDS: model ratio of mean gains 0.74-1.00, per seed >= 0.5 in 9/9; true ratio of mean gains 0.89-1.00, per seed >= 0.5 in 9/9 |
 | Congestion charge alone small: per city mean best congestion-only gain < 5% of |SC| and < 15% of the delivery-only gain | HOLDS: model mean 0.0-1.6% vs delivery-only 11-53%, max seed 4.4%; true mean 0.0-2.3% vs delivery-only 53-156%, max seed 4.7% | HOLDS (marginal: ratio 0.15-0.25): model mean 0.0-3.3% vs delivery-only 18-51%, max seed 4.7%; true mean 0.0-3.1% vs delivery-only 16-48%, max seed 4.4% | HOLDS: model mean 0.0-3.0% vs delivery-only 16-59%, max seed 4.6%; true mean 0.1-3.4% vs delivery-only 15-66%, max seed 5.9% | HOLDS: model mean 0.0-2.0% vs delivery-only 11-58%, max seed 6.1%; true mean 0.0-2.0% vs delivery-only 19-71%, max seed 6.0% |
 | PoA large only in London, Buenos Aires, New Delhi (large: true-law PoA >= 1.10; mean over seeds) | HOLDS: PoA>=1.10 in London, BuenosAires, NewDelhi; top 3 London, BuenosAires, NewDelhi; London 2.06, Buenos Aires 1.49, New Delhi 1.35, other cities max 1.09 | HOLDS: PoA>=1.10 in London, NewDelhi, BuenosAires; top 3 London, NewDelhi, BuenosAires; London 1.52, Buenos Aires 1.16, New Delhi 1.19, other cities max 1.06 | HOLDS: PoA>=1.10 in London, BuenosAires, NewDelhi; top 3 London, BuenosAires, NewDelhi; London 1.69, Buenos Aires 1.27, New Delhi 1.19, other cities max 1.07 | HOLDS: PoA>=1.10 in London, BuenosAires, NewDelhi; top 3 London, BuenosAires, NewDelhi; London 1.75, Buenos Aires 1.31, New Delhi 1.25, other cities max 1.06 |
-| Per-delivery charge u_z ~ -0.375 fee/n_z: |slope + 0.375| <= 0.03 and corr <= -0.95 in every city | HOLDS: slope -0.379 to -0.362, corr <= -0.984 | HOLDS: slope -0.373 to -0.361, corr <= -0.985 | HOLDS: slope -0.374 to -0.364, corr <= -0.985 | HOLDS: slope -0.374 to -0.361, corr <= -0.984 |
-| DIP gain >= coarse-grid gain (ratio of mean gains >= 1 per city) with < 15% of the calls of a 63-point grid | HOLDS: DIP / grid gain (carriers' cost) 1.03-1.66 (mean gains), per case >= 0.97 in 9/9, >= 1 in 9/9; true-law 0.64-0.82; calls 6.6% of a 63-point grid (28% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 1.03-1.20 (mean gains), per case >= 0.97 in 9/9, >= 1 in 8/9; true-law 1.01-1.19; calls 8.3% of a 63-point grid (35% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 1.01-1.15 (mean gains), per case >= 0.97 in 9/9, >= 1 in 8/9; true-law 0.95-1.11; calls 8.2% of a 63-point grid (34% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 1.00-1.31 (mean gains), per case >= 0.97 in 9/9, >= 1 in 8/9; true-law 1.00-1.17; calls 8.9% of a 63-point grid (37% of this 16-point grid) |
-| Optimal charge is a subsidy (DIP, every city) | HOLDS: weighted u/fee -0.246 to -0.115 (all negative) | HOLDS: weighted u/fee -0.257 to -0.115 (all negative) | HOLDS: weighted u/fee -0.259 to -0.119 (all negative) | HOLDS: weighted u/fee -0.260 to -0.115 (all negative) |
-| Complete-service cities (Moscow, New York, Cairo): nothing to fix | served share 0.987-1.000, PoA 1.000-1.008; DIP gain -0.08 to 0.67% | served share 0.997-1.000, PoA 1.000-1.001; DIP gain -0.24 to 0.07% | served share 1.000-1.000, PoA 1.000-1.000 | served share 0.996-1.000, PoA 1.000-1.001; DIP gain -0.39 to 0.16% |
+| Per-delivery charge u_z ~ -0.375 fee/n_z: |slope + 0.375| <= 0.03 and corr <= -0.95 in every city | HOLDS: slope -0.379 to -0.362, corr <= -0.984 | HOLDS: slope -0.373 to -0.361, corr <= -0.985 | HOLDS: slope -0.374 to -0.361, corr <= -0.985 | HOLDS: slope -0.374 to -0.361, corr <= -0.984 |
+| DIP gain matches the coarse-grid gain (ratio of mean gains >= 0.98 per city) with < 15% of the calls of a 63-point grid | HOLDS: DIP / grid gain (carriers' cost) 1.03-1.66 (mean gains), per case >= 0.97 in 9/9, >= 1 in 9/9; true-law 0.64-0.81; calls 6.6% of a 63-point grid (28% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 1.01-1.16 (mean gains), per case >= 0.97 in 8/9, >= 1 in 6/9; true-law 1.01-1.17; calls 8.3% of a 63-point grid (35% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 1.00-1.12 (mean gains), per case >= 0.97 in 9/9, >= 1 in 8/9; true-law 0.97-1.13; calls 8.2% of a 63-point grid (34% of this 16-point grid) | HOLDS: DIP / grid gain (carriers' cost) 0.99-1.24 (mean gains), per case >= 0.97 in 8/9, >= 1 in 8/9; true-law 0.97-1.14; calls 8.9% of a 63-point grid (37% of this 16-point grid) |
+| Optimal charge is a subsidy (DIP, every city) | HOLDS: weighted u/fee -0.246 to -0.115 (all negative) | HOLDS: weighted u/fee -0.257 to -0.115 (all negative) | HOLDS: weighted u/fee -0.259 to -0.115 (all negative) | HOLDS: weighted u/fee -0.260 to -0.115 (all negative) |
+| Complete-service cities (Moscow, New York, Cairo): nothing to fix | served share 0.987-1.000, PoA 1.000-1.008; DIP gain -0.08 to 1.00% | served share 0.997-1.000, PoA 1.000-1.001; DIP gain -0.39 to 0.04% | served share 0.997-1.000, PoA 1.000-1.001; DIP gain -0.23 to 0.00% | served share 0.996-1.000, PoA 1.000-1.001; DIP gain -0.28 to 0.21% |
 

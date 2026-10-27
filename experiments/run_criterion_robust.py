@@ -24,6 +24,9 @@ resumable).  Stages
   grid    coarse leader grid (about 17 points) on London, Buenos Aires, New Delhi: (0,0), delivery-only axis, congestion-only axis,
           two-instrument points around the best delivery-only subsidy and DIP's subsidy.  Same family as E2:
           u_z = sfrac * fee + theta * gc_z * X_z^NE (X^NE = unpriced equilibrium).
+  dipfix  the fresh-pool check of the DIP profile found improving deviations in part of the units (the pooled heuristic oracle misses routes
+          that an independent pool finds): best-response dynamics from the DIP profile under the same charges until the fresh pool
+          finds none (as `solve_ne(certify="fresh")` does for the unpriced equilibrium); the polished profile is the one reported.
   gridx   extra delivery-only points (sfrac in SFRAC_EXT) so that the best uniform per-delivery charge is bracketed for every criterion.
   imprec  Gamma-maximin width delta in {0.2, 0.8} of the rivals' aggregate (as E4), unpriced equilibrium (focus cities).
 """
@@ -55,7 +58,7 @@ FOCUS = ["London", "BuenosAires", "NewDelhi"]
 LOW_SERVICE = set(FOCUS)
 CRITERIA = ["saa", "wass_th", "wass_cv", "pbox"]
 EPS_GRID = [0.0, 0.05, 0.25, 1.0]  # coarse subset of the metro study's grid (0, .02, .05, .1, .25, .5, 1): one pool solve costs 5-10 s
-STAGES = ["ne", "so", "dip", "grid", "gridx", "imprec"]
+STAGES = ["ne", "so", "dip", "dipfix", "grid", "gridx", "imprec"]
 THETAS_AX = [1.0, 4.0, 16.0]
 SFRAC_AX = [-0.6, -0.4, -0.2, -0.1, -0.05, 0.2]
 SFRAC_EXT = [-1.0, -0.8, -0.5, -0.3]  # extra delivery-only points: the p-box optimum lies beyond the base axis (-0.6)
@@ -233,6 +236,23 @@ def stage_dip(g, P, city, seed, crit):
     write_csv(RES / f"criterion_dip_charges_{city}_s{seed}_{crit}.csv", ch.to_dict("records"))
 
 
+def stage_dipfix(g, P):
+    u = np.array(P["dip"]["u"])
+    dip._set_u(g, u)
+    prof = plans_from(g, P["dip"]["routes"])
+    c0 = g.calls
+    reg0 = float(g.regrets(prof, count=False, fresh=True).max())
+    reg, k = reg0, 0
+    while reg > 1e-7 and k < 3:
+        prof, _ = zmc.br_dynamics(g, init=prof)
+        reg = float(g.regrets(prof, count=False, fresh=True).max())
+        k += 1
+    ev = g.evaluate(prof)
+    P["dipfix"] = dict(metrics(ev), sc_model=float(ev["social_cost"]), regret_fresh_before=reg0, regret_fresh_after=reg, polish_rounds=k,
+                       calls=int(g.calls - c0), routes=routes_of(prof))
+    g.set_charges()
+
+
 def stage_imprec(g, P):
     base = P["ne"]["eqs"][0]
     A = None
@@ -339,6 +359,7 @@ def run_unit(city, seed, crit, stages):
     path = part_path(city, seed, crit)
     P = load_part(city, seed, crit)
     need = [s for s in stages if (s in ("ne", "so", "dip", "imprec") and s not in P) or
+            (s == "dipfix" and "dip" in P and "dipfix" not in P) or
             (s == "grid" and city in LOW_SERVICE and "gridcert" not in P) or
             (s == "gridx" and city in LOW_SERVICE and len(P.get("gridx", {})) < len(SFRAC_EXT))]
     if crit == "wass_cv" and "eps_cv" not in P and need:
@@ -375,6 +396,8 @@ def run_unit(city, seed, crit, stages):
             stage_so(g, P)
         elif st == "dip" and "dip" not in P:
             stage_dip(g, P, city, seed, crit)
+        elif st == "dipfix" and "dip" in P and "dipfix" not in P:
+            stage_dipfix(g, P)
         elif st == "imprec" and "imprec" not in P and city in LOW_SERVICE and "ne" in P:
             stage_imprec(g, P)
         elif st == "grid" and city in LOW_SERVICE and "gridcert" not in P and "ne" in P and "dip" in P:
@@ -399,7 +422,7 @@ def cmd_run(a):
         print("another run_criterion_robust job holds the lock", flush=True)
         return
     # stage-major order: all cheap stages everywhere first, then the policy stages, then the grid
-    waves = [(["ne", "so"], a.cities), (["dip"], a.cities), (["grid", "gridx", "imprec"], [c for c in a.cities if c in LOW_SERVICE])]
+    waves = [(["ne", "so"], a.cities), (["dip", "dipfix"], a.cities), (["grid", "gridx", "imprec"], [c for c in a.cities if c in LOW_SERVICE])]
     waves = [([s for s in ws if s in a.stages], cs) for ws, cs in waves]
     for crit in a.criteria:
         for ws, cs in waves:
