@@ -1,4 +1,4 @@
-\begin{thebibliography}{105}
+\begin{thebibliography}{106}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -279,6 +279,14 @@
   \bibinfo{volume}{350} (\bibinfo{year}{2025}) \bibinfo{pages}{201--233}.
   \DOIprefix\doi{10.1007/s10479-021-04504-3}.
 %Type = Article
+\bibitem[{Liu et~al.(2026)Liu, Ma, and Ma}]{LiuMaMa2026}
+\bibinfo{author}{R.~Liu}, \bibinfo{author}{Y.~Ma}, \bibinfo{author}{R.~Ma},
+\newblock \bibinfo{title}{Decision-focused learning for distributionally robust
+  multi-agent dynamic vehicle routing in e-commerce last-mile delivery},
+\newblock \bibinfo{journal}{European Journal of Operational Research}
+  (\bibinfo{year}{2026}). \DOIprefix\doi{10.1016/j.ejor.2026.09.028},
+  \bibinfo{note}{in press}.
+%Type = Article
 \bibitem[{Gounaris et~al.(2013)Gounaris, Wiesemann, and Floudas}]{Gounaris2013}
 \bibinfo{author}{C.~E. Gounaris}, \bibinfo{author}{W.~Wiesemann},
   \bibinfo{author}{C.~A. Floudas},
@@ -467,13 +475,6 @@
   (\bibinfo{year}{2000}) \bibinfo{pages}{191--219}.
   \DOIprefix\doi{10.1006/game.1999.0739}.
 %Type = Article
-\bibitem[{Beauch{\^e}ne(2016)}]{Beauchene2016}
-\bibinfo{author}{D.~Beauch{\^e}ne},
-\newblock \bibinfo{title}{Solution concepts for games with ambiguous payoffs},
-\newblock \bibinfo{journal}{Theory and Decision} \bibinfo{volume}{80}
-  (\bibinfo{year}{2016}) \bibinfo{pages}{245--269}.
-  \DOIprefix\doi{10.1007/s11238-015-9502-3}.
-%Type = Article
 \bibitem[{Aghassi and Bertsimas(2006)}]{Aghassi2006}
 \bibinfo{author}{M.~Aghassi}, \bibinfo{author}{D.~Bertsimas},
 \newblock \bibinfo{title}{Robust game theory},
@@ -488,6 +489,13 @@
 \newblock \bibinfo{journal}{Computational Economics} \bibinfo{volume}{65}
   (\bibinfo{year}{2025}) \bibinfo{pages}{717--761}.
   \DOIprefix\doi{10.1007/s10614-023-10486-0}.
+%Type = Article
+\bibitem[{Beauch{\^e}ne(2016)}]{Beauchene2016}
+\bibinfo{author}{D.~Beauch{\^e}ne},
+\newblock \bibinfo{title}{Solution concepts for games with ambiguous payoffs},
+\newblock \bibinfo{journal}{Theory and Decision} \bibinfo{volume}{80}
+  (\bibinfo{year}{2016}) \bibinfo{pages}{245--269}.
+  \DOIprefix\doi{10.1007/s11238-015-9502-3}.
 %Type = Misc
 \bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
   Paccagnan}]{Lanzetti2025}
