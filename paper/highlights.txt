@@ -1,5 +1,5 @@
-Exact route pricing under probability boxes; fast to prove, not scalable past 40
-Charges from best-response cuts use 6-8% of a grid's routing calls
-Charges from observed zone totals contract at an instance-free rate
-Ten seeds: price-of-anarchy ordering of cities holds in only 7 of 10 seeds
-Policy directions survive other carrier criteria; levels of PoA and gains do not
+Exact robust best responses for carriers under probability-box travel times
+City charges from best-response cuts, without a grid of equilibrium solves
+Aggregate-response pricing sets charges from observed zone totals alone
+Pure equilibria exist under exposure congestion; existence is NP-complete otherwise
+Policy directions hold across carrier criteria; levels of gains and PoA do not

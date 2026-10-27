@@ -688,25 +688,6 @@
   \bibinfo{volume}{71} (\bibinfo{year}{2026}) \bibinfo{pages}{3619--3633}.
   \DOIprefix\doi{10.1109/TAC.2025.3643351}, \bibinfo{note}{arXiv:2405.16716}.
 %Type = Article
-\bibitem[{Dabia et~al.(2013)Dabia, Ropke, van Woensel, and De~Kok}]{Dabia2013}
-\bibinfo{author}{S.~Dabia}, \bibinfo{author}{S.~Ropke}, \bibinfo{author}{T.~van
-  Woensel}, \bibinfo{author}{T.~De~Kok},
-\newblock \bibinfo{title}{Branch and price for the time-dependent vehicle
-  routing problem with time windows},
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{47}
-  (\bibinfo{year}{2013}) \bibinfo{pages}{380--396}.
-  \DOIprefix\doi{10.1287/trsc.1120.0445}.
-%Type = Article
-\bibitem[{Ioachim et~al.(1998)Ioachim, G{\'e}linas, Soumis, and
-  Desrosiers}]{Ioachim1998}
-\bibinfo{author}{I.~Ioachim}, \bibinfo{author}{S.~G{\'e}linas},
-  \bibinfo{author}{F.~Soumis}, \bibinfo{author}{J.~Desrosiers},
-\newblock \bibinfo{title}{A dynamic programming algorithm for the shortest path
-  problem with time windows and linear node costs},
-\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{31}
-  (\bibinfo{year}{1998}) \bibinfo{pages}{193--204}.
-  \DOIprefix\doi{10.1002/(SICI)1097-0037(199805)31:3<193::AID-NET6>3.0.CO;2-A}.
-%Type = Article
 \bibitem[{Dvoretzky et~al.(1956)Dvoretzky, Kiefer, and Wolfowitz}]{DKW1956}
 \bibinfo{author}{A.~Dvoretzky}, \bibinfo{author}{J.~Kiefer},
   \bibinfo{author}{J.~Wolfowitz},
@@ -723,15 +704,6 @@
 \newblock \bibinfo{journal}{The Annals of Probability} \bibinfo{volume}{18}
   (\bibinfo{year}{1990}) \bibinfo{pages}{1269--1283}.
   \DOIprefix\doi{10.1214/aop/1176990746}.
-%Type = Article
-\bibitem[{Baldacci et~al.(2011)Baldacci, Mingozzi, and Roberti}]{Baldacci2011}
-\bibinfo{author}{R.~Baldacci}, \bibinfo{author}{A.~Mingozzi},
-  \bibinfo{author}{R.~Roberti},
-\newblock \bibinfo{title}{New route relaxation and pricing strategies for the
-  vehicle routing problem},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{59}
-  (\bibinfo{year}{2011}) \bibinfo{pages}{1269--1283}.
-  \DOIprefix\doi{10.1287/opre.1110.0975}.
 %Type = Article
 \bibitem[{Feillet et~al.(2004)Feillet, Dejax, Gendreau, and
   Gueguen}]{Feillet2004}
@@ -752,6 +724,25 @@
   \bibinfo{booktitle}{Column Generation}, \bibinfo{publisher}{Springer},
   \bibinfo{address}{Boston, MA}, \bibinfo{year}{2005}, pp.
   \bibinfo{pages}{33--65}. \DOIprefix\doi{10.1007/0-387-25486-2_2}.
+%Type = Article
+\bibitem[{Ioachim et~al.(1998)Ioachim, G{\'e}linas, Soumis, and
+  Desrosiers}]{Ioachim1998}
+\bibinfo{author}{I.~Ioachim}, \bibinfo{author}{S.~G{\'e}linas},
+  \bibinfo{author}{F.~Soumis}, \bibinfo{author}{J.~Desrosiers},
+\newblock \bibinfo{title}{A dynamic programming algorithm for the shortest path
+  problem with time windows and linear node costs},
+\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{31}
+  (\bibinfo{year}{1998}) \bibinfo{pages}{193--204}.
+  \DOIprefix\doi{10.1002/(SICI)1097-0037(199805)31:3<193::AID-NET6>3.0.CO;2-A}.
+%Type = Article
+\bibitem[{Baldacci et~al.(2011)Baldacci, Mingozzi, and Roberti}]{Baldacci2011}
+\bibinfo{author}{R.~Baldacci}, \bibinfo{author}{A.~Mingozzi},
+  \bibinfo{author}{R.~Roberti},
+\newblock \bibinfo{title}{New route relaxation and pricing strategies for the
+  vehicle routing problem},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{59}
+  (\bibinfo{year}{2011}) \bibinfo{pages}{1269--1283}.
+  \DOIprefix\doi{10.1287/opre.1110.0975}.
 %Type = Article
 \bibitem[{Troffaes(2007)}]{Troffaes2007}
 \bibinfo{author}{M.~C.~M. Troffaes},
@@ -868,6 +859,15 @@
   Manual for Application with a Large, High Speed Computer},
   \bibinfo{type}{Technical Report}, U.S. Department of Commerce, Urban Planning
   Division, \bibinfo{address}{Washington, DC}, \bibinfo{year}{1964}.
+%Type = Article
+\bibitem[{Dabia et~al.(2013)Dabia, Ropke, van Woensel, and De~Kok}]{Dabia2013}
+\bibinfo{author}{S.~Dabia}, \bibinfo{author}{S.~Ropke}, \bibinfo{author}{T.~van
+  Woensel}, \bibinfo{author}{T.~De~Kok},
+\newblock \bibinfo{title}{Branch and price for the time-dependent vehicle
+  routing problem with time windows},
+\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{47}
+  (\bibinfo{year}{2013}) \bibinfo{pages}{380--396}.
+  \DOIprefix\doi{10.1287/trsc.1120.0445}.
 %Type = Article
 \bibitem[{Briant et~al.(2008)Briant, Lemar{\'e}chal, Meurdesoif, Michel,
   Perrot, and Vanderbeck}]{Briant2008}

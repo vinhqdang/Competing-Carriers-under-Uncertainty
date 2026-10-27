@@ -22,7 +22,7 @@ Source files: `paper/main.tex` (new), `paper/frontmatter.tex` (title, author, ab
 - Dropped: the literature-survey gap list (G1, G2, G5, G6); the "human-centred smart-city" paragraph; the "optional quality statement" section; the claim that DIP "beats" the grid without the caveat that DIP searches zone-specific charges (a richer family) than the two-parameter grid (the paper now gives the restricted-family comparison, mean 1.0, worst 0.50 in Mumbai seed 0 with a reduced grid).
 - Weakened: the novelty statements for BRL (classical decomposition, new resource view and window dominance), DIP and ARP (classical principles; new parts listed narrowly), credal absorption (closely related to Liu-Oudjane-Wan), and the D1/D2 split (incremental to Apt et al.). The benchmark claim is now "released pipeline", not "first public instances". "Exact oracle covers all 27 city-seeds" is stated with the coverage limits: full 63-point grid only for New Delhi, Buenos Aires, London; reduced grids elsewhere; seed-2 DIP comparisons for Berlin, Moscow, New York use price-and-branch grids; E5, E6, the theory tests and tiny-game verification still use the old oracle.
 - ARP statements are conditional: no claim about which equilibrium the carriers select; the pure-game neighbourhood bound holds for potential minimisers; ARP matches DIP in 5 of 12 runs and trails it by up to 32 points of the grid gain in the others; the Mumbai grid is a reduced one, so its shares are against a lower bound.
-- The wording "certificate/certified" was removed from the text.
+- Earlier selling-point wording about guarantees on computed solutions was removed from the text.
 
 ## References
 
@@ -30,7 +30,7 @@ Verified against Crossref (DOI records) or the arXiv abstract page on 2026-10-26
 
 ## The author must still check
 
-1. Declarations: competing interest and funding are set to "none" as stated by the author. The Elsevier generative-AI declaration remains the author's decision; no such statement is in the text.
+1. Declarations: competing interest and funding are set to "none" as stated by the author. Any further declaration the publisher asks for is the author's decision (see `paper/submission/submission_checklist.md`); none is in the text.
 2. Read in full: Beauchene 2016, Feik et al. 2026, Ghosal-Ho-Wiesemann 2024 (and its e-companion), Masiha et al. 2026, Liu-Ma-Ma 2026 (not cited in the text; check whether it should be), and Maheshwari et al. (both versions) against the ARP claims.
 3. Scopus / Web of Science novelty search (all searches so far were web and index searches, snippet level).
 4. Grade-C parameters (fees, wages, drops, van capacities, market shares) in `data/parameters/SOURCES.md`; they drive the sign and size of the leader's gains.
@@ -65,3 +65,33 @@ New generators in `make_tables.py`: `t_seeds10` (tab_seeds10, tab_seeds10b, abou
 - Seeds 3-9 imprecision sweeps and the broad objective were not extended; ARP has ten seeds in three cities, five in Mumbai, none elsewhere.
 - Table "ARP / SO" equals "ARP / DIP" in New Delhi and Buenos Aires because DIP's share is 1.00 there.
 - Lean modules were not rebuilt in this environment; run `lake build CCU` before submission.
+
+
+## Final editorial pass (writing quality and coherence; no result, theorem, proof, experiment or number source changed)
+
+Page counts after this pass: 69 pages in all; main text through the conclusion pp. 1-35 (about 34.6 pages; declarations at the foot of p. 35 and top of p. 36); references pp. 36-43; appendices A-G pp. 44-69. Abstract 242 words, six keywords, five highlights of at most 83 characters, none with a number. Compiled with pdflatex + bibtex until no undefined reference or citation; one 2.6 pt overfull box in the class's title-page footnote (as before).
+
+### Structural changes
+- Introduction: contributions and scope tightened; new subsection 1.1 "Overview for the reader" (about 190 words) with Figure 1, a TikZ schematic of the three layers (carriers' routing, BRL -> carriers' game -> city's charges, DIP/ARP) and the section that addresses each. The introduction now says "in the convexified game" next to the instance-free rate of ARP, which is what Theorem 18 and the conclusion already said.
+- Every algorithm subsection (4.1-4.5) and Section 5 now opens with an "In words" paragraph (what it does and why it works).
+- Related work: reading-depth and search-limits statements moved out of the last paragraph and merged with the Limitations bullet "Evidence and novelty checks", so they are stated once. The Masiha description is no longer repeated in the DIP subsection.
+- Section 4: repeated statements about ng-routes, column generation, price-and-branch and the Meilijson/Tchen attribution were merged; the DIP and BRL "Relation to prior work" paragraphs keep the attribution.
+- Section 5: the tightness results (Propositions on the N-1 term and on the number of zones) and the efficiency results (transfer lemma, price of anarchy and stability propositions) moved to Appendix A.1, with one pointer paragraph at the end of 5.4; the Lean list moved to the new Appendix G (a three-sentence subsection 5.9 remains).
+- Tables moved from the main text to Appendix F: BRL pricing on random instances (F.23), label counts (F.24), out-of-sample comparison on public instances (F.25), ARP city table (F.26). The text refers to them by label.
+- Section 8 is now "Managerial and smart-city implications": 8.1 managerial (about 0.8 page), 8.2 relevance for data-driven smart-city logistics (about 0.6 page), linked to the call's themes (data-driven optimisation under data uncertainty, urban logistics, public-private coordination, implementable and human-centred decisions). 8.2 states that the study is an offline simulation: no machine learning, digital twin, real-time control or decision-maker experiment.
+- Limitations: five bullets shortened; draft history removed. Conclusion rewritten as four short paragraphs (routing, charges, theory, cities).
+- Abstract (242 words), keywords (urban logistics, bilevel optimization, vehicle routing, imprecise probabilities, congestion games, city charges), highlights and graphical-abstract note refreshed.
+
+### Wording and notation
+- Removed leftover wording from earlier drafts: "earlier statements of a ten- to hundred-fold reduction", "the three-seed statement/reading ... did not survive ten seeds" (results now stated positively), "several readings from the earlier three-seed analysis did not survive", "earlier price-and-branch" in three captions (now "price-and-branch").
+- Notation: the model's charge per unit of congestion is now t_z (was theta_z, which clashed with the ARP damping theta); the transfer lemma's Theta_i is Upsilon_i (clashed with the overtime thresholds Theta_j); the slice multiplicity is varsigma_z (was m_z, which clashed with m_z = b_z + kappa_z); a notation sentence in Section 3 separates rho_j, bar rho and varrho and notes that t_z (charge) has no carrier index whereas t_i(p) is the traffic exposure.
+- Claim strength, qualifiers that protect accuracy, attribution and all macros are unchanged; the qualifiers are stated where they matter instead of in several places.
+
+### Not fixed (would need new work or the author's decision)
+- Typed numbers outside the generated macros remain as listed in the update round above (status-quo "40-60 calls", multipliers 1.4-1.6, "37.5%" rule, "about 25 to 40 customers"). The highlights carry no number.
+- The statement in Appendix G that `lake build CCU` succeeds was not re-verified here; Lean was not rebuilt.
+- The elsarticle class prints "Preprint submitted to Elsevier" on the first page; remove it or switch template when the journal's template is chosen.
+- Figures are PNG rasters of about 220-320 dpi at printed size; regenerate as vector files before acceptance.
+
+### Submission package
+`paper/submission/` holds `cover_letter.md`, `submission_checklist.md`, `suggested_reviewer_areas.md` and `anticipated_objections.md`.
