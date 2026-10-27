@@ -64,57 +64,6 @@
   (\bibinfo{year}{1980}) \bibinfo{pages}{814--827}.
   \DOIprefix\doi{10.1214/aop/1176994668}.
 %Type = Article
-\bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
-\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
-  \bibinfo{author}{W.~Wiesemann},
-\newblock \bibinfo{title}{A unifying framework for the capacitated vehicle
-  routing problem under risk and ambiguity},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{72}
-  (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
-  \DOIprefix\doi{10.1287/opre.2021.0669}.
-%Type = Article
-\bibitem[{Irnich(2008)}]{Irnich2008}
-\bibinfo{author}{S.~Irnich},
-\newblock \bibinfo{title}{Resource extension functions: properties, inversion,
-  and generalization to segments},
-\newblock \bibinfo{journal}{OR Spectrum} \bibinfo{volume}{30}
-  (\bibinfo{year}{2008}) \bibinfo{pages}{113--148}.
-  \DOIprefix\doi{10.1007/s00291-007-0083-6}.
-%Type = Article
-\bibitem[{Dabia et~al.(2013)Dabia, Ropke, van Woensel, and De~Kok}]{Dabia2013}
-\bibinfo{author}{S.~Dabia}, \bibinfo{author}{S.~Ropke}, \bibinfo{author}{T.~van
-  Woensel}, \bibinfo{author}{T.~De~Kok},
-\newblock \bibinfo{title}{Branch and price for the time-dependent vehicle
-  routing problem with time windows},
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{47}
-  (\bibinfo{year}{2013}) \bibinfo{pages}{380--396}.
-  \DOIprefix\doi{10.1287/trsc.1120.0445}.
-%Type = Article
-\bibitem[{Yang et~al.(2004)Yang, Meng, and Lee}]{Yang2004}
-\bibinfo{author}{H.~Yang}, \bibinfo{author}{Q.~Meng}, \bibinfo{author}{D.-H.
-  Lee},
-\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
-  pricing on networks in the absence of demand functions},
-\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
-  \bibinfo{volume}{38} (\bibinfo{year}{2004}) \bibinfo{pages}{477--493}.
-  \DOIprefix\doi{10.1016/S0191-2615(03)00077-8}.
-%Type = Article
-\bibitem[{Han and Yang(2009)}]{HanYang2009}
-\bibinfo{author}{D.~Han}, \bibinfo{author}{H.~Yang},
-\newblock \bibinfo{title}{Congestion pricing in the absence of demand
-  functions},
-\newblock \bibinfo{journal}{Transportation Research Part E: Logistics and
-  Transportation Review} \bibinfo{volume}{45} (\bibinfo{year}{2009})
-  \bibinfo{pages}{159--171}. \DOIprefix\doi{10.1016/j.tre.2008.03.002}.
-%Type = Article
-\bibitem[{Ye et~al.(2015)Ye, Yang, and Tan}]{YeYangTan2015}
-\bibinfo{author}{H.~Ye}, \bibinfo{author}{H.~Yang}, \bibinfo{author}{Z.~Tan},
-\newblock \bibinfo{title}{Learning marginal-cost pricing via a trial-and-error
-  procedure with day-to-day flow dynamics},
-\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
-  \bibinfo{volume}{81} (\bibinfo{year}{2015}) \bibinfo{pages}{794--807}.
-  \DOIprefix\doi{10.1016/j.trb.2015.08.001}.
-%Type = Article
 \bibitem[{Buchanan(1969)}]{Buchanan1969}
 \bibinfo{author}{J.~M. Buchanan},
 \newblock \bibinfo{title}{External diseconomies, corrective taxes, and market
@@ -139,6 +88,15 @@
 \newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{49}
   (\bibinfo{year}{2001}) \bibinfo{pages}{771--783}.
   \DOIprefix\doi{10.1287/opre.49.5.771.10607}.
+%Type = Article
+\bibitem[{Yang et~al.(2004)Yang, Meng, and Lee}]{Yang2004}
+\bibinfo{author}{H.~Yang}, \bibinfo{author}{Q.~Meng}, \bibinfo{author}{D.-H.
+  Lee},
+\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
+  pricing on networks in the absence of demand functions},
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{38} (\bibinfo{year}{2004}) \bibinfo{pages}{477--493}.
+  \DOIprefix\doi{10.1016/S0191-2615(03)00077-8}.
 %Type = Article
 \bibitem[{Wolpert and Tumer(2001)}]{Wolpert2001}
 \bibinfo{author}{D.~H. Wolpert}, \bibinfo{author}{K.~Tumer},
@@ -189,23 +147,6 @@
 \newblock \bibinfo{journal}{Journal of Artificial Intelligence Research}
   \bibinfo{volume}{24} (\bibinfo{year}{2005}) \bibinfo{pages}{357--406}.
   \DOIprefix\doi{10.1613/jair.1683}.
-%Type = Misc
-\bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
-  Paccagnan}]{Lanzetti2025}
-\bibinfo{author}{N.~Lanzetti}, \bibinfo{author}{S.~Fricker},
-  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
-  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust game
-  theory via optimal transport}, \bibinfo{howpublished}{arXiv preprint
-  2507.15325}, \bibinfo{year}{2025}.
-%Type = Article
-\bibitem[{Maheshwari et~al.(2026)Maheshwari, Kulkarni, Wu, and
-  Sastry}]{Maheshwari2026}
-\bibinfo{author}{C.~Maheshwari}, \bibinfo{author}{K.~Kulkarni},
-  \bibinfo{author}{M.~Wu}, \bibinfo{author}{S.~Sastry},
-\newblock \bibinfo{title}{Adaptive incentive design with learning agents},
-\newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
-  \bibinfo{volume}{71} (\bibinfo{year}{2026}) \bibinfo{pages}{3619--3633}.
-  \DOIprefix\doi{10.1109/TAC.2025.3643351}, \bibinfo{note}{arXiv:2405.16716}.
 %Type = Article
 \bibitem[{Figliozzi et~al.(2004)Figliozzi, Mahmassani, and
   Jaillet}]{Figliozzi2004}
@@ -380,6 +321,15 @@
   (\bibinfo{year}{2016}) \bibinfo{pages}{608--626}.
   \DOIprefix\doi{10.1287/trsc.2014.0581}.
 %Type = Article
+\bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
+\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
+  \bibinfo{author}{W.~Wiesemann},
+\newblock \bibinfo{title}{A unifying framework for the capacitated vehicle
+  routing problem under risk and ambiguity},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{72}
+  (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
+  \DOIprefix\doi{10.1287/opre.2021.0669}.
+%Type = Article
 \bibitem[{Long et~al.(2024)Long, Qi, and Zhang}]{LongQiZhang2024}
 \bibinfo{author}{D.~Z. Long}, \bibinfo{author}{J.~Qi},
   \bibinfo{author}{A.~Zhang},
@@ -539,6 +489,14 @@
   (\bibinfo{year}{2025}) \bibinfo{pages}{717--761}.
   \DOIprefix\doi{10.1007/s10614-023-10486-0}.
 %Type = Misc
+\bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
+  Paccagnan}]{Lanzetti2025}
+\bibinfo{author}{N.~Lanzetti}, \bibinfo{author}{S.~Fricker},
+  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
+  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust game
+  theory via optimal transport}, \bibinfo{howpublished}{arXiv preprint
+  2507.15325}, \bibinfo{year}{2025}.
+%Type = Misc
 \bibitem[{Feik et~al.(2026)Feik, Lanzetti, Bolognani, D{\"o}rfler, and
   Paccagnan}]{Feik2026}
 \bibinfo{author}{A.~Feik}, \bibinfo{author}{N.~Lanzetti},
@@ -661,6 +619,31 @@
 \newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{61}
   (\bibinfo{year}{2013}) \bibinfo{pages}{155--168}.
   \DOIprefix\doi{10.1287/opre.1120.1137}.
+%Type = Article
+\bibitem[{Han and Yang(2009)}]{HanYang2009}
+\bibinfo{author}{D.~Han}, \bibinfo{author}{H.~Yang},
+\newblock \bibinfo{title}{Congestion pricing in the absence of demand
+  functions},
+\newblock \bibinfo{journal}{Transportation Research Part E: Logistics and
+  Transportation Review} \bibinfo{volume}{45} (\bibinfo{year}{2009})
+  \bibinfo{pages}{159--171}. \DOIprefix\doi{10.1016/j.tre.2008.03.002}.
+%Type = Article
+\bibitem[{Ye et~al.(2015)Ye, Yang, and Tan}]{YeYangTan2015}
+\bibinfo{author}{H.~Ye}, \bibinfo{author}{H.~Yang}, \bibinfo{author}{Z.~Tan},
+\newblock \bibinfo{title}{Learning marginal-cost pricing via a trial-and-error
+  procedure with day-to-day flow dynamics},
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{81} (\bibinfo{year}{2015}) \bibinfo{pages}{794--807}.
+  \DOIprefix\doi{10.1016/j.trb.2015.08.001}.
+%Type = Article
+\bibitem[{Maheshwari et~al.(2026)Maheshwari, Kulkarni, Wu, and
+  Sastry}]{Maheshwari2026}
+\bibinfo{author}{C.~Maheshwari}, \bibinfo{author}{K.~Kulkarni},
+  \bibinfo{author}{M.~Wu}, \bibinfo{author}{S.~Sastry},
+\newblock \bibinfo{title}{Adaptive incentive design with learning agents},
+\newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
+  \bibinfo{volume}{71} (\bibinfo{year}{2026}) \bibinfo{pages}{3619--3633}.
+  \DOIprefix\doi{10.1109/TAC.2025.3643351}, \bibinfo{note}{arXiv:2405.16716}.
 %Type = Misc
 \bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
 \bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
@@ -714,6 +697,23 @@
   \bibinfo{booktitle}{Column Generation}, \bibinfo{publisher}{Springer},
   \bibinfo{address}{Boston, MA}, \bibinfo{year}{2005}, pp.
   \bibinfo{pages}{33--65}. \DOIprefix\doi{10.1007/0-387-25486-2_2}.
+%Type = Article
+\bibitem[{Irnich(2008)}]{Irnich2008}
+\bibinfo{author}{S.~Irnich},
+\newblock \bibinfo{title}{Resource extension functions: properties, inversion,
+  and generalization to segments},
+\newblock \bibinfo{journal}{OR Spectrum} \bibinfo{volume}{30}
+  (\bibinfo{year}{2008}) \bibinfo{pages}{113--148}.
+  \DOIprefix\doi{10.1007/s00291-007-0083-6}.
+%Type = Article
+\bibitem[{Dabia et~al.(2013)Dabia, Ropke, van Woensel, and De~Kok}]{Dabia2013}
+\bibinfo{author}{S.~Dabia}, \bibinfo{author}{S.~Ropke}, \bibinfo{author}{T.~van
+  Woensel}, \bibinfo{author}{T.~De~Kok},
+\newblock \bibinfo{title}{Branch and price for the time-dependent vehicle
+  routing problem with time windows},
+\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{47}
+  (\bibinfo{year}{2013}) \bibinfo{pages}{380--396}.
+  \DOIprefix\doi{10.1287/trsc.1120.0445}.
 %Type = Article
 \bibitem[{Troffaes(2007)}]{Troffaes2007}
 \bibinfo{author}{M.~C.~M. Troffaes},
