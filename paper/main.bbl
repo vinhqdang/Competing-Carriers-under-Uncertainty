@@ -1,4 +1,4 @@
-\begin{thebibliography}{92}
+\begin{thebibliography}{105}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -57,6 +57,13 @@
   \bibinfo{volume}{16} (\bibinfo{year}{1979}) \bibinfo{pages}{671--677}.
   \DOIprefix\doi{10.2307/3213097}.
 %Type = Article
+\bibitem[{Tchen(1980)}]{Tchen1980}
+\bibinfo{author}{A.~H. Tchen},
+\newblock \bibinfo{title}{Inequalities for distributions with given marginals},
+\newblock \bibinfo{journal}{The Annals of Probability} \bibinfo{volume}{8}
+  (\bibinfo{year}{1980}) \bibinfo{pages}{814--827}.
+  \DOIprefix\doi{10.1214/aop/1176994668}.
+%Type = Article
 \bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
 \bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
   \bibinfo{author}{W.~Wiesemann},
@@ -65,6 +72,48 @@
 \newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{72}
   (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
   \DOIprefix\doi{10.1287/opre.2021.0669}.
+%Type = Article
+\bibitem[{Irnich(2008)}]{Irnich2008}
+\bibinfo{author}{S.~Irnich},
+\newblock \bibinfo{title}{Resource extension functions: properties, inversion,
+  and generalization to segments},
+\newblock \bibinfo{journal}{OR Spectrum} \bibinfo{volume}{30}
+  (\bibinfo{year}{2008}) \bibinfo{pages}{113--148}.
+  \DOIprefix\doi{10.1007/s00291-007-0083-6}.
+%Type = Article
+\bibitem[{Dabia et~al.(2013)Dabia, Ropke, van Woensel, and De~Kok}]{Dabia2013}
+\bibinfo{author}{S.~Dabia}, \bibinfo{author}{S.~Ropke}, \bibinfo{author}{T.~van
+  Woensel}, \bibinfo{author}{T.~De~Kok},
+\newblock \bibinfo{title}{Branch and price for the time-dependent vehicle
+  routing problem with time windows},
+\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{47}
+  (\bibinfo{year}{2013}) \bibinfo{pages}{380--396}.
+  \DOIprefix\doi{10.1287/trsc.1120.0445}.
+%Type = Article
+\bibitem[{Yang et~al.(2004)Yang, Meng, and Lee}]{Yang2004}
+\bibinfo{author}{H.~Yang}, \bibinfo{author}{Q.~Meng}, \bibinfo{author}{D.-H.
+  Lee},
+\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
+  pricing on networks in the absence of demand functions},
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{38} (\bibinfo{year}{2004}) \bibinfo{pages}{477--493}.
+  \DOIprefix\doi{10.1016/S0191-2615(03)00077-8}.
+%Type = Article
+\bibitem[{Han and Yang(2009)}]{HanYang2009}
+\bibinfo{author}{D.~Han}, \bibinfo{author}{H.~Yang},
+\newblock \bibinfo{title}{Congestion pricing in the absence of demand
+  functions},
+\newblock \bibinfo{journal}{Transportation Research Part E: Logistics and
+  Transportation Review} \bibinfo{volume}{45} (\bibinfo{year}{2009})
+  \bibinfo{pages}{159--171}. \DOIprefix\doi{10.1016/j.tre.2008.03.002}.
+%Type = Article
+\bibitem[{Ye et~al.(2015)Ye, Yang, and Tan}]{YeYangTan2015}
+\bibinfo{author}{H.~Ye}, \bibinfo{author}{H.~Yang}, \bibinfo{author}{Z.~Tan},
+\newblock \bibinfo{title}{Learning marginal-cost pricing via a trial-and-error
+  procedure with day-to-day flow dynamics},
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{81} (\bibinfo{year}{2015}) \bibinfo{pages}{794--807}.
+  \DOIprefix\doi{10.1016/j.trb.2015.08.001}.
 %Type = Article
 \bibitem[{Buchanan(1969)}]{Buchanan1969}
 \bibinfo{author}{J.~M. Buchanan},
@@ -90,15 +139,6 @@
 \newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{49}
   (\bibinfo{year}{2001}) \bibinfo{pages}{771--783}.
   \DOIprefix\doi{10.1287/opre.49.5.771.10607}.
-%Type = Article
-\bibitem[{Yang et~al.(2004)Yang, Meng, and Lee}]{Yang2004}
-\bibinfo{author}{H.~Yang}, \bibinfo{author}{Q.~Meng}, \bibinfo{author}{D.-H.
-  Lee},
-\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
-  pricing on networks in the absence of demand functions},
-\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
-  \bibinfo{volume}{38} (\bibinfo{year}{2004}) \bibinfo{pages}{477--493}.
-  \DOIprefix\doi{10.1016/S0191-2615(03)00077-8}.
 %Type = Article
 \bibitem[{Wolpert and Tumer(2001)}]{Wolpert2001}
 \bibinfo{author}{D.~H. Wolpert}, \bibinfo{author}{K.~Tumer},
@@ -141,6 +181,22 @@
 \newblock \bibinfo{journal}{Mathematics of Operations Research}
   \bibinfo{volume}{47} (\bibinfo{year}{2022}) \bibinfo{pages}{995--1025}.
   \DOIprefix\doi{10.1287/moor.2021.1159}.
+%Type = Article
+\bibitem[{Gottlob et~al.(2005)Gottlob, Greco, and Scarcello}]{Gottlob2005}
+\bibinfo{author}{G.~Gottlob}, \bibinfo{author}{G.~Greco},
+  \bibinfo{author}{F.~Scarcello},
+\newblock \bibinfo{title}{Pure {Nash} equilibria: hard and easy games},
+\newblock \bibinfo{journal}{Journal of Artificial Intelligence Research}
+  \bibinfo{volume}{24} (\bibinfo{year}{2005}) \bibinfo{pages}{357--406}.
+  \DOIprefix\doi{10.1613/jair.1683}.
+%Type = Misc
+\bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
+  Paccagnan}]{Lanzetti2025}
+\bibinfo{author}{N.~Lanzetti}, \bibinfo{author}{S.~Fricker},
+  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
+  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust game
+  theory via optimal transport}, \bibinfo{howpublished}{arXiv preprint
+  2507.15325}, \bibinfo{year}{2025}.
 %Type = Article
 \bibitem[{Maheshwari et~al.(2026)Maheshwari, Kulkarni, Wu, and
   Sastry}]{Maheshwari2026}
@@ -324,6 +380,15 @@
   (\bibinfo{year}{2016}) \bibinfo{pages}{608--626}.
   \DOIprefix\doi{10.1287/trsc.2014.0581}.
 %Type = Article
+\bibitem[{Long et~al.(2024)Long, Qi, and Zhang}]{LongQiZhang2024}
+\bibinfo{author}{D.~Z. Long}, \bibinfo{author}{J.~Qi},
+  \bibinfo{author}{A.~Zhang},
+\newblock \bibinfo{title}{Supermodularity in two-stage distributionally robust
+  optimization},
+\newblock \bibinfo{journal}{Management Science} \bibinfo{volume}{70}
+  (\bibinfo{year}{2024}) \bibinfo{pages}{1394--1409}.
+  \DOIprefix\doi{10.1287/mnsc.2023.4748}.
+%Type = Article
 \bibitem[{Kaas et~al.(2000)Kaas, Dhaene, and Goovaerts}]{Kaas2000}
 \bibinfo{author}{R.~Kaas}, \bibinfo{author}{J.~Dhaene}, \bibinfo{author}{M.~J.
   Goovaerts},
@@ -490,6 +555,15 @@
   \bibinfo{volume}{303} (\bibinfo{year}{2022}) \bibinfo{pages}{1057--1070}.
   \DOIprefix\doi{10.1016/j.ejor.2022.03.048}.
 %Type = Article
+\bibitem[{Carvalho et~al.(2025)Carvalho, Dragotto, Lodi, and
+  Sankaranarayanan}]{Carvalho2025FTO}
+\bibinfo{author}{M.~Carvalho}, \bibinfo{author}{G.~Dragotto},
+  \bibinfo{author}{A.~Lodi}, \bibinfo{author}{S.~Sankaranarayanan},
+\newblock \bibinfo{title}{Integer programming games},
+\newblock \bibinfo{journal}{Foundations and Trends in Optimization}
+  \bibinfo{volume}{7} (\bibinfo{year}{2025}) \bibinfo{pages}{264--391}.
+  \DOIprefix\doi{10.1561/2400000040}.
+%Type = Article
 \bibitem[{Barnett(1980)}]{Barnett1980}
 \bibinfo{author}{A.~H. Barnett},
 \newblock \bibinfo{title}{The {Pigouvian} tax rule under monopoly},
@@ -547,12 +621,39 @@
   (\bibinfo{year}{2023}) \bibinfo{pages}{1143--1160}.
   \DOIprefix\doi{10.1287/ijoc.2022.0282}.
 %Type = Misc
-\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
+\bibitem[{Duguet et~al.(2025{\natexlab{a}})Duguet, Harks, Schmidt, and
+  Schwarz}]{DuguetHarks2025BC}
 \bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
   \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
-  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
-  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
-  \bibinfo{year}{2025}.
+  \bibinfo{title}{Branch-and-cut for mixed-integer {Nash} equilibrium
+  problems}, \bibinfo{howpublished}{arXiv preprint 2506.02520},
+  \bibinfo{year}{2025}{\natexlab{a}}.
+%Type = Article
+\bibitem[{Duguet et~al.(2025{\natexlab{b}})Duguet, Carvalho, Dragotto, and
+  Ngueveu}]{Duguet2025IPG}
+\bibinfo{author}{A.~Duguet}, \bibinfo{author}{M.~Carvalho},
+  \bibinfo{author}{G.~Dragotto}, \bibinfo{author}{S.~U. Ngueveu},
+\newblock \bibinfo{title}{Computing approximate {Nash} equilibria for integer
+  programming games},
+\newblock \bibinfo{journal}{Optimization Letters} \bibinfo{volume}{20}
+  (\bibinfo{year}{2025}{\natexlab{b}}) \bibinfo{pages}{231--255}.
+  \DOIprefix\doi{10.1007/s11590-025-02221-5}.
+%Type = Article
+\bibitem[{Monderer and Tennenholtz(2004)}]{MondererTennenholtz2004}
+\bibinfo{author}{D.~Monderer}, \bibinfo{author}{M.~Tennenholtz},
+\newblock \bibinfo{title}{K-implementation},
+\newblock \bibinfo{journal}{Journal of Artificial Intelligence Research}
+  \bibinfo{volume}{21} (\bibinfo{year}{2004}) \bibinfo{pages}{37--62}.
+  \DOIprefix\doi{10.1613/jair.1231}.
+%Type = Article
+\bibitem[{Caragiannis et~al.(2010)Caragiannis, Kaklamanis, and
+  Kanellopoulos}]{CaragiannisKK2010}
+\bibinfo{author}{I.~Caragiannis}, \bibinfo{author}{C.~Kaklamanis},
+  \bibinfo{author}{P.~Kanellopoulos},
+\newblock \bibinfo{title}{Taxes for linear atomic congestion games},
+\newblock \bibinfo{journal}{ACM Transactions on Algorithms} \bibinfo{volume}{7}
+  (\bibinfo{year}{2010}) \bibinfo{pages}{1--31}.
+  \DOIprefix\doi{10.1145/1868237.1868251}.
 %Type = Article
 \bibitem[{Marden and Wierman(2013)}]{Marden2013}
 \bibinfo{author}{J.~R. Marden}, \bibinfo{author}{A.~Wierman},
@@ -758,6 +859,13 @@
 \newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{179}
   (\bibinfo{year}{2020}) \bibinfo{pages}{343--384}.
   \DOIprefix\doi{10.1007/s10107-018-1334-9}.
+%Type = Misc
+\bibitem[{Duguet et~al.(2025)Duguet, Harks, Schmidt, and Schwarz}]{Duguet2025}
+\bibinfo{author}{A.~Duguet}, \bibinfo{author}{T.~Harks},
+  \bibinfo{author}{M.~Schmidt}, \bibinfo{author}{J.~Schwarz},
+  \bibinfo{title}{Minimal regret {Walras} equilibria for combinatorial
+  markets}, \bibinfo{howpublished}{arXiv preprint 2511.09021},
+  \bibinfo{year}{2025}.
 %Type = Book
 \bibitem[{Rockafellar(1970)}]{Rockafellar1970}
 \bibinfo{author}{R.~T. Rockafellar}, \bibinfo{title}{Convex Analysis},

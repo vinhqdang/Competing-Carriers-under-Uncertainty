@@ -29,7 +29,13 @@ WIDE_KEY = {"New Delhi": "NewDelhi", "Cairo": "Cairo", "Moscow": "Moscow", "Buen
 MACROS = {}
 
 
+_DIG = {"0": "Zero", "1": "One", "2": "Two", "3": "Three", "4": "Four", "5": "Five", "6": "Six", "7": "Seven", "8": "Eight", "9": "Nine"}
+
+
 def macro(name, value):
+    """Store a macro; TeX control-sequence names cannot contain digits, so digits are spelled out."""
+    for d, w in _DIG.items():
+        name = name.replace(d, w)
     MACROS[name] = value
 
 
@@ -1102,8 +1108,328 @@ def t_extra():
         macro("ArpFullBelowOneN", str(int((f.arp_gain_share < 1).sum())))
 
 
+# ---------------------------------------------------------------- ten seeds, probability boxes, BRL benchmark, criterion robustness
+FULL3 = ["NewDelhi", "BuenosAires", "London"]
+
+
+def _num(v, nd=2):
+    return fmt(v, nd + 1) if v is not None and not (isinstance(v, float) and math.isnan(v)) else "--"
+
+
+def t_seeds10():
+    ci = read("summary_seeds10_ci.csv")
+    raw = read("summary_seeds10.csv")
+    if ci is None or raw is None:
+        return
+    def row(city, q):
+        r = ci[(ci.city == city) & (ci.quantity == q)]
+        return r.iloc[0] if len(r) else None
+    def mci(city, q, nd=2, pct=False):
+        r = row(city, q)
+        if r is None:
+            return "--"
+        k = 100 if pct else 1
+        return f"{fmt(k * r['mean'], nd + 1)} [{fmt(k * r.ci_lo, nd + 1)}, {fmt(k * r.ci_hi, nd + 1)}]"
+    rows, rows2 = [], []
+    for c in ORDER:
+        r0 = row(c, "poa_zmc")
+        if r0 is None:
+            continue
+        star = "$^*$" if bool(row(c, "gain_both_pct").lower_bound_grid) else ""
+        ng = int(row(c, "gain_both_pct").n_seeds)
+        co, dl, bo = row(c, "gain_congestion_only_pct"), row(c, "gain_delivery_only_pct"), row(c, "gain_both_pct")
+        sh = row(c, "share_delivery")
+        pg = row(c, "priced_gap_pct")
+        rows.append([NAME[c] + star, str(int(r0.n_seeds)), str(ng), mci(c, "poa_zmc", 2),
+                     f"{fmt(co['mean'], 2)} ({fmt(co['max'], 2)})", f"{fmt(dl['mean'], 3)} ({fmt(dl['max'], 3)})",
+                     (mci(c, "share_delivery", 2) if sh is not None else "--"),
+                     f"{fmt(pg['mean'], 2)} ({fmt(pg['max'], 2)})"])
+        dg, dc = row(c, "dip_vs_grid_gain"), row(c, "dip_calls_share63")
+        sg, sd, sa = row(c, "so_share_grid"), row(c, "so_share_dip"), row(c, "so_share_arp")
+        ra = row(c, "arp_vs_dip_gain")
+        def f2(r, nd=2):
+            return "--" if r is None else fmt(r["mean"], nd + 1)
+        rows2.append([NAME[c] + star, f2(dg), fmt(100 * dc["mean"], 3) if dc is not None else "--", f2(sg), f2(sd), f2(sa),
+                      f2(ra), str(int(sa.n_seeds)) if sa is not None else "0"])
+    write_table("tab_seeds10.tex", ["City", "$n_{\\rm eq}$", "$n_{\\rm grid}$", "PoA mean [95\\% CI]",
+                                    "cong.\\ only \\% mean (max)", "deliv.\\ only \\% mean (max)",
+                                    "delivery share [95\\% CI]", "priced gap \\% mean (max)"], rows, "lrrlllll")
+    write_table("tab_seeds10b.tex", ["City", "DIP / grid", "DIP calls \\% of 63-pt grid", "grid / SO", "DIP / SO", "ARP / SO",
+                                     "ARP / DIP", "$n_{\\rm ARP}$"], rows2, "lrrrrrrr")
+    # macros
+    macro("TenSeedsMax", str(int(ci.n_seeds.max())))
+    macro("TenFullCities", ", ".join(NAME[c] for c in FULL3))
+    macro("TenRedCities", ", ".join(NAME[c] for c in ORDER if c not in FULL3))
+    macro("TenRedSeedsMin", str(int(ci[(ci.quantity == "poa_zmc") & (~ci.city.isin(FULL3))].n_seeds.min())))
+    macro("TenRedSeedsMax", str(int(ci[(ci.quantity == "poa_zmc") & (~ci.city.isin(FULL3))].n_seeds.max())))
+    for c in FULL3:
+        k = c
+        r = raw[raw.city == c]
+        co = r.gain_congestion_only_pct
+        macro("TenCongHi" + k, str(int((co >= 1.7).sum())))
+        macro("TenCongMax" + k, fmt(co.max(), 2))
+        macro("TenCongMean" + k, fmt(co.mean(), 2))
+        macro("TenN" + k, str(len(co)))
+        macro("TenDelMean" + k, fmt(r.gain_delivery_only_pct.mean(), 3))
+        macro("TenShare" + k, fmt(row(c, "share_delivery")["mean"], 2))
+        macro("TenShareLo" + k, fmt(row(c, "share_delivery").ci_lo, 2))
+        macro("TenShareHi" + k, fmt(row(c, "share_delivery").ci_hi, 2))
+        macro("TenShareMin" + k, fmt(row(c, "share_delivery")["min"], 2))
+        macro("TenPoa" + k, fmt(row(c, "poa_zmc")["mean"], 3))
+        macro("TenPoaMin" + k, fmt(row(c, "poa_zmc")["min"], 3))
+        macro("TenPoaMax" + k, fmt(row(c, "poa_zmc")["max"], 3))
+        macro("TenDipGrid" + k, fmt(row(c, "dip_vs_grid_gain")["mean"], 3))
+        macro("TenDipCalls" + k, fmt(100 * row(c, "dip_calls_share63")["mean"], 2))
+        macro("TenSoGrid" + k, fmt(row(c, "so_share_grid")["mean"], 3))
+        macro("TenSoDip" + k, fmt(row(c, "so_share_dip")["mean"], 3))
+        macro("TenSoArp" + k, fmt(row(c, "so_share_arp")["mean"], 3))
+        macro("TenArpDip" + k, fmt(row(c, "arp_vs_dip_gain")["mean"], 2))
+        macro("TenPricedGapMax" + k, fmt(row(c, "priced_gap_pct")["max"], 2))
+    # congestion-only versus delivery-only across the cities with a full grid
+    macro("TenCongMeanMin", fmt(min(row(c, "gain_congestion_only_pct")["mean"] for c in FULL3), 2))
+    macro("TenCongMeanMax", fmt(max(row(c, "gain_congestion_only_pct")["mean"] for c in FULL3), 2))
+    macro("TenDelMeanMin", fmt(min(row(c, "gain_delivery_only_pct")["mean"] for c in FULL3), 3))
+    macro("TenDelMeanMax", fmt(max(row(c, "gain_delivery_only_pct")["mean"] for c in FULL3), 3))
+    macro("TenCongHiTotal", str(sum(int((raw[raw.city == c].gain_congestion_only_pct >= 1.7).sum()) for c in FULL3)))
+    macro("TenCongHiDen", str(sum(len(raw[raw.city == c]) for c in FULL3)))
+    macro("TenCongMaxAll", fmt(max(raw[raw.city == c].gain_congestion_only_pct.max() for c in FULL3), 2))
+    # share below one half
+    lo = []
+    for c in FULL3:
+        r = raw[raw.city == c]
+        for _, x in r.iterrows():
+            if x.share_delivery < 0.5:
+                lo.append(f"{NAME[c]} seed {int(x.seed)}")
+    macro("TenShareBelowHalf", ", ".join(lo) if lo else "none")
+    bo = row("Bombay", "share_delivery")
+    macro("TenShareMumbaiLo", fmt(bo.ci_lo, 2))
+    macro("TenShareMumbaiHi", fmt(bo.ci_hi, 2))
+    macro("TenShareMumbaiN", str(int(bo.n_seeds)))
+    # PoA ordering
+    piv = raw.pivot_table(index="seed", columns="city", values="poa_zmc")
+    sub = piv.dropna(subset=FULL3)
+    macro("TenPoaOrderAll", str(int(((sub.London > sub.BuenosAires) & (sub.BuenosAires > sub.NewDelhi)).sum())))
+    macro("TenPoaOrderLB", str(int((sub.London > sub.BuenosAires).sum())))
+    macro("TenPoaOrderBN", str(int((sub.BuenosAires > sub.NewDelhi).sum())))
+    macro("TenPoaOrderN", str(len(sub)))
+    macro("TenPoaOrderFailSeeds", ", ".join(str(int(i)) for i in sub.index[~(sub.London > sub.BuenosAires)]))
+    hi = []
+    for c in ORDER:
+        m = row(c, "poa_zmc")
+        if m is not None and m["max"] >= 1.10:
+            hi.append(c)
+    macro("TenPoaHiCities", ", ".join(NAME[c] for c in hi))
+    bw = row("Bombay", "poa_worst")
+    macro("TenMumbaiWorst", f"{fmt(bw['mean'], 3)} [{fmt(bw.ci_lo, 3)}, {fmt(bw.ci_hi, 3)}]")
+    macro("TenPricedGapMax", fmt(max(row(c, "priced_gap_pct")["max"] for c in ORDER if row(c, "priced_gap_pct") is not None), 2))
+    ar = raw[raw.city.isin(FULL3)]
+    macro("TenArpFixedN", str(int((ar.arp_status == "fixed_point").sum())))
+    macro("TenArpRuns", str(int(ar.arp_status.notna().sum())))
+    # oracle accounting for seeds 3-9
+    o = read("seeds10_oracle.csv")
+    if o is not None:
+        calls = 0
+        unp = 0
+        for pre in ("e1", "dip", "ne", "arp", "grid"):
+            cc, uu = f"{pre}_bp_calls", f"{pre}_unproven"
+            if cc in o.columns:
+                calls += float(o[cc].fillna(0).sum())
+            if uu in o.columns:
+                unp += float(o[uu].fillna(0).sum())
+        calls += float(o.verify_bp_calls.fillna(0).sum())
+        macro("TenOracleCalls", f"{int(round(calls)):,}".replace(",", "\\,"))
+        macro("TenUnprovenPct", fmt(100 * unp / calls, 2))
+        macro("TenOracleUnits", str(len(o)))
+
+
+def t_ambiguity():
+    d = read("ambiguity_summary_by_n.csv")
+    if d is None:
+        return
+    b = d[(d.regime == "base") & (d.law == "true")].set_index(["criterion", "n"])
+    crits = [("saa", "SAA"), ("wass_cv", "Wasserstein, cross-validated radius"), ("wass_th", "Wasserstein, theory radius"),
+             ("cvar90", "CVaR$_{0.9}$"), ("pbox_ud_80", "p-box, unknown dependence, 0.80"),
+             ("pbox_ud_95", "p-box, unknown dependence, 0.95"), ("pbox_ud_99", "p-box, unknown dependence, 0.99"),
+             ("pbox_ind_95", "p-box, independent, 0.95"), ("pbox_ud_emp", "comonotone, empirical marginals (no band)")]
+    rows = []
+    for k, lab in crits:
+        def g(col, n):
+            return b.loc[(k, n), col]
+        rows.append([lab, fmt(g("true_regret_pct_mean", 10), 2), fmt(g("true_regret_pct_mean", 20), 2), fmt(g("true_regret_pct_mean", 60), 2),
+                     fmt(g("true_p_ot_day_mean", 20), 2), fmt(g("true_cvar95_pct_mean", 20), 3),
+                     fmt(g("disappointment_pct_mean", 20), 2)])
+    write_table("tab_ambig.tex", ["Criterion", "regret \\% $n=10$", "$n=20$", "$n=60$", "P(overtime day), $n=20$",
+                                  "CVaR$_{0.95}$ above best, \\% ($n=20$)", "criterion minus true cost, \\% ($n=20$)"],
+                rows, "lrrrrrr")
+    def r(k, n, col="true_regret_pct_mean"):
+        return b.loc[(k, n), col]
+    macro("AmbDraws", str(int(b.loc[("saa", 20), "n_draws"])))
+    macro("AmbSaaReg20", fmt(r("saa", 20), 2)); macro("AmbSaaReg60", fmt(r("saa", 60), 2))
+    macro("AmbWcvReg20", fmt(r("wass_cv", 20), 2)); macro("AmbWcvReg60", fmt(r("wass_cv", 60), 2))
+    macro("AmbWthReg20", fmt(r("wass_th", 20), 2)); macro("AmbWthReg60", fmt(r("wass_th", 60), 2))
+    macro("AmbCvarReg20", fmt(r("cvar90", 20), 2)); macro("AmbCvarReg60", fmt(r("cvar90", 60), 2))
+    macro("AmbPbLoReg20", fmt(r("pbox_ud_80", 20), 2)); macro("AmbPbLoReg60", fmt(r("pbox_ud_80", 60), 2))
+    macro("AmbPbHiReg20", fmt(r("pbox_ud_99", 20), 2)); macro("AmbPbHiReg60", fmt(r("pbox_ud_99", 60), 2))
+    macro("AmbEmpReg20", fmt(r("pbox_ud_emp", 20), 2)); macro("AmbEmpReg60", fmt(r("pbox_ud_emp", 60), 2))
+    macro("AmbRegMin", fmt(min(r(k, n) for k in ("pbox_ud_80", "pbox_ud_95", "pbox_ud_99") for n in (10, 20, 30, 60)), 2))
+    macro("AmbRegMax", fmt(max(r(k, n) for k in ("pbox_ud_80", "pbox_ud_95", "pbox_ud_99") for n in (10, 20, 30, 60)), 2))
+    macro("AmbOtSaa20", fmt(r("saa", 20, "true_p_ot_day_mean"), 2))
+    macro("AmbOtPb20", fmt(r("pbox_ud_80", 20, "true_p_ot_day_mean"), 2))
+    macro("AmbOtCvar20", fmt(r("cvar90", 20, "true_p_ot_day_mean"), 2))
+    macro("AmbCvarGainLo", fmt(min(r("saa", n, "true_cvar95_pct_mean") - r("pbox_ud_80", n, "true_cvar95_pct_mean") for n in (10, 20, 30, 60)), 2))
+    macro("AmbCvarGainHi", fmt(max(r("saa", n, "true_cvar95_pct_mean") - r("pbox_ud_80", n, "true_cvar95_pct_mean") for n in (10, 20, 30, 60)), 2))
+    macro("AmbDisSaa20", fmt(r("saa", 20, "disappointment_pct_mean"), 2))
+    macro("AmbDisWcv20", fmt(r("wass_cv", 20, "disappointment_pct_mean"), 2))
+    macro("AmbDisPbMin", fmt(min(r(k, n, "disappointment_pct_mean") for k in ("pbox_ud_80", "pbox_ud_99") for n in (20, 60)), 2))
+    macro("AmbDisPbMax", fmt(max(r(k, n, "disappointment_pct_mean") for k in ("pbox_ud_80", "pbox_ud_99") for n in (20, 60)), 2))
+    sh = read("ambiguity_shift_summary.csv")
+    if sh is not None:
+        for n in (20, 60):
+            x = sh[(sh.criterion == "pbox_ud_80") & (sh.n == n)].sort_values("delta")
+            neg = x[x.d_exp_pct < 0]
+            macro(f"AmbCross{'Twenty' if n == 20 else 'Sixty'}", fmt(neg.delta.iloc[0], 2) if len(neg) else "--")
+            macro(f"AmbCvarShift{'Twenty' if n == 20 else 'Sixty'}", fmt(-x[x.delta == 0].d_cvar_pct.iloc[0], 2))
+        x = sh[(sh.criterion == "pbox_ud_80") & (sh.n == 60) & (sh.delta == 1.0)]
+        macro("AmbShiftOneSixty", fmt(-x.d_exp_pct.iloc[0], 2) if len(x) else "--")
+    v = read("ambiguity_validation.csv")
+    if v is not None:
+        macro("AmbValRows", str(len(v)))
+        macro("AmbValOptN", str(int((v.gap_pct < 1e-6).sum())))
+        j = v.gap_pct.idxmax()
+        macro("AmbValMaxGap", fmt(v.gap_pct.max(), 2))
+        macro("AmbValMaxCity", NAME[v.loc[j, "city"]])
+
+
+def t_brlbench():
+    lab = read("brl_bench_labels_summary.csv")
+    pub = read("brl_bench_pub_summary.csv")
+    pol = read("brl_bench_pub_summary_polished.csv")
+    sh = read("brl_bench_shift_summary.csv")
+    bp = read("brl_bench_bpscale.csv")
+    if lab is None:
+        return
+    m = lab[lab.family == "metro"]; pu = lab[lab.family == "public"]
+    rows = []
+    for _, r in lab.iterrows():
+        rows.append([("metro" if r.family == "metro" else "public"), str(int(r.n)), str(int(r.instances)),
+                     fmt(r["window kept (median)"], 3), fmt(r["nowin kept (median)"], 3), fmt(r["qv kept (median)"], 3),
+                     fmt(r["nowin/window"], 2), fmt(r["qv/window"], 2)])
+    write_table("tab_brl_labels.tex", ["family", "$n$", "instances", "labels: window (BRL)", "no window", "quantile-vector",
+                                       "no window / window", "quantile / window"], rows, "lrrrrrrr")
+    macro("BrlLabNowinMetroMin", fmt(m["nowin/window"].min(), 2)); macro("BrlLabNowinMetroMax", fmt(m["nowin/window"].max(), 2))
+    macro("BrlLabQvMetroMin", fmt(m["qv/window"].min(), 2)); macro("BrlLabQvMetroMax", fmt(m["qv/window"].max(), 2))
+    macro("BrlLabNowinPubMin", fmt(pu["nowin/window"].min(), 2)); macro("BrlLabNowinPubMax", fmt(pu["nowin/window"].max(), 2))
+    macro("BrlLabQvPubMin", fmt(pu["qv/window"].min(), 2)); macro("BrlLabQvPubMax", fmt(pu["qv/window"].max(), 2))
+    # public instances: proven rates over all (N, instance) cells
+    tot = pub.groupby("arm").apply(lambda g: (g.proven * g.cells).sum() / g.cells.sum(), include_groups=False)
+    for a, nm in (("brl", "Brl"), ("det", "Det"), ("saa", "Saa"), ("wass", "Wass"), ("cvar", "Cvar")):
+        macro("BrlProven" + nm, fmt(100 * tot[a], 2))
+    macro("BrlProvenCells", str(int(pub[pub.arm == "brl"].cells.sum())))
+    b10 = pub[(pub.arm == "brl")]
+    macro("BrlLabelsBrlMin", fmt(pub[pub.arm == "brl"].labels_max_median.min(), 3)); macro("BrlLabelsBrlMax", fmt(pub[pub.arm == "brl"].labels_max_median.max(), 3))
+    sc = pub[pub.arm.isin(["saa", "wass", "cvar", "det"])]
+    macro("BrlLabelsScenMin", fmt(sc.labels_max_median.min(), 3)); macro("BrlLabelsScenMax", fmt(sc.labels_max_median.max(), 3))
+    # held-out comparison, polished
+    rows = []
+    for n in (10, 30, 60):
+        for a, nm in (("brl", "BRL"), ("saa", "SAA"), ("wass", "Wasserstein"), ("cvar", "mean-CVaR"), ("det", "deterministic")):
+            r = pol[(pol.N == n) & (pol.arm == a)].iloc[0]
+            s2 = sh[(sh.plans == "polished") & (sh.N == n) & (sh.arm == a)].iloc[0]
+            rows.append([str(n), nm, fmt(r.oos_mean_rel_saa_ls, 2), fmt(r.oos_p95_rel_saa_ls, 2), fmt(r.oos_cvar90_rel_saa_ls, 2),
+                         fmt(s2.mean_rel, 2), fmt(s2.p95_rel, 2)])
+    write_table("tab_brl_oos.tex", ["$N$ days", "plan", "held-out mean \\%", "95th pct \\%", "CVaR$_{0.9}$ \\%", "shifted law: mean \\%",
+                                    "shifted law: 95th pct \\%"], rows, "rlrrrrr")
+    pb = pol[(pol.arm == "brl")]
+    macro("BrlOosMeanMin", fmt(pb.oos_mean_rel_saa_ls.min(), 2)); macro("BrlOosMeanMax", fmt(pb.oos_mean_rel_saa_ls.max(), 2))
+    macro("BrlOosP95Min", fmt(pb.oos_p95_rel_saa_ls.min(), 2)); macro("BrlOosP95Max", fmt(pb.oos_p95_rel_saa_ls.max(), 2))
+    rawb = pub[pub.arm == "brl"].set_index("N"); raws = pub[pub.arm == "saa"].set_index("N")
+    macro("BrlRawMeanMin", fmt(rawb.oos_mean_rel_saa.min(), 2)); macro("BrlRawMeanMax", fmt(rawb.oos_mean_rel_saa.max(), 2))
+    s10 = sh[(sh.plans == "polished") & (sh.N == 10) & (sh.arm == "brl")].iloc[0]
+    macro("BrlShiftTenP95", fmt(-s10.p95_rel, 2)); macro("BrlShiftTenCvar", fmt(-s10.cvar90_rel, 2)); macro("BrlShiftTenMean", fmt(s10.mean_rel, 2))
+    s30 = sh[(sh.plans == "polished") & (sh.N == 30) & (sh.arm == "brl")].iloc[0]
+    macro("BrlShiftThirtyP95", fmt(s30.p95_rel, 2))
+    macro("BrlPolishedAll", fmt(pol.own_gap_pct.max(), 2))
+    # scale study
+    pr = read("brl_bench_pub.csv")
+    if pr is not None:
+        sol = pr[(pr.arm == "brl") & (pr.inst.str.startswith("solomon")) & (pr.n == 25) & (pr.proven == True)]
+        macro("BrlSolomonMedian", fmt(sol.time.median(), 2))
+        macro("BrlSolomonProvenN", str(len(sol)))
+        macro("BrlAugeratProvenN", str(int(((pr.arm == "brl") & pr.inst.str.startswith("augerat") & (pr.proven == True)).sum())))
+        macro("BrlAugeratCells", str(int(((pr.arm == "brl") & pr.inst.str.startswith("augerat")).sum())))
+    dv = read("brl_bench_devices_summary.csv")
+    if dv is not None:
+        macro("BrlHeurSpeedup", fmt(dv[dv.config == "heur5"].speedup_median.iloc[0], 2))
+    if bp is not None:
+        a = bp[(bp.name.str.startswith("augerat")) & (bp.cfg == "exact")].iloc[0]
+        macro("BrlAugGap", fmt(100 * a.rel_gap, 2)); macro("BrlAugCols", fmt(a.n_cols, 3))
+        def stat(name, n, cfg):
+            r = bp[(bp.name == name) & (bp.n == n) & (bp.cfg == cfg)]
+            return r.iloc[0] if len(r) else None
+        rows = []
+        for _, r in bp[bp.cfg == "exact"].iterrows():
+            d = stat(r["name"], r.n, "devices")
+            def cell(x):
+                if x is None:
+                    return "--"
+                if x.status == "optimal":
+                    return f"optimal, {fmt(x.time, 3)} s"
+                return "limit" + (f", gap {fmt(100 * x.rel_gap, 2)}\\%" if not pd.isna(x.rel_gap) else ", no valid bound")
+            rows.append([r["name"].replace("_", "\\_"), str(int(r.n)), cell(r), cell(d)])
+        write_table("tab_brl_scale.tex", ["instance", "$n$", "ng-8, exact pricing", "devices (ng-4 start, heuristic-first pricing)"], rows, "lrll")
+        opt = bp[(bp.cfg == "exact") & (bp.status == "optimal")]
+        macro("BrlScaleOptN", str(len(opt)))
+        macro("BrlScaleOptList", ", ".join(f"{str(x['name']).split('/')[-1]} {int(x['n'])}" for _, x in opt.iterrows()))
+
+
+def t_criterion():
+    d = read("summary_criterion.csv")
+    if d is None:
+        return
+    crit = [("pbox", "p-box"), ("saa", "SAA"), ("wass_cv", "Wass.\\ CV"), ("wass_th", "Wass.\\ theory")]
+    rows = []
+    for c in FULL3:
+        for k, lab in crit:
+            r = d[(d.city == c) & (d.criterion == k)].iloc[0]
+            rows.append([NAME[c], lab, fmt(r.served_share, 2), fmt(r.poa_true, 3), fmt(r.poa_model, 3), fmt(r.dip_gain_true_pct, 3),
+                         fmt(r.dip_gain_model_pct, 3), fmt(r.grid_best_sfrac_delivery_only, 2), fmt(r.grid_best_sfrac_delivery_only_m, 2),
+                         fmt(r.dip_u_q_weighted_over_fee, 2)])
+    write_table("tab_criterion.tex", ["City", "carriers' criterion", "served share", "PoA (true cost)", "PoA (model cost)",
+                                      "DIP gain \\%, true cost", "DIP gain \\%, model cost", "best uniform charge / fee, true cost",
+                                      "same, model cost", "DIP charge $u/$fee (weighted)"], rows, "llrrrrrrrr")
+    def v(c, k, col):
+        return d[(d.city == c) & (d.criterion == k)].iloc[0][col]
+    for c in FULL3:
+        for k, nm in (("pbox", "Pb"), ("saa", "Saa"), ("wass_cv", "Wcv"), ("wass_th", "Wth")):
+            macro(f"Crit{nm}Served{c}", fmt(v(c, k, "served_share"), 2))
+            macro(f"Crit{nm}PoaTrue{c}", fmt(v(c, k, "poa_true"), 3))
+            macro(f"Crit{nm}PoaModel{c}", fmt(v(c, k, "poa_model"), 3))
+            macro(f"Crit{nm}DipTrue{c}", fmt(v(c, k, "dip_gain_true_pct"), 3))
+            macro(f"Crit{nm}Charge{c}", fmt(-v(c, k, "grid_best_sfrac_delivery_only"), 2))
+            macro(f"Crit{nm}ChargeM{c}", fmt(-v(c, k, "grid_best_sfrac_delivery_only_m"), 2))
+    macro("CritSeeds", str(int(d.n_seeds.max())))
+    macro("CritChargeDropMin", fmt(min(100 * (1 - v(c, "saa", "grid_best_sfrac_delivery_only") / v(c, "pbox", "grid_best_sfrac_delivery_only")) for c in FULL3), 2))
+    macro("CritChargeDropMax", fmt(max(100 * (1 - v(c, "saa", "grid_best_sfrac_delivery_only") / v(c, "pbox", "grid_best_sfrac_delivery_only")) for c in FULL3), 2))
+    sl = d[d.dip_slope_fee_over_nz.notna()].dip_slope_fee_over_nz
+    macro("CritSlopeMin", fmt(-sl.max(), 3)); macro("CritSlopeMax", fmt(-sl.min(), 3))
+    macro("CritCorrAbsMin", fmt(-d.dip_corr_fee_over_nz.max(), 3))
+    g3 = d[d.city.isin(FULL3)]
+    ng = g3[g3.criterion != "wass_th"]
+    macro("CritDelShareMin", fmt(ng.grid_delivery_share_m.min(), 2)); macro("CritDelShareMax", fmt(ng.grid_delivery_share_m.max(), 2))
+    macro("CritDelShareMinTh", fmt(g3[g3.criterion == "wass_th"].grid_delivery_share_m.min(), 2))
+    macro("CritDelShareMaxTh", fmt(g3[g3.criterion == "wass_th"].grid_delivery_share_m.max(), 2))
+    macro("CritDipGridMin", fmt(g3.grid_dip_gain_share_of_grid_m.min(), 2))
+    macro("CritCongSaaBA", fmt(v("BuenosAires", "saa", "grid_gain_congestion_only_pct_m"), 2))
+    macro("CritDelSaaBA", fmt(v("BuenosAires", "saa", "grid_gain_delivery_only_pct_m"), 2))
+    macro("CritDipCallsShare63Min", fmt(100 * g3.grid_dip_calls_share_63.min(), 2)); macro("CritDipCallsShare63Max", fmt(100 * g3.grid_dip_calls_share_63.max(), 2))
+    macro("CritDipCallsShareGridMin", fmt(100 * g3.grid_dip_calls_share_grid.min(), 2)); macro("CritDipCallsShareGridMax", fmt(100 * g3.grid_dip_calls_share_grid.max(), 2))
+    macro("CritPoaAboveOther", fmt(d[(~d.city.isin(FULL3)) & (d.criterion == "saa")].poa_true.max(), 3))
+    macro("CritPoaAboveOtherAll", fmt(d[(~d.city.isin(FULL3))].poa_true.max(), 3))
+    macro("CritSaaBAND", f"{fmt(v('BuenosAires', 'saa', 'poa_true'), 3)} and {fmt(v('NewDelhi', 'saa', 'poa_true'), 3)}")
+
+
 def main():
-    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip, t_arp, t_extra):
+    for f in (t_params, t_cities, t_e1, t_sens, t_e2, t_e3, t_e4, t_e5, t_tiny, t_e6, t_brl, t_zmc_synth, t_cert, t_bp, t_theory, t_exact, t_dip, t_arp, t_extra, t_seeds10, t_ambiguity, t_brlbench, t_criterion):
         try:
             f()
         except Exception as exc:  # keep going so that one changed file does not block the rest

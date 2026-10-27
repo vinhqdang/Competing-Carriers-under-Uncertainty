@@ -1,5 +1,5 @@
-Exact route pricing under probability boxes with unknown dependence
-Branch-and-price makes each carrier's integer routing plan exact
-City charges from best-response cuts need 5-9% of a grid's routing calls
-Charges from observed zone totals alone contract at an instance-free rate
-Nine metro maps, three seeds: charge and anarchy results depend on the seed
+Exact route pricing under probability boxes; fast to prove, not scalable past 40
+Charges from best-response cuts use 6-8% of a grid's routing calls
+Charges from observed zone totals contract at an instance-free rate
+Ten seeds: price-of-anarchy ordering of cities holds in only 7 of 10 seeds
+Policy directions survive other carrier criteria; levels of PoA and gains do not
