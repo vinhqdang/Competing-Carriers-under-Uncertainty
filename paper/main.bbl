@@ -1,4 +1,4 @@
-\begin{thebibliography}{106}
+\begin{thebibliography}{108}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -64,6 +64,15 @@
   (\bibinfo{year}{1980}) \bibinfo{pages}{814--827}.
   \DOIprefix\doi{10.1214/aop/1176994668}.
 %Type = Article
+\bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
+\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
+  \bibinfo{author}{W.~Wiesemann},
+\newblock \bibinfo{title}{A unifying framework for the capacitated vehicle
+  routing problem under risk and ambiguity},
+\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{72}
+  (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
+  \DOIprefix\doi{10.1287/opre.2021.0669}.
+%Type = Article
 \bibitem[{Buchanan(1969)}]{Buchanan1969}
 \bibinfo{author}{J.~M. Buchanan},
 \newblock \bibinfo{title}{External diseconomies, corrective taxes, and market
@@ -122,6 +131,13 @@
   Control (CDC)}, \bibinfo{year}{2022}, pp. \bibinfo{pages}{2864--2869}.
   \DOIprefix\doi{10.1109/CDC51059.2022.9992685},
   \bibinfo{note}{arXiv:2204.05507}.
+%Type = Misc
+\bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
+\bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
+  \bibinfo{author}{N.~Kiyavash}, \bibinfo{author}{P.~Thiran},
+  \bibinfo{title}{Zeroth-order {Stackelberg} control in combinatorial
+  congestion games}, \bibinfo{howpublished}{arXiv preprint 2602.23277},
+  \bibinfo{year}{2026}.
 %Type = Article
 \bibitem[{Liu et~al.(2023)Liu, Oudjane, and Wan}]{Liu2023}
 \bibinfo{author}{K.~Liu}, \bibinfo{author}{N.~Oudjane},
@@ -131,6 +147,22 @@
 \newblock \bibinfo{journal}{Mathematics of Operations Research}
   \bibinfo{volume}{48} (\bibinfo{year}{2023}) \bibinfo{pages}{1791--1809}.
   \DOIprefix\doi{10.1287/moor.2022.1321}.
+%Type = Misc
+\bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
+  Paccagnan}]{Lanzetti2025}
+\bibinfo{author}{N.~Lanzetti}, \bibinfo{author}{S.~Fricker},
+  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
+  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust game
+  theory via optimal transport}, \bibinfo{howpublished}{arXiv preprint
+  2507.15325}, \bibinfo{year}{2025}.
+%Type = Misc
+\bibitem[{Feik et~al.(2026)Feik, Lanzetti, Bolognani, D{\"o}rfler, and
+  Paccagnan}]{Feik2026}
+\bibinfo{author}{A.~Feik}, \bibinfo{author}{N.~Lanzetti},
+  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
+  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust
+  aggregative games}, \bibinfo{howpublished}{arXiv preprint 2604.23669},
+  \bibinfo{year}{2026}.
 %Type = Article
 \bibitem[{Apt et~al.(2022)Apt, Simon, and Wojtczak}]{Apt2022}
 \bibinfo{author}{K.~R. Apt}, \bibinfo{author}{S.~Simon},
@@ -329,15 +361,6 @@
   (\bibinfo{year}{2016}) \bibinfo{pages}{608--626}.
   \DOIprefix\doi{10.1287/trsc.2014.0581}.
 %Type = Article
-\bibitem[{Ghosal et~al.(2024)Ghosal, Ho, and Wiesemann}]{GhosalHoWiesemann2024}
-\bibinfo{author}{S.~Ghosal}, \bibinfo{author}{C.~P. Ho},
-  \bibinfo{author}{W.~Wiesemann},
-\newblock \bibinfo{title}{A unifying framework for the capacitated vehicle
-  routing problem under risk and ambiguity},
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{72}
-  (\bibinfo{year}{2024}) \bibinfo{pages}{425--443}.
-  \DOIprefix\doi{10.1287/opre.2021.0669}.
-%Type = Article
 \bibitem[{Long et~al.(2024)Long, Qi, and Zhang}]{LongQiZhang2024}
 \bibinfo{author}{D.~Z. Long}, \bibinfo{author}{J.~Qi},
   \bibinfo{author}{A.~Zhang},
@@ -346,6 +369,26 @@
 \newblock \bibinfo{journal}{Management Science} \bibinfo{volume}{70}
   (\bibinfo{year}{2024}) \bibinfo{pages}{1394--1409}.
   \DOIprefix\doi{10.1287/mnsc.2023.4748}.
+%Type = Article
+\bibitem[{Alves~Pessoa et~al.(2015)Alves~Pessoa, Di~Puglia~Pugliese, Guerriero,
+  and Poss}]{Pessoa2015}
+\bibinfo{author}{A.~Alves~Pessoa}, \bibinfo{author}{L.~Di~Puglia~Pugliese},
+  \bibinfo{author}{F.~Guerriero}, \bibinfo{author}{M.~Poss},
+\newblock \bibinfo{title}{Robust constrained shortest path problems under
+  budgeted uncertainty},
+\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{66}
+  (\bibinfo{year}{2015}) \bibinfo{pages}{98--111}.
+  \DOIprefix\doi{10.1002/net.21615}.
+%Type = Article
+\bibitem[{Di~Puglia~Pugliese et~al.(2019)Di~Puglia~Pugliese, Guerriero, and
+  Poss}]{Pugliese2019}
+\bibinfo{author}{L.~Di~Puglia~Pugliese}, \bibinfo{author}{F.~Guerriero},
+  \bibinfo{author}{M.~Poss},
+\newblock \bibinfo{title}{The resource constrained shortest path problem with
+  uncertain data: A robust formulation and optimal solution approach},
+\newblock \bibinfo{journal}{Computers \& Operations Research}
+  \bibinfo{volume}{107} (\bibinfo{year}{2019}) \bibinfo{pages}{140--155}.
+  \DOIprefix\doi{10.1016/j.cor.2019.03.010}.
 %Type = Article
 \bibitem[{Kaas et~al.(2000)Kaas, Dhaene, and Goovaerts}]{Kaas2000}
 \bibinfo{author}{R.~Kaas}, \bibinfo{author}{J.~Dhaene}, \bibinfo{author}{M.~J.
@@ -496,22 +539,6 @@
 \newblock \bibinfo{journal}{Theory and Decision} \bibinfo{volume}{80}
   (\bibinfo{year}{2016}) \bibinfo{pages}{245--269}.
   \DOIprefix\doi{10.1007/s11238-015-9502-3}.
-%Type = Misc
-\bibitem[{Lanzetti et~al.(2025)Lanzetti, Fricker, Bolognani, D{\"o}rfler, and
-  Paccagnan}]{Lanzetti2025}
-\bibinfo{author}{N.~Lanzetti}, \bibinfo{author}{S.~Fricker},
-  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
-  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust game
-  theory via optimal transport}, \bibinfo{howpublished}{arXiv preprint
-  2507.15325}, \bibinfo{year}{2025}.
-%Type = Misc
-\bibitem[{Feik et~al.(2026)Feik, Lanzetti, Bolognani, D{\"o}rfler, and
-  Paccagnan}]{Feik2026}
-\bibinfo{author}{A.~Feik}, \bibinfo{author}{N.~Lanzetti},
-  \bibinfo{author}{S.~Bolognani}, \bibinfo{author}{F.~D{\"o}rfler},
-  \bibinfo{author}{D.~Paccagnan}, \bibinfo{title}{Strategically robust
-  aggregative games}, \bibinfo{howpublished}{arXiv preprint 2604.23669},
-  \bibinfo{year}{2026}.
 %Type = Article
 \bibitem[{Carvalho et~al.(2022)Carvalho, Lodi, and Pedroso}]{Carvalho2022}
 \bibinfo{author}{M.~Carvalho}, \bibinfo{author}{A.~Lodi},
@@ -652,13 +679,6 @@
 \newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
   \bibinfo{volume}{71} (\bibinfo{year}{2026}) \bibinfo{pages}{3619--3633}.
   \DOIprefix\doi{10.1109/TAC.2025.3643351}, \bibinfo{note}{arXiv:2405.16716}.
-%Type = Misc
-\bibitem[{Masiha et~al.(2026)Masiha, Elahi, Kiyavash, and Thiran}]{Masiha2026}
-\bibinfo{author}{S.~Masiha}, \bibinfo{author}{S.~Elahi},
-  \bibinfo{author}{N.~Kiyavash}, \bibinfo{author}{P.~Thiran},
-  \bibinfo{title}{Zeroth-order {Stackelberg} control in combinatorial
-  congestion games}, \bibinfo{howpublished}{arXiv preprint 2602.23277},
-  \bibinfo{year}{2026}.
 %Type = Article
 \bibitem[{Dvoretzky et~al.(1956)Dvoretzky, Kiefer, and Wolfowitz}]{DKW1956}
 \bibinfo{author}{A.~Dvoretzky}, \bibinfo{author}{J.~Kiefer},
