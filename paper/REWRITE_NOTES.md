@@ -30,7 +30,7 @@ Verified against Crossref (DOI records) or the arXiv abstract page on 2026-10-26
 
 ## The author must still check
 
-1. Competing-interest and funding statements are placeholders. The Elsevier generative-AI declaration is the author's decision; no such statement is in the text.
+1. Declarations: competing interest and funding are set to "none" as stated by the author. The Elsevier generative-AI declaration remains the author's decision; no such statement is in the text.
 2. Read in full: Beauchene 2016, Feik et al. 2026, Ghosal-Ho-Wiesemann 2024 (and its e-companion), Masiha et al. 2026, Liu-Ma-Ma 2026 (not cited in the text; check whether it should be), and Maheshwari et al. (both versions) against the ARP claims.
 3. Scopus / Web of Science novelty search (all searches so far were web and index searches, snippet level).
 4. Grade-C parameters (fees, wages, drops, van capacities, market shares) in `data/parameters/SOURCES.md`; they drive the sign and size of the leader's gains.
