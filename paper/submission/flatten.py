@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Flatten paper/main.tex into ONE .tex file plus PNG figures (for upload systems that cannot handle projects).
+"""Flatten paper/main.tex or paper/supplement.tex into ONE .tex file plus PNG figures (for upload systems that cannot handle projects).
 
-Usage: python3 paper/submission/flatten.py OUTDIR {anon|titled} [HIRES_FIGURE_DIR]
+Usage: python3 paper/submission/flatten.py OUTDIR {anon|titled} [main|supplement] [HIRES_FIGURE_DIR]
 
-Requires a finished build of paper/main.tex (main.bbl and main.aux are read).
-It inlines frontmatter.tex and all \\input tables, expands every number macro of
+Requires a finished build of the document (NAME.bbl and NAME.aux are read).
+It inlines frontmatter.tex (main) and all \\input tables, expands every number macro of
 tables/macros.tex to its literal value, inlines the compiled bibliography, replaces the
 TikZ schematic by a PNG, copies the figures under flat names, and drops non-standard packages.
 """
@@ -62,15 +62,18 @@ def strip_comments(t):
         out.append(l.rstrip())
     return re.sub(r'\n{3,}', '\n\n', '\n'.join(out))
 
-def build(out, mode, hires=None):
+def build(out, mode, doc='main', hires=None):
     anon = mode == 'anon'
-    hires = hires or os.path.join(REPO, 'figures')
+    hires = hires or os.path.join(HERE, 'hires')
     if os.path.exists(out): shutil.rmtree(out)
     os.makedirs(out)
-    main = open(f'{PAPER}/main.tex').read()
-    fm = open(f'{PAPER}/frontmatter.tex').read()
+    main = open(f'{PAPER}/{doc}.tex').read()
+    fm = open(f'{PAPER}/frontmatter.tex').read() if doc == 'main' else None
     macros = resolve(parse_macros(open(f'{PAPER}/tables/macros.tex').read()))
     # frontmatter
+    if doc == 'supplement':
+        mo = re.search(r'\\begin\{frontmatter\}.*?\\end\{frontmatter\}', main, re.S)
+        fm = mo.group(0)
     if anon:
         for k in ('author', 'ead', 'address'):
             fm = re.sub(r'\\%s\{[^\n]*\n' % k, '', fm)
@@ -79,7 +82,10 @@ def build(out, mode, hires=None):
         fm = re.sub(r'\\orcidlink\{[^}]*\}', '', fm)
         fm = fm.replace(r'\author{Quang-Vinh Dang\,}', r'\author{Quang-Vinh Dang}')
         fm = fm.replace('British University Vietnam, Hung Yen, Vietnam}', 'British University Vietnam, Hung Yen, Vietnam. ORCID 0000-0002-3877-8024}')
-    main = main.replace('\\input{frontmatter}', fm)
+    if doc == 'supplement':
+        main = main.replace(mo.group(0), fm)
+    else:
+        main = main.replace('\\input{frontmatter}', fm)
     main = main.replace('\\input{tables/macros}', '')
     # tables
     def tab(mo):
@@ -89,16 +95,16 @@ def build(out, mode, hires=None):
     # preamble
     for pkg in (r'\usepackage[export]{adjustbox}', r'\usepackage{xurl}', r'\usepackage{orcidlink}', r'\usepackage{tikz}',
                 r'\usetikzlibrary{arrows.meta,positioning}', r'\usepackage{microtype}', r'\graphicspath{{../figures/}}'):
-        assert pkg in main, pkg
+        assert pkg in main or (doc == 'supplement' and 'tikz' in pkg), pkg
         main = main.replace(pkg + '\n', '')
     shrink = ('\\long\\def\\shrinkbox#1{\\sbox0{#1}\\ifdim\\wd0>\\linewidth\\resizebox{\\linewidth}{!}{\\usebox0}\\else\\usebox0\\fi}\n')
     main = main.replace('\\setlength{\\tabcolsep}{4pt}', shrink + '\\setlength{\\tabcolsep}{4pt}', 1)
     if anon:
         main = main.replace('\\hypersetup{hidelinks}', '\\hypersetup{hidelinks,pdfauthor={Anonymous},pdfcreator={},pdfproducer={}}')
-        old = re.search(r'Code, processed data, parameter sources, result files, figures and the scripts that generate the tables and numbers of this paper are available at \\url\{[^}]+\}\.', main).group(0)
-        main = main.replace(old, 'Code, processed data, parameter sources, result files, figures and the scripts that generate the tables and numbers of this paper are available in a public repository. The link is withheld during peer review and will be provided on acceptance, or to the editor on request.')
+        old = None if doc == 'supplement' else re.search(r'Code, processed data, parameter sources, result files, figures and the scripts that generate the tables and numbers of this paper are available at \\url\{[^}]+\}\.', main) 
+        if old: main = main.replace(old.group(0), 'Code, processed data, parameter sources, result files, figures and the scripts that generate the tables and numbers of this paper are available in a public repository. The link is withheld during peer review and will be provided on acceptance, or to the editor on request.')
     # bibliography
-    bbl = open(f'{PAPER}/main.bbl').read()
+    bbl = open(f'{PAPER}/{doc}.bbl').read()
     main = main.replace('\\bibliographystyle{elsarticle-num-names}\n', '')
     main = main.replace('\\bibliography{references}', bbl)
     # macros
@@ -106,29 +112,33 @@ def build(out, mode, hires=None):
     main, pat = expand(main, macros)
     assert not pat.search(main)
     # tikz
-    mo = re.search(r'\\resizebox\{\\textwidth\}\{!\}\{\s*(\\begin\{tikzpicture\}.*?\\end\{tikzpicture\})\}', main, re.S)
-    tikz = mo.group(1)
-    aux = open(f'{PAPER}/main.aux').read()
-    labels = dict(re.findall(r'\\newlabel\{([^}]+)\}\{\{([^}]*)\}', aux))
-    tikz = re.sub(r'\\ref\{([^}]+)\}', lambda x: labels[x.group(1)], tikz)
-    with tempfile.TemporaryDirectory() as td:
-        open(f'{td}/t.tex', 'w').write('\\documentclass[12pt,border=3pt]{standalone}\n\\usepackage{amsmath,amssymb}\n\\usepackage{tikz}\n\\usetikzlibrary{arrows.meta,positioning}\n\\begin{document}\n' + tikz + '\n\\end{document}\n')
-        subprocess.run(['pdflatex', '-interaction=nonstopmode', 't.tex'], cwd=td, check=True, stdout=subprocess.DEVNULL)
-        subprocess.run(['pdftoppm', '-r', '450', '-png', '-singlefile', 't.pdf', 'fig01_overview_schematic'], cwd=td, check=True)
-        shutil.copy(f'{td}/fig01_overview_schematic.png', out)
-    main = main.replace(mo.group(0), '\\includegraphics[width=\\textwidth]{fig01_overview_schematic.png}')
+    names = {'arp_calls_vs_gain.png': 'fig02_arp_calls_vs_gain.png'}
+    if doc == 'main':
+        mo = re.search(r'\\resizebox\{\\textwidth\}\{!\}\{\s*(\\begin\{tikzpicture\}.*?\\end\{tikzpicture\})\}', main, re.S)
+        tikz = mo.group(1)
+        aux = open(f'{PAPER}/main.aux').read()
+        labels = dict(re.findall(r'\\newlabel\{([^}]+)\}\{\{([^}]*)\}', aux))
+        tikz = re.sub(r'\\ref\{([^}]+)\}', lambda x: labels[x.group(1)], tikz)
+        with tempfile.TemporaryDirectory() as td:
+            open(f'{td}/t.tex', 'w').write('\\documentclass[12pt,border=3pt]{standalone}\n\\usepackage{amsmath,amssymb}\n\\usepackage{tikz}\n\\usetikzlibrary{arrows.meta,positioning}\n\\begin{document}\n' + tikz + '\n\\end{document}\n')
+            subprocess.run(['pdflatex', '-interaction=nonstopmode', 't.tex'], cwd=td, check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(['pdftoppm', '-r', '450', '-png', '-singlefile', 't.pdf', 'fig01_overview_schematic'], cwd=td, check=True)
+            shutil.copy(f'{td}/fig01_overview_schematic.png', out)
+        main = main.replace(mo.group(0), '\\includegraphics[width=\\textwidth]{fig01_overview_schematic.png}')
+    else:
+        names = {'arp_calls_vs_gain.png': 'figS1_arp_calls_vs_gain.png', 'E4_imprecision.png': 'figS2_imprecision.png',
+                 'E2_instruments.png': 'figS3_instruments.png', 'overview_equilibria_light.png': 'figS4_equilibria_overview.png',
+                 'dip_calls_vs_gain.png': 'figS5_dip_calls_vs_gain.png', 'theory_absorption.png': 'figS6_theory_absorption.png',
+                 'theory_D2.png': 'figS7_theory_d2.png'}
     # figures
-    names = {'arp_calls_vs_gain.png': 'fig02_arp_calls_vs_gain.png', 'E4_imprecision.png': 'fig03_imprecision.png',
-             'E2_instruments.png': 'fig04_instruments.png', 'overview_equilibria_light.png': 'fig05_equilibria_overview.png',
-             'dip_calls_vs_gain.png': 'fig06_dip_calls_vs_gain.png', 'theory_absorption.png': 'fig07_theory_absorption.png',
-             'theory_D2.png': 'fig08_theory_d2.png'}
     for old, new in names.items():
         assert '{%s}' % old in main, old
         main = main.replace('{%s}' % old, '{%s}' % new)
         src = os.path.join(hires, old)
         if not os.path.exists(src): src = os.path.join(REPO, 'figures', old)
         shutil.copy(src, f'{out}/{new}')
-    open(f'{out}/main.tex', 'w').write(main + '\n')
+    assert '../figures' not in main and 'graphicspath' not in main
+    open(f'{out}/{doc}.tex', 'w').write(main + '\n')
 
 if __name__ == '__main__':
-    build(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
+    build(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else 'main', sys.argv[4] if len(sys.argv) > 4 else None)
