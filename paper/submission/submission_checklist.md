@@ -5,7 +5,7 @@
 **System:** https://submit.elsevier.com/OMEGA
 **Deadline:** 31 August 2027
 **Guest Editors:** Kai Pan (lead), Ilke Bakir, Hao Fu, Jorge A. Sefair, Duygu Tas, Ming Zhao
-**Manuscript:** `paper/main.tex` (class `elsarticle`, preprint, 12 pt), compiled `paper/main.pdf`: 69 pages in all; main text through the conclusion pp. 1-35; references pp. 36-43; appendices A-G pp. 44-69.
+**Manuscript (resubmission, OMEGA-D-26-03236):** `paper/main.tex` (class `elsarticle`, preprint, 11 pt, A4, single column, 1.5 line spacing via `setspace`, no line numbers), compiled `paper/main.pdf`: 34 pages including abstract, figures, tables and references; Supplementary Material `paper/supplement.tex`, 50 pages. The upload package is in `paper/submission/ready/` (see its README).
 
 ## 1. Files for upload
 
@@ -37,7 +37,7 @@
 | Reference style | the manuscript uses `elsarticle-num-names` (numbered, author names in the text via natbib). `\citep` and `\citet` are already used throughout, so switching to an author-year style needs only the `.bst` file (and the class option) if Omega requires it. Check the current Guide for Authors |
 | Reference accuracy | all DOIs were checked against Crossref (see `REWRITE_NOTES.md`); not in Crossref and not re-verified: Buchanan 1969, Barnett 1980, Chvatal 1973, the ICML papers. Four neighbours were read from reference lists or abstracts only (Section 9) |
 | Figure resolution | the figures are PNG rasters: effective resolution at printed size is about 220-320 dpi (E2 instruments about 220, E4 imprecision about 250, ARP calls about 250, DIP calls and equilibria map about 315). Figure 1 is vector (TikZ). Elsevier asks for at least 300 dpi for halftones and 1000 dpi for line art in production; regenerate the plots as PDF or EPS from the plotting scripts before acceptance. This is not a barrier at first submission |
-| Length | no page limit is known for Omega; the main text is about 34.6 pages at 12 pt single column, with appendices A-G as supporting material. The author may wish to offer the appendices as online supplementary material |
+| Length | Omega limit: 35 pages including abstract, figures, tables, main text and references. The main manuscript has 34; long proofs, extended data descriptions, full tables and further experiments are in the separate Supplementary Material |
 | Template line | the class prints "Preprint submitted to Elsevier" on page 1; fine for review, remove or change when the final template is used |
 | Anonymity | Omega uses single-anonymised review as a rule (check the Guide); the manuscript carries the author's name and a GitHub link containing the user name |
 
