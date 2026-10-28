@@ -668,7 +668,7 @@ DIP was run with the exact oracle on all nine cities, seeds 0--8 or 0--9 (Table~
 
 \paragraph{Gain and cost, seeds 0--2} In the same three full-grid cities, three seeds give \DipFullGainMin--\DipFullGainMax\% of the grid's gain with \DipFullCallsMin--\DipFullCallsMax\% of its calls (\DipCallsFullMin--\DipCallsFullMax{} calls against \GridCallsFullMin--\GridCallsFullMax). In \DipNoGainCities{} no charge improves on the unpriced equilibrium.
 
-\paragraph{Equilibrium certificate, seeds 0--2} In all \DipRuns{} runs the cutting-plane loop ended with charges under which the target is an exact pure equilibrium (fresh-oracle regret at most \DipRegretMax{} USD). The tangent charge alone sufficed in \DipTangentN. The uniform subsidy is \DipSubsMin--\DipSubsMax{} of the fee, and the zone charges follow the competitor-count rule of Proposition~\ref{prop:uniform}.
+\paragraph{Equilibrium check, seeds 0--2} In all \DipRuns{} runs the cutting-plane loop ended with charges under which the target is an exact pure equilibrium (fresh-oracle regret at most \DipRegretMax{} USD). The tangent charge alone sufficed in \DipTangentN. The uniform subsidy is \DipSubsMin--\DipSubsMax{} of the fee, and the zone charges follow the competitor-count rule of Proposition~\ref{prop:uniform}.
 
 \paragraph{Qualifiers, cost} The per-run detail for seeds 0--2 is in Table~\ref{tab:dip} and Figure~\ref{fig:dip} (Appendix~F). Against the reduced exact grids, DIP uses more than 10\% of their calls in most runs (\DipRedCalls).
 
