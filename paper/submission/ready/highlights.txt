@@ -1,0 +1,5 @@
+Exact robust best responses for carriers under probability-box travel times
+City charges from best-response cuts, without a grid of equilibrium solves
+Aggregate-response pricing sets charges from observed zone totals alone
+Pure equilibria exist under exposure congestion; existence is NP-complete otherwise
+Policy directions hold across carrier criteria; levels of gains and PoA do not
