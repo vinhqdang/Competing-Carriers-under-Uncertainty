@@ -3,7 +3,7 @@ Professor Kai Pan (lead), Professor Ilke Bakir, Professor Hao Fu, Professor Jorg
 
 **Article type:** VSI: Omega55: Smart Cities
 **Submission system:** Editorial Manager, https://submit.elsevier.com/OMEGA
-**Date:** [insert at submission]
+**Date:** 29 October 2026
 
 **Resubmission of a previously rejected paper:** this submission is based on the paper previously submitted as **OMEGA-D-26-03236**, whose decision was "reject & resubmit".
 
