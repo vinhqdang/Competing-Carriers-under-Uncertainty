@@ -25,3 +25,9 @@
 - Main manuscript: 34 pages including abstract, figures, tables and references (previously 70; limit 35); `elsarticle` preprint, A4, single column, 11 pt, 1.5 line spacing, no line numbers. Reference list reduced from 109 to the 58 works cited in the main text.
 - Supplementary Material (`paper/supplement.tex`, separate PDF and single-file zip): 50 pages, single line spacing. Holds the full model, complete theorem statements, all proofs, the extended data description and parameter tables, extended results and per-city tables, the ZMC negative result, criterion-robustness and BRL benchmark details, and the Lean description. The main text cites it as "Supplementary Material, Section S1" to "S12".
 - Uploads: `manuscript_anonymous.pdf`, `anonymous_upload.zip`, `supplement.pdf`, `supplement_upload.zip`, title page, cover letter (states the previous manuscript number and decision and gives the point-by-point response), highlights, CRediT, declaration of interest, graphical abstract.
+
+## Resubmission (2026-10-29)
+- Resubmitted to Omega, special issue "Data-Driven Optimization for Smart Cities"; based on rejected OMEGA-D-26-03236 (decision "reject & resubmit").
+- Package: 34-page main manuscript (A4, 11pt, 1.5 spacing, single column), 50-page Supplementary Material, cover letter dated 29 October 2026.
+- New manuscript number: NOT YET RECORDED (author has not supplied it); add here.
+- Open: supplement is single-spaced; confirm with the editorial office whether 1.5 spacing applies to it. Abstract is about 252 words.
