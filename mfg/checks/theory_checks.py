@@ -399,6 +399,39 @@ def check_time_of_day_corner():
     return float(cost.max()), float(xs[cost.argmax()])
 
 
+def check_toll_separable_and_welfare_any_charge():
+    """Theorem 12(b): zone-separable carriers: 0 <= u_W* - u_N* <= kappa * max_i q~_i^N per coordinate.
+    Theorem 13(a): SW* - SW(y^W(v)) <= <v - kappa Q*, Q* - Q> - 1/2 ||Q - Q*||_b^2 for any charge v.
+    Theorem 13(c): |SW(y^N(u)) - SW(y^W(u))| bound."""
+    worst_t, worst_a, worst_c = np.inf, np.inf, np.inf
+    for _ in range(60):
+        N, d = int(RNG.integers(1, 8)), int(RNG.integers(1, 4))
+        bl, _ = rand_game(RNG, N, d, sep=True)
+        b, kap = RNG.uniform(0.2, 1.0, d), RNG.uniform(0.1, 1.5, d)
+        m = b + kap
+        tN = solve(bl, m, mc=m + kap, own=True)
+        tW = solve(bl, m, mc=m + kap, own=False)
+        diff = kap * tW.Q - kap * tN.Q
+        # the separable blocks of rand_game(sep=True) are one block per (carrier, coordinate)
+        qmax = np.max(np.array([a for a in tN.a]), axis=0)
+        worst_t = min(worst_t, float(np.min(diff)) + 1e-7, float(np.min(kap * qmax - diff)) + 1e-7)
+
+        def SW(sol):
+            return sum(float(B.p @ yb) for B, yb in zip(bl, sol.y)) - 0.5 * float(sol.Q @ ((m + kap) * sol.Q))
+        so = solve(bl, m, mc=m + kap, own=False)
+        v = RNG.uniform(0, 2, d)
+        yv = solve(bl, m, own=False, u=v)
+        dQ = yv.Q - so.Q
+        rhs = float((v - kap * so.Q) @ (so.Q - yv.Q)) - 0.5 * float(dQ @ (b * dQ))
+        worst_a = min(worst_a, rhs - (SW(so) - SW(yv)) + 1e-6)
+        yN = solve(bl, m, own=True, u=v)
+        mid = 0.5 * (yN.Q + yv.Q)
+        bnd = 0.5 * sum(float(a @ (m * a)) for a in yv.a) + \
+            np.sqrt(np.sum(kap * (yN.Q - yv.Q) ** 2)) * np.sqrt(np.sum(kap * (mid - v / kap) ** 2))
+        worst_c = min(worst_c, bnd - abs(SW(yN) - SW(yv)) + 1e-6)
+    return worst_t, worst_a, worst_c
+
+
 def main():
     out = []
 
@@ -428,6 +461,9 @@ def main():
     wc, wf, wt, ww = check_leader()
     p(f"Prop 11  ARP contraction (N and W): min slack {wc:.2e};  fixed-point residual {wf:.2e}")
     p(f"Thm 12   toll gap <= eps/(1-rho): min slack {wt:.2e};  Thm 13(b) welfare bound: min slack {ww:.2e}")
+    w1, w2, w3 = check_toll_separable_and_welfare_any_charge()
+    p(f"Thm 12(b) separable charge gap: min slack {w1:.2e}; Thm 13(a) any charge: min slack {w2:.2e};"
+      f" Thm 13(c): min slack {w3:.2e}")
     wp, wg = check_gamma()
     p(f"Prop 15  Gamma-maximin prox bound: min slack {wp:.2e}; welfare of ARP under Gamma: min slack {wg:.2e}")
     det, r1, r2, ee = check_d2()

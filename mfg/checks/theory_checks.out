@@ -15,6 +15,7 @@ Prop 9   affine replica bound: min slack 3.84e-05
 Thm 4(b) lumpy pure equilibria, multi-zone (287 equilibria): min slack 1.52e-01
 Prop 11  ARP contraction (N and W): min slack 1.83e-01;  fixed-point residual 1.43e-11
 Thm 12   toll gap <= eps/(1-rho): min slack 7.94e-02;  Thm 13(b) welfare bound: min slack 1.88e-01
-Prop 15  Gamma-maximin prox bound: min slack 1.74e-03; welfare of ARP under Gamma: min slack 1.00e-06
-Prop 18  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max 1.07e-14; rank one symmetrisable & PSD: True; rank two not symmetrisable: True; rank-one potential maximiser equilibrium error (grid) 3.33e-03
+Thm 12(b) separable charge gap: min slack 1.00e-07; Thm 13(a) any charge: min slack 1.00e-06; Thm 13(c): min slack 1.54e-02
+Prop 15  Gamma-maximin prox bound: min slack 1.00e-06; welfare of ARP under Gamma: min slack 1.00e-06
+Prop 18  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max 7.11e-15; rank one symmetrisable & PSD: True; rank two not symmetrisable: True; rank-one potential maximiser equilibrium error (grid) 3.33e-03
 Prop 17  time-of-day: worst-case cost 3.999 attained at travel time 0.999 (the slowest law, T = 2, costs only 2)

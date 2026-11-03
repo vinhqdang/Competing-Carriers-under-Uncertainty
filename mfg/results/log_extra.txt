@@ -1,0 +1,7 @@
+gamma NewDelhi 0
+gamma Moscow 0
+gamma BuenosAires 0
+gamma Cairo 0
+gamma Bombay 0
+gamma NewYork 0
+gamma London 0
