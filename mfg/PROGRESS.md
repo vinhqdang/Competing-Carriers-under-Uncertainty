@@ -32,5 +32,22 @@ Gamma-maximin surcharge and the belief-width scaling; (5) venue left to the auth
 ## Step 6: draft (done)
 - paper/main.tex (elsarticle, 11pt) -> paper/main.pdf, 22 pages, compiles with pdflatex + bibtex.
 
+## Step 7: stakeholder analysis (done)
+- Code: src/mfgcc/stake.py (welfare decomposition CS + Pi + R = SW, charge rules, exposure), tests/test_stake.py (21 tests in total pass
+  together with test_mfg.py: `python3 -m pytest mfg/tests -q`).
+- Experiments (resumable): run_stake.py (stake.csv: 9 cities x 5 seeds x 9 sizes x rules none/obs/pm/opt; KSCALE=10 -> stake_k10.csv),
+  run_ident.py (ident.csv, identical carriers), run_uniform.py (uniform.csv, misspec.csv, about 1 h on 4 cores), then
+  `PYTHONPATH=mfg/src python3 mfg/experiments/analyze_stake.py` (summary_stake_*.csv, figures/mfg_stake_*.png, paper/numbers_stake.tex).
+- Paper: paper/stake.tex (Section 11 'Who gains and who loses', Proposition 20, Tables 2-3, Figures 7-8); main.pdf 27 pages.
+- Results (medians): N=6 market-power rule: welfare +19.6%, consumer surplus +69%, carrier net profit +132%, revenue -182% of no-charge
+  welfare (subsidy); observation-only: welfare -0.5%, CS -1.0%. N=1536: both rules raise about 3% of welfare as revenue, CS -1.1 to -1.6%,
+  carrier profit -0.1% of welfare (about -8% of their profit). Exposure Gini unchanged by charges at N=1536 (0.080); exposure share moves
+  away from dense zones (Spearman -0.56). Best single city-wide charge: loss 3.41% vs 1.08% (zone-hour) vs 17.66% (none) at N=6; captures
+  78% of the mean-field gain. Mis-specified charge (+-10, +-25%): bound holds 180/180, measured 0.2-0.98 of bound, losses <= 0.04%.
+- Proposition 20 (u*_N = (kappa - m/N) Q_opt for identical carriers) holds exactly (error <= 5e-9 in 324 instances). The Cournot ratio
+  N/(N+1) holds only where the fleet budget is slack (6 of 9 cities).
+- Weak or negative: calibrated congestion is small (3.6% of welfare), so exposure and its inequality barely move; the efficient charge at
+  small N is a large subsidy (budget neutral only for large N); the 'pm' rule does not reach the optimum with several carrier types (1.1% loss at N=6).
+
 ## Open items for the author
 See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".

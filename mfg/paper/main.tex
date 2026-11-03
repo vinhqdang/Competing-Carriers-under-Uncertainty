@@ -12,6 +12,7 @@
 
 \input{../theory/macros.tex}
 \input{numbers.tex}
+\input{numbers_stake.tex}
 \graphicspath{{../figures/}}
 
 \theoremstyle{plain}
@@ -157,10 +158,15 @@ The negative result is the leader gain. With few carriers the observation-only c
 \paragraph{E6: cost} The replica reduction makes the Nash equilibrium for $N=1536$ as cheap as for $N=6$ (well under a second per program). Heterogeneous splits grow with $N$: at $N=96$ one interior-point solve took up to 90 seconds (Wardrop, whose solution set in the individual variables is not a singleton) and about 20 seconds (Nash). Plain Frank--Wolfe is slow: within 3000 rounds it reached a relative duality gap of $10^{-4}$ in \FWReached{} runs, and its relative gap after 3000 rounds was between \FWGapMin\% and \FWGapMax\% of the potential (Figure~\ref{fig:cost} in the appendix). It is adequate as a model of how a decentralised market adjusts, not as a solver for the precision that the rate study needs; all reported equilibria come from the interior-point method.
 
 %======================================================================
+\input{stake.tex}
+
+%======================================================================
 \section{Discussion}\label{sec:discussion}
 
 \paragraph{What is proved, what is numerically supported, what is open}
-Proved, with complete proofs here: Lemmas~\ref{lem:lin}--\ref{lem:rep}, Theorems~\ref{thm:sqrt}, \ref{thm:sep}, \ref{thm:rep}, \ref{thm:toll}, \ref{thm:welfare}, Propositions~\ref{prop:tight}, \ref{prop:common}, \ref{prop:affine}, \ref{prop:arp}, \ref{prop:gamma}, \ref{prop:tod}, \ref{prop:d2} and Corollaries~\ref{cor:poa}, \ref{cor:width}. Theorem~\ref{thm:rep} rests on \citet{Robinson1981}, Proposition~\ref{prop:gamma}(a) and Corollary~\ref{cor:width} on the Omega paper, and Proposition~\ref{prop:arp}(a) restates the Omega contraction theorem. Every bound was also checked by brute force on small random games (Appendix~\ref{app:checks}). Numerically supported only: that the city instances behave like $O(s_N)$ with a constant near one, and that heterogeneous splits do too. Open: an explicit constant for replicas in the polyhedral case, and Conjecture~\ref{conj:d2}.
+Proved, with complete proofs here: Lemmas~\ref{lem:lin}--\ref{lem:rep}, Theorems~\ref{thm:sqrt}, \ref{thm:sep}, \ref{thm:rep}, \ref{thm:toll}, \ref{thm:welfare}, Propositions~\ref{prop:tight}, \ref{prop:common}, \ref{prop:affine}, \ref{prop:arp}, \ref{prop:gamma}, \ref{prop:tod}, \ref{prop:marketpower}, \ref{prop:d2} and Corollaries~\ref{cor:poa}, \ref{cor:width}. Theorem~\ref{thm:rep} rests on \citet{Robinson1981}, Proposition~\ref{prop:gamma}(a) and Corollary~\ref{cor:width} on the Omega paper, and Proposition~\ref{prop:arp}(a) restates the Omega contraction theorem. Every bound was also checked by brute force on small random games (Appendix~\ref{app:checks}). Numerically supported only: that the city instances behave like $O(s_N)$ with a constant near one, and that heterogeneous splits do too. Open: an explicit constant for replicas in the polyhedral case, and Conjecture~\ref{conj:d2}.
+
+\paragraph{Who gains and who loses} Section~\ref{sec:stake} splits welfare into carrier profit, consumer surplus, congestion cost and charge revenue. With few carriers the efficient charge is a subsidy that residents (as buyers) and carriers welcome and the council pays for; with many carriers all rules converge to the Pigou charge, which raises a few per cent of welfare and falls on consumers and, in proportion, on carrier profit. The congestion burden for residents is small in the calibration, so the distributional findings are mostly about market power and pass-through.
 
 \paragraph{What the results mean for a city} With many small carriers, a city can set congestion charges from observed zone-hour totals and approach the marginal-cost charge; welfare converges at rate $O(\bar s)$ regardless of how carriers' tours couple zones. With few carriers this rule is harmful, and the market-power correction of the Omega rule is needed. Cautious carriers make an observation-only city over-charge by about their caution margin; the welfare cost is second order.
 

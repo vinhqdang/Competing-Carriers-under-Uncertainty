@@ -187,6 +187,7 @@ Decisions taken with the memo's defaults: (1) mean-field agent = small multi-sto
 | Prop 17 | time-dependent charges can break the slow-corner property of p-boxes | proved (example) |
 | Prop 18 | D2 limit: existence; weighted potential iff dwell times rank one; unweighted operator indefinite | proved |
 | Conj 19 | D2 rank >= 2: multiplicity, PPAD-hardness | conjecture, not checked |
+| Prop 20 | N identical carriers: optimal charge = Pigou minus (1/N) m Q^opt (subsidy for N < m/kappa) | proved; checked to 5e-9 on 324 city instances |
 
 Every inequality was also checked by brute force on small random games (`mfg/checks/theory_checks.out`, all slacks nonnegative). Lean (`mfg/lean`, `lake build` passes, no sorry) checks the algebraic cores listed in `mfg/lean/README.md`.
 
@@ -202,6 +203,7 @@ Every inequality was also checked by brute force on small random games (`mfg/che
 | hourly profile (amplitudes 0-1.5) | weak effect: PoA at N = 6 between 20.7% and 21.8%, slopes -0.86 to -0.90; conclusions are not artefacts of the profile, but the profile is stylised |
 | Gamma-maximin | aggregate shift <= 0.97 of the bound; ARP under cautious carriers loses 1.2% (delta = 1 lot) to 11.9% (delta = 4 lots) of welfare, within the bound in 675/675 |
 | width scaling (weak result) | the uniform absorption width falls from 481 to 0.7 times a zone-hour's mean demand between N = 6 and N = 24576: not a practically small width |
+| stakeholder split (new) | Welfare = carrier profit + consumer surplus + congestion cost + revenue (exact). N=6: market-power rule +19.6% welfare, CS +69%, carriers +132%, revenue -182% (city pays); observation-only -0.5%. N=1536: revenue +3%, CS -1.1%, carrier profit -8%. Exposure Gini unchanged by charges (0.080), traffic share moves away from dense zones (rho -0.56); best single city-wide charge loses 3.41% vs 1.08% (zone-hour) at N=6; +-25% charge error costs <= 0.04% (bound held 180/180). Congestion is 3.6% of welfare: residents' burden is small (weak result) |
 | solver | replica reduction makes N = 1536 as cheap as N = 6; plain Frank-Wolfe did not reach 1e-4 relative gap in 3000 rounds (0.3-1.3%); interior point used for all results |
 
 **Honest novelty assessment.** The new pieces, to our reading of the literature listed in Section 2: the tightness family (no lower bound for the Nash-Wardrop distance was found in Paccagnan et al. 2019, Jacquot-Wan 2018 or Haurie-Marcotte 1985), the sharp constant-one zone-separable theorem (short and elementary), the exact identity for the finite-market observation-only charge and the instance-free O(s) welfare bound. Potentials, uniqueness, marginal-cost tolls, MDP congestion games, the contraction of the observation-only rule (Omega paper) and robust-MFG existence are known and are used as such. Paccagnan et al. (Thm 1(1)-(2)) already give O(1/N) under strong monotonicity in individual strategies; our replica results matter only because routing plans with linear costs lack it. The full texts of Gomes-Mohr-Souza (2013) and Cominetti et al. (2023) were still not read.
