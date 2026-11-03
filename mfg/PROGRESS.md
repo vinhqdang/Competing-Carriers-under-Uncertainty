@@ -33,7 +33,7 @@ Gamma-maximin surcharge and the belief-width scaling; (5) venue left to the auth
 - paper/main.tex (elsarticle, 11pt) -> paper/main.pdf, 22 pages, compiles with pdflatex + bibtex.
 
 ## Step 7: stakeholder analysis (done)
-- Code: src/mfgcc/stake.py (welfare decomposition CS + Pi + R = SW, charge rules, exposure), tests/test_stake.py (21 tests in total pass
+- Code: src/mfgcc/stake.py (welfare decomposition CS + Pi + R = SW, charge rules, exposure), tests/test_stake.py (16 tests in total pass
   together with test_mfg.py: `python3 -m pytest mfg/tests -q`).
 - Experiments (resumable): run_stake.py (stake.csv: 9 cities x 5 seeds x 9 sizes x rules none/obs/pm/opt; KSCALE=10 -> stake_k10.csv),
   run_ident.py (ident.csv, identical carriers), run_uniform.py (uniform.csv, misspec.csv, about 1 h on 4 cores), then
