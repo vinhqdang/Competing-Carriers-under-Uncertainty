@@ -1,0 +1,26 @@
+check 1  symmetric closed form  max|Q^N - N/(N+1) Q^W| = 2.22e-16
+check 2  one zone, 200 random instances: max |Q^N-Q^W|/s = 0.6509  (bound 1)
+check 3  multi-zone with cross-zone capacity budget, max over instances of max_z|dQ_z|/s
+   N    Z  heterogeneous  replicated(T=2)  solver-accuracy/s
+    2    3        0.3331          0.3566           3.9e-08
+    4    3        0.4532          0.5363           6.4e-07
+    8    3        0.5481          0.5820           2.3e-06
+   16    3        0.5445          0.7517           5.4e-06
+   32    3        0.5376          1.0156           1.1e-05
+   64    3        0.6003          1.0940           2.6e-05
+    2    8        0.1991          0.2784           1.8e-07
+    4    8        0.3448          0.4533           4.4e-07
+    8    8        0.4039          0.6013           1.3e-06
+   16    8        0.4975          0.6347           2.5e-06
+   32    8        0.4904          0.9277           2.9e-05
+   64    8        0.5844          0.7085           1.6e-04
+check 3c exact replicas (Z=3, T=2), ratio max_z|dQ_z|/s for N = 4, 16, 64, 256 (fixed instance per row)
+   instance 0 0.448 0.204 0.104 0.106
+   instance 1 0.366 0.488 0.532 0.545
+   instance 2 0.306 0.408 0.445 0.456
+   instance 3 0.155 0.206 0.225 0.230
+   instance 4 0.287 0.414 0.452 0.462
+   instance 5 0.320 0.427 0.466 0.477
+check 3b adversarial random search (3000 small instances, unequal caps): max ratio = 0.5767
+check 4  D2 two types h=[0.5 2. ]: eig(sym part)=[-0.208  2.708]  -> not monotone; after per-type weight 1/h: eig=[0.   4.25] -> PSD (weighted potential)
+         dwell matrix rank 2 across (type, zone): no single per-type weight symmetrises both zones; potential argument fails (non-monotone coupling possible)
