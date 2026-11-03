@@ -5,3 +5,80 @@ gamma Cairo 0
 gamma Bombay 0
 gamma NewYork 0
 gamma London 0
+gamma NewDelhi 1
+gamma Berlin 0
+gamma Paris 0
+gamma Moscow 1
+gamma BuenosAires 1
+gamma Cairo 1
+gamma Bombay 1
+gamma NewYork 1
+gamma London 1
+gamma NewDelhi 2
+gamma Paris 1
+gamma Berlin 1
+gamma Moscow 2
+gamma BuenosAires 2
+gamma Cairo 2
+gamma Bombay 2
+gamma NewYork 2
+gamma London 2
+gamma Paris 2
+gamma Berlin 2
+width done
+paths done
+flat NewDelhi 0 1.0
+flat Moscow 0 1.0
+flat BuenosAires 0 1.0
+flat Cairo 0 1.0
+flat NewYork 0 1.0
+flat London 0 1.0
+flat Bombay 0 1.0
+flat NewDelhi 1 1.0
+flat Paris 0 1.0
+flat Berlin 0 1.0
+flat Moscow 1 1.0
+flat BuenosAires 1 1.0
+flat Cairo 1 1.0
+flat Bombay 1 1.0
+flat NewYork 1 1.0
+flat London 1 1.0
+flat Paris 1 1.0
+flat NewDelhi 2 1.0
+flat Berlin 1 1.0
+flat Moscow 2 1.0
+flat BuenosAires 2 1.0
+flat Cairo 2 1.0
+flat Bombay 2 1.0
+flat London 2 1.0
+flat NewYork 2 1.0
+flat NewDelhi 0 10.0
+flat Paris 2 1.0
+flat Berlin 2 1.0
+flat Moscow 0 10.0
+flat BuenosAires 0 10.0
+flat Cairo 0 10.0
+flat Bombay 0 10.0
+flat NewYork 0 10.0
+flat London 0 10.0
+flat NewDelhi 1 10.0
+flat Berlin 0 10.0
+flat Paris 0 10.0
+flat Moscow 1 10.0
+flat Cairo 1 10.0
+flat BuenosAires 1 10.0
+flat Bombay 1 10.0
+flat London 1 10.0
+flat NewYork 1 10.0
+flat Paris 1 10.0
+flat NewDelhi 2 10.0
+flat Berlin 1 10.0
+flat Moscow 2 10.0
+flat BuenosAires 2 10.0
+flat Cairo 2 10.0
+flat NewYork 2 10.0
+flat Bombay 2 10.0
+flat London 2 10.0
+flat Berlin 2 10.0
+flat Paris 2 10.0
+cost done

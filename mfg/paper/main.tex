@@ -1,6 +1,7 @@
 \documentclass[preprint,11pt,authoryear]{elsarticle}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs}
 \usepackage{graphicx}
@@ -65,7 +66,7 @@ This paper asks what remains of that picture when the carriers are small. When e
 
 \paragraph{Nash to Wardrop} \citet{HaurieMarcotte1985} showed that Nash--Cournot equilibria of routing games converge to Wardrop equilibria as players split into replicas, with a bound of the same square-root order as \citet[Thm.~1(3)]{Paccagnan2019}, who proved $\norm{\sigma(x^\Nash)-\sigma(x^\War)}\le(2RL_2/(\alpha M))^{1/2}$ for aggregative games with coupling constraints, and $O(1/M)$ bounds when the Nash or Wardrop operator is strongly monotone in the individual strategies (their Thm.~1(1)--(2)). \citet{JacquotWan2018} bound the squared distance on parallel networks linearly in the largest class mass, again a square-root rate for the distance. \citet{Cominetti2023} study unsplittable atomic games and their Poisson limits. To our reading, no lower bound showing that the square-root order is attained had been given; Proposition~\ref{prop:tight} provides one, for linear profits where strong monotonicity in individual strategies fails. Theorem~\ref{thm:sep} (constant one, sharp) and Theorem~\ref{thm:welfare}(b) (uniform $O(\bar s)$ welfare) are, as far as we found, not in print; both are short.
 
-\paragraph{Mean-field games on networks and tolls} Existence and uniqueness of potential congestion MFGs on graphs are known \citep{Gueant2015,Gomes2010}; MDP congestion games and their Wardrop equilibria are due to \citet{CalderoneSastry2017}; tolls that enforce constraints in MDP congestion games, including adaptive tolls with unknown costs on real ride-hail data, are in \citet{Li2019,Li2023}; marginal-cost tolls go back to \citet{Beckmann1956} and trial-and-error implementation to \citet{Yang2004}. \citet{Cabannes2021} solve $N$-player dynamic routing games through their mean-field limit and observe accuracy beyond a few dozen vehicles, without a theorem on the gap or prices. Stackelberg MFGs are studied by \citet{Aurell2022} and pricing with a continuum of congested followers by \citet{HarksSchedel2024}. Our leader results reuse these mechanisms; what is new is the exact identity for the finite-market fixed point and the instance-free welfare rate. Cournot MFGs \citep{ChanSircar2015} and ride-hailing MFGs \citep{LiDimakis2025} have no congestion network or tolls; robust MFG existence is known \citep{Langner2024}, and we use only the $\Gamma$-maximin surcharge. Solvers for potential MFGs (fictitious play, conditional gradient, mirror descent) exist \citep{CardaliaguetHadikhanloo2017,LavignePfeiffer2023,Perolat2022}; we reuse conditional gradient and do not claim a new solver.
+\paragraph{Mean-field games on networks and tolls} Existence and uniqueness of potential congestion MFGs on graphs are known \citep{Gueant2015,Gomes2010}; MDP congestion games and their Wardrop equilibria are due to \citet{CalderoneSastry2017}; tolls that enforce constraints in MDP congestion games, including adaptive tolls with unknown costs on real ride-hail data, are in \citet{Li2019,Li2023}; marginal-cost tolls go back to \citet{Beckmann1956} and trial-and-error implementation to \citet{Yang2004}. \citet{Cabannes2021} solve $N$-player dynamic routing games through their mean-field limit and observe accuracy beyond a few dozen vehicles, without a theorem on the gap or prices. Stackelberg MFGs are studied by \citet{Aurell2022} and pricing with a continuum of congested followers by \citet{HarksSchedel2024}. Our leader results reuse these mechanisms; what is new is the exact identity for the finite-market fixed point and the instance-free welfare rate. Cournot MFGs \citep{ChanSircar2015} and ride-hailing MFGs \citep{LiDimakis2025} have no congestion network or tolls; robust MFG existence is known \citep{Langner2024}, and we use only the $\Gamma$-maximin surcharge. Solvers for potential MFGs (fictitious play, conditional gradient, mirror descent) exist \citep{CardaliaguetHadikhanloo2017,LavignePfeiffer2023,Perolat2022}; we reuse conditional gradient as the model of decentralised adjustment.
 
 %======================================================================
 \input{../theory/model.tex}
@@ -95,15 +96,9 @@ This paper asks what remains of that picture when the carriers are small. When e
 \paragraph{The hourly profile is an assumption} The congestion level $\mathrm{cong}(h)$ is the TomTom all-day value with two Gaussian rush-hour bumps (width one hour) centred at 08:30 and 17:30 whose heights reproduce the TomTom morning and evening peak values of each city (anchors graded A; the shape graded C; Moscow's peaks, absent from the index, imputed from the other cities' ratios, graded C). The demand share $\psi(h)$ has a late-afternoon bump of $+60\%$ and a late-morning bump of $+30\%$, normalised to mean one (graded C; no data). An amplitude parameter scales all deviations from a flat profile (amplitude zero is the static model split into ten equal hours). Results that depend on the profile are reported as sensitivity analyses over the amplitudes $0$, $0.5$, $1$ and $1.5$, and nothing in the paper relies on the profile being realistic.
 
 \begin{table}[t]
-\centering\small
+\centering\footnotesize\setlength{\tabcolsep}{3.5pt}
 \caption{Replica study per city (amplitude 1, five seeds). $d$: active zone-hours; $\varrho=\max\kappa/m$; slope: log-log slope of $\norm{Q^\Nash-Q^\War}_m$ in $N$ for $N\ge24$, mean over seeds with 95\% $t$-interval; ratio: $\max_k|\Delta Q_k|/s_N$ with $s_N$ the largest Nash delivery of one carrier at one zone-hour, median and maximum over $N$ and seeds; PoA$-1$ in \% of optimal welfare at $N=6$ and in the limit; charge gap $\norm{u^*_\Nash-u^*_\War}_{\kappa^{-1}}/\norm{u^*_\War}_{\kappa^{-1}}$ at $N=6$ and $N=1536$.}\label{tab:cities}
-\begin{tabular}{lrrlrrrrrr}
-\toprule
-City & $d$ & $\varrho$ & slope [95\% CI] & ratio med & ratio max & PoA$_6$ & PoA$_\infty$ & charge$_6$ & charge$_{1536}$\\
-\midrule
 \input{table_cities.tex}
-\bottomrule
-\end{tabular}
 \end{table}
 
 %======================================================================
@@ -143,7 +138,7 @@ The negative result is the leader gain. With few carriers the observation-only c
 \caption{Sensitivity to the amplitude of the stylised hourly profile (three seeds). Left: PoA$-1$ at $N=6$. Right: gap slopes with 95\% intervals.}\label{fig:profile}
 \end{figure}
 
-\paragraph{E4: cautious carriers and the belief width} With the belief box in units of the median lot, the mean-field aggregate moves by at most \GamDevMax{} of the bound $\delta\norm w_m$ of Proposition~\ref{prop:gamma}(b) (median \GamDevMed). The observation-only charge under cautious carriers loses \GamLossOneMed\% of optimal welfare at $\delta=1$ and \GamLossFourMed\% at $\delta=4$ (median), within the bound of Proposition~\ref{prop:gamma}(d) in \GamLossOK{} cases (median ratio \GamLossRatioMed); the charge shift satisfied part (c) in \GamTollOK{} cases (Figure~\ref{fig:gamma}). The absorption width of Corollary~\ref{cor:width}, relative to the mean demand of a zone-hour, falls from \WidthSixMed{} at $N=6$ to \WidthBigMed{} at $N=24576$; with $d$ between \Dmin{} and \Dmax{} active zone-hours the $N$-free terms bind only beyond a few hundred carriers.
+\paragraph{E4: cautious carriers and the belief width} With the belief box in units of the median lot, the mean-field aggregate moves by at most \GamDevMax{} of the bound $\delta\norm w_m$ of Proposition~\ref{prop:gamma}(b) (median \GamDevMed). The observation-only charge under cautious carriers loses \GamLossOneMed\% of optimal welfare at $\delta=1$ and \GamLossFourMed\% at $\delta=4$ (median), within the bound of Proposition~\ref{prop:gamma}(d) in \GamLossOK{} cases (median ratio \GamLossRatioMed); the charge shift satisfied part (c) in \GamTollOK{} cases (Figure~\ref{fig:gamma}). The absorption width of Corollary~\ref{cor:width}, relative to the mean demand of a zone-hour, falls from \WidthSixMed{} at $N=6$ to \WidthBigMed{} at $N=24576$ (Figure~\ref{fig:width} in the appendix); with $d$ between \Dmin{} and \Dmax{} active zone-hours the $N$-free terms bind only beyond a few hundred carriers. This is a weak result: the uniform bound uses the largest delivery a carrier \emph{could} make at one zone-hour (its whole fleet there), and even with twenty-four thousand carriers it remains of the order of a zone-hour's demand, so the absorption theorem does not give a practically small belief width on these instances.
 
 \begin{figure}[t]
 \centering
@@ -151,7 +146,7 @@ The negative result is the leader gain. With few carriers the observation-only c
 \caption{$\Gamma$-maximin carriers ($N=1536$). Left: shift of the mean-field aggregate relative to the bound. Right: welfare loss of the observation-only charge and the bound $\tfrac12\delta^2\norm{m\odot w}^2_{(m+\kappa)^{-1}}$.}\label{fig:gamma}
 \end{figure}
 
-\paragraph{E5: which observation-only rule} Figure~\ref{fig:arp} (right) compares the observation-only Pigou rule with the Omega flat rule $u\leftarrow\kappa Q-m\odot\bar d$, where $\bar d$ is the observed mean delivery per active carrier (damped iteration). At $N=6$ the flat rule gains \FlatSixMed\% (calibrated; \FlatKSixMed\% with congestion $\times10$) where the Pigou rule loses \ObsSixMed\% (\ObsKSixMed\%); at $N=1536$ the flat rule gains \FlatBigMed\% (\FlatKBigMed\%) and its charge is within \FlatKDistBig{} (relative, congestion $\times10$) of the Pigou charge. The subsidy vanishes like the share, so the two rules meet in the limit. The plain rule contracted in every run at a per-round ratio of at most \PathRatioMax{} times $\varrho$ (left panel).
+\paragraph{E5: which observation-only rule} Figure~\ref{fig:arp} (right) compares the observation-only Pigou rule with the Omega flat rule $u\leftarrow\kappa Q-m\odot\bar d$, where $\bar d$ is the observed mean delivery per active carrier (damped iteration). At $N=6$ the flat rule gains \FlatSixMed\% (calibrated; \FlatKSixMed\% with congestion $\times10$) where the Pigou rule loses \ObsSixMed\% (\ObsKSixMed\%); at $N=1536$ the flat rule gains \FlatBigMed\% (\FlatKBigMed\%) and its charge is within \FlatKDistBig{} (relative, congestion $\times10$) of the Pigou charge. The subsidy vanishes like the share, so the two rules meet in the limit. The plain rule contracted in every run at a per-round ratio of at most \PathRatioMax{} times $\varrho$, counting the rounds before the distance reached $10^{-6}$ of its initial value, below which solver accuracy dominates (left panel).
 
 \begin{figure}[t]
 \centering
@@ -159,7 +154,7 @@ The negative result is the leader gain. With few carriers the observation-only c
 \caption{Left: plain observation-only iteration (Nash carriers), distance to the fixed point. Right: welfare gain of the Omega flat rule and of the observation-only Pigou rule against $N$ (median over cities and seeds).}\label{fig:arp}
 \end{figure}
 
-\paragraph{E6: cost} The replica reduction makes the Nash equilibrium for $N=1536$ as cheap as for $N=6$ (well under a second per program). Heterogeneous splits grow with $N$: at $N=96$ one interior-point solve took up to 90 seconds (Wardrop, whose solution set in the individual variables is not a singleton) and about 20 seconds (Nash). Frank--Wolfe needed a median of \FWItersW{} rounds (Wardrop) and \FWItersN{} rounds (Nash) to reach a relative gap of $10^{-4}$ (Figure~\ref{fig:cost} in the appendix).
+\paragraph{E6: cost} The replica reduction makes the Nash equilibrium for $N=1536$ as cheap as for $N=6$ (well under a second per program). Heterogeneous splits grow with $N$: at $N=96$ one interior-point solve took up to 90 seconds (Wardrop, whose solution set in the individual variables is not a singleton) and about 20 seconds (Nash). Plain Frank--Wolfe is slow: within 3000 rounds it reached a relative duality gap of $10^{-4}$ in \FWReached{} runs, and its relative gap after 3000 rounds was between \FWGapMin\% and \FWGapMax\% of the potential (Figure~\ref{fig:cost} in the appendix). It is adequate as a model of how a decentralised market adjusts, not as a solver for the precision that the rate study needs; all reported equilibria come from the interior-point method.
 
 %======================================================================
 \section{Discussion}\label{sec:discussion}
@@ -186,6 +181,12 @@ The script \texttt{mfg/checks/theory\_checks.py} computes, on small random games
 
 \section{Machine-checked cores}\label{app:lean}
 The Lean~4 file \texttt{mfg/lean/MFG/Core.lean} (Mathlib; no \texttt{sorry}; axioms \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only) checks: the symmetric closed form of Theorem~\ref{thm:sep}; the inner-product algebra of Theorem~\ref{thm:sqrt}(a) from the per-carrier optimality inequalities; the revealed-preference and sandwich steps of Theorem~\ref{thm:sep}; the contraction perturbation lemma of Theorem~\ref{thm:toll}; the weighted-norm chain of Proposition~\ref{prop:arp}(a); the algebra of the tightness family (Proposition~\ref{prop:tight}); the welfare inequalities behind Theorem~\ref{thm:welfare}(b) and Proposition~\ref{prop:gamma}(d); the determinant and the weight equivalence of Proposition~\ref{prop:d2}; and the width bound of Corollary~\ref{cor:width}. It does not formalise existence, first-order optimality, Robinson's theorem or the Omega theorems that are used.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\textwidth]{mfg_width.png}
+\caption{Uniform belief width of Corollary~\ref{cor:width} relative to the mean demand of a zone-hour (seed 0).}\label{fig:width}
+\end{figure}
 
 \begin{figure}[h]
 \centering

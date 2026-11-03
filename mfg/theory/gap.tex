@@ -11,7 +11,9 @@ Assume (A1)--(A2).
 \item[(a)] For every Wardrop equilibrium $y^\War$,
 \[
 \norm{\Delta A}_m^2\le\sum_i\ip{a_i^\Nash}{M(a_i^\War-a_i^\Nash)}\le\frac14\sum_i\norm{a_i^\War}_m^2 ,
-\qquad\text{hence}\qquad
+\]
+hence
+\[
 \norm{\Delta A}_m\le\frac12\Big(\sum_i\norm{a_i^\War}_m^2\Big)^{1/2}\le\frac12\big(\bar s\,\ip{m}{A^\War}\big)^{1/2}.
 \]
 \item[(b)] (Lumpy plans.) Let $p$ be a pure Nash equilibrium of the game in which carrier $i$ chooses a plan in the finite set $\cP_i$ (payoff \eqref{eq:payoff} with $a_i=q_i(p_i)$), and let $x^\War$ be a Wardrop equilibrium of its mixed extension (carrier $i$ mixes over $\cP_i$, contributes the mean $\bar a_i$). Then
@@ -103,7 +105,10 @@ The constant of Theorem~\ref{thm:rep} is not explicit. In the smooth interior ca
 \begin{proposition}[Affine interior replicas: explicit constant]\label{prop:affine}
 Let base type $\theta$ choose $t_\theta$ in an open set, deliver $L_\theta t_\theta$ and earn $\ip{c_\theta}{t_\theta}-\tfrac12t_\theta^\top K_\theta t_\theta$ with $K_\theta\succeq0$ (its $n_\theta$-split carriers earn $\ip{c_\theta}{t}-\tfrac{n_\theta}{2}t^\top K_\theta t$). Let $L=[L_\theta]_\theta$, $G=L^\top ML$, $K=\diag(K_\theta)$, $D_n=\diag(L_\theta^\top ML_\theta/n_\theta)$, and suppose $G+K\succ0$ and that both equilibria are interior. Then
 \[
-\norm{A^\Nash-A^\War}_m=\norm{G^{1/2}(G+K+D_n)^{-1}D_nT^\War}_2\le\norm{D_nT^\War}_{(G+K)^{-1}}\le\lambda_{\min}(G+K)^{-1/2}\Big(\sum_\theta\norm{L_\theta^\top Ma_\theta^\War}^2\Big)^{1/2},
+\begin{aligned}
+\norm{A^\Nash-A^\War}_m&=\norm{G^{1/2}(G+K+D_n)^{-1}D_nT^\War}_2\le\norm{D_nT^\War}_{(G+K)^{-1}}\\
+&\le\lambda_{\min}(G+K)^{-1/2}\Big(\sum_\theta\norm{L_\theta^\top Ma_\theta^\War}^2\Big)^{1/2},
+\end{aligned}
 \]
 with $a_\theta^\War=L_\theta T^\War_\theta/n_\theta$ the per-carrier Wardrop delivery of type $\theta$.
 \end{proposition}

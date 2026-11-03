@@ -1,6 +1,6 @@
 # A mean-field direction after the Omega paper: decision memo
 
-Date: 2026-11-03. Status: design only. Nothing under `paper/`, `theory/`, `src/`, `lean/` or the submission folders was changed. The numerical sanity checks are in `mfg/checks/` (script and output file).
+Date: 2026-11-03. Status: design memo, followed by execution of the plan (Section 6 below gives the status after execution). Nothing under `paper/`, `theory/`, `src/`, `lean/` or the submission folders was changed. The numerical sanity checks are in `mfg/checks/` (script and output file).
 
 ## 0. Recommendation in brief
 
@@ -161,6 +161,52 @@ Not Lean-checkable at reasonable cost: existence through Kakutani (I do not know
 None of this proves anything. The checks support the conjecture in B3 and show that its constant is not 1.
 
 Data gaps for the dynamic model: no hourly demand or speed profiles, no counts of gig couriers or fleet mix per city, and no dwell times by vehicle type. The static instances (zones, populations, OSM travel times, POIs) are sufficient for T = 1.
+
+
+## 6. Status after execution of the plan (2026-11-03)
+
+Decisions taken with the memo's defaults: (1) mean-field agent = small multi-stop carriers (tours with up to three stops, fleet budgets); (2) major-minor model left for a later paper; (3) stylised hourly profile, graded (anchors A from TomTom peak values, shape C, Moscow peaks imputed C); (4) imprecise layer limited to the Gamma-maximin surcharge and the width scaling; (5) venue open. All new work is in `mfg/` (code `mfg/src/mfgcc`, tests `mfg/tests`, checks `mfg/checks`, theory `mfg/theory`, Lean `mfg/lean`, results `mfg/results`, figures `mfg/figures`, draft `mfg/paper/main.pdf`). Nothing in `paper/`, `theory/`, `src/ccu`, `lean/` was changed. Theorem numbers refer to `mfg/paper/main.tex`.
+
+**Answer to the open question of Problem B3.** No instance-free O(s) constant exists once carriers' plans couple zones. Proposition 5 gives a two-zone family (two carrier types moving along directions at angle phi_n with 1 - cos phi_n = 1/n, linear profits, bounded data) whose gap is exactly sqrt(1/(8n) + (2n-1)/(8n^3)), i.e. 1/sqrt 2 times the general bound (1/2)(sum_i ||a_i^W||^2)^(1/2) of Theorem 4. The worst-case rate over bounded instances is therefore exactly of order s^(1/2) (the Paccagnan et al. order). For a fixed angle the rate is 1/n with constant 1/sin(phi): O(s) per instance, with a constant governed by the conditioning of the carrier types (Proposition 9: lambda_min(G+K)^(-1/2)). The memo's "C(Z)" guess is refuted for weighted budgets/tours; whether a C(Z) exists for unweighted fleet budgets (unimodular directions) is open.
+
+| Result | Statement (short) | Status |
+|---|---|---|
+| Lemma 1-3 | linearisation; potentials and uniqueness; Nash = Wardrop with own surcharge M a_i; replica symmetry | proved (classical parts cited) |
+| Thm 4(a) | gap <= (1/2)(sum ||a_i^W||^2)^(1/2) <= (1/2)(s <m,A^W>)^(1/2) | proved; constant 1/2 new, argument Paccagnan et al. |
+| Thm 4(b) | same order for pure equilibria of lumpy plans | proved |
+| Prop 5 | tightness family, ratio -> 1/sqrt 2; no instance-free O(s) constant | proved (closed form; Lean algebra) |
+| Thm 6 | zone-separable: 0 <= Q^W - Q^N <= max_i q_i^N (convexified) or max lot (lumpy pure); equality for identical carriers | proved, sharp |
+| Prop 7 | identical carriers, any coupling: ||dA||_m <= ||A^N||_m / N | proved |
+| Thm 8 | replicas (polyhedral, linear profits): O(1/n), instance-dependent constant | proved via Robinson (1981) |
+| Prop 9 | affine interior replicas: explicit constant lambda_min(G+K)^(-1/2) | proved |
+| Lemma 10, Prop 11 | responses nonexpansive; observation-only rule contracts at rho = max kappa/m (Omega theorem restated); fixed point = kappa * aggregate of auxiliary game; Pigou in the limit | proved |
+| Thm 12 | u_N* - u_W* = kappa (Q~_N - Q~_W): charge converges at the aggregate rate of an auxiliary game; separable: 0 <= u_W* - u_N* <= kappa s | proved |
+| Thm 13, Cor 14 | welfare under any charge; observation-only fixed point loses <= (1/2) s <m,Q^opt> for every instance; PoA and leader gain converge | proved |
+| Prop 15 | Gamma-maximin = common tax delta m w; prox shift <= delta ||w||_m; ARP over-corrects, loss <= (1/2) delta^2 ||m w||^2_{(m+kappa)^-1} | proved (part (a) from the Omega lemma) |
+| Cor 16 | absorption width <= (d+1) s / w_min | algebra on the Omega theorem |
+| Prop 17 | time-dependent charges can break the slow-corner property of p-boxes | proved (example) |
+| Prop 18 | D2 limit: existence; weighted potential iff dwell times rank one; unweighted operator indefinite | proved |
+| Conj 19 | D2 rank >= 2: multiplicity, PPAD-hardness | conjecture, not checked |
+
+Every inequality was also checked by brute force on small random games (`mfg/checks/theory_checks.out`, all slacks nonnegative). Lean (`mfg/lean`, `lake build` passes, no sorry) checks the algebraic cores listed in `mfg/lean/README.md`.
+
+**Experiments (nine cities, ten hourly periods, 6 segments split into k = 1..256 carriers, N <= 1536).**
+
+| Question | Result |
+|---|---|
+| gap vs N (replicas, 5 seeds) | slope -0.88 [-0.90, -0.86] for N >= 24 (by city -0.93 to -0.77); against the share s_N slope 0.95 [0.92, 0.97]; gap / s_N median 0.98, range 0.35-1.86; general bound held in 405/405 |
+| heterogeneous splits (3 seeds, N <= 96) | slope -0.79 [-0.83, -0.75], gap / s_N median 0.76, max 1.57; short range of N, read as consistent with O(s) only |
+| charge | observation-only fixed point -> Pigou charge with slope -0.91 [-0.92, -0.89] (calibrated) and -0.90 (congestion x10) |
+| PoA | Cournot loss 21.4% of optimal welfare at N = 6 (8.7-28.1%), 0.020% at N = 1536; mean-field PoA 0.026% (calibrated congestion is weak, rho 0.009-0.52) |
+| leader gain (negative result) | the observation-only charge lowers welfare with few carriers (-0.45% at N = 6; -3.0% with congestion x10) and helps in every instance only from N = 192 (congestion x10); the Omega flat rule with subsidy gains 16.4% (10.5%) at N = 6 and meets the Pigou rule in the limit |
+| hourly profile (amplitudes 0-1.5) | weak effect: PoA at N = 6 between 20.7% and 21.8%, slopes -0.86 to -0.90; conclusions are not artefacts of the profile, but the profile is stylised |
+| Gamma-maximin | aggregate shift <= 0.97 of the bound; ARP under cautious carriers loses 1.2% (delta = 1 lot) to 11.9% (delta = 4 lots) of welfare, within the bound in 675/675 |
+| width scaling (weak result) | the uniform absorption width falls from 481 to 0.7 times a zone-hour's mean demand between N = 6 and N = 24576: not a practically small width |
+| solver | replica reduction makes N = 1536 as cheap as N = 6; plain Frank-Wolfe did not reach 1e-4 relative gap in 3000 rounds (0.3-1.3%); interior point used for all results |
+
+**Honest novelty assessment.** The new pieces, to our reading of the literature listed in Section 2: the tightness family (no lower bound for the Nash-Wardrop distance was found in Paccagnan et al. 2019, Jacquot-Wan 2018 or Haurie-Marcotte 1985), the sharp constant-one zone-separable theorem (short and elementary), the exact identity for the finite-market observation-only charge and the instance-free O(s) welfare bound. Potentials, uniqueness, marginal-cost tolls, MDP congestion games, the contraction of the observation-only rule (Omega paper) and robust-MFG existence are known and are used as such. Paccagnan et al. (Thm 1(1)-(2)) already give O(1/N) under strong monotonicity in individual strategies; our replica results matter only because routing plans with linear costs lack it. The full texts of Gomes-Mohr-Souza (2013) and Cominetti et al. (2023) were still not read.
+
+**Decisions for the author.** (i) Venue: with B3 answered negatively, MOR is less natural than Transportation Science / OR; a shorter theory note (Dynamic Games and Applications) is possible. (ii) Whether to pursue the open C(Z) question for unweighted budgets. (iii) Whether to acquire hourly data. (iv) Blind-review rules for citing the Omega paper. (v) Whether the economic message (observation-only charge harmful with few carriers) should lead the paper.
 
 ## References
 

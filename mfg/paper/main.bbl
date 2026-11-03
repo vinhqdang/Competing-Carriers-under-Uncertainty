@@ -1,0 +1,229 @@
+\begin{thebibliography}{28}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Aurell et~al.(2022)Aurell, Carmona, Dayanikli and
+  Lauri{\`e}re}]{Aurell2022}
+\bibinfo{author}{Aurell, A.}, \bibinfo{author}{Carmona, R.},
+  \bibinfo{author}{Dayanikli, G.}, \bibinfo{author}{Lauri{\`e}re, M.},
+  \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Optimal incentives to mitigate epidemics: a
+  {Stackelberg} mean field game approach}.
+\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
+  \bibinfo{volume}{60}, \bibinfo{pages}{S294--S322}.
+%Type = Book
+\bibitem[{Beckmann et~al.(1956)Beckmann, McGuire and Winsten}]{Beckmann1956}
+\bibinfo{author}{Beckmann, M.}, \bibinfo{author}{McGuire, C.B.},
+  \bibinfo{author}{Winsten, C.B.}, \bibinfo{year}{1956}.
+\newblock \bibinfo{title}{Studies in the Economics of Transportation}.
+\newblock \bibinfo{publisher}{Yale University Press}.
+%Type = Misc
+\bibitem[{Cabannes et~al.(2021)Cabannes, Lauri{\`e}re, P{\'e}rolat
+  et~al.}]{Cabannes2021}
+\bibinfo{author}{Cabannes, T.}, \bibinfo{author}{Lauri{\`e}re, M.},
+  \bibinfo{author}{P{\'e}rolat, J.}, et~al., \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Solving {N}-player dynamic routing games with
+  congestion: a mean field approach}.
+\newblock \bibinfo{howpublished}{arXiv:2110.11943}.
+%Type = Inproceedings
+\bibitem[{Calderone and Sastry(2017)}]{CalderoneSastry2017}
+\bibinfo{author}{Calderone, D.}, \bibinfo{author}{Sastry, S.S.},
+  \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Markov decision process routing games}, in:
+  \bibinfo{booktitle}{Proceedings of the 8th International Conference on
+  Cyber-Physical Systems (ICCPS)}, pp. \bibinfo{pages}{273--279}.
+%Type = Article
+\bibitem[{Cardaliaguet and Hadikhanloo(2017)}]{CardaliaguetHadikhanloo2017}
+\bibinfo{author}{Cardaliaguet, P.}, \bibinfo{author}{Hadikhanloo, S.},
+  \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{Learning in mean field games: the fictitious play}.
+\newblock \bibinfo{journal}{ESAIM: Control, Optimisation and Calculus of
+  Variations} \bibinfo{volume}{23}, \bibinfo{pages}{569--591}.
+%Type = Article
+\bibitem[{Chan and Sircar(2015)}]{ChanSircar2015}
+\bibinfo{author}{Chan, P.}, \bibinfo{author}{Sircar, R.}, \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{Bertrand and {Cournot} mean field games}.
+\newblock \bibinfo{journal}{Applied Mathematics \& Optimization}
+  \bibinfo{volume}{71}, \bibinfo{pages}{533--569}.
+%Type = Article
+\bibitem[{Cominetti et~al.(2023)Cominetti, Scarsini, Schr{\"o}der and
+  Stier-Moses}]{Cominetti2023}
+\bibinfo{author}{Cominetti, R.}, \bibinfo{author}{Scarsini, M.},
+  \bibinfo{author}{Schr{\"o}der, M.}, \bibinfo{author}{Stier-Moses, N.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Approximation and convergence of large atomic
+  congestion games}.
+\newblock \bibinfo{journal}{Mathematics of Operations Research}
+  \bibinfo{volume}{48}, \bibinfo{pages}{784--811}.
+%Type = Unpublished
+\bibitem[{Dang(2026)}]{Omega2026}
+\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{City charges for competing delivery carriers: exact
+  best responses under probability-box travel times and leader pricing without
+  equilibrium search}.
+\newblock \bibinfo{note}{Working paper, under review}.
+%Type = Incollection
+\bibitem[{Gomes et~al.(2011)Gomes, Mohr and Souza}]{Gomes2010}
+\bibinfo{author}{Gomes, D.A.}, \bibinfo{author}{Mohr, J.},
+  \bibinfo{author}{Souza, R.R.}, \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Discrete time, finite state space mean field games},
+  in: \bibinfo{booktitle}{Dynamics, Games and Science I}.
+  \bibinfo{publisher}{Springer}.
+%Type = Article
+\bibitem[{Goulart and Chen(2024)}]{Clarabel2024}
+\bibinfo{author}{Goulart, P.J.}, \bibinfo{author}{Chen, Y.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Clarabel: an interior-point solver for conic programs
+  with quadratic objectives}.
+\newblock \bibinfo{journal}{arXiv:2405.12762} .
+%Type = Article
+\bibitem[{Gu{\'e}ant(2015)}]{Gueant2015}
+\bibinfo{author}{Gu{\'e}ant, O.}, \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{Existence and uniqueness result for mean field games
+  with congestion effect on graphs}.
+\newblock \bibinfo{journal}{Applied Mathematics \& Optimization}
+  \bibinfo{volume}{72}, \bibinfo{pages}{291--303}.
+%Type = Article
+\bibitem[{Harks and Schedel(2024)}]{HarksSchedel2024}
+\bibinfo{author}{Harks, T.}, \bibinfo{author}{Schedel, A.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Stackelberg pricing games with congestion effects}.
+\newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{203},
+  \bibinfo{pages}{763--799}.
+%Type = Article
+\bibitem[{Haurie and Marcotte(1985)}]{HaurieMarcotte1985}
+\bibinfo{author}{Haurie, A.}, \bibinfo{author}{Marcotte, P.},
+  \bibinfo{year}{1985}.
+\newblock \bibinfo{title}{On the relationship between {Nash-Cournot} and
+  {Wardrop} equilibria}.
+\newblock \bibinfo{journal}{Networks} \bibinfo{volume}{15},
+  \bibinfo{pages}{295--308}.
+%Type = Article
+\bibitem[{Huang(2010)}]{Huang2010}
+\bibinfo{author}{Huang, M.}, \bibinfo{year}{2010}.
+\newblock \bibinfo{title}{Large-population {LQG} games involving a major
+  player: the {Nash} certainty equivalence principle}.
+\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
+  \bibinfo{volume}{48}, \bibinfo{pages}{3318--3353}.
+%Type = Article
+\bibitem[{Huang et~al.(2006)Huang, Malham{\'e} and
+  Caines}]{HuangMalhameCaines2006}
+\bibinfo{author}{Huang, M.}, \bibinfo{author}{Malham{\'e}, R.P.},
+  \bibinfo{author}{Caines, P.E.}, \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Large population stochastic dynamic games:
+  closed-loop {McKean-Vlasov} systems and the {Nash} certainty equivalence
+  principle}.
+\newblock \bibinfo{journal}{Communications in Information and Systems}
+  \bibinfo{volume}{6}, \bibinfo{pages}{221--252}.
+%Type = Misc
+\bibitem[{Jacquot and Wan(2018)}]{JacquotWan2018}
+\bibinfo{author}{Jacquot, P.}, \bibinfo{author}{Wan, C.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Routing game on parallel networks: the convergence of
+  atomic to nonatomic}.
+\newblock \bibinfo{howpublished}{arXiv:1804.03081}.
+%Type = Misc
+\bibitem[{Langner et~al.(2024)Langner, Neufeld and Park}]{Langner2024}
+\bibinfo{author}{Langner, J.}, \bibinfo{author}{Neufeld, A.},
+  \bibinfo{author}{Park, K.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Markov-{Nash} equilibria in mean-field games under
+  model uncertainty}.
+\newblock \bibinfo{howpublished}{arXiv:2410.11652}.
+%Type = Article
+\bibitem[{Lasry and Lions(2007)}]{LasryLions2007}
+\bibinfo{author}{Lasry, J.M.}, \bibinfo{author}{Lions, P.L.},
+  \bibinfo{year}{2007}.
+\newblock \bibinfo{title}{Mean field games}.
+\newblock \bibinfo{journal}{Japanese Journal of Mathematics}
+  \bibinfo{volume}{2}, \bibinfo{pages}{229--260}.
+%Type = Article
+\bibitem[{Lavigne and Pfeiffer(2023)}]{LavignePfeiffer2023}
+\bibinfo{author}{Lavigne, P.}, \bibinfo{author}{Pfeiffer, L.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Generalized conditional gradient and learning in
+  potential mean field games}.
+\newblock \bibinfo{journal}{Applied Mathematics \& Optimization} .
+%Type = Inproceedings
+\bibitem[{Li et~al.(2019)Li, Yu, Calderone, Ratliff and
+  A{\c{c}}{\i}kme{\c{s}}e}]{Li2019}
+\bibinfo{author}{Li, S.H.Q.}, \bibinfo{author}{Yu, Y.},
+  \bibinfo{author}{Calderone, D.}, \bibinfo{author}{Ratliff, L.},
+  \bibinfo{author}{A{\c{c}}{\i}kme{\c{s}}e, B.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Tolling for constraint satisfaction in {Markov}
+  decision process congestion games}, in: \bibinfo{booktitle}{American Control
+  Conference (ACC)}, pp. \bibinfo{pages}{1238--1243}.
+%Type = Article
+\bibitem[{Li et~al.(2023)Li, Yu, Miguel, Calderone, Ratliff and
+  A{\c{c}}{\i}kme{\c{s}}e}]{Li2023}
+\bibinfo{author}{Li, S.H.Q.}, \bibinfo{author}{Yu, Y.},
+  \bibinfo{author}{Miguel, N.I.}, \bibinfo{author}{Calderone, D.},
+  \bibinfo{author}{Ratliff, L.J.}, \bibinfo{author}{A{\c{c}}{\i}kme{\c{s}}e,
+  B.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Adaptive constraint satisfaction for {Markov}
+  decision process congestion games: application to transportation networks}.
+\newblock \bibinfo{journal}{Automatica} \bibinfo{volume}{151},
+  \bibinfo{pages}{110879}.
+%Type = Misc
+\bibitem[{Li et~al.(2025)Li, Dimakis and Courcoubetis}]{LiDimakis2025}
+\bibinfo{author}{Li, Y.}, \bibinfo{author}{Dimakis, A.},
+  \bibinfo{author}{Courcoubetis, C.A.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Repositioning, ride-matching, and abandonment in
+  on-demand ride-hailing platforms: a mean field game approach}.
+\newblock \bibinfo{howpublished}{arXiv:2504.02346}.
+%Type = Article
+\bibitem[{Monderer and Shapley(1996)}]{Monderer1996}
+\bibinfo{author}{Monderer, D.}, \bibinfo{author}{Shapley, L.S.},
+  \bibinfo{year}{1996}.
+\newblock \bibinfo{title}{Potential games}.
+\newblock \bibinfo{journal}{Games and Economic Behavior} \bibinfo{volume}{14},
+  \bibinfo{pages}{124--143}.
+%Type = Article
+\bibitem[{Paccagnan et~al.(2019)Paccagnan, Gentile, Parise, Kamgarpour and
+  Lygeros}]{Paccagnan2019}
+\bibinfo{author}{Paccagnan, D.}, \bibinfo{author}{Gentile, B.},
+  \bibinfo{author}{Parise, F.}, \bibinfo{author}{Kamgarpour, M.},
+  \bibinfo{author}{Lygeros, J.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Nash and {Wardrop} equilibria in aggregative games
+  with coupling constraints}.
+\newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
+  \bibinfo{volume}{64}, \bibinfo{pages}{1373--1388}.
+%Type = Inproceedings
+\bibitem[{P{\'e}rolat et~al.(2022)P{\'e}rolat, Perrin, Elie
+  et~al.}]{Perolat2022}
+\bibinfo{author}{P{\'e}rolat, J.}, \bibinfo{author}{Perrin, S.},
+  \bibinfo{author}{Elie, R.}, et~al., \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Scaling mean field games by online mirror descent},
+  in: \bibinfo{booktitle}{Proceedings of the 21st International Conference on
+  Autonomous Agents and Multiagent Systems (AAMAS)}.
+%Type = Article
+\bibitem[{Robinson(1981)}]{Robinson1981}
+\bibinfo{author}{Robinson, S.M.}, \bibinfo{year}{1981}.
+\newblock \bibinfo{title}{Some continuity properties of polyhedral
+  multifunctions}.
+\newblock \bibinfo{journal}{Mathematical Programming Study}
+  \bibinfo{volume}{14}, \bibinfo{pages}{206--214}.
+%Type = Article
+\bibitem[{Slade(1994)}]{Slade1994}
+\bibinfo{author}{Slade, M.E.}, \bibinfo{year}{1994}.
+\newblock \bibinfo{title}{What does an oligopoly maximize?}
+\newblock \bibinfo{journal}{The Journal of Industrial Economics}
+  \bibinfo{volume}{42}, \bibinfo{pages}{45--61}.
+%Type = Article
+\bibitem[{Yang et~al.(2004)Yang, Meng and Lee}]{Yang2004}
+\bibinfo{author}{Yang, H.}, \bibinfo{author}{Meng, Q.}, \bibinfo{author}{Lee,
+  D.H.}, \bibinfo{year}{2004}.
+\newblock \bibinfo{title}{Trial-and-error implementation of marginal-cost
+  pricing on networks in the absence of demand functions}.
+\newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
+  \bibinfo{volume}{38}, \bibinfo{pages}{477--493}.
+
+\end{thebibliography}
