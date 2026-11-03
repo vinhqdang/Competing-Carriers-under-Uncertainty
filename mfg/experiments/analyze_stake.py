@@ -48,6 +48,7 @@ def deltas(s):
         for t in ("Pi", "CS", "CC", "R", "SW"):
             z["d" + t] = 100.0 * (r[t] - (base[t].loc[r.index] if t != "R" else 0.0)) / sw0
         z["R"] = z["dR"]
+        z["dPiop"] = 100.0 * (r.Pi_op - base.Pi_op.loc[r.index]) / sw0
         z["R_share"] = 100.0 * r.R / r.SW
         z["R_pct_sw0"] = 100.0 * r.R / sw0
         z["SW0"] = sw0
@@ -55,14 +56,19 @@ def deltas(s):
     return pd.concat(out)
 
 
+def sg(v, nd=1):
+    v = round(float(v), nd)
+    return f"{0.0:.{nd}f}" if v == 0 else f"{v:+.{nd}f}"
+
+
 def tex_who(dl):
     lines = []
     for N in NT:
         for rule, nm in (("obs", "observation-only"), ("pm", "Pigou minus market power")):
             x = dl[(dl.N == N) & (dl.rule == rule)]
-            f = lambda c: f"{x[c].median():+.1f}"
+            f = lambda c: sg(x[c].median())
             lines.append(f"{N if rule == 'obs' else ''} & {nm} & {f('dPi')} & {f('dCS')} & {f('dCC')} & {f('R')} & "
-                         f"{f('dSW')} & {x.R_share.median():+.1f} \\\\")
+                         f"{f('dSW')} & {sg(x.R_share.median())} \\\\")
         if N != NT[-1]:
             lines.append("\\addlinespace")
     return "\n".join(lines)
@@ -81,7 +87,7 @@ def fig_who(dl):
         ax.axhline(0, color="k", lw=0.5)
         ax.set_title(ttl, fontsize=9)
         ax.set_xlabel("N")
-    axes[0].set_ylabel("change vs no charge (% of welfare without charge)")
+    axes[0].set_ylabel("change vs no charge\n(% of welfare, no charge)")
     axes[0].legend(fontsize=7)
     fig.tight_layout()
     fig.savefig(FIG / "mfg_stake_who.png", dpi=150)
@@ -159,7 +165,7 @@ def fig_second(s, uni, mis):
     meas = [100 * (w[w.eps == e].loss / w[w.eps == e].sw_opt).median() for e in xs]
     loose = [100 * (w[w.eps == e].bound_loose / w[w.eps == e].sw_opt).median() for e in xs]
     tight = [100 * (w[w.eps == e].bound_tight / w[w.eps == e].sw_opt).median() for e in xs]
-    ax.semilogy(100 * xs, loose, "--s", color="tab:orange", ms=4, label=r"bound $\frac12\|v-\kappa Q^{\rm opt}\|^2_{b^{-1}}$")
+    ax.semilogy(100 * xs, loose, "--s", color="tab:orange", ms=4, label=r"bound $\frac{1}{2}\Vert v-\kappa Q^{\mathrm{opt}}\Vert^2_{b^{-1}}$")
     ax.semilogy(100 * xs, tight, ":^", color="tab:purple", ms=4, label="first inequality of Thm 13(a)")
     ax.semilogy(100 * xs, meas, "-o", color="tab:blue", ms=4, label="measured (mean field)")
     ax.set_xlabel("error of the charge (%)")
@@ -186,13 +192,15 @@ def main():
     pool.to_csv(RES / "summary_stake_who_pooled.csv")
     (PAP / "table_stake_who.tex").write_text(tex_who(dl) + "\n")
     fig_who(dl)
-    for N in (6, 1536):
+    TAG = {6: "Six", 24: "TwentyFour", 192: "OneNinetyTwo", 1536: "Big"}
+    for N in NT:
         for rule in ("obs", "pm"):
             x = dl[(dl.N == N) & (dl.rule == rule)]
-            tag = f"{'Six' if N == 6 else 'Big'}{rule.capitalize()}"
-            for t in ("dPi", "dCS", "dCC", "R", "dSW", "R_share"):
-                macro(f"W{tag}{t}", x[t].median(), "{:.1f}")
-            macro(f"W{tag}PiRange", f"{x.groupby('city').dPi.median().min():.1f}", "{}")
+            tag = f"{TAG[N]}{rule.capitalize()}"
+            for t in ("dPi", "dPiop", "dCS", "dCC", "R", "dSW", "R_share"):
+                macro(f"W{tag}{t.replace('_', '')}", x[t].median(), "{:.1f}")
+            macro(f"W{tag}PiMin", x.groupby("city").dPi.median().min(), "{:.1f}")
+            macro(f"W{tag}PiMax", x.groupby("city").dPi.median().max(), "{:.1f}")
             macro(f"W{tag}CSMin", x.groupby("city").dCS.median().min(), "{:.1f}")
             macro(f"W{tag}CSMax", x.groupby("city").dCS.median().max(), "{:.1f}")
     # abs levels at N = 6

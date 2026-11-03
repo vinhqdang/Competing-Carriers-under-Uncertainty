@@ -21,9 +21,10 @@ from mfgcc.leader import arp_fixed_point, social_optimum
 from mfgcc.qp import solve
 from mfgcc.stake import decompose, exposure_metrics, pm_charge
 
-OUT = Path(__file__).resolve().parents[1] / "results" / "stake.csv"
-KREP = [1, 2, 4, 8, 16, 32, 64, 128, 256]
-SEEDS = range(5)
+KS = float(os.environ.get("KSCALE", "1"))  # congestion sensitivity run: KSCALE=10 -> stake_k10.csv (seeds 0-2, N = 6, 24, 192, 1536)
+OUT = Path(__file__).resolve().parents[1] / "results" / ("stake.csv" if KS == 1.0 else "stake_k10.csv")
+KREP = [1, 2, 4, 8, 16, 32, 64, 128, 256] if KS == 1.0 else [1, 4, 32, 256]
+SEEDS = range(5) if KS == 1.0 else range(3)
 FIELDS = ["city", "seed", "k", "N", "rule", "SW", "CS", "Pi_op", "CC", "R", "Pi", "SW_opt", "resid", "neg_share",
           "Q_total", "n_zones", "pop_cov", "veh_hours", "exp_mean_min", "gini_zone", "gini_zh", "d10d1",
           "peak_hour_min", "corr_rel_dens", "corr_share_dens", "dens_mass_shift"]
@@ -42,7 +43,7 @@ def job(args):
     todo = [k for k in KREP if (c, str(seed), str(k)) not in d]
     if not todo:
         return 0
-    g = C.build(c, seed)
+    g = C.build(c, seed, kappa_scale=KS)
     m, kap, b = g.m, g.kappa, g.b
     for k in todo:
         bl = g.blocks(k)
