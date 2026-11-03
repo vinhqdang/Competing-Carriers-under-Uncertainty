@@ -1,0 +1,23 @@
+% Section: vehicle-count congestion (D2) in the limit
+\section{Vehicle-count congestion}\label{sec:d2}
+
+Under D2 the congestion variable counts vehicles. Let mean-field types $\theta\in[\Theta]$ choose exposures $\tau_\theta\in\mathcal T_\theta\subset\R^Z_{\ge0}$ (vehicle-hours per zone; compact convex) with concave value $V_\theta$, and let a type-$\theta$ vehicle dwell $h_{\theta z}>0$ hours in zone $z$, so that it contributes $\tau_{\theta z}/h_{\theta z}$ vehicles. The congestion variable is $X_z=\sum_\theta\tau_{\theta z}/h_{\theta z}$ and a vehicle-hour in $z$ costs $g_zX_z$, $g_z>0$. A mean-field equilibrium is a profile in which each $\tau_\theta$ maximises $V_\theta(\tau)-\ip{\tau}{g\odot X}$ at the realised $X$. The coupling operator $F_\theta(\tau)=g\odot X(\tau)$ has Jacobian blocks $\partial F_\theta/\partial\tau_{\theta'}=\diag_z(g_z/h_{\theta'z})$.
+
+\begin{proposition}[Existence and the rank-one condition]\label{prop:d2}
+\begin{enumerate}
+\item[(a)] An equilibrium exists.
+\item[(b)] If $h_{\theta z}=\eta_\theta\zeta_z$ (rank one), the game is a weighted potential game with weights $1/\eta_\theta$ and concave potential $\Psi(\tau)=\sum_\theta\eta_\theta^{-1}V_\theta(\tau_\theta)-\tfrac12\sum_zg_z\zeta_zX_z^2$; equilibria are the maximisers of $\Psi$, and $X$ is unique when the $V_\theta$ are concave.
+\item[(c)] Positive weights $w_\theta$ with $w_\theta\,\partial F_\theta/\partial\tau_{\theta'}$ symmetric for all $\theta,\theta'$ exist iff $h_{\theta z}/h_{\theta'z}$ does not depend on $z$, i.e.\ iff $h$ is rank one.
+\item[(d)] With two types in one zone and $h_1\ne h_2$, the symmetric part of the coupling matrix $g\begin{psmallmatrix}1/h_1&1/h_2\\1/h_1&1/h_2\end{psmallmatrix}$ has determinant $-g^2(1/h_1-1/h_2)^2/4<0$, so the unweighted operator is not monotone.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) Each type's best-response correspondence at a given $X$ is nonempty, convex-valued and upper hemicontinuous (Berge), and $X$ is continuous in $\tau$; Kakutani's theorem on $\prod_\theta\mathcal T_\theta$ gives a fixed point. (b) $\partial\Psi/\partial\tau_{\theta z}$ of the coupling part is $-g_z\zeta_zX_z/(\eta_\theta\zeta_z)=-\eta_\theta^{-1}g_zX_z$, which is $\eta_\theta^{-1}$ times the marginal coupling cost of type $\theta$; $\Psi$ is concave and the equivalence of equilibria and maximisers follows as in Lemma~\ref{lem:pot}(a); $X$ is a linear image on which $\Psi$ is strictly concave. (c) Symmetry means $w_\theta g_z/h_{\theta'z}=w_{\theta'}g_z/h_{\theta z}$, i.e.\ $h_{\theta z}/h_{\theta'z}=w_{\theta'}/w_\theta$ for all $z$. (d) Direct computation.
+\end{proof}
+
+In the finite game, deciding whether a pure equilibrium exists under D2 is strongly NP-complete (Omega, Theorem ``NP-completeness under D2''); in the convexified mean-field game an equilibrium always exists, so the limit removes the existence problem. What the limit does not remove is non-monotonicity: with dwell times that are not rank one there is no weighting under which the game is a potential game.
+
+\begin{conjecture}\label{conj:d2}
+For rank$(h)\ge2$ there are instances with several isolated mean-field equilibria, and computing one is PPAD-hard in the number of types.
+\end{conjecture}
+Neither part has been checked; no reduction has been designed. The rank-one condition is plausible for a fleet of one vehicle class (dwell time proportional to a zone factor) and implausible for mixed fleets of vans and cargo bikes.

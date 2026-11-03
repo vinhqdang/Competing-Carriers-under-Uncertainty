@@ -14,7 +14,7 @@ same toolchain and manifest); nothing in `lean/` is changed.  Build: `cd mfg/lea
 | Prop 11(a) | `arp_contraction` | weighted-norm chain `‖κΔQ‖_{κ⁻¹} ≤ ρ‖Δu‖_{κ⁻¹}` from nonexpansiveness | core |
 | Prop 5 | `tight_family` | Nash type totals solve `(G+I/n)T = α`; `‖ΔA‖² = 1/(8n)+(2n-1)/(8n³) ≥ 1/(8n)` | full (algebra of the example) |
 | Thm 13(b) | `welfare_fixed_point` | loss ≤ difference of own terms | core (one line) |
-| Prop 15(c) | `gamma_welfare` | `Σ(-σx - c x²/2) ≤ Σσ²/(2c)` | core |
+| Prop 15(d) | `gamma_welfare` | `Σ(-σx - c x²/2) ≤ Σσ²/(2c)` | core |
 | Prop 18 | `d2_det`, `d2_weights_iff`, `d2_rank_one` | determinant of the symmetric part; weights symmetrise iff dwell ratios are zone-independent; rank one works | full (algebra) |
 | Cor 16 | `width_scaling` | absorption width `≤ (d+1)s` | full (algebra on the Omega bound) |
 

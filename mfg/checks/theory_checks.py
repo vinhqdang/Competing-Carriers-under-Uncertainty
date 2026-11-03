@@ -65,7 +65,7 @@ def mnorm(x, m):
 
 
 def check_linearisation():
-    """Lemma 1: a Nash equilibrium is a Wardrop equilibrium with own surcharges sigma_i = M a_i^N."""
+    """Lemma 2(c): a Nash equilibrium is a Wardrop equilibrium with own surcharges sigma_i = M a_i^N."""
     worst = 0.0
     for _ in range(40):
         N, d = int(RNG.integers(2, 6)), int(RNG.integers(2, 5))
@@ -78,7 +78,7 @@ def check_linearisation():
 
 
 def check_sqrt_bound():
-    """Theorem 1(a): ||A^N - A^W||_M <= 1/2 (sum ||a_i^W||_M^2)^(1/2), any Wardrop selection."""
+    """Theorem 4(a): ||A^N - A^W||_M <= 1/2 (sum ||a_i^W||_M^2)^(1/2), any Wardrop selection."""
     worst, ratio = np.inf, 0.0
     for _ in range(150):
         N, d = int(RNG.integers(2, 12)), int(RNG.integers(2, 6))
@@ -134,7 +134,7 @@ def lumpy_wardrop(plans, profits, m, d):
 
 
 def check_zone_separable():
-    """Theorem 2: one coordinate.  Splittable: 0 <= Q^W - Q^N <= max_i q_i^N.  Lumpy pure: 0 <= Q^W - Q^N <= max lot."""
+    """Theorem 6: one coordinate.  Splittable: 0 <= Q^W - Q^N <= max_i q_i^N.  Lumpy pure: 0 <= Q^W - Q^N <= max lot."""
     worst_split, worst_lumpy, max_ratio, n_eq = np.inf, np.inf, 0.0, 0
     for _ in range(200):
         N = int(RNG.integers(1, 30))
@@ -221,7 +221,7 @@ def _onezone_nash(carriers, m):
 
 
 def check_common_surcharge():
-    """Proposition 3: identical carriers, any coupling: ||A^N - A^W||_M <= ||a^N||_M."""
+    """Proposition 7: identical carriers, any coupling: ||A^N - A^W||_M <= ||a^N||_M."""
     worst, ratio = np.inf, 0.0
     for _ in range(60):
         N, d = int(RNG.integers(2, 10)), int(RNG.integers(2, 6))
@@ -235,7 +235,7 @@ def check_common_surcharge():
 
 
 def check_replica_affine():
-    """Proposition 4: affine interior replicas: ||A^N - A^W||_M <= ||D_n T^W||_{G^{-1}} (and the 1/2-sqrt bound)."""
+    """Proposition 9: affine interior replicas: ||A^N - A^W||_M <= ||D_n T^W||_{G^{-1}} (and the 1/2-sqrt bound)."""
     worst = np.inf
     for _ in range(100):
         d, Th = int(RNG.integers(2, 5)), int(RNG.integers(2, 5))
@@ -257,7 +257,7 @@ def check_replica_affine():
 
 
 def check_lumpy_multizone():
-    """Theorem 1(b): pure Nash of a lumpy game: ||A(p) - A^W||_M^2 <= sum_i E_{x_i^W} ||a_i||_M^2."""
+    """Theorem 4(b): pure Nash of a lumpy game: ||A(p) - A^W||_M^2 <= sum_i E_{x_i^W} ||a_i||_M^2."""
     worst, cnt = np.inf, 0
     for _ in range(200):
         N, d = int(RNG.integers(2, 5)), int(RNG.integers(2, 4))
@@ -278,7 +278,7 @@ def check_lumpy_multizone():
 
 
 def check_leader():
-    """Lemma 5 / Theorems 6-7: ARP contraction, fixed-point characterisation, toll convergence, welfare bound."""
+    """Proposition 11 / Theorems 12-13: ARP contraction, fixed-point characterisation, toll convergence, welfare bound."""
     worst_c, worst_fp, worst_toll, worst_w = np.inf, 0.0, np.inf, np.inf
     for _ in range(40):
         N, d = int(RNG.integers(2, 8)), int(RNG.integers(2, 5))
@@ -315,7 +315,7 @@ def check_leader():
 
 
 def check_gamma():
-    """Proposition 8: Gamma-maximin surcharge delta m w: ||Q^Gamma - Q^W||_m <= delta ||w||_m, and the ARP fixed
+    """Proposition 15: Gamma-maximin surcharge delta m w: ||Q^Gamma - Q^W||_m <= delta ||w||_m, and the ARP fixed
     point under Gamma-maximin carriers loses at most 1/2 delta^2 ||m w||^2_{(m+kappa)^{-1}} of welfare (mean field)."""
     worst_p, worst_w = np.inf, np.inf
     for _ in range(40):
@@ -343,7 +343,7 @@ def check_gamma():
 
 
 def check_d2():
-    """Lemma 9: rank-one dwell times <=> per-type weights symmetrise the D2 coupling; two types with different dwell
+    """Proposition 18: rank-one dwell times <=> per-type weights symmetrise the D2 coupling; two types with different dwell
     times give an indefinite symmetric part with determinant -(1/h1 - 1/h2)^2 / 4 (times g^2)."""
     worst_det = 0.0
     for _ in range(200):
@@ -391,8 +391,8 @@ def check_d2():
 
 
 def check_time_of_day_corner():
-    """Remark 10: with a charge U paid when arriving before t=1, the worst-case law of a p-box containing all laws on
-    [0, 2] is the fastest one when U > 2 (upper prevision max(2, U)), not the slowest."""
+    """Proposition 17: with a charge U paid when arriving before t=1, the worst case over all laws on [0, 2] is a
+    travel time just below 1 (cost close to 1 + U), not the slowest law T = 2 (cost 2), when U > 2."""
     U = 3.0
     xs = np.linspace(0, 2, 2001)
     cost = xs + U * (xs < 1)
@@ -407,34 +407,34 @@ def main():
         print(s)
         out.append(s)
     p("Theory checks for mfg/theory (min slack >= 0 means the bound holds on every instance)")
-    p(f"Lemma 1  linearisation (Nash = Wardrop with own surcharge): max |dQ| = {check_linearisation():.2e}")
+    p(f"Lemma 2(c) linearisation (Nash = Wardrop with own surcharge): max |dQ| = {check_linearisation():.2e}")
     w, r = check_sqrt_bound()
-    p(f"Thm 1(a) sqrt bound, 150 random multi-zone games: min slack {w:.2e}, max ratio gap/bound {r:.3f}")
+    p(f"Thm 4(a) sqrt bound, 150 random multi-zone games: min slack {w:.2e}, max ratio gap/bound {r:.3f}")
     rows, fixed = check_tight_family()
-    p("Prop 2   tightness family (1 - cos phi = 1/n):  n  gap(closed)  gap(exact formula)  gap(solver)  gap/bound"
+    p("Prop 5   tightness family (1 - cos phi = 1/n):  n  gap(closed)  gap(exact formula)  gap(solver)  gap/bound"
       "  gap*sqrt(n)  gap/s")
     for r_ in rows:
         p("         " + "  ".join(f"{x:.6g}" for x in r_))
     p("         fixed phi = 0.2: n * gap = " + ", ".join(f"{n}:{g:.4f}" for n, g in fixed) +
-      f"  (limit (1/sqrt 2)/sqrt(1 - cos phi) = {1 / np.sqrt(2) / np.sqrt(1 - np.cos(0.2)):.4f})")
+      f"  (limit 1/sin(phi) = {1 / np.sin(0.2):.4f})")
     ws, mr, wl, ne = check_zone_separable()
-    p(f"Thm 2    one zone, splittable (200 games): min slack {ws:.2e}, max (Q^W-Q^N)/max_i q_i^N = {mr:.4f};"
+    p(f"Thm 6    one zone, splittable (200 games): min slack {ws:.2e}, max (Q^W-Q^N)/max_i q_i^N = {mr:.4f};"
       f" lumpy pure ({ne} equilibria of 300 games): min slack {wl:.2e}")
     w, r = check_common_surcharge()
-    p(f"Prop 3   identical carriers: min slack {w:.2e}, max ratio {r:.3f}")
-    p(f"Prop 4   affine replica bound: min slack {check_replica_affine():.2e}")
+    p(f"Prop 7   identical carriers: min slack {w:.2e}, max ratio {r:.3f}")
+    p(f"Prop 9   affine replica bound: min slack {check_replica_affine():.2e}")
     w, c = check_lumpy_multizone()
-    p(f"Thm 1(b) lumpy pure equilibria, multi-zone ({c} equilibria): min slack {w:.2e}")
+    p(f"Thm 4(b) lumpy pure equilibria, multi-zone ({c} equilibria): min slack {w:.2e}")
     wc, wf, wt, ww = check_leader()
-    p(f"Lemma 5  ARP contraction (N and W): min slack {wc:.2e};  fixed-point residual {wf:.2e}")
-    p(f"Thm 6    toll gap <= eps/(1-rho): min slack {wt:.2e};  Thm 7 welfare bound: min slack {ww:.2e}")
+    p(f"Prop 11  ARP contraction (N and W): min slack {wc:.2e};  fixed-point residual {wf:.2e}")
+    p(f"Thm 12   toll gap <= eps/(1-rho): min slack {wt:.2e};  Thm 13(b) welfare bound: min slack {ww:.2e}")
     wp, wg = check_gamma()
-    p(f"Prop 8   Gamma-maximin prox bound: min slack {wp:.2e}; welfare of ARP under Gamma: min slack {wg:.2e}")
+    p(f"Prop 15  Gamma-maximin prox bound: min slack {wp:.2e}; welfare of ARP under Gamma: min slack {wg:.2e}")
     det, r1, r2, ee = check_d2()
-    p(f"Lemma 9  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max {det:.2e}; rank one symmetrisable & PSD: {r1};"
+    p(f"Prop 18  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max {det:.2e}; rank one symmetrisable & PSD: {r1};"
       f" rank two not symmetrisable: {r2}; rank-one potential maximiser equilibrium error (grid) {ee:.2e}")
     mx, arg = check_time_of_day_corner()
-    p(f"Remark 10 time-of-day: worst-case cost {mx:.3f} attained at travel time {arg:.3f} (the slowest law, T = 2, costs only 2)")
+    p(f"Prop 17  time-of-day: worst-case cost {mx:.3f} attained at travel time {arg:.3f} (the slowest law, T = 2, costs only 2)")
     return out
 
 

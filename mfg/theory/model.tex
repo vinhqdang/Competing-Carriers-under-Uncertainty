@@ -1,0 +1,87 @@
+% Section: model (input by mfg/paper/main.tex and mfg/theory/notes.tex)
+\section{Model}\label{sec:model}
+
+\subsection{The time-expanded zone graph}\label{sec:teg}
+The city is divided into zones $z\in[Z]$ and the delivery day into periods $t\in[H]$ (in the experiments $H=10$ hourly periods from 08:00 to 18:00). The \emph{time-expanded zone graph} $G_H$ has a node $(z,t)$ for every zone and period, a travel arc $(z,t)\to(z',t')$ whenever a vehicle that leaves $z$ in period $t$ reaches $z'$ in period $t'\ge t$ (travel times depend on the departure period), and a waiting arc $(z,t)\to(z,t+1)$. Because every arc moves forward in time, $G_H$ is acyclic.
+
+A \emph{tour} of a carrier is a path in $G_H$ that starts and ends at the carrier's depot and makes deliveries at some of the nodes it visits. Delivering in zone $z$ during period $t$ adds to the deliveries $q_{zt}$ of the carrier at that node. The coordinates of the interaction are the nodes $k=(z,t)$ touched by some tour; we write $\cK$ for this set and $d=|\cK|\le ZH$. Vehicle-hours spent in zone $z$ during period $t$ are $r\,q_{zt}$, where $r$ is the in-zone time per delivery (assumption C3 of \citealp{Omega2026}): congestion is caused by the time spent serving a zone, and inter-zone driving is priced through the tour's own cost only. This is the delivery-unit reduction of the Omega paper.
+
+\paragraph{Demand and congestion} In coordinate $k$, the inverse demand for deliveries is $\alpha_k-b_kQ_k$ with $b_k>0$, where $Q_k$ is the total number of deliveries made at $k$ by all carriers. A vehicle-hour at $k$ costs $\gamma(\xi_k+c_kX_k)$ where $X_k=rQ_k$ is the congestion variable. Per delivery, a carrier therefore pays $\gamma r\xi_k$ (part of its private cost) plus $\kappa_kQ_k$ with $\kappa_k=\gamma c_kr^2>0$. Write
+\[
+m_k=b_k+\kappa_k,\qquad M=\diag(m),\qquad \varrho=\max_{k}\kappa_k/m_k<1.
+\]
+For $v\in\R^d$ and a positive weight vector $w$ we write $\norm v_w^2=\sum_kw_kv_k^2$; thus $\norm v_m$ is the $M$-norm and $\norm v_{m^{-1}}$ its dual norm.
+
+\subsection{Carriers, plans and their convexification}\label{sec:carriers}
+There are $N$ carriers. Carrier $i$ has a finite set $\cP_i$ of \emph{plans}: a plan is a multiset of tours that the carrier's fleet can operate in one day. Plan $p$ has deliveries $q_i(p)\in\R^d_{\ge0}$ and private profit $\pi_i(p)=\sum_k\alpha_kq_{ik}(p)-C_i(p)$, where $C_i(p)$ is its routing cost (driver time, fuel, fixed costs and the free-flow congestion term $\gamma r\ip{\xi}{q_i(p)}$). A \emph{small multi-stop carrier} is a carrier whose fleet is small compared with the market; the mean-field limit lets the share of every carrier go to zero while plans keep their routing structure.
+
+For most results the plan set is convexified. A carrier with a fleet budget $B_i$ (vehicle-hours) and a tour set $\mathcal T_i$ chooses fleet weights $y_i\in Y_i=\{y\in\R^{\mathcal T_i}_{\ge0}:\ip{w_i}{y}\le B_i\}$, where $w_{ij}$ is the duration of tour $j$; its deliveries are $a_i=L_iy_i$ with $L_i\ge0$ entrywise (column $j$ is the delivery vector of tour $j$ per vehicle-hour) and its profit is $\pi_i(y_i)=\ip{p_i}{y_i}$. The abstract assumptions under which the theory holds are:
+\begin{itemize}
+\item[(A1)] $Y_i$ is a nonempty compact convex subset of a Euclidean space, $\pi_i:Y_i\to\R$ is concave and upper semicontinuous, and $a_i=L_iy_i$ with $L_i$ linear and $L_iy_i\in\R^d_{\ge0}$ for $y_i\in Y_i$;
+\item[(A2)] $m_k>0$ for all $k$.
+\end{itemize}
+The fleet polytope with linear profits satisfies (A1). We write $A=\sum_ia_i$ (in delivery units $A=Q$) and
+\[
+\bar s=\max_i\max_{y\in Y_i}\max_k\,(L_iy)_k
+\]
+for the largest number of deliveries that one carrier can make at one coordinate; $\bar s$ is the \emph{share} parameter of the limit.
+
+\paragraph{Payoffs and equilibria} The city posts a charge $u\in\R^d$ per delivery. Carrier $i$'s payoff is
+\begin{equation}\label{eq:payoff}
+J_i(y_i;y_{-i})=\pi_i(y_i)-\ip{a_i}{M(A_{-i}+a_i)}-\ip{u}{a_i},\qquad A_{-i}=\sum_{j\ne i}a_j .
+\end{equation}
+A \emph{Nash equilibrium} $y^\Nash$ is a profile in which each $y_i$ maximises $J_i(\cdot\,;y_{-i})$: a carrier takes its own effect on the price and the congestion of the coordinates it serves into account (Cournot behaviour). A \emph{Wardrop} (\emph{mean-field}) \emph{equilibrium} $y^\War$ is a profile in which each $y_i$ maximises $\pi_i(y_i)-\ip{a_i}{MA+u}$ with the aggregate $A=A(y^\War)$ held fixed: carriers are price takers. The mean-field reading is the usual one: if carrier $i$ is replaced by a continuum of identical infinitesimal agents whose plans sum to a point of $Y_i$, each agent's own effect vanishes and the equilibrium conditions of the continuum are those of $y^\War$. On $G_H$ this is the Wardrop equilibrium of a Markov-decision-process congestion game in which vehicles choose paths \citep{CalderoneSastry2017}, with an elastic (Cournot) price added; it is also a discrete-time, finite-state potential mean-field game \citep{Gomes2010,Gueant2015}.
+
+The welfare of a profile, with charges treated as transfers, is
+\begin{equation}\label{eq:welfare}
+\SW(y)=\sum_i\pi_i(y_i)+\sum_k\Big[-\tfrac{b_k}{2}Q_k^2-\kappa_kQ_k^2\Big]=\sum_i\pi_i(y_i)-\tfrac12\norm{Q}_{m+\kappa}^2 ,
+\end{equation}
+the gross consumer benefit $\alpha_kQ_k-\tfrac{b_k}{2}Q_k^2$ (its linear part is inside $\pi_i$) minus routing and congestion costs. A \emph{social optimum} maximises $\SW$.
+
+\subsection{Potentials and a linearisation lemma}
+The first lemma is elementary convex analysis; it is used in almost every proof below.
+
+\begin{lemma}[Linearisation]\label{lem:lin}
+Let $C$ be convex, $h:C\to\R$ concave and $g$ convex and differentiable on a neighbourhood of $C$. If $x^*$ maximises $h-g$ over $C$, then $x^*$ maximises $h-\ip{\nabla g(x^*)}{\cdot}$ over $C$.
+\end{lemma}
+\begin{proof}
+Let $x\in C$ and $x_t=x^*+t(x-x^*)$ for $t\in(0,1]$. Optimality and concavity of $h$ give $0\ge h(x_t)-g(x_t)-h(x^*)+g(x^*)\ge t\,(h(x)-h(x^*))-(g(x_t)-g(x^*))$. Divide by $t$ and let $t\downarrow0$: $0\ge h(x)-h(x^*)-\ip{\nabla g(x^*)}{x-x^*}$.
+\end{proof}
+
+\begin{lemma}[Potentials, uniqueness and the own surcharge]\label{lem:pot}
+Assume (A1)--(A2) and fix $u$. Let
+\[
+\Phi_\Nash(y)=\sum_i\pi_i(y_i)-\ip{u}{A}-\tfrac12\norm{A}_m^2-\tfrac12\sum_i\norm{a_i}_m^2,\qquad
+\Phi_\War(y)=\sum_i\pi_i(y_i)-\ip{u}{A}-\tfrac12\norm{A}_m^2 .
+\]
+\begin{enumerate}
+\item[(a)] $y$ is a Nash equilibrium iff it maximises $\Phi_\Nash$ over $\prod_iY_i$, and a Wardrop equilibrium iff it maximises $\Phi_\War$; a social optimum maximises $\Phi_\War$ with $u=0$ and $m$ replaced by $m+\kappa$. All three sets are nonempty.
+\item[(b)] The Nash contributions $a_i^\Nash$ are unique, and so is the Wardrop aggregate $A^\War$; the Wardrop contributions need not be.
+\item[(c)] (Own surcharge.) Every Nash equilibrium is a Wardrop equilibrium of the game in which carrier $i$ pays the additional per-delivery charge $\sigma_i=Ma_i^\Nash$ (with $a_i^\Nash$ held fixed): each $y_i^\Nash$ maximises $\pi_i(y_i)-\ip{a_i}{MA^\Nash+u+Ma_i^\Nash}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) $\Phi_\Nash-J_i$ does not depend on $y_i$: the terms of $\Phi_\Nash$ containing $y_i$ are $\pi_i-\ip{u}{a_i}-\ip{A_{-i}}{Ma_i}-\norm{a_i}_m^2$, which are those of $J_i$. Hence a maximiser of $\Phi_\Nash$ is a Nash equilibrium. Conversely let $y$ be a Nash equilibrium and write $\Phi_\Nash=\sum_i\pi_i-f$ with $f$ convex and differentiable. By Lemma~\ref{lem:lin} applied to carrier $i$ (with $h=\pi_i$, $g=f(\cdot,y_{-i})$), $\pi_i(y_i')-\ip{\nabla_if(y)}{y_i'-y_i}\le\pi_i(y_i)$ for all $y_i'\in Y_i$. Summing over $i$ and using $f(y')\ge f(y)+\ip{\nabla f(y)}{y'-y}$ gives $\Phi_\Nash(y')\le\Phi_\Nash(y)$. The Wardrop case is the same with the linear functional $y_i\mapsto\ip{a_i}{MA+u}$, whose $y_i$-gradient is $\nabla_i(\tfrac12\norm{A}_m^2+\ip{u}{A})$. Existence: the potentials are upper semicontinuous on a compact set.
+(b) $\Phi_\Nash$ is the sum of a concave function and $-\tfrac12\norm A_m^2-\tfrac12\sum_i\norm{a_i}_m^2$, which is strictly concave in $(a_1,\dots,a_N)$; two maximisers with different contributions would have a midpoint with a strictly larger value. The same argument with $-\tfrac12\norm A_m^2$ gives uniqueness of $A^\War$. Non-uniqueness of Wardrop contributions: two identical carriers with linear profits can exchange deliveries.
+(c) Lemma~\ref{lem:lin} applied to $J_i$ with $g(y_i)=\norm{L_iy_i}_m^2$, whose gradient at $y_i^\Nash$ is $2L_i^\top Ma_i^\Nash$, and $A_{-i}+a_i^\Nash=A^\Nash$.
+\end{proof}
+
+Parts (a) and (b) are classical: the Nash potential of a Cournot game with linear demand is due to \citet{Slade1994} and the Wardrop potential to \citet{Beckmann1956}; for MDP congestion games see \citet{CalderoneSastry2017}. Part (c) is the device behind all the bounds below: the finite game is the mean-field game in which each carrier pays a private surcharge equal to its own marginal effect $Ma_i^\Nash$, a vector of size at most $\max_km_k\cdot\bar s$.
+
+\paragraph{Replicas} A \emph{base type} $\theta$ is a triple $(\cY_\theta,\pi_\theta,L_\theta)$ satisfying (A1) with $\pi_\theta$ positively homogeneous (linear profits are). Its \emph{$n$-split} consists of $n$ carriers with $Y=\cY_\theta/n$, profit $\pi_\theta$ and the same $L_\theta$: the fleet of the type is divided equally. A game whose carriers are the $n_\theta$-splits of base types $\theta\in\Theta$ is a \emph{replica game}.
+
+\begin{lemma}[Symmetry of replicas]\label{lem:rep}
+In a replica game, carriers of the same type have the same Nash contributions, and the type totals $Y_\theta=\sum_{i\in\theta}y_i$ of a Nash equilibrium maximise
+\[
+\Phi^{(n)}(Y)=\sum_\theta\pi_\theta(Y_\theta)-\ip{u}{A}-\tfrac12\norm{A}_m^2-\tfrac12\sum_\theta\frac{1}{n_\theta}\norm{L_\theta Y_\theta}_m^2,\qquad A=\sum_\theta L_\theta Y_\theta,
+\]
+over $\prod_\theta\cY_\theta$. The Wardrop aggregate does not depend on $(n_\theta)$.
+\end{lemma}
+\begin{proof}
+$\Phi_\Nash$ is invariant under permutations of identical carriers, so by uniqueness of the Nash contributions (Lemma~\ref{lem:pot}(b)) identical carriers have equal contributions. Averaging a maximiser over the permutations within each type gives a symmetric maximiser (concavity), whose value is $\Phi^{(n)}$ of its type totals; conversely every $Y$ yields the symmetric profile $y_i=Y_\theta/n_\theta$. For the Wardrop part, $\Phi_\War$ depends on $y$ only through the type totals, and $\sum_{i\in\theta}\cY_\theta/n_\theta=\cY_\theta$ by convexity.
+\end{proof}
+
+Lemma~\ref{lem:rep} is also the computational reduction used in Section~\ref{sec:comp}: the Nash equilibrium of $n$ replicas per type costs one convex quadratic program in the type totals, whatever $n$ is.
+
+\subsection{Imprecise beliefs and vehicle counts}
+Two extensions of the Omega model are kept. Under $\Gamma$-maximin beliefs of width $\delta$ about the rival aggregate (Omega, Lemma ``$\Gamma$-maximin surcharge'') each carrier evaluates its plans at the upper corner $A_{-i}+\delta w$ of a box of weights $w\in\R^d_{>0}$; Section~\ref{sec:imprecise} studies this layer in the limit. Under vehicle-count congestion (D2) the congestion variable counts vehicles instead of vehicle-hours; Section~\ref{sec:d2} treats it.

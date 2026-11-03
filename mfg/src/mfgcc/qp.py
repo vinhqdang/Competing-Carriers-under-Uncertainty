@@ -90,7 +90,7 @@ def _omega(blocks, own: bool):
 
 
 def solve(blocks: list[Block], m: np.ndarray, *, mc: np.ndarray | None = None, own: bool = True,
-          u: np.ndarray | None = None, tol: float = 1e-10, max_iter: int = 400) -> Solution:
+          u: np.ndarray | None = None, tol: float = 1e-13, max_iter: int = 400) -> Solution:
     """Maximise Phi with Clarabel (interior point).  own=True: Nash; own=False: Wardrop / social."""
     import clarabel
 

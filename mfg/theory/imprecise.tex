@@ -1,0 +1,36 @@
+% Section: imprecise beliefs in the limit (Gamma-maximin surcharge and width scaling only)
+\section{Cautious carriers in the limit}\label{sec:imprecise}
+
+Following decision (4) of the memo, only two pieces of the imprecise-probability layer of the Omega paper are kept: the $\Gamma$-maximin surcharge and the scaling of the belief width needed for credal absorption. Fix weights $w\in\R^d_{>0}$ and a width $\delta\ge0$; a carrier believes that the mean rival aggregate lies in the box $\{A':|A'_k-A_{-i,k}|\le\delta w_k\}$.
+
+\begin{proposition}[$\Gamma$-maximin carriers]\label{prop:gamma}
+\begin{enumerate}
+\item[(a)] (Omega, Lemma ``$\Gamma$-maximin surcharge''.) Because deliveries are nonnegative and the coupling is affine, the lower expectation of every plan is attained at the upper corner $A_{-i}+\delta w$. Hence the $\Gamma$-maximin equilibria, finite or mean-field, are the precise equilibria under the charge $u+\delta\,m\odot w$: $Q^{X,\delta}(u)=Q^X(u+\delta m\odot w)$.
+\item[(b)] $\norm{Q^{X,\delta}(u)-Q^X(u)}_m\le\delta\norm{w}_m$; for zone-separable carriers, $0\le Q^X_k(u)-Q^{X,\delta}_k(u)\le\delta w_k$ for $X=\War$.
+\item[(c)] The observation-only rule under $\Gamma$-maximin carriers, $u\mapsto\kappa\odot Q^{X,\delta}(u)$, contracts with the same ratio $\varrho$ (it needs no knowledge of $\delta$); its fixed point $u_\delta^*$ satisfies $\norm{u^*_\delta-u_X^*}_{\kappa^{-1}}\le\varrho^{1/2}\delta\norm w_m/(1-\varrho)$.
+\item[(d)] In the mean-field game, the equilibrium under $u_\delta^*$ loses at most $\tfrac12\delta^2\norm{m\odot w}_{(m+\kappa)^{-1}}^2$ of welfare. A city that knows $\delta w$ and posts $u_\delta^*-\delta m\odot w$ recovers the optimum.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) is the Omega lemma; in the time-expanded model the coordinates are zone-hours, and nothing else changes. (b) Lemma~\ref{lem:prox} with $u'=u+\delta m\odot w$: $\norm{\delta m\odot w}_{m^{-1}}=\delta\norm w_m$. In the separable case the proof of Theorem~\ref{thm:sep} with a common price increase $\delta m_kw_k$ in coordinate $k$ (in place of the private surcharges) gives the coordinatewise statement: the Wardrop aggregate falls, and by at most the price increase divided by $m_k$. (c) The map is $T_X(\cdot+\delta m\odot w)$, a $\varrho$-contraction in $\norm\cdot_{\kappa^{-1}}$ (Proposition~\ref{prop:arp}). Its distance to $T_X$ at any $u$ is $\norm{Q^X(u+\delta m\odot w)-Q^X(u)}_\kappa\le\varrho^{1/2}\norm{\cdot}_m\le\varrho^{1/2}\delta\norm w_m$; apply the perturbation statement of Theorem~\ref{thm:toll}. (d) The carriers face $v=u_\delta^*+\delta m\odot w$ and $u_\delta^*=\kappa\odot Q$ at the fixed point, so in Theorem~\ref{thm:welfare}(a) $v-\kappa\odot Q^\opt=\kappa\odot\Delta Q+\delta m\odot w$ with $\Delta Q=Q-Q^\opt$, and the bound becomes $-\ip{\delta m\odot w}{\Delta Q}-\tfrac12\norm{\Delta Q}_{b+2\kappa}^2\le\tfrac12\delta^2\norm{m\odot w}_{(b+2\kappa)^{-1}}^2$, with $b+2\kappa=m+\kappa$.
+\end{proof}
+
+So cautious carriers behave like carriers facing a tax of $\delta m_kw_k$ per delivery; the observation-only city cannot tell this tax apart from cost, and over-charges by about that amount. The welfare cost is second order in $\delta$ and of Harberger form.
+
+\begin{corollary}[Belief width needed for absorption]\label{cor:width}
+Let $\sigma_{\max}$ be the largest range of one carrier's deliveries at one coordinate in units of $w$. The uniform credal-absorption bound of the Omega paper, $\delta_0^E\le\sigma_{\max}\min\{N-1,d+1,1+\sqrt{d\ln(2d)/2}\}$, is at most $(d+1)\bar s/\min_kw_k$. For $n$-splits of a fixed instance $\bar s\propto1/n$, so the width at which a rounded pure profile becomes an E-admissible equilibrium is $O(d/n)$ and vanishes in the limit; the $N$-free terms bind exactly when $N>d+1$.
+\end{corollary}
+\begin{proof}
+$\sigma_{\max}\le\bar s/\min_kw_k$ and $\min\{\cdot\}\le d+1$.
+\end{proof}
+
+With $d=ZH$ coordinates the terms $d+1$ and $1+\sqrt{d\ln(2d)/2}$ become relevant only for very many carriers (for Cairo with 179 active zone-hours in the experiments, $N>180$), which is the regime of gig couriers and small operators. The corollary is algebra on the Omega theorem; its content is the regime statement.
+
+\begin{proposition}[Time-of-day charges can move the worst case of travel times]\label{prop:tod}
+In the Omega routing layer the cost of a route is nondecreasing in every arc travel time, and the upper prevision over a probability box with unknown dependence is attained at the upper (slowest) marginals. If instead a period-dependent charge is paid at the arrival time, monotonicity can fail: with one arc whose travel time $T$ has a p-box containing all laws on $[0,2]$, and cost $T+U\cdot\one\{T<1\}$ with $U>2$, the upper prevision equals $\sup_{T\in[0,2]}(T+U\one\{T<1\})=1+U$ (approached as $T\uparrow1$), whereas the slowest law ($T=2$) costs $2$.
+\end{proposition}
+\begin{proof}
+The p-box contains every Dirac law on $[0,2]$, so the upper prevision is the supremum of the cost; on $[0,1)$ the cost is $T+U<1+U$ and tends to $1+U$, on $[1,2]$ it is at most $2<1+U$.
+\end{proof}
+
+When charges increase over the day (or are constant), the arrival-time cost is again nondecreasing in travel time and the Omega corner property is restored; with decreasing charges, the robust route cost must be computed over the whole box. In the experiments below travel times are deterministic, so this proposition limits the transfer of the Omega routing layer to the time-expanded model rather than affecting the computations.

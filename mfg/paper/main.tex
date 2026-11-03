@@ -1,0 +1,196 @@
+\documentclass[preprint,11pt,authoryear]{elsarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{orcidlink}
+
+\input{../theory/macros.tex}
+\input{numbers.tex}
+\graphicspath{{../figures/}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\journal{(venue to be decided)}
+
+\begin{document}
+
+\begin{frontmatter}
+\title{Many small carriers: the mean-field limit of competitive urban delivery under zone-time charges}
+
+\author{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
+\ead{vinh.dq4@buv.edu.vn}
+\address{British University Vietnam, Hung Yen, Vietnam}
+
+\begin{abstract}
+Cities increasingly face many small delivery operators rather than a few large ones. We study the limit of a Cournot-congestion game among delivery carriers when the share of every carrier goes to zero, on a time-expanded zone graph in which carriers keep multi-stop tours and fleet budgets. The limit is a potential mean-field game whose equilibrium is a Wardrop equilibrium of the zone-hour market. We ask how fast the finite market approaches it, and what this means for a city that sets charges from observed zone totals. Four results answer the rate question. The aggregate gap is at most $\tfrac12(\bar s\langle m,A\rangle)^{1/2}$, where $\bar s$ is the largest delivery one carrier can make at one zone-hour, and an explicit two-zone family attains this order, so no rate of order $\bar s$ with an instance-free constant exists once carriers' plans couple zones. When carriers' problems separate by zone-hour, the gap is at most one carrier's delivery, with constant one and equality for identical carriers; for identical carriers it is at most $\|A\|/N$ under any coupling; and for replicas of a fixed instance it is $O(1/n)$ with a constant governed by the conditioning of the carrier types. For the city, the observation-only charge converges to the marginal-cost charge at the rate of the aggregate gap of an auxiliary game, and its welfare loss is at most $\tfrac12\bar s\langle m,Q^{\rm opt}\rangle$ for every instance. Cautious ($\Gamma$-maximin) carriers shift the limit like a per-delivery tax, which costs welfare of second order in the belief width. On nine cities with a stylised hourly profile, the gap falls like $N^{\SlopeGap}$ (95\% interval $[\SlopeGapLo,\SlopeGapHi]$) between 24 and 1536 carriers, about one largest carrier delivery throughout; the observation-only charge lowers welfare when there are few carriers and approaches the marginal-cost charge as their number grows. Algebraic cores of the theory are checked in Lean.
+\end{abstract}
+
+\begin{keyword}
+mean-field games \sep Wardrop equilibrium \sep Cournot competition \sep congestion pricing \sep urban logistics \sep rate of convergence
+\end{keyword}
+\end{frontmatter}
+
+%======================================================================
+\section{Introduction}\label{sec:intro}
+
+Parcel delivery in large cities is carried out by a mixture of a few large carriers and very many small operators: subcontracted van owners, regional couriers and gig drivers. A companion paper \citep{Omega2026} (the \emph{Omega paper} below) studied a city that charges a handful of large carriers playing a Cournot-congestion game in which each carrier solves a vehicle-routing problem. Its leader results (dual implementation pricing and aggregate-response pricing) are driven by market power: with few carriers, the corrective charge contains a subsidy for the deliveries that Cournot carriers withhold.
+
+This paper asks what remains of that picture when the carriers are small. When every carrier's share goes to zero, each becomes a price taker and the market approaches a Wardrop equilibrium of the zone-time market, which is a potential mean-field game on a time-expanded graph \citep{LasryLions2007,HuangMalhameCaines2006,Gomes2010,Gueant2015,CalderoneSastry2017}. Three questions follow. How fast does the finite market approach the limit, and with what constant? What happens to the city's observation-only charge? What happens to the parts of the Omega theory that depend on the number of carriers, namely the belief width that absorbs rounding errors and the vehicle-count regime in which pure equilibria may fail to exist?
+
+\paragraph{Contributions} The paper's main contribution is a precise answer to the rate question for this class of games.
+\begin{enumerate}
+\item A general bound $\norm{A^\Nash-A^\War}_m\le\tfrac12(\sum_i\norm{a_i^\War}_m^2)^{1/2}\le\tfrac12(\bar s\ip{m}{A^\War})^{1/2}$, also for pure equilibria with lumpy plans (Theorem~\ref{thm:sqrt}), and a two-zone family that attains it up to the factor $1/\sqrt2$ (Proposition~\ref{prop:tight}). Consequently, for carriers whose tours or fleets couple zones, \emph{no} bound of order $\bar s$ with an instance-free constant exists; the worst case is of exact order $\bar s^{1/2}$, the rate of \citet{Paccagnan2019}.
+\item Exact $O(\bar s)$ bounds under structure: constant one for zone-separable carriers, for convexified and lumpy plans alike, with equality for identical carriers (Theorem~\ref{thm:sep}); constant one in the $M$-norm for identical carriers under any coupling (Proposition~\ref{prop:common}); $O(1/n)$ for replicas with an instance-dependent constant (Theorem~\ref{thm:rep}) that is explicit in the smooth case and degrades with the collinearity of the carrier types (Proposition~\ref{prop:affine}).
+\item For the city: the observation-only rule contracts at the instance-free rate of the Omega paper for both behaviours; its finite-market fixed point equals $\kappa$ times the Nash aggregate of an auxiliary game, so it converges to the marginal-cost charge at the rate of an aggregate gap (Theorem~\ref{thm:toll}); and its welfare loss is at most $\tfrac12\bar s\ip{m}{Q^\opt}$ for every instance (Theorem~\ref{thm:welfare}), so efficiency converges at rate $O(\bar s)$ even where aggregates converge only at rate $O(\bar s^{1/2})$.
+\item In the limit, $\Gamma$-maximin carriers act like a tax $\delta m\odot w$; the observation-only charge then over-corrects, at a welfare cost of at most $\tfrac12\delta^2\norm{m\odot w}^2_{(m+\kappa)^{-1}}$ (Proposition~\ref{prop:gamma}); the belief width needed for credal absorption is $O(d\bar s)$ (Corollary~\ref{cor:width}). Under vehicle-count congestion the limit has an equilibrium, and it is a weighted potential game exactly when dwell times are rank one (Proposition~\ref{prop:d2}).
+\item A computational study on the nine cities of the Omega paper, extended to a time-expanded graph with ten hourly periods and a stylised hourly profile, with up to $1536$ carriers.
+\end{enumerate}
+
+\paragraph{Scope} The limit fits gig couriers, subcontracted van operators and small regional carriers; it does not fit a market dominated by three to six large carriers, for which the Omega paper's atomic model, or a model with major and minor players \citep{Huang2010}, is the faithful one. We do not treat the major-minor model here. The hourly demand and speed profile is stylised: the repository has no hourly data, and we anchor the profile at published peak-hour congestion values and grade every assumption (Section~\ref{sec:data}).
+
+%======================================================================
+\section{Related work and what is new}\label{sec:related}
+
+\paragraph{Nash to Wardrop} \citet{HaurieMarcotte1985} showed that Nash--Cournot equilibria of routing games converge to Wardrop equilibria as players split into replicas, with a bound of the same square-root order as \citet[Thm.~1(3)]{Paccagnan2019}, who proved $\norm{\sigma(x^\Nash)-\sigma(x^\War)}\le(2RL_2/(\alpha M))^{1/2}$ for aggregative games with coupling constraints, and $O(1/M)$ bounds when the Nash or Wardrop operator is strongly monotone in the individual strategies (their Thm.~1(1)--(2)). \citet{JacquotWan2018} bound the squared distance on parallel networks linearly in the largest class mass, again a square-root rate for the distance. \citet{Cominetti2023} study unsplittable atomic games and their Poisson limits. To our reading, no lower bound showing that the square-root order is attained had been given; Proposition~\ref{prop:tight} provides one, for linear profits where strong monotonicity in individual strategies fails. Theorem~\ref{thm:sep} (constant one, sharp) and Theorem~\ref{thm:welfare}(b) (uniform $O(\bar s)$ welfare) are, as far as we found, not in print; both are short.
+
+\paragraph{Mean-field games on networks and tolls} Existence and uniqueness of potential congestion MFGs on graphs are known \citep{Gueant2015,Gomes2010}; MDP congestion games and their Wardrop equilibria are due to \citet{CalderoneSastry2017}; tolls that enforce constraints in MDP congestion games, including adaptive tolls with unknown costs on real ride-hail data, are in \citet{Li2019,Li2023}; marginal-cost tolls go back to \citet{Beckmann1956} and trial-and-error implementation to \citet{Yang2004}. \citet{Cabannes2021} solve $N$-player dynamic routing games through their mean-field limit and observe accuracy beyond a few dozen vehicles, without a theorem on the gap or prices. Stackelberg MFGs are studied by \citet{Aurell2022} and pricing with a continuum of congested followers by \citet{HarksSchedel2024}. Our leader results reuse these mechanisms; what is new is the exact identity for the finite-market fixed point and the instance-free welfare rate. Cournot MFGs \citep{ChanSircar2015} and ride-hailing MFGs \citep{LiDimakis2025} have no congestion network or tolls; robust MFG existence is known \citep{Langner2024}, and we use only the $\Gamma$-maximin surcharge. Solvers for potential MFGs (fictitious play, conditional gradient, mirror descent) exist \citep{CardaliaguetHadikhanloo2017,LavignePfeiffer2023,Perolat2022}; we reuse conditional gradient and do not claim a new solver.
+
+%======================================================================
+\input{../theory/model.tex}
+\input{../theory/gap.tex}
+\input{../theory/leader.tex}
+\input{../theory/imprecise.tex}
+\input{../theory/d2.tex}
+
+%======================================================================
+\section{Computation}\label{sec:comp}
+
+\paragraph{Equilibria as quadratic programs} By Lemma~\ref{lem:pot}, every object of the paper maximises a concave quadratic potential over a product of fleet polytopes: Nash ($\Phi_\Nash$), Wardrop ($\Phi_\War$), the social optimum ($\Phi_\War$ with coupling $m+\kappa$) and the two observation-only fixed points (Proposition~\ref{prop:arp}(b)). We introduce the deliveries $a_i$ and the aggregate $Q$ as variables, so that the Hessian is diagonal, and solve the program with the interior-point method Clarabel \citep{Clarabel2024} at relative gap $10^{-13}$. The accuracy of each solution is measured by the Frank--Wolfe (duality) gap $\Gamma$ of the potential, and $\norm{Q-Q^*}_m\le(2\Gamma)^{1/2}$ because the potential is $1$-strongly concave in $Q$ in the $m$-norm; every reported gap carries this error bound, which is at most \ErrMax{} of the gap in the replica runs.
+
+\paragraph{Replicas cost the same as one carrier per type} By Lemma~\ref{lem:rep} the Nash equilibrium of $n$ replicas per segment is one program in the segment totals with own weight $1/n$; the experiments therefore reach $N=1536$ at the cost of $N=6$. Heterogeneous splits need one block per carrier.
+
+\paragraph{Learning dynamics} The conditional-gradient (Frank--Wolfe) method with exact line search is the natural decentralised dynamics: in each round every carrier computes one best response to the current zone-hour prices (one oracle call: the tour with the largest profit per vehicle-hour) and the profile moves toward it. For potential MFGs this is fictitious play in its conditional-gradient form \citep{CardaliaguetHadikhanloo2017,LavignePfeiffer2023}; its gap decreases at rate $O(1/k)$. It is included as the method a decentralised market would follow and as an independent check of the interior-point solutions (tests in \texttt{mfg/tests}).
+
+\paragraph{Best responses on the time-expanded graph} A carrier's best response to prices is a longest-path problem on the acyclic graph $G_H$ with a constraint that a zone is served at most once per tour. With at most three stops per tour, as here, the tours are enumerated (one ordering per stop set, the one with least travel time, for each start hour); with longer tours the best response is a prize-collecting elementary path problem, NP-hard in general, and the labelling algorithms of the Omega paper apply.
+
+%======================================================================
+\section{Data and stylised hourly profile}\label{sec:data}
+
+\paragraph{Cities} We use the nine processed cities of the Omega paper (zones, populations, zone-to-zone travel times on the major road graph, depot scores and the parameter table with grades A/B/C; Table~\ref{tab:cities}). For each city and seed we draw six \emph{segments} of small carriers. A segment has a depot (high depot score, at least 3\,km apart), eight customer zones drawn around the depot by population times a gravity decay, lots per stop as in the Omega calibration, and a fleet budget in vehicle-hours equal to the segment's daily parcels divided by drops per vehicle-day times the shift length. The segment's demand share is $1/6$ of the zone's parcels. Tours start in any of the ten hours, visit one to three customer zones, deliver one lot per stop, and end at the depot by 18:00; this gives $2.5$ to $2.9$ thousand tours per instance.
+
+\paragraph{Calibration} As in the Omega paper: $\alpha_k=1.5\times$ delivery fee, $b_k=\alpha_k/(2Q_k^{\rm full})$ with $Q_k^{\rm full}$ the slice's demand in the hour, in-zone hours per delivery $r=0.6\times$ shift$/$drops, and $\kappa_k=\gamma c_kr^2$ with $c_k$ the derivative of the BPR curve at the hourly congestion level, scaled by the slice multiplicity. A tour costs the hourly vehicle cost (wage plus fuel) times its duration plus one hour.
+
+\paragraph{The hourly profile is an assumption} The congestion level $\mathrm{cong}(h)$ is the TomTom all-day value with two Gaussian rush-hour bumps (width one hour) centred at 08:30 and 17:30 whose heights reproduce the TomTom morning and evening peak values of each city (anchors graded A; the shape graded C; Moscow's peaks, absent from the index, imputed from the other cities' ratios, graded C). The demand share $\psi(h)$ has a late-afternoon bump of $+60\%$ and a late-morning bump of $+30\%$, normalised to mean one (graded C; no data). An amplitude parameter scales all deviations from a flat profile (amplitude zero is the static model split into ten equal hours). Results that depend on the profile are reported as sensitivity analyses over the amplitudes $0$, $0.5$, $1$ and $1.5$, and nothing in the paper relies on the profile being realistic.
+
+\begin{table}[t]
+\centering\small
+\caption{Replica study per city (amplitude 1, five seeds). $d$: active zone-hours; $\varrho=\max\kappa/m$; slope: log-log slope of $\norm{Q^\Nash-Q^\War}_m$ in $N$ for $N\ge24$, mean over seeds with 95\% $t$-interval; ratio: $\max_k|\Delta Q_k|/s_N$ with $s_N$ the largest Nash delivery of one carrier at one zone-hour, median and maximum over $N$ and seeds; PoA$-1$ in \% of optimal welfare at $N=6$ and in the limit; charge gap $\norm{u^*_\Nash-u^*_\War}_{\kappa^{-1}}/\norm{u^*_\War}_{\kappa^{-1}}$ at $N=6$ and $N=1536$.}\label{tab:cities}
+\begin{tabular}{lrrlrrrrrr}
+\toprule
+City & $d$ & $\varrho$ & slope [95\% CI] & ratio med & ratio max & PoA$_6$ & PoA$_\infty$ & charge$_6$ & charge$_{1536}$\\
+\midrule
+\input{table_cities.tex}
+\bottomrule
+\end{tabular}
+\end{table}
+
+%======================================================================
+\section{Computational study}\label{sec:exp}
+
+\paragraph{Protocol} Main study: nine cities, five seeds, profile amplitude 1, replica splits $k\in\{1,2,4,\dots,256\}$ per segment ($N=6k$ carriers, $N\le1536$), \NRows{} instances. Heterogeneous splits (Dirichlet(2) fleet shares and individual routing-cost multipliers in $[0.85,1.15]$): three seeds, $k\le16$, \NRowsHet{} instances, each compared with the Wardrop equilibrium of the same population. Sensitivity: amplitudes $0$, $0.5$, $1.5$ (three seeds) and a congestion-heavy variant with $\kappa\times10$ (three seeds, \NRowsK{} instances). All runs are resumable scripts in \texttt{mfg/experiments}; results are in \texttt{mfg/results}. Confidence intervals are $t$-intervals over seeds of per-seed least-squares slopes.
+
+\paragraph{E1: the gap behaves like one carrier's delivery} Figure~\ref{fig:gap} shows the relative gap $\norm{Q^\Nash-Q^\War}_m/\norm{Q^\War}_m$ against $N$. Over all cities and seeds the slope for $N\ge24$ is $\SlopeGap$ $[\SlopeGapLo,\SlopeGapHi]$, between $\SlopeGapCityMin$ and $\SlopeGapCityMax$ by city. The slope is not $-1$ because the share itself does not fall exactly like $1/N$: the largest delivery of one carrier, $s_N$, scales like $N^{\SlopeSN}$ (segments deliver more in total as the market becomes more competitive), and the gap against $s_N$ has slope $\SlopeS$ $[\SlopeSLo,\SlopeSHi]$. In units of $s_N$ the gap stays near one: median \RatioMed{}, range \RatioMin--\RatioMax{} (right panel). The general bound of Theorem~\ref{thm:sqrt} held in \SqrtOK{} instances (largest ratio \SqrtRatioMax). For heterogeneous splits the slope over $N=12$ to $96$ is $\SlopeHet$ $[\SlopeHetLo,\SlopeHetHi]$, the ratio to $s_N$ has median \RatioHetMed{} and maximum \RatioHetMax{}, and the general bound held in \HetSqrtOK{}. The heterogeneous slope is flatter and its range of $N$ is short; we read it as consistent with $O(s_N)$ but not as evidence of a rate. No city comes close to the adversarial behaviour of Proposition~\ref{prop:tight}: the theory says that such behaviour needs nearly collinear segment types with different own surcharges, and the city instances do not produce it.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{mfg_gap.png}
+\caption{Left: relative aggregate gap against the number of carriers (replicas, median of five seeds). Right: largest coordinate gap in units of the largest carrier delivery $s_N$ (circles: replicas; crosses: heterogeneous splits).}\label{fig:gap}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.62\textwidth]{mfg_tight.png}
+\caption{The two-zone family of Proposition~\ref{prop:tight}. With $1-\cos\varphi_n=1/n$ the gap follows the bound of Theorem~\ref{thm:sqrt} at ratio $1/\sqrt2$; for a fixed angle it eventually falls like $1/n$, with a constant $1/\sin\varphi$.}\label{fig:tight}
+\end{figure}
+
+\paragraph{E2: the charge and the welfare} The calibrated congestion is weak relative to demand: $\varrho$ lies between \RhoMin{} and \RhoMax{}, the mean-field price of anarchy is \PoaWMed\% of optimal welfare (median; maximum \PoaWMax\%), and the welfare cost of the finite market is almost entirely Cournot withholding: PoA$-1$ is \PoaSixMed\% at $N=6$ (range \PoaSixMin--\PoaSixMax\%) and \PoaBigMed\% at $N=1536$ (Figure~\ref{fig:toll}). The observation-only fixed point approaches the Pigou charge with slope \SlopeToll{} $[\SlopeTollLo,\SlopeTollHi]$ (calibrated) and \SlopeTollK{} $[\SlopeTollKLo,\SlopeTollKHi]$ (congestion $\times10$, $\varrho$ up to \RhoKMax{}). The welfare bound of Theorem~\ref{thm:welfare}(b) held in \WelfOK{} instances; the realised loss was at most \WlossRatioMax{} of the bound.
+
+The negative result is the leader gain. With few carriers the observation-only charge \emph{lowers} welfare: median $\GainSixMed\%$ at $N=6$ (calibrated) and $\GainKSixMed\%$ with congestion $\times10$, because it taxes deliveries that Cournot carriers already withhold. With congestion $\times10$ the gain is positive in every city and seed from $N=\GainKPosN$ on and reaches \GainKBigMed\% at $N=1536$ against \GainKWMed\% in the limit. With the calibrated congestion the attainable gain is tiny (\GainWMed\% in the limit) and the charge never helps in all instances at once. The Omega flat rule, which adds the market-power subsidy, is the right rule for few carriers (E5).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{mfg_toll_poa.png}
+\caption{Left: distance of the finite-market observation-only charge from the Pigou charge. Middle: price of anarchy at $N$ carriers (dotted: limit). Right: welfare gain of the observation-only charge (solid: calibrated congestion; dashed: congestion $\times10$).}\label{fig:toll}
+\end{figure}
+
+\paragraph{E3: the hourly profile matters little for these questions} With amplitudes $0$, $0.5$, $1$ and $1.5$ the median PoA$-1$ at $N=6$ is \PoaAmpZero, \PoaAmpHalf, \PoaAmpOne{} and \PoaAmpOneHalf\%, and the pooled gap slopes are \SlopeAmpZero, \SlopeAmpHalf, \SlopeAmpOne{} and \SlopeAmpOneHalf{} (Figure~\ref{fig:profile}). The convergence results do not depend on the profile, as the theory predicts (the bounds are uniform in the data), and the economic quantities move by about one percentage point. This is a weak result in the sense that it says little about real time-of-day effects: with a stylised profile, it shows only that our conclusions are not artefacts of a particular shape.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{mfg_profile.png}
+\caption{Sensitivity to the amplitude of the stylised hourly profile (three seeds). Left: PoA$-1$ at $N=6$. Right: gap slopes with 95\% intervals.}\label{fig:profile}
+\end{figure}
+
+\paragraph{E4: cautious carriers and the belief width} With the belief box in units of the median lot, the mean-field aggregate moves by at most \GamDevMax{} of the bound $\delta\norm w_m$ of Proposition~\ref{prop:gamma}(b) (median \GamDevMed). The observation-only charge under cautious carriers loses \GamLossOneMed\% of optimal welfare at $\delta=1$ and \GamLossFourMed\% at $\delta=4$ (median), within the bound of Proposition~\ref{prop:gamma}(d) in \GamLossOK{} cases (median ratio \GamLossRatioMed); the charge shift satisfied part (c) in \GamTollOK{} cases (Figure~\ref{fig:gamma}). The absorption width of Corollary~\ref{cor:width}, relative to the mean demand of a zone-hour, falls from \WidthSixMed{} at $N=6$ to \WidthBigMed{} at $N=24576$; with $d$ between \Dmin{} and \Dmax{} active zone-hours the $N$-free terms bind only beyond a few hundred carriers.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{mfg_gamma.png}
+\caption{$\Gamma$-maximin carriers ($N=1536$). Left: shift of the mean-field aggregate relative to the bound. Right: welfare loss of the observation-only charge and the bound $\tfrac12\delta^2\norm{m\odot w}^2_{(m+\kappa)^{-1}}$.}\label{fig:gamma}
+\end{figure}
+
+\paragraph{E5: which observation-only rule} Figure~\ref{fig:arp} (right) compares the observation-only Pigou rule with the Omega flat rule $u\leftarrow\kappa Q-m\odot\bar d$, where $\bar d$ is the observed mean delivery per active carrier (damped iteration). At $N=6$ the flat rule gains \FlatSixMed\% (calibrated; \FlatKSixMed\% with congestion $\times10$) where the Pigou rule loses \ObsSixMed\% (\ObsKSixMed\%); at $N=1536$ the flat rule gains \FlatBigMed\% (\FlatKBigMed\%) and its charge is within \FlatKDistBig{} (relative, congestion $\times10$) of the Pigou charge. The subsidy vanishes like the share, so the two rules meet in the limit. The plain rule contracted in every run at a per-round ratio of at most \PathRatioMax{} times $\varrho$ (left panel).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{mfg_arp.png}
+\caption{Left: plain observation-only iteration (Nash carriers), distance to the fixed point. Right: welfare gain of the Omega flat rule and of the observation-only Pigou rule against $N$ (median over cities and seeds).}\label{fig:arp}
+\end{figure}
+
+\paragraph{E6: cost} The replica reduction makes the Nash equilibrium for $N=1536$ as cheap as for $N=6$ (well under a second per program). Heterogeneous splits grow with $N$: one interior-point solve took minutes at $N=96$. Frank--Wolfe needed a median of \FWItersW{} rounds (Wardrop) and \FWItersN{} rounds (Nash) to reach a relative gap of $10^{-4}$ (Figure~\ref{fig:cost} in the appendix).
+
+%======================================================================
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{What is proved, what is numerically supported, what is open}
+Proved, with complete proofs here: Lemmas~\ref{lem:lin}--\ref{lem:rep}, Theorems~\ref{thm:sqrt}, \ref{thm:sep}, \ref{thm:rep}, \ref{thm:toll}, \ref{thm:welfare}, Propositions~\ref{prop:tight}, \ref{prop:common}, \ref{prop:affine}, \ref{prop:arp}, \ref{prop:gamma}, \ref{prop:tod}, \ref{prop:d2} and Corollaries~\ref{cor:poa}, \ref{cor:width}. Theorem~\ref{thm:rep} rests on \citet{Robinson1981}, Proposition~\ref{prop:gamma}(a) and Corollary~\ref{cor:width} on the Omega paper, and Proposition~\ref{prop:arp}(a) restates the Omega contraction theorem. Every bound was also checked by brute force on small random games (Appendix~\ref{app:checks}). Numerically supported only: that the city instances behave like $O(s_N)$ with a constant near one, and that heterogeneous splits do too. Open: an explicit constant for replicas in the polyhedral case, and Conjecture~\ref{conj:d2}.
+
+\paragraph{What the results mean for a city} With many small carriers, a city can set congestion charges from observed zone-hour totals and approach the marginal-cost charge; welfare converges at rate $O(\bar s)$ regardless of how carriers' tours couple zones. With few carriers this rule is harmful, and the market-power correction of the Omega rule is needed. Cautious carriers make an observation-only city over-charge by about their caution margin; the welfare cost is second order.
+
+\paragraph{Limitations} The hourly profile is stylised; real hourly demand and speed data would change the levels in E2--E4 and possibly the economic conclusions, but not the convergence statements. Travel times are deterministic in the experiments (the p-box routing layer of the Omega paper is not re-run on the time-expanded graph, and Proposition~\ref{prop:tod} shows that its corner property can fail with time-dependent charges). Congestion is linear in in-zone hours and ignores inter-zone driving. Tours have at most three stops. The segments are drawn, not observed. The mean-field limit removes market power, which is the economic content of the Omega leader results; for markets with a few large carriers and many small ones, a major-minor model is the right object and is left for later work.
+
+\section{Conclusion}\label{sec:conclusion}
+The mean-field limit of competitive urban delivery is reached at rate $O(\bar s)$ when carriers' problems separate across zone-hours, and in the city instances; in the worst case, once tours and fleets couple zones, only the square-root rate holds, and an explicit example attains it. The city's observation-only charge inherits these rates, but its efficiency converges at rate $O(\bar s)$ for every instance. Whether a constant that depends only on the number of zone-hours exists for natural subclasses (unweighted fleet budgets, for example) is the main open question.
+
+\section*{Data and code availability}
+Code, instances, result files and the Lean development are in the repository (folder \texttt{mfg}).
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references}
+
+\appendix
+\section{Numerical checks of the theory}\label{app:checks}
+The script \texttt{mfg/checks/theory\_checks.py} computes, on small random games with linear profits and fleet budgets (and by exhaustive enumeration for pure equilibria of lumpy games), the slack of every inequality of Sections~\ref{sec:model}--\ref{sec:d2}; its output is \texttt{theory\_checks.out}. All slacks were nonnegative (up to the solver accuracy). In particular: the linearisation of Lemma~\ref{lem:pot}(c) reproduces the Nash aggregate to $10^{-7}$; the bound of Theorem~\ref{thm:sqrt}(a) held in 150 games with largest ratio $0.92$; the closed form of Proposition~\ref{prop:tight} matches the solver; Theorem~\ref{thm:sep} held in 200 convexified and 300 lumpy one-zone games (358 pure equilibria), with the constant one attained; Theorem~\ref{thm:sqrt}(b) held on 287 pure equilibria of multi-zone lumpy games.
+
+\section{Machine-checked cores}\label{app:lean}
+The Lean~4 file \texttt{mfg/lean/MFG/Core.lean} (Mathlib; no \texttt{sorry}; axioms \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound} only) checks: the symmetric closed form of Theorem~\ref{thm:sep}; the inner-product algebra of Theorem~\ref{thm:sqrt}(a) from the per-carrier optimality inequalities; the revealed-preference and sandwich steps of Theorem~\ref{thm:sep}; the contraction perturbation lemma of Theorem~\ref{thm:toll}; the weighted-norm chain of Proposition~\ref{prop:arp}(a); the algebra of the tightness family (Proposition~\ref{prop:tight}); the welfare inequalities behind Theorem~\ref{thm:welfare}(b) and Proposition~\ref{prop:gamma}(d); the determinant and the weight equivalence of Proposition~\ref{prop:d2}; and the width bound of Corollary~\ref{cor:width}. It does not formalise existence, first-order optimality, Robinson's theorem or the Omega theorems that are used.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.62\textwidth]{mfg_cost.png}
+\caption{Time of one equilibrium solve (interior point and Frank--Wolfe) for replicas and heterogeneous splits.}\label{fig:cost}
+\end{figure}
+
+\end{document}

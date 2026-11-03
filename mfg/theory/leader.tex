@@ -1,0 +1,79 @@
+% Section: the leader
+\section{The city's charge in the limit}\label{sec:leader}
+
+The city posts a per-delivery charge $u\in\R^d$ (by Omega Proposition ``one instrument per zone'' it can be realised as a uniform per-delivery charge plus non-negative congestion charges per vehicle-hour). Let $Q^\Nash(u)$ and $Q^\War(u)$ be the Nash and Wardrop aggregates under $u$ (unique by Lemma~\ref{lem:pot}). The \emph{observation-only rule} of the Omega paper, in its form without the market-power subsidy, posts
+\[
+u^{t+1}=(1-\theta)u^t+\theta\,\kappa\odot Q(u^t),\qquad\theta\in(0,1],
+\]
+using only the observed aggregate: the corrective charge at the observed deliveries. In the mean-field limit the market-power subsidy of the Omega rule has no object, and this is the natural rule.
+
+\begin{lemma}[Responses are nonexpansive]\label{lem:prox}
+For $X\in\{\Nash,\War\}$ and charges $u,u'$: $\norm{Q^X(u)-Q^X(u')}_m^2\le\ip{u'-u}{Q^X(u)-Q^X(u')}$, hence $\norm{Q^X(u)-Q^X(u')}_m\le\norm{u-u'}_{m^{-1}}$.
+\end{lemma}
+\begin{proof}
+For $X=\War$ write the two optimality inequalities of Theorem~\ref{thm:sqrt}(a) with the two equilibria $y=y^\War(u)$, $y'=y^\War(u')$: $\pi_i(y_i')-\ip{a_i'}{MA+u}\le\pi_i(y_i)-\ip{a_i}{MA+u}$ and the symmetric one. Adding and summing over $i$ gives $\norm{A-A'}_m^2+\ip{A-A'}{u-u'}\le0$. For $X=\Nash$ the surcharges $Ma_i$, $Ma_i'$ of Lemma~\ref{lem:pot}(c) add $\sum_i\norm{a_i-a_i'}_m^2\ge0$ to the left side. The second inequality follows by Cauchy--Schwarz in the dual pair $(\norm\cdot_m,\norm\cdot_{m^{-1}})$.
+\end{proof}
+
+\begin{proposition}[Contraction and fixed point]\label{prop:arp}
+Let $T_X(u)=\kappa\odot Q^X(u)$ for $X\in\{\Nash,\War\}$.
+\begin{enumerate}
+\item[(a)] $\norm{T_X(u)-T_X(u')}_{\kappa^{-1}}\le\varrho\norm{u-u'}_{\kappa^{-1}}$ with $\varrho=\max_k\kappa_k/m_k<1$; the plain rule ($\theta=1$) converges linearly with ratio $\varrho$.
+\item[(b)] The unique fixed point is $u_X^*=\kappa\odot\tilde Q_X$, where $\tilde Q_X$ is the aggregate of any maximiser of $\tilde\Phi_X$, defined as $\Phi_X$ with $u=0$ and the coupling $\tfrac12\norm A_m^2$ replaced by $\tfrac12\norm A_{m+\kappa}^2$ (the own terms of $\Phi_\Nash$ keep the weight $m$).
+\item[(c)] $\tilde\Phi_\War=\SW$, so $u_\War^*=\kappa\odot Q^\opt$ is the marginal-cost (Pigou) charge and the Wardrop equilibrium under $u_\War^*$ is socially optimal.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) $\norm{\kappa\odot\Delta Q}_{\kappa^{-1}}^2=\sum_k\kappa_k\Delta Q_k^2\le\varrho\norm{\Delta Q}_m^2\le\varrho\norm{\Delta u}_{m^{-1}}^2\le\varrho^2\norm{\Delta u}_{\kappa^{-1}}^2$, using $\kappa_k\le\varrho m_k$ twice and Lemma~\ref{lem:prox}. (b) Let $\tilde y$ maximise $\tilde\Phi_X$ and $\tilde Q$ its aggregate. Lemma~\ref{lem:lin}, applied to the convex term $\tfrac12\norm{A}_\kappa^2$, shows that $\tilde y$ maximises $\tilde\Phi_X+\tfrac12\norm A_\kappa^2-\ip{\kappa\odot\tilde Q}{A}$, which is $\Phi_X$ with $u=\kappa\odot\tilde Q$. By Lemma~\ref{lem:pot}(a), $\tilde y$ is an $X$-equilibrium under that charge, so $\kappa\odot\tilde Q$ is a fixed point; it is unique by (a). (c) $\tfrac12\norm A_{m+\kappa}^2=\tfrac12\norm{Q}_{b+2\kappa}^2$ is the quadratic part of \eqref{eq:welfare}.
+\end{proof}
+
+Part (a) is the contraction theorem of the Omega paper (``the response is a proximal map''), restated for the time-expanded game and for both behaviours; part (c) is the classical marginal-cost toll \citep{Beckmann1956}, here reached by observation alone. Part (b) is what makes the finite-$N$ analysis exact:
+
+\begin{theorem}[Charge convergence]\label{thm:toll}
+Let $\tilde Q_\Nash,\tilde Q_\War$ be the Nash and Wardrop aggregates of the auxiliary game of Proposition~\ref{prop:arp}(b) (coupling $m+\kappa$, own weight $m$). Then
+\[
+u_\Nash^*-u_\War^*=\kappa\odot(\tilde Q_\Nash-\tilde Q_\War),\qquad
+\norm{u_\Nash^*-u_\War^*}_{\kappa^{-1}}=\norm{\tilde Q_\Nash-\tilde Q_\War}_\kappa ,
+\]
+and consequently
+\begin{enumerate}
+\item[(a)] in general, $\norm{u_\Nash^*-u_\War^*}_{\kappa^{-1}}\le\tfrac12\tilde\varrho^{1/2}\big(\sum_i\norm{\tilde a_i^\War}_m^2\big)^{1/2}\le\tfrac12\big(\tilde\varrho\,\bar s\,\ip{m}{\tilde Q_\War}\big)^{1/2}$ with $\tilde\varrho=\max_k\kappa_k/(m_k+\kappa_k)$;
+\item[(b)] for zone-separable carriers, $0\le u_{\War,k}^*-u_{\Nash,k}^*\le\kappa_k\max_i\tilde q_{ik}^\Nash\le\kappa_k\bar s$ for every $k$;
+\item[(c)] for replicas (polyhedral types, linear profits), $\norm{u_\Nash^*-u_\War^*}=O(1/n)$ with an instance-dependent constant.
+\end{enumerate}
+Moreover, for any charge-to-charge perturbation: if $T$ is a $\varrho$-contraction with fixed point $u^*$ and $u'$ is a fixed point of a map $T'$ with $\norm{T'u'-Tu'}\le\varepsilon$, then $\norm{u'-u^*}\le\varepsilon/(1-\varrho)$; with $T=T_\War$, $T'=T_\Nash$ this gives the memo's form $\norm{u_\Nash^*-u_\War^*}_{\kappa^{-1}}\le\norm{Q^\Nash(u_\Nash^*)-Q^\War(u_\Nash^*)}_\kappa/(1-\varrho)$.
+\end{theorem}
+\begin{proof}
+The identity is Proposition~\ref{prop:arp}(b). The auxiliary game is a game of the form of Section~\ref{sec:model} with coupling $m'=m+\kappa$ except that each carrier's own term carries $m$ instead of $m'$; Lemma~\ref{lem:pot}(c) then gives own surcharges $Ma_i$ instead of $M'a_i$, and the proofs of Theorems~\ref{thm:sqrt}, \ref{thm:sep} and~\ref{thm:rep} go through verbatim: in Theorem~\ref{thm:sqrt}(a) one obtains $\norm{\Delta\tilde Q}_{m'}^2\le\sum_i\ip{\tilde a_i^\Nash}{M(\tilde a_i^\War-\tilde a_i^\Nash)}\le\tfrac14\sum_i\norm{\tilde a_i^\War}_m^2$, and $\norm{x}_\kappa^2\le\tilde\varrho\norm x_{m'}^2$ gives (a); in Theorem~\ref{thm:sep} the surcharge $m_kq_i\le m'_kq_i$ only strengthens (ii), so $0\le\tilde Q_{\War,k}-\tilde Q_{\Nash,k}\le\max_i\tilde q_{ik}^\Nash$, which is (b) after multiplying by $\kappa_k$; (c) is Theorem~\ref{thm:rep}. The perturbation statement: $\norm{u'-u^*}=\norm{T'u'-Tu^*}\le\norm{T'u'-Tu'}+\norm{Tu'-Tu^*}\le\varepsilon+\varrho\norm{u'-u^*}$.
+\end{proof}
+
+So the finite-market fixed point lies \emph{below} the Pigou charge in every coordinate when carriers are zone-separable, and the shortfall is at most one carrier's deliveries times the congestion slope. The rate of convergence of the charge is the rate of convergence of the aggregate in the auxiliary game; the factor $1/(1-\varrho)$ of the perturbation argument is not needed.
+
+\begin{theorem}[Welfare]\label{thm:welfare}
+Let $y^\opt$ be a social optimum with aggregate $Q^\opt$ and $\SW^\opt=\SW(y^\opt)$.
+\begin{enumerate}
+\item[(a)] For every charge $v$ and every Wardrop equilibrium $y$ under $v$ with aggregate $Q$,
+\[
+\SW^\opt-\SW(y)\le\ip{v-\kappa\odot Q^\opt}{Q^\opt-Q}-\tfrac12\norm{Q-Q^\opt}_b^2\le\tfrac12\norm{v-\kappa\odot Q^\opt}_{b^{-1}}^2 .
+\]
+\item[(b)] (Uniform $O(\bar s)$ efficiency of the observation-only charge.) The Nash equilibrium under the finite-market fixed point $u_\Nash^*$ satisfies
+\[
+0\le\SW^\opt-\SW(y^\Nash(u_\Nash^*))\le\tfrac12\sum_i\norm{a_i^\opt}_m^2-\tfrac12\sum_i\norm{a_i^\Nash}_m^2\le\tfrac12\bar s\,\ip{m}{Q^\opt}.
+\]
+\item[(c)] For every charge $u$, $\big|\SW(y^\Nash(u))-\SW(y^\War(u))\big|\le\tfrac12\sum_i\norm{a_i^\War(u)}_m^2+\norm{Q^\Nash(u)-Q^\War(u)}_\kappa\,\norm{\bar Q(u)-\kappa^{-1}\odot u}_\kappa$, where $\bar Q(u)$ is the midpoint of the two aggregates.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Write $P^v(y)=\sum_i\pi_i-\tfrac12\norm Q_m^2-\ip vQ$, so $\SW=P^v+\ip vQ-\tfrac12\norm Q_\kappa^2$. (a) $y$ maximises $P^v$, which is the sum of a concave function and $-\tfrac12\norm{Q}_m^2$; by Lemma~\ref{lem:lin}, $y$ also maximises $\sum_i\pi_i-\ip vQ-\ip{MQ}{\cdot}$ evaluated at the aggregate, and the exact expansion of the quadratic term then gives $P^v(y)-P^v(y^\opt)\ge\tfrac12\norm{Q-Q^\opt}_m^2$. Hence
+$\SW^\opt-\SW(y)\le-\tfrac12\norm{\Delta Q}_m^2+\ip{v}{Q^\opt-Q}-\tfrac12\norm{Q^\opt}_\kappa^2+\tfrac12\norm{Q}_\kappa^2$ with $\Delta Q=Q-Q^\opt$, and $\tfrac12\norm Q_\kappa^2-\tfrac12\norm{Q^\opt}_\kappa^2=\ip{\kappa\odot Q^\opt}{\Delta Q}+\tfrac12\norm{\Delta Q}_\kappa^2$; with $m-\kappa=b$ this is the first inequality, and maximising over $\Delta Q$ gives the second.
+(b) By Proposition~\ref{prop:arp}(b), $y^\Nash(u_\Nash^*)$ maximises $\tilde\Phi_\Nash=\SW-\tfrac12\sum_i\norm{a_i}_m^2$; compare with $y^\opt$. The last inequality uses $0\le a_{ik}^\opt\le\bar s$.
+(c) $\SW=P^u-\tfrac12\norm{Q-\kappa^{-1}\odot u}_\kappa^2+\tfrac12\norm u_{\kappa^{-1}}^2$. Lemma~\ref{lem:pot} gives $0\le P^u(y^\War)-P^u(y^\Nash)\le\tfrac12\sum_i\norm{a_i^\War}_m^2-\tfrac12\sum_i\norm{a_i^\Nash}_m^2$ (because $y^\Nash$ maximises $P^u-\tfrac12\sum\norm{a_i}_m^2$), and the difference of the two quadratic terms is $\ip{Q^\Nash-Q^\War}{\bar Q-\kappa^{-1}\odot u}_\kappa$.
+\end{proof}
+
+Part (b) is uniform: unlike the aggregates (Proposition~\ref{prop:tight}), the welfare of the observation-only charge converges at rate $O(\bar s)$ with constant $\tfrac12\ip{m}{Q^\opt}$ for every instance. The reason is that welfare is second order in the aggregate error near the optimum. Part (b) does not say that the charge helps when $N$ is small: with few carriers the Cournot shortfall dominates and a charge that only adds the congestion cost can lower welfare (Section~\ref{sec:exp}). For a fixed small $N$ the Omega rule with its market-power subsidy is the appropriate one.
+
+\begin{corollary}[Price of anarchy and leader gain]\label{cor:poa}
+Let $\mathrm{PoA}_X=\SW^\opt/\SW(y^X(0))$ (welfare positive) and $G_X=\SW(y^X(u_X^*))-\SW(y^X(0))$ the gain of the observation-only charge. Then $|\mathrm{PoA}_\Nash-\mathrm{PoA}_\War|\le\mathrm{PoA}_\Nash\mathrm{PoA}_\War\,|\SW(y^\Nash(0))-\SW(y^\War(0))|/\SW^\opt$ and $|G_\Nash-G_\War|\le\big[\SW^\opt-\SW(y^\Nash(u_\Nash^*))\big]+|\SW(y^\Nash(0))-\SW(y^\War(0))|$; by Theorems~\ref{thm:welfare} and~\ref{thm:sqrt}--\ref{thm:rep} both tend to zero at rate $O(\bar s)+O(\norm{Q^\Nash(0)-Q^\War(0)}_\kappa)$, that is $O(\bar s)$ for separable carriers and replicas and $O(\bar s^{1/2})$ in the worst case.
+\end{corollary}
+\begin{proof}
+Direct from the definitions, $\SW(y^\War(u_\War^*))=\SW^\opt$ (Proposition~\ref{prop:arp}(c)) and Theorem~\ref{thm:welfare}(b),(c) at $u=0$.
+\end{proof}

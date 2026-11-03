@@ -39,8 +39,8 @@ def tight_family(n: int, phi: float | None = None, tA: float = 1.0, tB: float = 
                 s=float(max(TN.max(), TW.max()) / n))
 
 
-def tight_family_blocks(n: int, phi: float | None = None, tA: float = 1.0, tB: float = 0.0, cap: float = 10.0):
-    """The same family as replica blocks for the generic solver (linear profits, box [0, cap/n] per carrier)."""
+def tight_family_blocks(n: int, phi: float | None = None, tA: float = 1.0, tB: float = 0.0, cap: float = 1.0):
+    """The same family as replica blocks for the generic solver (linear profits, t in [0, cap/n] per carrier)."""
     f = tight_family(n, phi, tA, tB)
     blocks = []
     for k, vec in enumerate((np.array([1.0, 0.0]), f["v"])):

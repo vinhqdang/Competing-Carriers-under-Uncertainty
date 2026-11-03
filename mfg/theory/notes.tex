@@ -1,0 +1,26 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+\input{macros.tex}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\title{Mean-field limit of the carrier game: statements and proofs}
+\author{Quang-Vinh Dang}
+\date{Working notes (the same text is input by mfg/paper/main.tex)}
+\begin{document}
+\maketitle
+\label{sec:comp}\label{sec:exp}
+\input{model.tex}
+\input{gap.tex}
+\input{leader.tex}
+\input{imprecise.tex}
+\input{d2.tex}
+\bibliographystyle{plainnat}
+\bibliography{../paper/references}
+\end{document}

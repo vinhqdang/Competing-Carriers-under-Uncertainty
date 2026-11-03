@@ -1,0 +1,116 @@
+% Section: finite-N to mean-field gap
+\section{How far is the finite market from its mean-field limit?}\label{sec:gap}
+
+Throughout this section the charge $u$ is fixed (all bounds hold uniformly in $u$), $y^\Nash$ is a Nash equilibrium and $y^\War$ a Wardrop equilibrium of the same carriers, and $\Delta A=A^\Nash-A^\War$.
+
+\subsection{A general bound and its tightness}
+
+\begin{theorem}[General bound]\label{thm:sqrt}
+Assume (A1)--(A2).
+\begin{enumerate}
+\item[(a)] For every Wardrop equilibrium $y^\War$,
+\[
+\norm{\Delta A}_m^2\le\sum_i\ip{a_i^\Nash}{M(a_i^\War-a_i^\Nash)}\le\frac14\sum_i\norm{a_i^\War}_m^2 ,
+\qquad\text{hence}\qquad
+\norm{\Delta A}_m\le\frac12\Big(\sum_i\norm{a_i^\War}_m^2\Big)^{1/2}\le\frac12\big(\bar s\,\ip{m}{A^\War}\big)^{1/2}.
+\]
+\item[(b)] (Lumpy plans.) Let $p$ be a pure Nash equilibrium of the game in which carrier $i$ chooses a plan in the finite set $\cP_i$ (payoff \eqref{eq:payoff} with $a_i=q_i(p_i)$), and let $x^\War$ be a Wardrop equilibrium of its mixed extension (carrier $i$ mixes over $\cP_i$, contributes the mean $\bar a_i$). Then
+\[
+\norm{A(p)-A^\War}_m^2\le\sum_i\Big(\E_{x_i^\War}\norm{q_i}_m^2-\ip{\bar a_i^\War}{Mq_i(p_i)}\Big)\le\bar s\,\ip{m}{A^\War},
+\]
+with $\bar s$ the largest delivery of a plan at a coordinate. A pure Nash equilibrium exists.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) By Lemma~\ref{lem:pot}(c), $y_i^\Nash$ maximises $\pi_i-\ip{a_i}{MA^\Nash+u+Ma_i^\Nash}$, so it is at least as good as $y_i^\War$; and $y_i^\War$ maximises $\pi_i-\ip{a_i}{MA^\War+u}$, so it is at least as good as $y_i^\Nash$:
+\[
+\pi_i(y_i^\War)-\ip{a_i^\War}{MA^\Nash+u+Ma_i^\Nash}\le\pi_i(y_i^\Nash)-\ip{a_i^\Nash}{MA^\Nash+u+Ma_i^\Nash},
+\]
+\[
+\pi_i(y_i^\Nash)-\ip{a_i^\Nash}{MA^\War+u}\le\pi_i(y_i^\War)-\ip{a_i^\War}{MA^\War+u}.
+\]
+Adding, the profits and charges cancel and $\ip{a_i^\War-a_i^\Nash}{M(A^\War-A^\Nash)}\le\ip{a_i^\War-a_i^\Nash}{Ma_i^\Nash}$. Summing over $i$ gives the first inequality. The second is $\ip{x}{M(y-x)}\le\tfrac14\norm{y}_m^2$, i.e.\ $\norm{x-y/2}_m^2\ge0$, with $x=a_i^\Nash$, $y=a_i^\War$. Finally $\sum_i\norm{a_i^\War}_m^2=\sum_km_k\sum_i(a_{ik}^\War)^2\le\bar s\sum_km_kA_k^\War$ because $0\le a_{ik}^\War\le\bar s$.
+
+(b) A pure equilibrium exists because $\Phi_\Nash$ restricted to pure profiles is an exact potential of a finite game \citep{Monderer1996}. At $p$, carrier $i$ does not gain by deviating to any plan $p'$; averaging over $p'\sim x_i^\War$ (payoffs are evaluated against the realised rival aggregate $A_{-i}=A(p)-q_i(p_i)$),
+\[
+\pi_i(p_i)-\ip{q_i(p_i)}{M(A_{-i}+q_i(p_i))}\ge\bar\pi_i(x_i^\War)-\ip{\bar a_i^\War}{MA_{-i}}-\E_{x_i^\War}\norm{q_i}_m^2 .
+\]
+The Wardrop condition, tested against the pure strategies $p$, gives $\sum_i\bar\pi_i(x_i^\War)-\ip{A^\War}{MA^\War}\ge\sum_i\pi_i(p_i)-\ip{A(p)}{MA^\War}$ (the charge terms are omitted; they cancel as in (a)). Adding the sum over $i$ of the first inequality to the second and expanding $A_{-i}$ gives
+$0\ge\norm{A(p)-A^\War}_m^2+\sum_i\ip{\bar a_i^\War}{Mq_i(p_i)}-\sum_i\E_{x_i^\War}\norm{q_i}_m^2$, which is the claim; the last bound uses $\ip{\bar a_i^\War}{Mq_i(p_i)}\ge0$ and $\E\norm{q_i}_m^2\le\bar s\,\ip{m}{\bar a_i^\War}$.
+\end{proof}
+
+The first inequality of (a) is the summed variational-inequality argument of \citet[Thm.~1(3)]{Paccagnan2019}, written for this game; with $\bar s\sim1/N$ it gives the rate $O(N^{-1/2})$ of that theorem. The constant $\tfrac12$ and part (b) are additions. The next result shows that, without further structure, nothing better than $O(\bar s^{1/2})$ holds: the constant $\tfrac12$ is attained up to the factor $1/\sqrt2$.
+
+\begin{proposition}[Tightness]\label{prop:tight}
+Let $n\ge2$ and $\varphi_n\in(0,\pi/2)$ with $1-\cos\varphi_n=1/n$; put $c=\cos\varphi_n$, $v=(c,\sin\varphi_n)$. Consider two coordinates with $M=I$ and $2n$ carriers: $n$ carriers of type A choose $t\in[0,1/n]$, deliver $te_1$ and earn $\alpha_At$; $n$ carriers of type B choose $t\in[0,1/n]$, deliver $tv$ and earn $\alpha_Bt$; $(\alpha_A,\alpha_B)=(1,c)$. Then the Wardrop aggregate is $A^\War=e_1$ (type totals $T^\War=(1,0)$), the Nash type totals are $T^\Nash=\big(\tfrac34-\tfrac1{4n},\tfrac14-\tfrac1{4n}\big)$, and
+\[
+\norm{A^\Nash-A^\War}_2^2=\frac1{8n}+\frac{2n-1}{8n^3},\qquad\text{so}\qquad
+\norm{\Delta A}_2\ge\frac{1}{2\sqrt{2n}}=\frac1{\sqrt2}\cdot\frac12\Big(\sum_i\norm{a_i^\War}^2\Big)^{1/2}.
+\]
+Every carrier can deliver at most $\bar s=1/n$ at any coordinate, while $\norm{\Delta A}_\infty\ge\norm{\Delta A}_2/\sqrt2\ge\tfrac14\sqrt n\,\bar s$. Hence there is no constant $C$, independent of the instance, with $\norm{A^\Nash-A^\War}\le C\bar s$, even with two coordinates, linear profits and bounded data; over this class the worst-case gap is of exact order $\bar s^{1/2}$.
+\end{proposition}
+\begin{proof}
+Write $J=[e_1,v]$ and $G=J^\top J=\begin{psmallmatrix}1&c\\c&1\end{psmallmatrix}\succ0$. By Lemma~\ref{lem:rep} it suffices to work with the type totals $T\in[0,1]^2$, $A=JT$. The Wardrop potential is $\ip{\alpha}{T}-\tfrac12T^\top GT$; its unconstrained maximiser $G^{-1}\alpha=(1,0)$ lies in the box (on its boundary, where both partial derivatives $\alpha-GT$ vanish), so $T^\War=(1,0)$ is the maximiser; it is unique because $G\succ0$. The Nash potential of Lemma~\ref{lem:rep} is $\ip\alpha T-\tfrac12T^\top(G+\tfrac1nI)T$ (each type moves along a unit vector, so $\norm{L_\theta T_\theta}^2=T_\theta^2$); its unconstrained maximiser solves $(G+\tfrac1nI)T=\alpha$, and direct substitution (with $c=1-1/n$) shows that $T^\Nash$ above solves it; it lies in the interior of the box, so it is the Nash equilibrium. Then $\Delta A=J(T^\Nash-T^\War)$ with $T^\Nash-T^\War=-\big(\tfrac14+\tfrac1{4n},-\tfrac14+\tfrac1{4n}\big)$, and $\norm{\Delta A}^2=\Delta T^\top G\Delta T$ evaluates (using $\sin^2\varphi_n=1-c^2$) to the stated expression, which is at least $1/(8n)$. With the Wardrop selection in which every A carrier delivers $1/n$ and every B carrier nothing, $\sum_i\norm{a_i^\War}^2=1/n$. Per-carrier deliveries are at most $1/n$ by construction.
+\end{proof}
+
+The mechanism is visible in the eigenvectors of $G$: when two types move along nearly parallel directions ($\varphi$ small), their \emph{difference} direction $e_1-v$ is almost free for the mean-field market, so a small difference between the types' own surcharges ($Ma_i^\Nash$, of size $1/n$) moves the type totals by $O(1/(n\lambda_{\min}(G)))$ in opposite directions, and the aggregate by $O(1/(n\lambda_{\min}(G)^{1/2}))$. For a \emph{fixed} angle $\varphi$ the same computation gives $n\norm{\Delta A}_2\to1/\sin\varphi$ as $n\to\infty$: the rate is $O(1/n)$, but with a constant that grows without bound as the types become collinear (Proposition~\ref{prop:affine} below states this in general). Proposition~\ref{prop:tight} answers the question of the memo negatively: an instance-free constant for the cross-zone case does not exist.
+
+\subsection{Exact $O(\bar s)$ bounds under structure}
+
+\begin{theorem}[Zone-separable carriers: constant one]\label{thm:sep}
+Suppose every carrier's problem separates by coordinate: $Y_i=\prod_kY_{ik}$, $\pi_i=\sum_k\pi_{ik}$, and $a_{ik}$ depends on $y_{ik}$ only, so that carrier $i$ chooses a number of deliveries $q_{ik}$ in a compact set $S_{ik}\subset\R_{\ge0}$ (an interval for the convexified game, a finite set for lumpy plans) with concave (respectively arbitrary) profit $\pi_{ik}$. Then for every coordinate $k$ and every charge $u$:
+\begin{enumerate}
+\item[(a)] (convexified game) $0\le Q_k^\War-Q_k^\Nash\le\max_iq_{ik}^\Nash$;
+\item[(b)] (lumpy plans) every pure Nash equilibrium satisfies $0\le Q_k^\War-Q_k^\Nash\le\max_i\max S_{ik}$, where $Q^\War$ is the Wardrop aggregate of the mixed extension.
+\end{enumerate}
+In (a) equality holds when the $N$ carriers are identical with linear profit and an interior equilibrium: then $Q_k^\Nash=\frac{N}{N+1}Q_k^\War$ and $Q_k^\War-Q_k^\Nash=Q_k^\War/(N+1)=q_{ik}^\Nash$.
+\end{theorem}
+\begin{proof}
+Separability decouples the coordinates, so fix $k$, drop it from the notation and write $m=m_k$, $\pi_i=\pi_{ik}$, $Q=Q^\Nash$ and $q_i=q_i^\Nash$; the charge $u_k$ is absorbed into $\pi_i$. Let $\hat s_i=q_i$ in case (a) and $\hat s_i=\max S_i$ in case (b). We first show two revealed-preference facts about the Nash choice $q_i$:
+\begin{itemize}
+\item[(i)] for all $q'\in S_i$ with $q'<q_i$: $\pi_i(q_i)-mQq_i\ge\pi_i(q')-mQq'$;
+\item[(ii)] for all $q'\in S_i$ with $q'>q_i$: $\pi_i(q_i)-m(Q+\hat s_i)q_i\ge\pi_i(q')-m(Q+\hat s_i)q'$.
+\end{itemize}
+In case (a), Lemma~\ref{lem:pot}(c) says that $q_i$ maximises $\pi_i(q)-m(Q+q_i)q$ over $S_i$, which implies (ii) directly and (i) because $m(Q+q_i)(q_i-q')\ge mQ(q_i-q')$ for $q'<q_i$. In case (b), the Nash condition against $q'$ reads $\pi_i(q_i)-\pi_i(q')\ge m[(q_i-q')Q_{-i}+q_i^2-q'^2]=m(q_i-q')(Q_{-i}+q_i+q')$ with $Q_{-i}=Q-q_i$; for $q'<q_i$ the right side is at least $m(q_i-q')Q$, and for $q'>q_i$ it is at least $-m(q'-q_i)(Q+\hat s_i)$ because $q'\le\hat s_i$.
+
+Now let $p\ge0$ and let $\mathrm{BR}_i(p)=\argmax_{q\in S_i}\pi_i(q)-pq$; in case (b) a Wardrop carrier mixes over $\mathrm{BR}_i(p)$, in case (a) it chooses a point of the interval $\mathrm{BR}_i(p)$; either way its delivery lies in $\conv\mathrm{BR}_i(p)$ and $Q^\War=\sum_i\bar q_i^\War$ with $\bar q_i^\War\in\conv\mathrm{BR}_i(mQ^\War)$.
+
+\emph{Upper bound $Q\le Q^\War$.} Suppose $Q>Q^\War$, so $p:=mQ^\War<mQ$. For $q'<q_i$, (i) gives $\pi_i(q_i)-pq_i-(\pi_i(q')-pq')\ge(mQ-p)(q_i-q')>0$, so no $q'<q_i$ is a best response at $p$, and $\bar q_i^\War\ge q_i$ for every $i$. Summing, $Q^\War\ge Q$, a contradiction.
+
+\emph{Lower bound $Q\ge Q^\War-\hat s$, $\hat s=\max_i\hat s_i$.} Suppose $Q<Q^\War-\hat s$, so $p:=mQ^\War>m(Q+\hat s)\ge m(Q+\hat s_i)$. For $q'>q_i$, (ii) gives $\pi_i(q_i)-pq_i-(\pi_i(q')-pq')\ge(p-m(Q+\hat s_i))(q'-q_i)>0$, so $\bar q_i^\War\le q_i$ for all $i$ and $Q^\War\le Q$, a contradiction.
+
+Equality case: with profit $\alpha q$ and an interior solution, the first-order conditions are $\alpha=mQ^\War$ and $\alpha=mQ^\Nash+mq$ with $Q^\Nash=Nq$, so $q=\alpha/(m(N+1))$ and $Q^\War-Q^\Nash=\alpha/m-N\alpha/(m(N+1))=q$.
+\end{proof}
+
+The theorem needs no symmetry, no smoothness and no bound on the number of carriers, and the constant is attained. Its scope is a carrier whose plans in different zone-hours do not compete for the same fleet. A carrier whose fleet budget is shared across zones, or whose tours visit several zones, is not separable; Proposition~\ref{prop:tight} shows that for such carriers no analogue with an instance-free constant holds.
+
+\begin{proposition}[Equal own surcharges]\label{prop:common}
+If all carriers have the same Nash contribution $\bar a$ (in particular, if they are identical: Lemma~\ref{lem:rep}), then $\norm{A^\Nash-A^\War}_m\le\norm{\bar a}_m=\norm{A^\Nash}_m/N$, for any coupling across coordinates.
+\end{proposition}
+\begin{proof}
+In the first inequality of Theorem~\ref{thm:sqrt}(a), $\sum_i\ip{\bar a}{M(a_i^\War-\bar a)}=\ip{\bar a}{M(A^\War-A^\Nash)}\le\norm{\bar a}_m\norm{\Delta A}_m$.
+\end{proof}
+
+\begin{theorem}[Replicas: $O(1/n)$ with an instance-dependent constant]\label{thm:rep}
+Consider a replica game with base types $\theta\in\Theta$, polyhedral $\cY_\theta$ and linear profits, and let $n=\min_\theta n_\theta$. There is a constant $C$, depending on the base instance (and on $u$) but not on $(n_\theta)$, such that $\norm{A^{\Nash}-A^\War}_m\le C/n$ for all $n\ge1$.
+\end{theorem}
+\begin{proof}
+For $\sigma=(\sigma_\theta)_\theta\in\R^{d\times\Theta}$ let $S(\sigma)$ be the Wardrop aggregate of the base types (one carrier per type) when type $\theta$ pays the extra per-delivery charge $\sigma_\theta$; it is unique by Lemma~\ref{lem:pot}(b), and $S(0)=A^\War$ for every replica game (Lemma~\ref{lem:rep}). By Lemmas~\ref{lem:rep} and~\ref{lem:pot}(c), the Nash aggregate of the replica game is $S(\sigma^n)$ with $\sigma_\theta^n=ML_\theta Y_\theta^\Nash/n_\theta$, so $\norm{\sigma^n}\le c_1/n$ with $c_1=\max_\theta\max_{Y\in\cY_\theta}\norm{ML_\theta Y}$. The Wardrop equilibria under $\sigma$ are the solutions of the Karush--Kuhn--Tucker system of a convex quadratic program with polyhedral constraints in which $\sigma$ enters linearly; its solution set, as a multifunction of $\sigma$, has a graph that is a finite union of polyhedra. By \citet{Robinson1981} such a multifunction is locally upper Lipschitz: there are $\eta,C_0>0$ with $S(\sigma)\in S(0)+C_0\norm\sigma\mathbb B$ whenever $\norm\sigma\le\eta$. Hence $\norm{\Delta A}\le C_0c_1/n$ for $n\ge c_1/\eta$, and $\norm{\Delta A}\le D\le D(c_1/\eta)/n$ otherwise, where $D$ is the diameter of the set of feasible aggregates.
+\end{proof}
+
+The constant of Theorem~\ref{thm:rep} is not explicit. In the smooth interior case it is:
+
+\begin{proposition}[Affine interior replicas: explicit constant]\label{prop:affine}
+Let base type $\theta$ choose $t_\theta$ in an open set, deliver $L_\theta t_\theta$ and earn $\ip{c_\theta}{t_\theta}-\tfrac12t_\theta^\top K_\theta t_\theta$ with $K_\theta\succeq0$ (its $n_\theta$-split carriers earn $\ip{c_\theta}{t}-\tfrac{n_\theta}{2}t^\top K_\theta t$). Let $L=[L_\theta]_\theta$, $G=L^\top ML$, $K=\diag(K_\theta)$, $D_n=\diag(L_\theta^\top ML_\theta/n_\theta)$, and suppose $G+K\succ0$ and that both equilibria are interior. Then
+\[
+\norm{A^\Nash-A^\War}_m=\norm{G^{1/2}(G+K+D_n)^{-1}D_nT^\War}_2\le\norm{D_nT^\War}_{(G+K)^{-1}}\le\lambda_{\min}(G+K)^{-1/2}\Big(\sum_\theta\norm{L_\theta^\top Ma_\theta^\War}^2\Big)^{1/2},
+\]
+with $a_\theta^\War=L_\theta T^\War_\theta/n_\theta$ the per-carrier Wardrop delivery of type $\theta$.
+\end{proposition}
+\begin{proof}
+The first-order conditions are $(G+K)T^\War=c-L^\top u$ and $(G+K+D_n)T^\Nash=c-L^\top u$, so $\Delta T=-(G+K+D_n)^{-1}D_nT^\War$ and $\norm{\Delta A}_m^2=\Delta T^\top G\Delta T$. With $S=G+K+D_n\succeq G+K\succ0$, $S^{-1}GS^{-1}\preceq S^{-1}\preceq(G+K)^{-1}$, which gives the first inequality; the second is $\norm{x}_{(G+K)^{-1}}\le\lambda_{\min}(G+K)^{-1/2}\norm x_2$ and $(D_nT^\War)_\theta=L_\theta^\top Ma_\theta^\War$.
+\end{proof}
+
+When the profit of each type is linear ($K=0$), the constant is $\lambda_{\min}(G)^{-1/2}$: the gap is $O(1/n)$ exactly when the types' delivery directions are linearly independent in the $M$-geometry, and the constant degrades as they approach collinearity, as in Proposition~\ref{prop:tight} where $\lambda_{\min}(G)=1-\cos\varphi$. With strictly concave individual profits ($K\succ0$) the constant is at most $\lambda_{\min}(K)^{-1/2}$; this is the regime of \citet[Thm.~1(1)--(2)]{Paccagnan2019}, whose $O(1/N)$ bounds use strong monotonicity of the Nash or Wardrop operator in the individual strategies. Routing plans with linear costs and fleet budgets do not provide such monotonicity, which is why Theorem~\ref{thm:rep} has to rely on polyhedrality.
+
+\paragraph{Summary of the rate question} With $\bar s$ the largest share of one carrier at one coordinate: the gap is at most $\tfrac12(\bar s\ip{m}{A^\War})^{1/2}$ always (Theorem~\ref{thm:sqrt}), and this order is attained (Proposition~\ref{prop:tight}); it is at most $\bar s$ per coordinate with constant one for zone-separable carriers (Theorem~\ref{thm:sep}) and at most $\norm{A^\Nash}_m/N$ for identical carriers (Proposition~\ref{prop:common}); for replicas of a fixed instance it is $O(1/n)$ with a constant that depends on the conditioning of the instance (Theorem~\ref{thm:rep}, Proposition~\ref{prop:affine}).

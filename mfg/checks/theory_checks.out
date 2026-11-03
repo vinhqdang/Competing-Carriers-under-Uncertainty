@@ -1,20 +1,20 @@
 Theory checks for mfg/theory (min slack >= 0 means the bound holds on every instance)
-Lemma 1  linearisation (Nash = Wardrop with own surcharge): max |dQ| = 8.19e-08
-Thm 1(a) sqrt bound, 150 random multi-zone games: min slack 1.57e-01, max ratio gap/bound 0.923
-Prop 2   tightness family (1 - cos phi = 1/n):  n  gap(closed)  gap(exact formula)  gap(solver)  gap/bound  gap*sqrt(n)  gap/s
-         4  0.211948  0.211948  0.211945  0.847791  0.423896  0.847791
-         16  0.0935871  0.0935871  0.0935834  0.748697  0.374348  1.49739
-         64  0.0448741  0.0448741  0.0448703  0.717985  0.358993  2.87194
-         256  0.0221831  0.0221831  0.0221772  0.709858  0.354929  5.67887
-         1024  0.0110593  0.0110593  0.0110519  0.707797  0.353898  11.3247
-         4096  0.00552562  0.00552562  0.00551938  0.707279  0.35364  22.6329
-         fixed phi = 0.2: n * gap = 4:0.5795, 16:1.3054, 64:2.8515, 256:4.2176, 1024:4.8008, 4096:4.9732, 16384:5.0183  (limit (1/sqrt 2)/sqrt(1 - cos phi) = 5.0083)
-Thm 2    one zone, splittable (200 games): min slack 1.00e-09, max (Q^W-Q^N)/max_i q_i^N = 1.0000; lumpy pure (358 equilibria of 300 games): min slack 9.19e-08
-Prop 3   identical carriers: min slack 1.00e-06, max ratio 1.000
-Prop 4   affine replica bound: min slack 3.84e-05
-Thm 1(b) lumpy pure equilibria, multi-zone (287 equilibria): min slack 1.52e-01
-Lemma 5  ARP contraction (N and W): min slack 1.83e-01;  fixed-point residual 1.18e-08
-Thm 6    toll gap <= eps/(1-rho): min slack 7.94e-02;  Thm 7 welfare bound: min slack 1.88e-01
-Prop 8   Gamma-maximin prox bound: min slack 1.74e-03; welfare of ARP under Gamma: min slack 1.00e-06
-Lemma 9  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max 1.07e-14; rank one symmetrisable & PSD: True; rank two not symmetrisable: True; rank-one potential maximiser equilibrium error (grid) 3.33e-03
-Remark 10 time-of-day: worst-case cost 3.999 attained at travel time 0.999 (the slowest law, T = 2, costs only 2)
+Lemma 2(c) linearisation (Nash = Wardrop with own surcharge): max |dQ| = 2.11e-11
+Thm 4(a) sqrt bound, 150 random multi-zone games: min slack 1.57e-01, max ratio gap/bound 0.923
+Prop 5   tightness family (1 - cos phi = 1/n):  n  gap(closed)  gap(exact formula)  gap(solver)  gap/bound  gap*sqrt(n)  gap/s
+         4  0.211948  0.211948  0.211948  0.847791  0.423896  0.847791
+         16  0.0935871  0.0935871  0.0935868  0.748697  0.374348  1.49739
+         64  0.0448741  0.0448741  0.0448739  0.717985  0.358993  2.87194
+         256  0.0221831  0.0221831  0.0221828  0.709858  0.354929  5.67887
+         1024  0.0110593  0.0110593  0.0110589  0.707797  0.353898  11.3247
+         4096  0.00552562  0.00552562  0.00552504  0.707279  0.35364  22.6329
+         fixed phi = 0.2: n * gap = 4:0.5795, 16:1.3054, 64:2.8515, 256:4.2176, 1024:4.8008, 4096:4.9732, 16384:5.0183  (limit 1/sin(phi) = 5.0335)
+Thm 6    one zone, splittable (200 games): min slack 1.00e-09, max (Q^W-Q^N)/max_i q_i^N = 1.0000; lumpy pure (358 equilibria of 300 games): min slack 1.00e-07
+Prop 7   identical carriers: min slack 1.00e-06, max ratio 1.000
+Prop 9   affine replica bound: min slack 3.84e-05
+Thm 4(b) lumpy pure equilibria, multi-zone (287 equilibria): min slack 1.52e-01
+Prop 11  ARP contraction (N and W): min slack 1.83e-01;  fixed-point residual 1.43e-11
+Thm 12   toll gap <= eps/(1-rho): min slack 7.94e-02;  Thm 13(b) welfare bound: min slack 1.88e-01
+Prop 15  Gamma-maximin prox bound: min slack 1.74e-03; welfare of ARP under Gamma: min slack 1.00e-06
+Prop 18  D2: |det(sym part) + g^2 (1/h1-1/h2)^2/4| max 1.07e-14; rank one symmetrisable & PSD: True; rank two not symmetrisable: True; rank-one potential maximiser equilibrium error (grid) 3.33e-03
+Prop 17  time-of-day: worst-case cost 3.999 attained at travel time 0.999 (the slowest law, T = 2, costs only 2)
