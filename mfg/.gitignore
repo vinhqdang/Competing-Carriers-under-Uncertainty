@@ -1,0 +1,9 @@
+lean/.lake/
+*.aux
+*.log
+*.out
+*.toc
+*.blg
+*.spl
+*.fls
+*.fdb_latexmk
