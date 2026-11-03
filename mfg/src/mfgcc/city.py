@@ -196,6 +196,8 @@ def build(city: str, seed: int = 0, *, n_types: int = 6, n_cust: int = 8, max_st
     meta = dict(city=city, seed=seed, kappa_scale=kappa_scale, n_types=n_types, n_cust=n_cust, max_stops=max_stops, amp=amp, Z=Z, d=d,
                 n_cols=int(sum(len(c) for c in raw)), gamma_h=gamma_h, r=r, fee=fee, cong_allday=cong0,
                 cong_am=am, cong_pm=pm, peak_grade=grade, rho=float((kappa / (b + kappa)).max()))
+    # per-coordinate population data (used only by the exposure analysis; they do not enter the equilibrium)
+    meta.update(pop_c=pop[zc], area_c=zones["area_km2"].to_numpy(float)[zc], mult_c=mult, ppc=float(ppc))
     return CityGame(city, seed, base, coords, b, kappa, alpha, r, gamma_h, meta)
 
 
