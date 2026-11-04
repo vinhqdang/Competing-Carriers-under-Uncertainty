@@ -1,0 +1,5 @@
+Square-root Nash-Wardrop gap is attained when carriers' plans couple zones
+Constant-one gap bound for zone-separable carriers, with equality if identical
+Observation-only charge: uniform welfare-loss bound linear in carrier size
+Nine cities: gap stays near one carrier's delivery from 24 to 1536 carriers
+Free entry: market-power subsidy draws entrants; through-traffic delay dominates
