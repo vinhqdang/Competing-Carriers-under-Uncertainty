@@ -207,3 +207,10 @@ entry Berlin 0 16 obs 0.5 N=98.31 act=6 err=1.5e-06
 entry Berlin 0 16 obs 1.5 N=97.08 act=6 err=4.3e-06
 entry Berlin 0 64 none 1.0 N=386.99 act=6 err=3.4e-06
 entry Berlin 0 64 obs 1.0 N=373.80 act=6 err=8.4e-06
+entry Cairo 0 64 pmfee 1.0 N=340.19 act=6 err=2.0e-04
+entry Cairo 0 64 obs 0.5 N=354.86 act=6 err=5.2e-06
+entry Cairo 0 64 obs 1.5 N=294.25 act=6 err=3.2e-06
+entry Berlin 0 64 pm 1.0 N=400.86 act=6 err=2.6e-04
+entry Berlin 0 64 pmfee 1.0 N=305.90 act=6 err=9.9e-06
+entry Berlin 0 64 obs 0.5 N=380.98 act=6 err=3.9e-06
+entry Berlin 0 64 obs 1.5 N=367.79 act=6 err=1.5e-06

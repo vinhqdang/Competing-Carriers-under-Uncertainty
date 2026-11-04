@@ -169,7 +169,7 @@ def entry():
     axes[0].plot([6, 384], [6, 384], ":", color="grey", lw=0.8)
     axes[0].set(xscale="log", yscale="log", xlabel="calibration $N_0$ (fixed cost $F$ decreases to the right)",
                 ylabel="free-entry number of carriers $N^*$")
-    axes[1].set(xscale="log", xlabel="calibration $N_0$", ylabel="welfare net of fixed costs, % change vs no charge")
+    axes[1].set(xscale="log", xlabel="calibration $N_0$", ylabel="welfare net of $F$, % vs no charge")
     axes[1].axhline(0, color="grey", lw=0.6)
     axes[0].legend(fontsize=8)
     fig.tight_layout()

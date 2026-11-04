@@ -52,7 +52,7 @@ Gamma-maximin surcharge and the belief-width scaling; (5) venue left to the auth
 ## Open items for the author
 See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".
 
-## Step 8: fees, entry, further externalities (done except the F sweep, 2026-11-04)
+## Step 8: fees, entry, further externalities (done, 2026-11-04)
 - Code: src/mfgcc/fees.py (fee schemes at fixed N; free entry with real counts per segment, secant on log k, sequential
   exit of the least viable segment; one-zone closed forms), src/mfgcc/extern.py (fastest-path km on the major graph,
   cached in results/geo/ [not committed, rebuilt on demand, ~30 s per city]; per-tour external cost: air pollution,
