@@ -87,3 +87,14 @@ See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".
   40/45 (not Buenos Aires). Free entry: the market-power subsidy attracts entrants and lowers welfare net of fixed costs;
   one zone: the observation-only (Pigou) charge is the second-best per-delivery charge under free entry.
   Through-traffic delay dominates the extra externalities (Paris: 0.62 USD/delivery vs 0.11 in-zone congestion charge).
+
+## Step 9: related-work section rewritten (2026-11-04)
+- Section 2 ("Related work and what is new") rewritten as seven subsections (Nash to Wardrop; mean-field games; road pricing;
+  Stackelberg MFG and mean-field control; urban logistics; robust games; entry, external costs and distribution) plus a
+  closing "What is new" list; about 4.3 pages. One sentence added to the introduction pointing to it.
+- 54 new references in paper/references.bib, all cited. Bibliographic fields checked against Crossref records or the arXiv
+  record; statements about cited papers rest on abstracts (Paccagnan et al. 2019 and Jacquot-Wan 2018 theorem statements
+  were read in the full text). Pigou (1920), Walley (1991), Yang-Huang (2005), the Carmona-Delarue and Cardaliaguet et al.
+  books and Buchanan (1969) are books or JSTOR items checked only for bibliographic details.
+- Gomes-Mohr-Souza JMPA 93 (2010) 308-328 is now verified (Crossref); the chapter entry Gomes2010 stays as before.
+- main.pdf: 39 pages (was 33).
