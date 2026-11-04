@@ -51,3 +51,17 @@ Gamma-maximin surcharge and the belief-width scaling; (5) venue left to the auth
 
 ## Open items for the author
 See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".
+
+## Step 8: fees, entry, further externalities (in progress, 2026-11-04)
+- Code: src/mfgcc/fees.py (fee schemes at fixed N, free entry with real counts per segment, one-zone closed forms),
+  src/mfgcc/extern.py (fastest-path km on the major graph, cached in results/geo/ [not committed, rebuilt on demand];
+  per-tour external cost: air pollution, climate, noise (EU Handbook 2019 values), through-traffic delay (BPR marginal
+  external delay at the hourly congestion level, VOT = driver wage); exposure in vkm per resident). city.py records the
+  legs of every tour (no change to any equilibrium). Tests: tests/test_ext.py (38 tests pass in total).
+- Experiments (resumable, PYTHONPATH=mfg/src): run_fees.py -> results/fees.csv (done, 180 rows); run_entry.py ->
+  results/entry.csv (SWEEP=1 -> entry_sweep.csv); run_extern.py -> results/extern.csv.
+- First findings: N=6 recovery fee takes 96% of carrier profit (median); flat or fleet-proportional fee leaves some carrier
+  with negative profit at N=6 in 45/45 and 41/45 instances; a carrier-specific (profit-proportional) fee balances in
+  40/45 (not Buenos Aires). Free entry: the market-power subsidy attracts entrants and lowers welfare net of fixed costs;
+  one zone: the observation-only (Pigou) charge is the second-best per-delivery charge under free entry.
+  Through-traffic delay dominates the extra externalities (Paris: 0.62 USD/delivery vs 0.11 in-zone congestion charge).

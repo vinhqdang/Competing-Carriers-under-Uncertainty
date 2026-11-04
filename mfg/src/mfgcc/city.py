@@ -135,8 +135,10 @@ def build(city: str, seed: int = 0, *, n_types: int = 6, n_cust: int = 8, max_st
                     clock = float(t0)
                     pos = dep
                     stops = []
+                    legs = []  # (from zone, to zone, departure period); used only by mfgcc.extern
                     for j in perm:
                         z = int(cz[j])
+                        legs.append((pos, z, min(int(clock), H - 1)))
                         clock += _tt(TT, pos, z) * (1 + cong[min(int(clock), H - 1)])
                         if clock >= H:
                             break
@@ -146,13 +148,14 @@ def build(city: str, seed: int = 0, *, n_types: int = 6, n_cust: int = 8, max_st
                         pos = z
                     if len(stops) < ns:
                         continue
+                    legs.append((pos, dep, min(int(clock), H - 1)))
                     clock += _tt(TT, pos, dep) * (1 + cong[min(int(clock), H - 1)])
                     if clock > H + 1e-9:
                         continue
                     dur = clock - t0
-                    cols.append((stops, dur))
+                    cols.append((stops, dur, legs))
         raw.append(cols)
-        for stops, _ in cols:
+        for stops, _, _ in cols:
             for z, hour, _ in stops:
                 coord_index.setdefault((z, hour), len(coord_index))
     d = len(coord_index)
@@ -180,7 +183,7 @@ def build(city: str, seed: int = 0, *, n_types: int = 6, n_cust: int = 8, max_st
         rev = np.zeros(len(cols))
         cost = np.zeros(len(cols))
         w = np.zeros(len(cols))
-        for j, (stops, dur) in enumerate(cols):
+        for j, (stops, dur, _) in enumerate(cols):
             for z, hour, q in stops:
                 rows.append(coord_index[(z, hour)])
                 cidx.append(j)
@@ -191,13 +194,16 @@ def build(city: str, seed: int = 0, *, n_types: int = 6, n_cust: int = 8, max_st
         L = sp.csr_matrix((vals, (rows, cidx)), shape=(d, len(cols)))
         fleet_vh = fleet_factor * float(np.sum(share * pop[custs[th]] * ppc)) / drops * shift
         base.append(dict(rev=rev, cost=cost, L=L, w=w, B=fleet_vh, depot=depots[th], zones=custs[th],
-                         lots=lots[th]))
+                         lots=lots[th], tours=[(st, lg) for st, _, lg in cols]))
     am, pm, grade = peak_levels(city, cong0)
     meta = dict(city=city, seed=seed, kappa_scale=kappa_scale, n_types=n_types, n_cust=n_cust, max_stops=max_stops, amp=amp, Z=Z, d=d,
                 n_cols=int(sum(len(c) for c in raw)), gamma_h=gamma_h, r=r, fee=fee, cong_allday=cong0,
                 cong_am=am, cong_pm=pm, peak_grade=grade, rho=float((kappa / (b + kappa)).max()))
     # per-coordinate population data (used only by the exposure analysis; they do not enter the equilibrium)
     meta.update(pop_c=pop[zc], area_c=zones["area_km2"].to_numpy(float)[zc], mult_c=mult, ppc=float(ppc))
+    # city-level data used only by the externality extension (mfgcc.extern); they do not enter the equilibrium
+    meta.update(cong=cong, v_ff=v_ff, pop_z=pop, area_z=zones["area_km2"].to_numpy(float), Qfull_z=Qfull_z,
+                fuel_l=fuel_l, wage=wage, cap=cap, bpr_beta=bpr_b, pce=pce)
     return CityGame(city, seed, base, coords, b, kappa, alpha, r, gamma_h, meta)
 
 
