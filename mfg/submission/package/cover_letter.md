@@ -17,7 +17,7 @@ The contributions are:
 - **City-scale evidence.** On nine cities (with a stylised hourly profile, which the manuscript states and grades) the gap stays near one carrier's delivery from 24 to 1536 carriers. The tables show who gains and who loses: with few carriers the efficient charge is a subsidy that carriers and buyers welcome and the city pays; with many carriers all rules converge to the Pigou charge.
 - **Entry and externalities.** Lump-sum fees can fund the subsidy only with carrier-specific terms at small N; with free entry the subsidy attracts entrants and lowers welfare net of fixed costs; through-traffic delay, emissions and noise are several times the in-zone congestion charge.
 
-The manuscript is 36 pages (A4, single column, 11 pt) with 52 references. The manuscript builds on a companion paper by the author, cited as Dang (2026) and under review. Code, instances, results and a Lean check of the algebraic cores are in the repository named in the data availability statement. The work has not been published elsewhere and is not under consideration by another journal.
+The manuscript is 37 pages (A4, single column, 11 pt) with 52 references. The manuscript builds on a companion paper by the author, cited as Dang (2026) and under review. Code, instances, results and a Lean check of the algebraic cores are in the repository named in the data availability statement. The work has not been published elsewhere and is not under consideration by another journal.
 
 Yours sincerely,
 

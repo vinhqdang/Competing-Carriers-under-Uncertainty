@@ -15,7 +15,7 @@ def info(p): return subprocess.run(['pdfinfo', p], capture_output=True, text=Tru
 
 print('== manuscript PDF ==')
 inf = info(f'{R}/manuscript.pdf'); pages = int(re.search(r'Pages:\s+(\d+)', inf).group(1))
-check('page count (no journal limit; target 34-36)', 34 <= pages <= 36, pages)
+check('page count (no journal limit; target 34-38)', 34 <= pages <= 38, pages)
 check('A4 page size', 'A4' in inf, re.search(r'Page size:\s+(.*)', inf).group(1))
 fonts = subprocess.run(['pdffonts', f'{R}/manuscript.pdf'], capture_output=True, text=True).stdout.split('\n')[2:]
 bad = [l for l in fonts if l.strip() and l.split()[-5] != 'yes']
@@ -67,7 +67,9 @@ check('no maps (no boundary note needed)', True, 'all figures are plots')
 
 print('== wording scans (AI / certificate / venue names) ==')
 bad = re.compile(r'(?<![A-Za-z\\])AI(?![A-Za-z])|\bLLMs?\b|certif\w*|\bclau' + r'de\b|anthro' + r'pic|chatgpt|generative|copilot|\bGPT|\bOmega\b|\bmemo\b', re.I)
-files = {'manuscript.pdf': txt, 'latex_source/main.tex': src}
+DECL = re.compile(r'Declaration of generative AI.*?(?=\\bibliographystyle|\\begin\{thebibliography\}|References)', re.S)
+files = {'manuscript.pdf': DECL.sub('', txt), 'latex_source/main.tex': DECL.sub('', src)}
+check('AI declaration present before references', 'generative AI' in src and 'Claude' in src)
 for p in ('highlights.txt', 'cover_letter.md', 'data_availability_statement.txt', 'suggested_reviewers.md'): files[p] = open(f'{R}/{p}').read()
 files['cover_letter.pdf'] = pdftext(f'{R}/cover_letter.pdf')
 for p in ('highlights.docx', 'cover_letter.docx', 'declaration_of_interest.docx', 'credit_statement.docx'):
