@@ -31,3 +31,11 @@
 - Package: 34-page main manuscript (A4, 11pt, 1.5 spacing, single column), 50-page Supplementary Material, cover letter dated 29 October 2026.
 - New manuscript number: NOT YET RECORDED (author has not supplied it); add here.
 - Open: supplement is single-spaced; confirm with the editorial office whether 1.5 spacing applies to it. Abstract is about 252 words.
+
+## Mean-field paper submitted to Transportation Research Part B
+- Title: Many small carriers: the mean-field limit of competitive urban delivery under zone-time charges
+- Journal: Transportation Research Part B: Methodological (Elsevier); review model: single anonymized.
+- Package: mfg/submission/package/ (manuscript 36-37 pages, anonymous variant and separate title page, highlights, graphical abstract, declarations incl. generative-AI declaration, cover letter).
+- Manuscript number: NOT YET RECORDED (author has not supplied it); add here.
+- Related manuscript: the Omega paper (OMEGA resubmission of 2026-10-29), cited in the TR-B paper as under review.
+- Open: references have no DOIs; repository has no archival DOI (consider Zenodo); three figures are 1950 px wide (below the 2244 px full-page minimum).
