@@ -13,25 +13,11 @@ Fix the set of $N$ carriers, a charge $u$ and outside options $\underline\pi_i$.
 \item[(c)] A fee that recovers the \emph{realised} deficit, $T_i=-\ip{u}{Q}/N$, is not lump-sum. Carrier $i$ then faces the charge $(1-\tfrac1N)u$ on its own deliveries, and in the one-zone case of Proposition~\ref{prop:marketpower} the Nash aggregate under $u=u_N^*<0$ falls below $Q^\opt$.
 \end{enumerate}
 \end{proposition}
-\begin{proof}
-(a) Carrier $i$'s payoff $J_i(y_i;y_{-i})-T_i$ differs from $J_i$ by a constant in $y_i$, so best responses coincide. Welfare~\eqref{eq:welfare} depends on $(\pi_i)$ and $Q$ only. (b) The first claim is the definition. If $\sum_i(\pi_i-\underline\pi_i)\ge D$, the fees $T_i=\pi_i-\underline\pi_i-\tfrac1N(\sum_j(\pi_j-\underline\pi_j)-D)$ sum to $D$ and leave every carrier at least $\underline\pi_i$; the converse follows by summing the participation constraints. With $D=-R$ and $\Pi=\Pi_{\rm op}-\mathrm{CC}-R$ (Section~\ref{sec:stake}) the condition is $\Pi_{\rm op}-\mathrm{CC}\ge\sum_i\underline\pi_i$. (c) $T_i=-\tfrac1N\ip{u}{A_{-i}}-\tfrac1N\ip{u}{a_i}$, so $J_i-T_i$ equals $J_i+\tfrac1N\ip{u}{a_i}$ up to a constant in $y_i$. In one zone the Nash condition $\alpha-(1-\tfrac1N)u=(1+\tfrac1N)mQ$ gives $Q<Q^\opt$ when $u<0$.
-\end{proof}
+\emph{The proof is in Appendix~\ref{app:proofs}.}
 
 The proposition is elementary; for the city, (b) and (c) say that the fee must be computed from the target plan, not from the books after the fact, and must leave each carrier its outside option. Table~\ref{tab:fees} applies it to the market-power rule of Section~\ref{sec:stake} with outside option zero. At $N=6$ the deficit is \FeeSixDef\,\% of welfare (median) and the charge is a subsidy in \FeeSixSub\,\% of zone-hours; recovering it takes \FeeSixShare\,\% of carrier profit (range \FeeSixShareMin--\FeeSixShareMax\,\%). A flat fee per carrier leaves some carrier with a loss in every instance (participation in \FeeSixFlatOK), a fee in proportion to the licensed fleet in \FeeSixFleetOK{} instances; carrier-specific fees exist in \FeeSixAggregateOK{} instances, the exceptions being \FeeAggFailCities, where the subsidy exceeds total carrier profit. At $N=24$ the fee takes \FeeTwentyFourShare\,\% of profit and a flat fee keeps every carrier in \FeeTwentyFourFlatOK{} instances; at $N=192$ the charge is a subsidy only in some cities and the fee takes \FeeOneNinetyTwoShare\,\% (participation \FeeOneNinetyTwoFlatOK{} flat); at $N=1536$ the charge raises revenue and no fee is needed. After the fee, carriers keep \FeeSixKept\,\% of their no-charge profit at $N=6$ (\FeeTwentyFourKept\,\% at $N=24$): the subsidy and the fee together transfer the Cournot rent to buyers, and for $N\le192$ no fee scheme leaves every carrier with at least its no-charge profit in any instance. Recovering the realised deficit instead (part (c)) costs \FeeSixEpLoss\,\% of optimal welfare at $N=6$, small because the residual subsidy is still $(1-\tfrac16)u$.
 
-\begin{table}[t]
-\centering\footnotesize\setlength{\tabcolsep}{3.5pt}
-\caption{Budget-balanced market-power rule at a fixed number of carriers (five seeds per city). For each $N$: fee as \% of carrier profit before the fee (median), and the number of seeds with participation (every carrier's profit after the fee $\ge0$) under a flat fee / a fee in proportion to the licensed fleet / carrier-specific fees (the aggregate condition of Proposition~\ref{prop:fee}(b)). ``tax'': the median charge raises revenue, no fee needed.}\label{tab:fees}
-\begin{tabular}{lrcrcrcrc}
-\toprule
-& \multicolumn{2}{c}{$N=6$} & \multicolumn{2}{c}{$N=24$} & \multicolumn{2}{c}{$N=192$} & \multicolumn{2}{c}{$N=1536$}\\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
-city & fee\,\% & part. & fee\,\% & part. & fee\,\% & part. & fee\,\% & part.\\
-\midrule
-\input{table_fees.tex}\\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 So the subsidy is budget-balanceable with participation only with carrier-specific fees at $N=6$, and with simple fees from about $N=192$ on, where it is small. With a fixed set of carriers this is about distribution; it stops being so when carriers can leave or enter.
 
@@ -43,30 +29,16 @@ So the subsidy is budget-balanceable with participation only with carrier-specif
 \item[(a)] At every free-entry equilibrium, under any charge and lump-sum fees, welfare net of fixed costs equals $\mathrm{CS}+R+\sum_\theta k_\theta T_\theta$: consumer surplus plus the city's net revenue. Of two rules that produce the same aggregate, the one with the larger net revenue has the larger welfare.
 \item[(b)] One zone, $N$ identical carriers, slack budget, charge $u$, no fee. Every carrier delivers $s=(F/m)^{1/2}$ whatever $u$, and the free-entry number is $N^*(u)=(\alpha-u)/(mF)^{1/2}-1$. Under no charge $N_a=\alpha/(mF)^{1/2}-1$; under the observation-only rule $N_b=Q_b/s$ with $Q_b=(\alpha-ms)/(m+\kappa)$; under Pigou minus market power ($u=u^*_N$ of Proposition~\ref{prop:marketpower} with $N$ endogenous) $N_c=Q^\opt/s$; with the fee $T=-u Q^\opt/N$ recovering a subsidy, $N_d=\kappa(Q^\opt)^2/F$, smaller than $N_c$ exactly when the charge is a subsidy ($N_c<m/\kappa$).
 \item[(c)] (Excess entry.) In (b) with $u=0$, welfare decreases in $N$ at $N_a$: a planner who could limit entry, but not change Cournot conduct, would admit fewer carriers.
-\item[(d)] (Second best.) In (b), welfare net of fixed costs as a function of a constant charge $u$ is maximised at $u=\kappa Q_b$, the observation-only fixed point; the market-power term of $u^*_N$ is absent, and $u^*_N$ with endogenous $N$ gives lower welfare.
+\item[(d)] (Second best, one-zone linear case.) In (b), welfare net of fixed costs as a function of a constant charge $u$ is maximised at $u=\kappa Q_b$, the observation-only fixed point; the market-power term of $u^*_N$ is absent, and $u^*_N$ with endogenous $N$ gives lower welfare.
 \end{enumerate}
 \end{proposition}
-\begin{proof}
-(a) $\SW=\mathrm{CS}+\Pi+R$ (Section~\ref{sec:stake}) with $\Pi$ net of the charge. With fees, carriers keep $\Pi-\sum_\theta k_\theta T_\theta$ and zero profit gives $\Pi-\sum_\theta k_\theta T_\theta=\sum_\theta k_\theta F_\theta$; inactive segments contribute nothing. $\mathrm{CS}=\tfrac12\ip b{Q^2}$ depends on $Q$ only. (b) The Nash condition is $\alpha-u-mQ=mq$ and the profit of a carrier is $(\alpha-u-mQ)q=mq^2$ (Proposition~\ref{prop:marketpower}); zero profit gives $q=s$, and $Q=Nq$ gives $N^*$. For $u=\kappa Q$: $Q(m+\kappa)=\alpha-ms$. Under $u^*_N$ the aggregate is $Q^\opt$ and $q=s$. With the fee, profit is $mq^2+uq=(\alpha-mQ^\opt)q=\kappa Q^\opt q$, so $q=F/(\kappa Q^\opt)$ and $N_d=\kappa(Q^\opt)^2/F$; $N_d/N_c=\kappa Q^\opt/(ms)=\kappa N_c/m$. (c) With $Q(N)=\frac N{N+1}\frac\alpha m$ and $q=Q/N$, $Q'(N)=q/(N+1)$ and $\frac{d}{dN}(\SW-NF)=(\alpha-(m+\kappa)Q)Q'-F=(mq-\kappa Q)\frac q{N+1}-mq^2<0$ at $F=mq^2$. (d) Since $q=s$ for every $u$, $N=Q/s$ and $\SW(Q)=\alpha Q-\tfrac b2Q^2-\kappa Q^2-msQ$, concave with maximiser $Q_b$; the map $u\mapsto Q=(\alpha-u)/m-s$ is a bijection and $Q=Q_b$ at $u=\kappa Q_b$.
-\end{proof}
+\emph{The proof is in Appendix~\ref{app:proofs}.}
 
-Part (c) is the business-stealing result of \citet{MankiwWhinston1986}; parts (a), (b) and (d) are short computations in the same model. The literature on taxes under free-entry oligopoly finds that the optimal specific tax departs from the Pigou level by a term of either sign that depends on the curvature of demand and costs \citep{Konishi1990,KatsoulacosXepapadeas1995,Hamada2022}. Part (d) is the linear case: output per carrier is pinned down by $F$ alone, a charge changes only the number of carriers, and the departure is zero. The congestion-pricing literature with market power \citep{Brueckner2002,PelsVerhoef2004} gives the fixed-$N$ counterpart, a toll below the congestion cost and possibly negative, which is Proposition~\ref{prop:marketpower}. With $N$ endogenous the market-power subsidy no longer buys output per carrier; it buys entrants.
+Part (c) is the business-stealing result of \citet{MankiwWhinston1986}; parts (a), (b) and (d) are short computations in the same model. The literature on taxes under free-entry oligopoly finds that the optimal specific tax departs from the Pigou level by a term of either sign that depends on the curvature of demand and costs \citep{Konishi1990,KatsoulacosXepapadeas1995,Hamada2022}. Part (d) holds in the one-zone linear case only: output per carrier is pinned down by $F$ alone, a charge changes only the number of carriers, and the departure is zero. The congestion-pricing literature with market power \citep{Brueckner2002,PelsVerhoef2004} gives the fixed-$N$ counterpart, a toll below the congestion cost and possibly negative, which is Proposition~\ref{prop:marketpower}, a finite-$N$ analogue of those results. With $N$ endogenous the market-power subsidy no longer buys output per carrier; it buys entrants.
 
 \paragraph{Calibration of $F$} $F_\theta$ is not observed; we set it so that the no-charge free-entry count lies between $k_0$ and $k_0+1$ carriers per segment (the geometric mean of the profit per carrier at $k_0$ and $k_0+1$), for $N_0=6k_0\in\{6,24,192\}$ (three seeds, \EntInst{} city-seed pairs), and sweep $N_0\in\{12,48,96,384\}$ on seed 0. A smaller $N_0$ means a larger fixed cost. Zero-profit residuals are below $10^{-5}$ of $F$ except for the market-power rules, where \EntConv{} runs reached $10^{-4}$ and the rest stopped after 80 rounds (residual up to \EntErrMax{} of $F$, identity of Proposition~\ref{prop:entry}(a) to \EntIdErr{} of welfare); no reported sign depends on them.
 
-\begin{table}[t]
-\centering\footnotesize\setlength{\tabcolsep}{3pt}
-\caption{Free entry (nine cities, three seeds; medians). $N^*$: free-entry number of carriers (real); seg.: active segments of six; $\Delta\SW$: welfare net of fixed costs, \% change against no charge (free entry in both); $R$: city's net revenue (charge plus fee), \% of no-charge welfare. $\theta\kappa Q$: observation-only rule with the charge scaled by $\theta$.}\label{tab:entry}
-\begin{tabular}{lrrrrrrrrrrrr}
-\toprule
-& \multicolumn{4}{c}{$N_0=6$} & \multicolumn{4}{c}{$N_0=24$} & \multicolumn{4}{c}{$N_0=192$}\\
-\cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-13}
-rule & $N^*$ & seg. & $\Delta\SW$ & $R$ & $N^*$ & seg. & $\Delta\SW$ & $R$ & $N^*$ & seg. & $\Delta\SW$ & $R$\\
-\midrule
-\input{table_entry.tex}\\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \paragraph{Results} Table~\ref{tab:entry} and Figure~\ref{fig:entry}. \emph{The subsidy attracts entrants.} Under Pigou minus market power the count rises to \EntSixPmN{} at $N_0=6$ and \EntTwentyFourPmN{} at $N_0=24$, and welfare net of fixed costs changes by \EntSixPmdSW\,\% and \EntTwentyFourPmdSW\,\% against no charge (ranges \EntSixPmdSWMin{} to \EntSixPmdSWMax\,\% and \EntTwentyFourPmdSWMin{} to \EntTwentyFourPmdSWMax\,\%): the rule that gained \WSixPmdSW\,\% with six fixed carriers loses in every instance once entry responds, because the subsidy pays for fixed costs instead of output. \emph{The recovery fee drives exits.} With the fee the count falls to \EntSixPmfeeN{} at $N_0=6$ (median \EntSixPmfeeAct{} of six segments stay; the market closes in \EntSixPmfeeClosed{} instances) and to \EntTwentyFourPmfeeN{} at $N_0=24$ (\EntTwentyFourPmfeeAct{} segments). The fee raises the cost of being a carrier by about the subsidy each one receives (Proposition~\ref{prop:entry}(b)). Because free entry is excessive (below), the exits can raise welfare: the fee rule beats no charge in \EntSixPmfeeBeatsNone{} instances at $N_0=6$ and \EntTwentyFourPmfeeBeatsNone{} at $N_0=24$ (median \EntSixPmfeedSW{} and \EntTwentyFourPmfeedSW\,\%, ranges \EntSixPmfeedSWMin{} to \EntSixPmfeedSWMax\,\% and \EntTwentyFourPmfeedSWMin{} to \EntTwentyFourPmfeedSWMax\,\%); it acts as an uncontrolled entry restriction whose outcome ranges from closing the market to a large gain. \emph{The observation-only charge is safe and close to the second best.} It changes the count little (\EntSixObsN, \EntTwentyFourObsN, \EntOneNinetyTwoObsN), raises welfare and beats the market-power rule in every instance, and is the best of the scalings $\theta\in\{0.5,1,1.5\}$ in \EntSixObsBest, \EntTwentyFourObsBest{} and \EntOneNinetyTwoObsBest{} instances: the one-zone result of Proposition~\ref{prop:entry}(d) holds approximately, less so with many carriers. The gains are small (\EntSixObsdSW, \EntTwentyFourObsdSW{} and \EntOneNinetyTwoObsdSW\,\%) because the calibrated congestion is weak. The $F$ sweep in Figure~\ref{fig:entry} shows the same ordering at every $N_0$; the fee rule's median changes sign between $N_0=12$ and $N_0=24$.
 
@@ -87,22 +59,7 @@ E_j=\sum_{\text{legs}}\ell_{\rm leg}\big(e_{\rm air}+e_{\rm clim}+e_{\rm noise}\
 \]
 with $e_\cdot$ in USD per vehicle-km and welfare $\SW_{\rm ext}=\SW-\sum_i\ip{E_i}{y_i}$. A leg's length $\ell_{\rm leg}$ is the length of the fastest path between the two zone nodes on the major-road graph of the processed city data (the same paths as the travel-time matrix of Section~\ref{sec:data}, reproduced to $10^{-7}$), plus an access drive of 120\,s at each end. The driving between the drops of one stop, $\ell_{\rm stop}=0.7124(A_z\,\mathrm{lot})^{1/2}$, is the Beardwood--Halton--Hammersley length of a tour through $\mathrm{lot}$ points spread over the zone's area $A_z$ \citep{BHH1959}. Through-traffic delay is the marginal external delay of one vehicle under the BPR curve \citep{BPR1964}: a vehicle on a link with free-flow time $t^0$ at congestion level $c$ adds $\beta c\,t^0$ hours of delay to all others, so $g(h)=\mathrm{pce}\,\beta\,\mathrm{cong}(h)\,\mathrm{VOT}$ per free-flow hour of the leg, at the hourly congestion level of Section~\ref{sec:data}. It is charged on inter-zone legs only; delay inside a zone is the $\kappa$ term already in the model. Table~\ref{tab:extparams} lists the values.
 
-\begin{table}[t]
-\centering\footnotesize\setlength{\tabcolsep}{3pt}
-\caption{External cost parameters, USD 2025 per vehicle-km (EUR 2016 values of \citet{Handbook2019} times 1.285, euro-area HICP 2016--2025, and 1.122 USD per EUR). Grades as in Section~\ref{sec:data}. Air pollution and noise are transferred to the non-European cities by the driver wage relative to Paris, Berlin and London (income elasticity one, grade C); air pollution and climate are scaled by $\tfrac13$ for the small vehicles of New Delhi, Mumbai and Cairo (the model's fuel ratio, C).}\label{tab:extparams}
-\begin{tabular}{p{2.4cm}p{2.9cm}p{8.2cm}c}
-\toprule
-item & value & source & grade\\
-\midrule
-air pollution & 0.032 & diesel Euro~6 LCV, metropolitan urban road, 2.19\,EURct \citep[Tab.~19]{Handbook2019}; sensitivity Euro~4 & B\\
-climate & 0.035 & same vehicle, 2.40\,EURct at EUR 100/t CO$_2$e \citep[Tab.~28]{Handbook2019}; sensitivity USD 190/t of 2020 \citep{EPA2023} & B\\
-noise & 0.025 & LCV, day, dense urban traffic, 1.7\,EURct \citep[Tab.~37]{Handbook2019} & B\\
-through-traffic delay & $\mathrm{pce}\,\beta\,\mathrm{cong}(h)\,\mathrm{VOT}$ per free-flow hour & BPR $\beta=4$, pce 1.5, hourly congestion of Section~\ref{sec:data}; VOT of other traffic = driver wage per vehicle-hour. Cross-check: LCVs on urban roads near to over capacity, 0.26--0.99\,EUR/vkm \citep[Tab.~118]{Handbook2019}; ours \ExtCongPerVkmEU{} USD per inter-zone vkm in London, Paris, Berlin & C\\
-access drive & 0.67\,km per trip end & 120\,s (access time of the travel-time matrix) at 20\,km/h & C\\
-in-zone driving & $0.7124\sqrt{A_z\,\mathrm{lot}}$ & tour length through uniformly spread drops \citep{BHH1959} & B\\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \begin{proposition}[Charges for linear tour externalities]\label{prop:extcharge}
 Let tour $j$ of carrier $i$ cause the external cost $E_{ij}$, and let $Q'$ be the aggregate of an extended social optimum (maximiser of $\SW_{\rm ext}$).
@@ -111,25 +68,11 @@ Let tour $j$ of carrier $i$ cause the external cost $E_{ij}$, and let $Q'$ be th
 \item[(b)] If the external cost is additive over deliveries, $E_i=L_i^\top e$ for a common $e\in\R^d$, the per-delivery charge $\kappa\odot Q'+e$ alone does the same in the mean field.
 \end{enumerate}
 \end{proposition}
-\begin{proof}
-(a) $\SW_{\rm ext}$ is the welfare of the game with tour profits $p_i-E_i$, which satisfies (A1)--(A2); a carrier that pays $E$ per tour has exactly these profits. The mean-field statement is the Pigou property of that game (Lemma~\ref{lem:pot} with $u=\kappa\odot Q'$) and the $N$-carrier statement is Proposition~\ref{prop:marketpower} applied to it. (b) $\ip{E_i}{y_i}=\ip{e}{L_iy_i}=\ip e{a_i}$ for every $y_i$, so a charge $e$ per delivery is the distance charge of (a).
-\end{proof}
+\emph{The proof is in Appendix~\ref{app:proofs}.}
 
 Vehicle-km are not proportional to deliveries, so (b) holds only approximately. We compute, in the mean field, the exact rule of (a); the \emph{matched} per-delivery charge that reproduces $Q'$ (damped iteration as in Section~\ref{sec:stake}); and the simple rule $u=\kappa\odot Q'+\bar e$, with $\bar e_k$ the external cost of the tours delivering at $k$ per delivery made there; at finite $N$, the market-power rule with these terms.
 
-\begin{table}[t]
-\centering\footnotesize\setlength{\tabcolsep}{2.6pt}
-\caption{External costs per city (mean field, no charge unless stated; median of five seeds). Emiss.: air pollution and climate; noise; through: through-traffic delay; $\kappa Q$: the in-zone congestion charge, all in USD per delivery; \%fee: total external cost per delivery as \% of the delivery fee. Loss: welfare below the extended optimum, \% of the optimal welfare of Section~\ref{sec:stake}, with no charge, with the congestion-only Pigou charge and with the matched per-delivery charge. $\Delta$vkm: change of vehicle-km at the extended optimum against no charge. Exposure: vehicle-metres per resident and day in the zones the traffic touches (no charge), and its population-weighted Gini without charge and at the extended optimum.}\label{tab:extern}
-\begin{tabular}{lrrrrrrrrrrrr}
-\toprule
-& \multicolumn{5}{c}{USD per delivery} & \multicolumn{3}{c}{loss, \% of $\SW^\opt$} & & \multicolumn{3}{c}{exposure}\\
-\cmidrule(lr){2-6}\cmidrule(lr){7-9}\cmidrule(lr){11-13}
-city & emiss. & noise & through & $\kappa Q$ & \%fee & none & Pigou & matched & $\Delta$vkm\,\% & m/res. & Gini & Gini$'$\\
-\midrule
-\input{table_extern.tex}\\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \paragraph{Results} Table~\ref{tab:extern} and Figure~\ref{fig:extern}. A delivery drives \ExtVkmDel{} vehicle-km (median; \ExtVkmInShare\,\% of it inside the delivery zones) and causes \ExtPerE{} USD of external cost beyond in-zone delay (city medians \ExtPerEMin--\ExtPerEMax), \ExtShareFee\,\% of the delivery fee (\ExtShareFeeMin--\ExtShareFeeMax\,\%). Through-traffic delay is \ExtShareCong\,\% of it; emissions are \ExtPerAir{} (air) and \ExtPerClim{} (climate) USD per delivery and noise \ExtPerNoise. The external cost is \ExtRatioKQ{} times the in-zone congestion charge $\kappa Q$ (city medians \ExtRatioKQMin--\ExtRatioKQMax). This is the main finding of the extension and a negative one for the model of the earlier sections: the congestion term that the model prices, the delay among delivery vehicles while they serve a zone, is the smaller part of the congestion they cause.
 

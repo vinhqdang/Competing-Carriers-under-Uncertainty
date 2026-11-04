@@ -1,4 +1,4 @@
-\begin{thebibliography}{95}
+\begin{thebibliography}{52}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -12,13 +12,6 @@
 \providecommand{\bibinfo}[2]{#2}
 \ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
 %Type = Article
-\bibitem[{Achdou and Porretta(2018)}]{AchdouPorretta2018}
-\bibinfo{author}{Achdou, Y.}, \bibinfo{author}{Porretta, A.},
-  \bibinfo{year}{2018}.
-\newblock \bibinfo{title}{Mean field games with congestion}.
-\newblock \bibinfo{journal}{Annales de l'Institut Henri Poincar{\'e} C, Analyse
-  non lin{\'e}aire} \bibinfo{volume}{35}, \bibinfo{pages}{443--480}.
-%Type = Article
 \bibitem[{Al~Saleh et~al.(2024)Al~Saleh, Bakaryan, Gomes and
   de~Lima~Ribeiro}]{AlSaleh2024}
 \bibinfo{author}{Al~Saleh, F.}, \bibinfo{author}{Bakaryan, T.},
@@ -29,14 +22,6 @@
 \newblock \bibinfo{journal}{Portugaliae Mathematica} \bibinfo{volume}{81},
   \bibinfo{pages}{201--246}.
 %Type = Article
-\bibitem[{Anas and Lindsey(2011)}]{AnasLindsey2011}
-\bibinfo{author}{Anas, A.}, \bibinfo{author}{Lindsey, R.},
-  \bibinfo{year}{2011}.
-\newblock \bibinfo{title}{Reducing urban road transportation externalities:
-  road pricing in theory and in practice}.
-\newblock \bibinfo{journal}{Review of Environmental Economics and Policy}
-  \bibinfo{volume}{5}, \bibinfo{pages}{66--88}.
-%Type = Article
 \bibitem[{Arslan et~al.(2019)Arslan, Agatz, Kroon and Zuidwijk}]{Arslan2019}
 \bibinfo{author}{Arslan, A.M.}, \bibinfo{author}{Agatz, N.},
   \bibinfo{author}{Kroon, L.}, \bibinfo{author}{Zuidwijk, R.},
@@ -45,24 +30,6 @@
   problem with ad hoc drivers}.
 \newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{53},
   \bibinfo{pages}{222--235}.
-%Type = Article
-\bibitem[{Aurell et~al.(2022)Aurell, Carmona, Dayanikli and
-  Lauri{\`e}re}]{Aurell2022}
-\bibinfo{author}{Aurell, A.}, \bibinfo{author}{Carmona, R.},
-  \bibinfo{author}{Dayanikli, G.}, \bibinfo{author}{Lauri{\`e}re, M.},
-  \bibinfo{year}{2022}.
-\newblock \bibinfo{title}{Optimal incentives to mitigate epidemics: a
-  {Stackelberg} mean field game approach}.
-\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
-  \bibinfo{volume}{60}, \bibinfo{pages}{S294--S322}.
-%Type = Article
-\bibitem[{Bauso et~al.(2016)Bauso, Tembine and
-  Ba{\c{s}}ar}]{BausoTembineBasar2016}
-\bibinfo{author}{Bauso, D.}, \bibinfo{author}{Tembine, H.},
-  \bibinfo{author}{Ba{\c{s}}ar, T.}, \bibinfo{year}{2016}.
-\newblock \bibinfo{title}{Robust mean field games}.
-\newblock \bibinfo{journal}{Dynamic Games and Applications}
-  \bibinfo{volume}{6}, \bibinfo{pages}{277--303}.
 %Type = Article
 \bibitem[{Beardwood et~al.(1959)Beardwood, Halton and Hammersley}]{BHH1959}
 \bibinfo{author}{Beardwood, J.}, \bibinfo{author}{Halton, J.H.},
@@ -76,28 +43,6 @@
   \bibinfo{author}{Winsten, C.B.}, \bibinfo{year}{1956}.
 \newblock \bibinfo{title}{Studies in the Economics of Transportation}.
 \newblock \bibinfo{publisher}{Yale University Press}.
-%Type = Article
-\bibitem[{Bensoussan et~al.(2015)Bensoussan, Chau and Yam}]{Bensoussan2015}
-\bibinfo{author}{Bensoussan, A.}, \bibinfo{author}{Chau, M.H.M.},
-  \bibinfo{author}{Yam, S.C.P.}, \bibinfo{year}{2015}.
-\newblock \bibinfo{title}{Mean field {Stackelberg} games: aggregation of
-  delayed instructions}.
-\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
-  \bibinfo{volume}{53}, \bibinfo{pages}{2237--2266}.
-%Type = Book
-\bibitem[{Bensoussan et~al.(2013)Bensoussan, Frehse and
-  Yam}]{BensoussanFrehseYam2013}
-\bibinfo{author}{Bensoussan, A.}, \bibinfo{author}{Frehse, J.},
-  \bibinfo{author}{Yam, P.}, \bibinfo{year}{2013}.
-\newblock \bibinfo{title}{Mean Field Games and Mean Field Type Control Theory}.
-\newblock SpringerBriefs in Mathematics, \bibinfo{publisher}{Springer}.
-%Type = Article
-\bibitem[{Bimpikis et~al.(2019)Bimpikis, Candogan and Saban}]{Bimpikis2019}
-\bibinfo{author}{Bimpikis, K.}, \bibinfo{author}{Candogan, O.},
-  \bibinfo{author}{Saban, D.}, \bibinfo{year}{2019}.
-\newblock \bibinfo{title}{Spatial pricing in ride-sharing networks}.
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{67},
-  \bibinfo{pages}{744--769}.
 %Type = Article
 \bibitem[{Brueckner(2002)}]{Brueckner2002}
 \bibinfo{author}{Brueckner, J.K.}, \bibinfo{year}{2002}.
@@ -125,7 +70,7 @@
   \bibinfo{author}{P{\'e}rolat, J.}, et~al., \bibinfo{year}{2021}.
 \newblock \bibinfo{title}{Solving {N}-player dynamic routing games with
   congestion: a mean field approach}.
-\newblock \bibinfo{howpublished}{arXiv:2110.11943}.
+\newblock \bibinfo{howpublished}{arXiv preprint arXiv:2110.11943}.
 %Type = Inproceedings
 \bibitem[{Calderone and Sastry(2017)}]{CalderoneSastry2017}
 \bibinfo{author}{Calderone, D.}, \bibinfo{author}{Sastry, S.S.},
@@ -133,14 +78,6 @@
 \newblock \bibinfo{title}{Markov decision process routing games}, in:
   \bibinfo{booktitle}{Proceedings of the 8th International Conference on
   Cyber-Physical Systems (ICCPS)}, pp. \bibinfo{pages}{273--279}.
-%Type = Article
-\bibitem[{Camilli and Marchi(2016)}]{CamilliMarchi2016}
-\bibinfo{author}{Camilli, F.}, \bibinfo{author}{Marchi, C.},
-  \bibinfo{year}{2016}.
-\newblock \bibinfo{title}{Stationary mean field games systems defined on
-  networks}.
-\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
-  \bibinfo{volume}{54}, \bibinfo{pages}{1085--1103}.
 %Type = Book
 \bibitem[{Cardaliaguet et~al.(2019)Cardaliaguet, Delarue, Lasry and
   Lions}]{CDLL2019}
@@ -167,13 +104,6 @@
 \newblock Probability Theory and Stochastic Modelling,
   \bibinfo{publisher}{Springer}.
 %Type = Article
-\bibitem[{Carmona and Zhu(2016)}]{CarmonaZhu2016}
-\bibinfo{author}{Carmona, R.}, \bibinfo{author}{Zhu, X.}, \bibinfo{year}{2016}.
-\newblock \bibinfo{title}{A probabilistic approach to mean field games with
-  major and minor players}.
-\newblock \bibinfo{journal}{The Annals of Applied Probability}
-  \bibinfo{volume}{26}, \bibinfo{pages}{1535--1580}.
-%Type = Article
 \bibitem[{Cattaruzza et~al.(2017)Cattaruzza, Absi, Feillet and
   Gonz{\'a}lez-Feliu}]{Cattaruzza2017}
 \bibinfo{author}{Cattaruzza, D.}, \bibinfo{author}{Absi, N.},
@@ -182,29 +112,6 @@
 \newblock \bibinfo{title}{Vehicle routing problems for city logistics}.
 \newblock \bibinfo{journal}{EURO Journal on Transportation and Logistics}
   \bibinfo{volume}{6}, \bibinfo{pages}{51--79}.
-%Type = Article
-\bibitem[{Chan and Sircar(2015)}]{ChanSircar2015}
-\bibinfo{author}{Chan, P.}, \bibinfo{author}{Sircar, R.}, \bibinfo{year}{2015}.
-\newblock \bibinfo{title}{Bertrand and {Cournot} mean field games}.
-\newblock \bibinfo{journal}{Applied Mathematics \& Optimization}
-  \bibinfo{volume}{71}, \bibinfo{pages}{533--569}.
-%Type = Article
-\bibitem[{Chau and Sim(2003)}]{ChauSim2003}
-\bibinfo{author}{Chau, C.K.}, \bibinfo{author}{Sim, K.M.},
-  \bibinfo{year}{2003}.
-\newblock \bibinfo{title}{The price of anarchy for non-atomic congestion games
-  with symmetric cost maps and elastic demands}.
-\newblock \bibinfo{journal}{Operations Research Letters} \bibinfo{volume}{31},
-  \bibinfo{pages}{327--334}.
-%Type = Article
-\bibitem[{Chen et~al.(2019)Chen, Chevalier, Rossi and Oehlsen}]{Chen2019}
-\bibinfo{author}{Chen, M.K.}, \bibinfo{author}{Chevalier, J.A.},
-  \bibinfo{author}{Rossi, P.E.}, \bibinfo{author}{Oehlsen, E.},
-  \bibinfo{year}{2019}.
-\newblock \bibinfo{title}{The value of flexible work: evidence from {Uber}
-  drivers}.
-\newblock \bibinfo{journal}{Journal of Political Economy}
-  \bibinfo{volume}{127}, \bibinfo{pages}{2735--2794}.
 %Type = Article
 \bibitem[{Cominetti et~al.(2023)Cominetti, Scarsini, Schr{\"o}der and
   Stier-Moses}]{Cominetti2023}
@@ -221,15 +128,7 @@
 \newblock \bibinfo{title}{City charges for competing delivery carriers: exact
   best responses under probability-box travel times and leader pricing without
   equilibrium search}.
-\newblock \bibinfo{note}{Working paper, under review}.
-%Type = Article
-\bibitem[{Dayanikli and Lauri{\`e}re(2025)}]{DayanikliLauriere2025}
-\bibinfo{author}{Dayanikli, G.}, \bibinfo{author}{Lauri{\`e}re, M.},
-  \bibinfo{year}{2025}.
-\newblock \bibinfo{title}{A machine learning method for {Stackelberg} mean
-  field games}.
-\newblock \bibinfo{journal}{Mathematics of Operations Research}
-  \bibinfo{volume}{50}, \bibinfo{pages}{3055--3093}.
+\newblock \bibinfo{note}{Manuscript under review}.
 %Type = Article
 \bibitem[{Doncel et~al.(2019)Doncel, Gast and Gaujal}]{DoncelGastGaujal2019}
 \bibinfo{author}{Doncel, J.}, \bibinfo{author}{Gast, N.},
@@ -263,20 +162,6 @@
   European Union. \bibinfo{address}{Luxembourg}.
 \newblock \bibinfo{note}{Doi:10.2832/51388}.
 %Type = Article
-\bibitem[{Frank and Wolfe(1956)}]{FrankWolfe1956}
-\bibinfo{author}{Frank, M.}, \bibinfo{author}{Wolfe, P.}, \bibinfo{year}{1956}.
-\newblock \bibinfo{title}{An algorithm for quadratic programming}.
-\newblock \bibinfo{journal}{Naval Research Logistics Quarterly}
-  \bibinfo{volume}{3}, \bibinfo{pages}{95--110}.
-%Type = Article
-\bibitem[{G{\"a}rdenfors and Sahlin(1982)}]{GardenforsSahlin1982}
-\bibinfo{author}{G{\"a}rdenfors, P.}, \bibinfo{author}{Sahlin, N.E.},
-  \bibinfo{year}{1982}.
-\newblock \bibinfo{title}{Unreliable probabilities, risk taking, and decision
-  making}.
-\newblock \bibinfo{journal}{Synthese} \bibinfo{volume}{53},
-  \bibinfo{pages}{361--386}.
-%Type = Article
 \bibitem[{Gilboa and Schmeidler(1989)}]{GilboaSchmeidler1989}
 \bibinfo{author}{Gilboa, I.}, \bibinfo{author}{Schmeidler, D.},
   \bibinfo{year}{1989}.
@@ -290,13 +175,6 @@
 \newblock \bibinfo{title}{Discrete time, finite state space mean field games}.
 \newblock \bibinfo{journal}{Journal de Math{\'e}matiques Pures et
   Appliqu{\'e}es} \bibinfo{volume}{93}, \bibinfo{pages}{308--328}.
-%Type = Incollection
-\bibitem[{Gomes et~al.(2011)Gomes, Mohr and Souza}]{Gomes2010}
-\bibinfo{author}{Gomes, D.A.}, \bibinfo{author}{Mohr, J.},
-  \bibinfo{author}{Souza, R.R.}, \bibinfo{year}{2011}.
-\newblock \bibinfo{title}{Discrete time, finite state space mean field games},
-  in: \bibinfo{booktitle}{Dynamics, Games and Science I}.
-  \bibinfo{publisher}{Springer}.
 %Type = Article
 \bibitem[{Gomes et~al.(2013)Gomes, Mohr and Souza}]{GomesMohrSouza2013}
 \bibinfo{author}{Gomes, D.A.}, \bibinfo{author}{Mohr, J.},
@@ -310,7 +188,7 @@
   \bibinfo{year}{2024}.
 \newblock \bibinfo{title}{Clarabel: an interior-point solver for conic programs
   with quadratic objectives}.
-\newblock \bibinfo{journal}{arXiv:2405.12762} .
+\newblock \bibinfo{journal}{arXiv preprint arXiv:2405.12762} .
 %Type = Article
 \bibitem[{Gu{\'e}ant(2015)}]{Gueant2015}
 \bibinfo{author}{Gu{\'e}ant, O.}, \bibinfo{year}{2015}.
@@ -324,7 +202,7 @@
   J.}, \bibinfo{year}{2022}.
 \newblock \bibinfo{title}{Optimization frameworks and sensitivity analysis of
   {Stackelberg} mean-field games}.
-\newblock \bibinfo{howpublished}{arXiv:2210.04110}.
+\newblock \bibinfo{howpublished}{arXiv preprint arXiv:2210.04110}.
 %Type = Article
 \bibitem[{Hall and Krueger(2018)}]{HallKrueger2018}
 \bibinfo{author}{Hall, J.V.}, \bibinfo{author}{Krueger, A.B.},
@@ -342,20 +220,6 @@
 \newblock \bibinfo{journal}{Canadian Journal of Economics}
   \bibinfo{volume}{55}, \bibinfo{pages}{1166--1192}.
 %Type = Article
-\bibitem[{Han and Yang(2009)}]{HanYang2009}
-\bibinfo{author}{Han, D.}, \bibinfo{author}{Yang, H.}, \bibinfo{year}{2009}.
-\newblock \bibinfo{title}{Congestion pricing in the absence of demand
-  functions}.
-\newblock \bibinfo{journal}{Transportation Research Part E: Logistics and
-  Transportation Review} \bibinfo{volume}{45}, \bibinfo{pages}{159--171}.
-%Type = Article
-\bibitem[{Harks and Schedel(2024)}]{HarksSchedel2024}
-\bibinfo{author}{Harks, T.}, \bibinfo{author}{Schedel, A.},
-  \bibinfo{year}{2024}.
-\newblock \bibinfo{title}{Stackelberg pricing games with congestion effects}.
-\newblock \bibinfo{journal}{Mathematical Programming} \bibinfo{volume}{203},
-  \bibinfo{pages}{763--799}.
-%Type = Article
 \bibitem[{Haurie and Marcotte(1985)}]{HaurieMarcotte1985}
 \bibinfo{author}{Haurie, A.}, \bibinfo{author}{Marcotte, P.},
   \bibinfo{year}{1985}.
@@ -370,16 +234,6 @@
   player: the {Nash} certainty equivalence principle}.
 \newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
   \bibinfo{volume}{48}, \bibinfo{pages}{3318--3353}.
-%Type = Article
-\bibitem[{Huang et~al.(2007)Huang, Caines and
-  Malham{\'e}}]{HuangCainesMalhame2007}
-\bibinfo{author}{Huang, M.}, \bibinfo{author}{Caines, P.E.},
-  \bibinfo{author}{Malham{\'e}, R.P.}, \bibinfo{year}{2007}.
-\newblock \bibinfo{title}{Large-population cost-coupled {LQG} problems with
-  nonuniform agents: individual-mass behavior and decentralized
-  $\varepsilon$-{Nash} equilibria}.
-\newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
-  \bibinfo{volume}{52}, \bibinfo{pages}{1560--1571}.
 %Type = Article
 \bibitem[{Huang et~al.(2006)Huang, Malham{\'e} and
   Caines}]{HuangMalhameCaines2006}
@@ -401,7 +255,7 @@
 \bibinfo{author}{Jacquot, P.}, \bibinfo{author}{Wan, C.}, \bibinfo{year}{2018}.
 \newblock \bibinfo{title}{Routing game on parallel networks: the convergence of
   atomic to nonatomic}.
-\newblock \bibinfo{howpublished}{arXiv:1804.03081}.
+\newblock \bibinfo{howpublished}{arXiv preprint arXiv:1804.03081}.
 %Type = Article
 \bibitem[{Katsoulacos and Xepapadeas(1995)}]{KatsoulacosXepapadeas1995}
 \bibinfo{author}{Katsoulacos, Y.}, \bibinfo{author}{Xepapadeas, A.},
@@ -419,15 +273,6 @@
   general equilibrium analysis of entry regulation and tax-subsidy schemes}.
 \newblock \bibinfo{journal}{Journal of Public Economics} \bibinfo{volume}{42},
   \bibinfo{pages}{67--88}.
-%Type = Article
-\bibitem[{Labb{\'e} et~al.(1998)Labb{\'e}, Marcotte and
-  Savard}]{LabbeMarcotteSavard1998}
-\bibinfo{author}{Labb{\'e}, M.}, \bibinfo{author}{Marcotte, P.},
-  \bibinfo{author}{Savard, G.}, \bibinfo{year}{1998}.
-\newblock \bibinfo{title}{A bilevel model of taxation and its application to
-  optimal highway pricing}.
-\newblock \bibinfo{journal}{Management Science} \bibinfo{volume}{44},
-  \bibinfo{pages}{1608--1622}.
 %Type = Misc
 \bibitem[{Langner et~al.(2024)Langner, Neufeld and Park}]{Langner2024}
 \bibinfo{author}{Langner, J.}, \bibinfo{author}{Neufeld, A.},
@@ -435,21 +280,6 @@
 \newblock \bibinfo{title}{Markov-{Nash} equilibria in mean-field games under
   model uncertainty}.
 \newblock \bibinfo{howpublished}{arXiv:2410.11652}.
-%Type = Article
-\bibitem[{Lasry and Lions(2006a)}]{LasryLions2006a}
-\bibinfo{author}{Lasry, J.M.}, \bibinfo{author}{Lions, P.L.},
-  \bibinfo{year}{2006}a.
-\newblock \bibinfo{title}{Jeux {\`a} champ moyen. {I} -- le cas stationnaire}.
-\newblock \bibinfo{journal}{Comptes Rendus Math{\'e}matique}
-  \bibinfo{volume}{343}, \bibinfo{pages}{619--625}.
-%Type = Article
-\bibitem[{Lasry and Lions(2006b)}]{LasryLions2006b}
-\bibinfo{author}{Lasry, J.M.}, \bibinfo{author}{Lions, P.L.},
-  \bibinfo{year}{2006}b.
-\newblock \bibinfo{title}{Jeux {\`a} champ moyen. {II} -- horizon fini et
-  contr{\^o}le optimal}.
-\newblock \bibinfo{journal}{Comptes Rendus Math{\'e}matique}
-  \bibinfo{volume}{343}, \bibinfo{pages}{679--684}.
 %Type = Article
 \bibitem[{Lasry and Lions(2007)}]{LasryLions2007}
 \bibinfo{author}{Lasry, J.M.}, \bibinfo{author}{Lions, P.L.},
@@ -465,67 +295,18 @@
   potential mean field games}.
 \newblock \bibinfo{journal}{Applied Mathematics \& Optimization} .
 %Type = Article
-\bibitem[{Layard(1977)}]{Layard1977}
-\bibinfo{author}{Layard, R.}, \bibinfo{year}{1977}.
-\newblock \bibinfo{title}{The distributional effects of congestion taxes}.
-\newblock \bibinfo{journal}{Economica} \bibinfo{volume}{44},
-  \bibinfo{pages}{297--304}.
-%Type = Article
 \bibitem[{Leape(2006)}]{Leape2006}
 \bibinfo{author}{Leape, J.}, \bibinfo{year}{2006}.
 \newblock \bibinfo{title}{The {London} congestion charge}.
 \newblock \bibinfo{journal}{Journal of Economic Perspectives}
   \bibinfo{volume}{20}, \bibinfo{pages}{157--176}.
-%Type = Article
-\bibitem[{LeBlanc et~al.(1975)LeBlanc, Morlok and Pierskalla}]{LeBlanc1975}
-\bibinfo{author}{LeBlanc, L.J.}, \bibinfo{author}{Morlok, E.K.},
-  \bibinfo{author}{Pierskalla, W.P.}, \bibinfo{year}{1975}.
-\newblock \bibinfo{title}{An efficient approach to solving the road network
-  equilibrium traffic assignment problem}.
-\newblock \bibinfo{journal}{Transportation Research} \bibinfo{volume}{9},
-  \bibinfo{pages}{309--318}.
-%Type = Inproceedings
-\bibitem[{Li et~al.(2019)Li, Yu, Calderone, Ratliff and
-  A{\c{c}}{\i}kme{\c{s}}e}]{Li2019}
-\bibinfo{author}{Li, S.H.Q.}, \bibinfo{author}{Yu, Y.},
-  \bibinfo{author}{Calderone, D.}, \bibinfo{author}{Ratliff, L.},
-  \bibinfo{author}{A{\c{c}}{\i}kme{\c{s}}e, B.}, \bibinfo{year}{2019}.
-\newblock \bibinfo{title}{Tolling for constraint satisfaction in {Markov}
-  decision process congestion games}, in: \bibinfo{booktitle}{American Control
-  Conference (ACC)}, pp. \bibinfo{pages}{1238--1243}.
-%Type = Article
-\bibitem[{Li et~al.(2023)Li, Yu, Miguel, Calderone, Ratliff and
-  A{\c{c}}{\i}kme{\c{s}}e}]{Li2023}
-\bibinfo{author}{Li, S.H.Q.}, \bibinfo{author}{Yu, Y.},
-  \bibinfo{author}{Miguel, N.I.}, \bibinfo{author}{Calderone, D.},
-  \bibinfo{author}{Ratliff, L.J.}, \bibinfo{author}{A{\c{c}}{\i}kme{\c{s}}e,
-  B.}, \bibinfo{year}{2023}.
-\newblock \bibinfo{title}{Adaptive constraint satisfaction for {Markov}
-  decision process congestion games: application to transportation networks}.
-\newblock \bibinfo{journal}{Automatica} \bibinfo{volume}{151},
-  \bibinfo{pages}{110879}.
 %Type = Misc
 \bibitem[{Li et~al.(2025)Li, Dimakis and Courcoubetis}]{LiDimakis2025}
 \bibinfo{author}{Li, Y.}, \bibinfo{author}{Dimakis, A.},
   \bibinfo{author}{Courcoubetis, C.A.}, \bibinfo{year}{2025}.
 \newblock \bibinfo{title}{Repositioning, ride-matching, and abandonment in
   on-demand ride-hailing platforms: a mean field game approach}.
-\newblock \bibinfo{howpublished}{arXiv:2504.02346}.
-%Type = Misc
-\bibitem[{Liang et~al.(2026)Liang, Zhou, Zhuang and Zou}]{Liang2026}
-\bibinfo{author}{Liang, Z.}, \bibinfo{author}{Zhou, Z.},
-  \bibinfo{author}{Zhuang, Y.}, \bibinfo{author}{Zou, B.},
-  \bibinfo{year}{2026}.
-\newblock \bibinfo{title}{Mean-field games under model uncertainty}.
-\newblock \bibinfo{howpublished}{arXiv:2601.12226}.
-%Type = Article
-\bibitem[{Liu et~al.(2023)Liu, Oudjane and Wan}]{Liu2023}
-\bibinfo{author}{Liu, K.}, \bibinfo{author}{Oudjane, N.}, \bibinfo{author}{Wan,
-  C.}, \bibinfo{year}{2023}.
-\newblock \bibinfo{title}{Approximate {Nash} equilibria in large nonconvex
-  aggregative games}.
-\newblock \bibinfo{journal}{Mathematics of Operations Research}
-  \bibinfo{volume}{48}, \bibinfo{pages}{1791--1809}.
+\newblock \bibinfo{howpublished}{arXiv preprint arXiv:2504.02346}.
 %Type = Article
 \bibitem[{Mankiw and Whinston(1986)}]{MankiwWhinston1986}
 \bibinfo{author}{Mankiw, N.G.}, \bibinfo{author}{Whinston, M.D.},
@@ -534,13 +315,6 @@
 \newblock \bibinfo{journal}{RAND Journal of Economics} \bibinfo{volume}{17},
   \bibinfo{pages}{48--58}.
 %Type = Article
-\bibitem[{Mas-Colell(1983)}]{MasColell1983}
-\bibinfo{author}{Mas-Colell, A.}, \bibinfo{year}{1983}.
-\newblock \bibinfo{title}{Walrasian equilibria as limits of noncooperative
-  equilibria. {Part I}: mixed strategies}.
-\newblock \bibinfo{journal}{Journal of Economic Theory} \bibinfo{volume}{30},
-  \bibinfo{pages}{153--170}.
-%Type = Article
 \bibitem[{Monderer and Shapley(1996)}]{Monderer1996}
 \bibinfo{author}{Monderer, D.}, \bibinfo{author}{Shapley, L.S.},
   \bibinfo{year}{1996}.
@@ -548,43 +322,12 @@
 \newblock \bibinfo{journal}{Games and Economic Behavior} \bibinfo{volume}{14},
   \bibinfo{pages}{124--143}.
 %Type = Article
-\bibitem[{Moon and Ba{\c{s}}ar(2018)}]{MoonBasar2018}
-\bibinfo{author}{Moon, J.}, \bibinfo{author}{Ba{\c{s}}ar, T.},
-  \bibinfo{year}{2018}.
-\newblock \bibinfo{title}{Linear quadratic mean field {Stackelberg}
-  differential games}.
-\newblock \bibinfo{journal}{Automatica} \bibinfo{volume}{97},
-  \bibinfo{pages}{200--213}.
-%Type = Article
-\bibitem[{Nilim and El~Ghaoui(2005)}]{NilimElGhaoui2005}
-\bibinfo{author}{Nilim, A.}, \bibinfo{author}{El~Ghaoui, L.},
-  \bibinfo{year}{2005}.
-\newblock \bibinfo{title}{Robust control of {Markov} decision processes with
-  uncertain transition matrices}.
-\newblock \bibinfo{journal}{Operations Research} \bibinfo{volume}{53},
-  \bibinfo{pages}{780--798}.
-%Type = Article
-\bibitem[{Nourian and Caines(2013)}]{NourianCaines2013}
-\bibinfo{author}{Nourian, M.}, \bibinfo{author}{Caines, P.E.},
-  \bibinfo{year}{2013}.
-\newblock \bibinfo{title}{$\varepsilon$-{Nash} mean field game theory for
-  nonlinear stochastic dynamical systems with major and minor agents}.
-\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
-  \bibinfo{volume}{51}, \bibinfo{pages}{3302--3331}.
-%Type = Article
 \bibitem[{Novshek(1985)}]{Novshek1985}
 \bibinfo{author}{Novshek, W.}, \bibinfo{year}{1985}.
 \newblock \bibinfo{title}{Perfectly competitive markets as the limits of
   {Cournot} markets}.
 \newblock \bibinfo{journal}{Journal of Economic Theory} \bibinfo{volume}{35},
   \bibinfo{pages}{72--82}.
-%Type = Article
-\bibitem[{Ord{\'o}{\~n}ez and Stier-Moses(2010)}]{OrdonezStierMoses2010}
-\bibinfo{author}{Ord{\'o}{\~n}ez, F.}, \bibinfo{author}{Stier-Moses, N.E.},
-  \bibinfo{year}{2010}.
-\newblock \bibinfo{title}{Wardrop equilibria with risk-averse users}.
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{44},
-  \bibinfo{pages}{63--86}.
 %Type = Article
 \bibitem[{Paccagnan et~al.(2019)Paccagnan, Gentile, Parise, Kamgarpour and
   Lygeros}]{Paccagnan2019}
@@ -602,27 +345,11 @@
 \newblock \bibinfo{title}{The economics of airport congestion pricing}.
 \newblock \bibinfo{journal}{Journal of Urban Economics} \bibinfo{volume}{55},
   \bibinfo{pages}{257--277}.
-%Type = Inproceedings
-\bibitem[{P{\'e}rolat et~al.(2022)P{\'e}rolat, Perrin, Elie
-  et~al.}]{Perolat2022}
-\bibinfo{author}{P{\'e}rolat, J.}, \bibinfo{author}{Perrin, S.},
-  \bibinfo{author}{Elie, R.}, et~al., \bibinfo{year}{2022}.
-\newblock \bibinfo{title}{Scaling mean field games by online mirror descent},
-  in: \bibinfo{booktitle}{Proceedings of the 21st International Conference on
-  Autonomous Agents and Multiagent Systems (AAMAS)}.
 %Type = Book
 \bibitem[{Pigou(1920)}]{Pigou1920}
 \bibinfo{author}{Pigou, A.C.}, \bibinfo{year}{1920}.
 \newblock \bibinfo{title}{The Economics of Welfare}.
 \newblock \bibinfo{publisher}{Macmillan}, \bibinfo{address}{London}.
-%Type = Article
-\bibitem[{Quak and de~Koster(2009)}]{QuakDeKoster2009}
-\bibinfo{author}{Quak, H.J.}, \bibinfo{author}{de~Koster, M.B.M.R.},
-  \bibinfo{year}{2009}.
-\newblock \bibinfo{title}{Delivering goods in urban areas: how to deal with
-  urban policy restrictions and the environment}.
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{43},
-  \bibinfo{pages}{211--227}.
 %Type = Article
 \bibitem[{Robinson(1981)}]{Robinson1981}
 \bibinfo{author}{Robinson, S.M.}, \bibinfo{year}{1981}.
@@ -630,63 +357,19 @@
   multifunctions}.
 \newblock \bibinfo{journal}{Mathematical Programming Study}
   \bibinfo{volume}{14}, \bibinfo{pages}{206--214}.
-%Type = Article
-\bibitem[{Roughgarden and Tardos(2002)}]{RoughgardenTardos2002}
-\bibinfo{author}{Roughgarden, T.}, \bibinfo{author}{Tardos, {\'E}.},
-  \bibinfo{year}{2002}.
-\newblock \bibinfo{title}{How bad is selfish routing?}
-\newblock \bibinfo{journal}{Journal of the ACM} \bibinfo{volume}{49},
-  \bibinfo{pages}{236--259}.
-%Type = Article
-\bibitem[{Ruffin(1971)}]{Ruffin1971}
-\bibinfo{author}{Ruffin, R.J.}, \bibinfo{year}{1971}.
-\newblock \bibinfo{title}{Cournot oligopoly and competitive behaviour}.
-\newblock \bibinfo{journal}{The Review of Economic Studies}
-  \bibinfo{volume}{38}, \bibinfo{pages}{493--502}.
-%Type = Article
-\bibitem[{Saldi et~al.(2018)Saldi, Ba{\c{s}}ar and
-  Raginsky}]{SaldiBasarRaginsky2018}
-\bibinfo{author}{Saldi, N.}, \bibinfo{author}{Ba{\c{s}}ar, T.},
-  \bibinfo{author}{Raginsky, M.}, \bibinfo{year}{2018}.
-\newblock \bibinfo{title}{Markov--{Nash} equilibria in mean-field games with
-  discounted cost}.
-\newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
-  \bibinfo{volume}{56}, \bibinfo{pages}{4256--4287}.
 %Type = Misc
 \bibitem[{Sanjari et~al.(2022)Sanjari, Bose and Ba{\c{s}}ar}]{Sanjari2022}
 \bibinfo{author}{Sanjari, S.}, \bibinfo{author}{Bose, S.},
   \bibinfo{author}{Ba{\c{s}}ar, T.}, \bibinfo{year}{2022}.
 \newblock \bibinfo{title}{Incentive designs for {Stackelberg} games with a
   large number of followers and their mean-field limits}.
-\newblock \bibinfo{howpublished}{arXiv:2207.10611}.
-%Type = Article
-\bibitem[{Savelsbergh and Van~Woensel(2016)}]{Savelsbergh2016}
-\bibinfo{author}{Savelsbergh, M.}, \bibinfo{author}{Van~Woensel, T.},
-  \bibinfo{year}{2016}.
-\newblock \bibinfo{title}{50th anniversary invited article---city logistics:
-  challenges and opportunities}.
-\newblock \bibinfo{journal}{Transportation Science} \bibinfo{volume}{50},
-  \bibinfo{pages}{579--590}.
+\newblock \bibinfo{howpublished}{arXiv preprint arXiv:2207.10611}.
 %Type = Article
 \bibitem[{Slade(1994)}]{Slade1994}
 \bibinfo{author}{Slade, M.E.}, \bibinfo{year}{1994}.
 \newblock \bibinfo{title}{What does an oligopoly maximize?}
 \newblock \bibinfo{journal}{The Journal of Industrial Economics}
   \bibinfo{volume}{42}, \bibinfo{pages}{45--61}.
-%Type = Article
-\bibitem[{Suzumura and Kiyono(1987)}]{SuzumuraKiyono1987}
-\bibinfo{author}{Suzumura, K.}, \bibinfo{author}{Kiyono, K.},
-  \bibinfo{year}{1987}.
-\newblock \bibinfo{title}{Entry barriers and economic welfare}.
-\newblock \bibinfo{journal}{The Review of Economic Studies}
-  \bibinfo{volume}{54}, \bibinfo{pages}{157--167}.
-%Type = Article
-\bibitem[{Troffaes(2007)}]{Troffaes2007}
-\bibinfo{author}{Troffaes, M.C.M.}, \bibinfo{year}{2007}.
-\newblock \bibinfo{title}{Decision making under uncertainty using imprecise
-  probabilities}.
-\newblock \bibinfo{journal}{International Journal of Approximate Reasoning}
-  \bibinfo{volume}{45}, \bibinfo{pages}{17--29}.
 %Type = Techreport
 \bibitem[{{U.S. Environmental Protection Agency}(2023)}]{EPA2023}
 \bibinfo{author}{{U.S. Environmental Protection Agency}}, \bibinfo{year}{2023}.
@@ -702,23 +385,12 @@
   points}.
 \newblock \bibinfo{journal}{Transportation Research Part B: Methodological}
   \bibinfo{volume}{36}, \bibinfo{pages}{707--729}.
-%Type = Book
-\bibitem[{Walley(1991)}]{Walley1991}
-\bibinfo{author}{Walley, P.}, \bibinfo{year}{1991}.
-\newblock \bibinfo{title}{Statistical Reasoning with Imprecise Probabilities}.
-\newblock \bibinfo{publisher}{Chapman and Hall}, \bibinfo{address}{London}.
 %Type = Article
 \bibitem[{Wardrop(1952)}]{Wardrop1952}
 \bibinfo{author}{Wardrop, J.G.}, \bibinfo{year}{1952}.
 \newblock \bibinfo{title}{Some theoretical aspects of road traffic research}.
 \newblock \bibinfo{journal}{Proceedings of the Institution of Civil Engineers,
   Part II} \bibinfo{volume}{1}, \bibinfo{pages}{325--362}.
-%Type = Article
-\bibitem[{von Weizs{\"a}cker(1980)}]{VonWeizsacker1980}
-\bibinfo{author}{von Weizs{\"a}cker, C.C.}, \bibinfo{year}{1980}.
-\newblock \bibinfo{title}{A welfare analysis of barriers to entry}.
-\newblock \bibinfo{journal}{The Bell Journal of Economics}
-  \bibinfo{volume}{11}, \bibinfo{pages}{399--420}.
 %Type = Book
 \bibitem[{Yang and Huang(2005)}]{YangHuang2005}
 \bibinfo{author}{Yang, H.}, \bibinfo{author}{Huang, H.J.},
