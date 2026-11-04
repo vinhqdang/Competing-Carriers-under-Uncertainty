@@ -1,4 +1,4 @@
-\begin{thebibliography}{28}
+\begin{thebibliography}{38}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -21,12 +21,32 @@
   {Stackelberg} mean field game approach}.
 \newblock \bibinfo{journal}{SIAM Journal on Control and Optimization}
   \bibinfo{volume}{60}, \bibinfo{pages}{S294--S322}.
+%Type = Article
+\bibitem[{Beardwood et~al.(1959)Beardwood, Halton and Hammersley}]{BHH1959}
+\bibinfo{author}{Beardwood, J.}, \bibinfo{author}{Halton, J.H.},
+  \bibinfo{author}{Hammersley, J.M.}, \bibinfo{year}{1959}.
+\newblock \bibinfo{title}{The shortest path through many points}.
+\newblock \bibinfo{journal}{Mathematical Proceedings of the Cambridge
+  Philosophical Society} \bibinfo{volume}{55}, \bibinfo{pages}{299--327}.
 %Type = Book
 \bibitem[{Beckmann et~al.(1956)Beckmann, McGuire and Winsten}]{Beckmann1956}
 \bibinfo{author}{Beckmann, M.}, \bibinfo{author}{McGuire, C.B.},
   \bibinfo{author}{Winsten, C.B.}, \bibinfo{year}{1956}.
 \newblock \bibinfo{title}{Studies in the Economics of Transportation}.
 \newblock \bibinfo{publisher}{Yale University Press}.
+%Type = Article
+\bibitem[{Brueckner(2002)}]{Brueckner2002}
+\bibinfo{author}{Brueckner, J.K.}, \bibinfo{year}{2002}.
+\newblock \bibinfo{title}{Airport congestion when carriers have market power}.
+\newblock \bibinfo{journal}{American Economic Review} \bibinfo{volume}{92},
+  \bibinfo{pages}{1357--1375}.
+%Type = Techreport
+\bibitem[{{Bureau of Public Roads}(1964)}]{BPR1964}
+\bibinfo{author}{{Bureau of Public Roads}}, \bibinfo{year}{1964}.
+\newblock \bibinfo{title}{Traffic Assignment Manual for Application with a
+  Large, High Speed Computer}.
+\newblock \bibinfo{type}{Technical Report}. U.S. Department of Commerce, Urban
+  Planning Division. \bibinfo{address}{Washington, DC}.
 %Type = Misc
 \bibitem[{Cabannes et~al.(2021)Cabannes, Lauri{\`e}re, P{\'e}rolat
   et~al.}]{Cabannes2021}
@@ -72,6 +92,22 @@
   best responses under probability-box travel times and leader pricing without
   equilibrium search}.
 \newblock \bibinfo{note}{Working paper, under review}.
+%Type = Techreport
+\bibitem[{van Essen et~al.(2020)van Essen, van Wijngaarden, Schroten, Sutter,
+  Bieler, Maffii, Brambilla, Fiorello, Fermi, Parolin and
+  El~Beyrouty}]{Handbook2019}
+\bibinfo{author}{van Essen, H.}, \bibinfo{author}{van Wijngaarden, L.},
+  \bibinfo{author}{Schroten, A.}, \bibinfo{author}{Sutter, D.},
+  \bibinfo{author}{Bieler, C.}, \bibinfo{author}{Maffii, S.},
+  \bibinfo{author}{Brambilla, M.}, \bibinfo{author}{Fiorello, D.},
+  \bibinfo{author}{Fermi, F.}, \bibinfo{author}{Parolin, R.},
+  \bibinfo{author}{El~Beyrouty, K.}, \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Handbook on the External Costs of Transport, Version
+  2019 -- 1.1}.
+\newblock \bibinfo{type}{Technical Report}. European Commission,
+  Directorate-General for Mobility and Transport; Publications Office of the
+  European Union. \bibinfo{address}{Luxembourg}.
+\newblock \bibinfo{note}{Doi:10.2832/51388}.
 %Type = Incollection
 \bibitem[{Gomes et~al.(2011)Gomes, Mohr and Souza}]{Gomes2010}
 \bibinfo{author}{Gomes, D.A.}, \bibinfo{author}{Mohr, J.},
@@ -93,6 +129,14 @@
   with congestion effect on graphs}.
 \newblock \bibinfo{journal}{Applied Mathematics \& Optimization}
   \bibinfo{volume}{72}, \bibinfo{pages}{291--303}.
+%Type = Article
+\bibitem[{Hamada et~al.(2022)Hamada, Ohkawa and Okamura}]{Hamada2022}
+\bibinfo{author}{Hamada, K.}, \bibinfo{author}{Ohkawa, T.},
+  \bibinfo{author}{Okamura, M.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Optimal taxation in a free-entry {Cournot} oligopoly:
+  the average cost function approach}.
+\newblock \bibinfo{journal}{Canadian Journal of Economics}
+  \bibinfo{volume}{55}, \bibinfo{pages}{1166--1192}.
 %Type = Article
 \bibitem[{Harks and Schedel(2024)}]{HarksSchedel2024}
 \bibinfo{author}{Harks, T.}, \bibinfo{author}{Schedel, A.},
@@ -131,6 +175,23 @@
 \newblock \bibinfo{title}{Routing game on parallel networks: the convergence of
   atomic to nonatomic}.
 \newblock \bibinfo{howpublished}{arXiv:1804.03081}.
+%Type = Article
+\bibitem[{Katsoulacos and Xepapadeas(1995)}]{KatsoulacosXepapadeas1995}
+\bibinfo{author}{Katsoulacos, Y.}, \bibinfo{author}{Xepapadeas, A.},
+  \bibinfo{year}{1995}.
+\newblock \bibinfo{title}{Environmental policy under oligopoly with endogenous
+  market structure}.
+\newblock \bibinfo{journal}{Scandinavian Journal of Economics}
+  \bibinfo{volume}{97}, \bibinfo{pages}{411--420}.
+%Type = Article
+\bibitem[{Konishi et~al.(1990)Konishi, Okuno-Fujiwara and
+  Suzumura}]{Konishi1990}
+\bibinfo{author}{Konishi, H.}, \bibinfo{author}{Okuno-Fujiwara, M.},
+  \bibinfo{author}{Suzumura, K.}, \bibinfo{year}{1990}.
+\newblock \bibinfo{title}{Oligopolistic competition and economic welfare: a
+  general equilibrium analysis of entry regulation and tax-subsidy schemes}.
+\newblock \bibinfo{journal}{Journal of Public Economics} \bibinfo{volume}{42},
+  \bibinfo{pages}{67--88}.
 %Type = Misc
 \bibitem[{Langner et~al.(2024)Langner, Neufeld and Park}]{Langner2024}
 \bibinfo{author}{Langner, J.}, \bibinfo{author}{Neufeld, A.},
@@ -180,6 +241,13 @@
   on-demand ride-hailing platforms: a mean field game approach}.
 \newblock \bibinfo{howpublished}{arXiv:2504.02346}.
 %Type = Article
+\bibitem[{Mankiw and Whinston(1986)}]{MankiwWhinston1986}
+\bibinfo{author}{Mankiw, N.G.}, \bibinfo{author}{Whinston, M.D.},
+  \bibinfo{year}{1986}.
+\newblock \bibinfo{title}{Free entry and social inefficiency}.
+\newblock \bibinfo{journal}{RAND Journal of Economics} \bibinfo{volume}{17},
+  \bibinfo{pages}{48--58}.
+%Type = Article
 \bibitem[{Monderer and Shapley(1996)}]{Monderer1996}
 \bibinfo{author}{Monderer, D.}, \bibinfo{author}{Shapley, L.S.},
   \bibinfo{year}{1996}.
@@ -196,6 +264,13 @@
   with coupling constraints}.
 \newblock \bibinfo{journal}{IEEE Transactions on Automatic Control}
   \bibinfo{volume}{64}, \bibinfo{pages}{1373--1388}.
+%Type = Article
+\bibitem[{Pels and Verhoef(2004)}]{PelsVerhoef2004}
+\bibinfo{author}{Pels, E.}, \bibinfo{author}{Verhoef, E.T.},
+  \bibinfo{year}{2004}.
+\newblock \bibinfo{title}{The economics of airport congestion pricing}.
+\newblock \bibinfo{journal}{Journal of Urban Economics} \bibinfo{volume}{55},
+  \bibinfo{pages}{257--277}.
 %Type = Inproceedings
 \bibitem[{P{\'e}rolat et~al.(2022)P{\'e}rolat, Perrin, Elie
   et~al.}]{Perolat2022}
@@ -217,6 +292,13 @@
 \newblock \bibinfo{title}{What does an oligopoly maximize?}
 \newblock \bibinfo{journal}{The Journal of Industrial Economics}
   \bibinfo{volume}{42}, \bibinfo{pages}{45--61}.
+%Type = Techreport
+\bibitem[{{U.S. Environmental Protection Agency}(2023)}]{EPA2023}
+\bibinfo{author}{{U.S. Environmental Protection Agency}}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Report on the Social Cost of Greenhouse Gases:
+  Estimates Incorporating Recent Scientific Advances}.
+\newblock \bibinfo{type}{Technical Report}. U.S. Environmental Protection
+  Agency. \bibinfo{address}{Washington, DC}.
 %Type = Article
 \bibitem[{Yang et~al.(2004)Yang, Meng and Lee}]{Yang2004}
 \bibinfo{author}{Yang, H.}, \bibinfo{author}{Meng, Q.}, \bibinfo{author}{Lee,

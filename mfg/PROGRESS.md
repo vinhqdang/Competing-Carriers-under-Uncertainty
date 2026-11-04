@@ -52,6 +52,28 @@ Gamma-maximin surcharge and the belief-width scaling; (5) venue left to the auth
 ## Open items for the author
 See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".
 
+## Step 8: fees, entry, further externalities (done except the F sweep, 2026-11-04)
+- Code: src/mfgcc/fees.py (fee schemes at fixed N; free entry with real counts per segment, secant on log k, sequential
+  exit of the least viable segment; one-zone closed forms), src/mfgcc/extern.py (fastest-path km on the major graph,
+  cached in results/geo/ [not committed, rebuilt on demand, ~30 s per city]; per-tour external cost: air pollution,
+  climate, noise (EU Handbook 2019 values), through-traffic delay (BPR marginal external delay at the hourly congestion
+  level, VOT = driver wage); exposure in vkm per resident). city.py records the legs of every tour (no equilibrium change).
+  Tests: tests/test_ext.py; `python3 -m pytest mfg/tests -q` (all pass).
+- Experiments (resumable, PYTHONPATH=mfg/src): run_fees.py -> results/fees.csv; run_entry.py -> results/entry.csv
+  (seeds 0-2, N0 = 6, 24, 192); SWEEP=1 run_entry.py -> results/entry_sweep.csv (seed 0, N0 = 12, 48, 96, 384);
+  run_extern.py -> results/extern.csv; then analyze_ext.py -> numbers_ext.tex, table_{fees,entry,extern}.tex,
+  figures/mfg_entry.png, mfg_extern.png, results/summary_ext_*.csv.
+- Paper: paper/ext.tex (Section 12, Props 21-23, Tables 4-7, Figs 9-10); abstract, contributions, discussion and
+  limitations updated; 33 pages.
+- Findings: see docs/MFG_DIRECTION.md Section 6 (rows Prop 21-23 and the three new experiment rows).
+- Weak/negative: through-traffic delay (VOT proxy, grade C) carries the externality result; the free-entry pm/pmfee runs
+  stop at 80 rounds in about a quarter of cases (residual up to 2% of F; signs unaffected); the recovery fee under
+  free entry has outcomes from market closure to +26% welfare; second-best property of the Pigou charge proved for one
+  zone only and holds approximately in the cities (best of the scalings in 27/27, 20/27, 12/27).
+
+## Open items for the author
+See docs/MFG_DIRECTION.md, Section 6, "Decisions for the author".
+
 ## Step 8: fees, entry, further externalities (in progress, 2026-11-04)
 - Code: src/mfgcc/fees.py (fee schemes at fixed N, free entry with real counts per segment, one-zone closed forms),
   src/mfgcc/extern.py (fastest-path km on the major graph, cached in results/geo/ [not committed, rebuilt on demand];

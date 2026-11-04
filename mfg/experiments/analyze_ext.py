@@ -102,6 +102,9 @@ def entry():
     macro("EntInst", str(e.groupby(["city", "seed"]).ngroups))
     macro("EntIdErr", f"{e.id_err.max():.0e}")
     macro("EntErrMax", f"{e.err.max():.0e}")
+    pmr = e[e.rule.isin(["pm", "pmfee"])]
+    macro("EntConv", f"{int((pmr.err < 1e-4).sum())}/{len(pmr)}")
+    macro("EntIdErrMed", f"{e.id_err.median():.0e}")
     macro("EntResidMax", f"{e[e.rule.isin(['pm', 'pmfee'])].resid.max():.0e}")
     rows = []
     for rule, th, name in RULES:
@@ -152,7 +155,7 @@ def entry():
         macro(f"Ent{w}MwExcess", f"{int((x.lam_best.astype(float) < 1.0).sum())}/{len(x)}")
     e.to_csv(RES / "summary_ext_entry.csv", index=False)
     # figure
-    fig, axes = plt.subplots(1, 2, figsize=(12, 3.8))
+    fig, axes = plt.subplots(1, 2, figsize=(12, 3.3))
     allE = pd.concat([e, sw]) if sw is not None else e
     col = {"none": "k", "obs": "tab:red", "pm": "tab:blue", "pmfee": "tab:green"}
     for rule, th, name in RULES[:4]:
@@ -290,7 +293,7 @@ def extern():
     (PAP / "table_extern.tex").write_text("\n".join(rows)[:-3] + "\n")
     d.to_csv(RES / "summary_ext_extern.csv", index=False)
     # figure
-    fig, axes = plt.subplots(1, 2, figsize=(12, 3.8), gridspec_kw=dict(width_ratios=[1.3, 1]))
+    fig, axes = plt.subplots(1, 2, figsize=(12, 3.3), gridspec_kw=dict(width_ratios=[1.3, 1]))
     cities = CITY_ORDER
     xs = np.arange(len(cities))
     bottom = np.zeros(len(cities))
@@ -302,8 +305,8 @@ def extern():
     kq = np.array([nb.loc[c].kQ_per_del.median() for c in cities])
     axes[0].plot(xs, kq, "k_", ms=18, mew=2, label=r"in-zone congestion charge $\kappa Q$")
     axes[0].set_xticks(xs, [lab(c) for c in cities], rotation=30, fontsize=8)
-    axes[0].set(yscale="log", ylabel="USD per delivery (no charge, mean field)")
-    axes[0].legend(fontsize=7)
+    axes[0].set(ylabel="USD per delivery (no charge, mean field)")
+    axes[0].legend(fontsize=7, loc="upper left")
     Ns = [6, 12, 24, 48, 96, 192, 384, 768, 1536]
     pf["Ni"] = pf.N.astype(int)
     for r_, cl, nm in (("none", "k", "no charge"), ("pm_cong", "tab:blue", "congestion only (Pigou minus m.p.)"),
@@ -314,7 +317,7 @@ def extern():
         axes[1].plot(n_, g.median().reindex(n_), "o-", color=cl, label=nm)
         axes[1].fill_between(n_, g.quantile(0.25).reindex(n_), g.quantile(0.75).reindex(n_), color=cl, alpha=0.15)
     _ = Ns
-    axes[1].set(xscale="log", yscale="symlog", xlabel="number of carriers $N$",
+    axes[1].set(xscale="log", xlabel="number of carriers $N$",
                 ylabel="loss vs extended optimum, % of $\\mathrm{SW}^{\\rm opt}$")
     axes[1].legend(fontsize=7)
     fig.tight_layout()
