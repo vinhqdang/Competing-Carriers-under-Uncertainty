@@ -57,7 +57,15 @@ def strip_comments(t):
         out.append(l.rstrip())
     return re.sub(r'\n{3,}', '\n\n', '\n'.join(out))
 
-def build(out, figdir=None):
+def anonymise(main):
+    """Author-free manuscript: no name, affiliation, e-mail, ORCID, repository link, CRediT; self-citation anonymised."""
+    main = re.sub(r'\\author\{[^}]*\}\n\\ead\{[^}]*\}\n\\address\{[^}]*\}\n', '', main)
+    main = re.sub(r'\\section\*\{CRediT authorship contribution statement\}.*?(?=\\section\*\{Declaration of competing)', '', main, flags=re.S)
+    main = re.sub(r'(\\section\*\{Data availability\}\n).*?\n', r'\1Code, instances, result files and the Lean development are available in a public repository. The link is withheld during peer review and will be provided to the editor on request and on acceptance.\n', main, count=1)
+    main = re.sub(r'\\bibitem\[\{Dang\(2026\)\}\]\{Omega2026\}.*?(?=\\bibitem|\\end\{thebibliography\})', lambda m: '\\bibitem[{Anonymous(2026)}]{Omega2026}\n\\bibinfo{author}{Anonymous}, \\bibinfo{year}{2026}.\n\\newblock \\bibinfo{title}{Manuscript under review}.\n\n', main, flags=re.S)
+    return main
+
+def build(out, figdir=None, anon=False):
     figdir = figdir or f'{HERE}/figures_src'
     if os.path.exists(out): shutil.rmtree(out)
     os.makedirs(out)
@@ -81,6 +89,8 @@ def build(out, figdir=None):
     main = main.replace('\\address{British University Vietnam, Hung Yen, Vietnam}', '\\address{British University Vietnam, Hung Yen, Vietnam. ORCID: 0000-0002-3877-8024}')
     bbl = open(f'{PAPER}/main.bbl').read()
     main = main.replace('\\bibliographystyle{elsarticle-harv}\n', '').replace('\\bibliography{references}', bbl)
+    if anon:
+        main = anonymise(main)
     main = strip_comments(main)
     main, pat = expand(main, macros)
     assert not pat.search(main)
