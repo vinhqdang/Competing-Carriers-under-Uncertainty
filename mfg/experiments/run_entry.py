@@ -26,12 +26,12 @@ from mfgcc.stake import decompose
 SWEEP = os.environ.get("SWEEP", "0") == "1"
 OUT = Path(__file__).resolve().parents[1] / "results" / ("entry_sweep.csv" if SWEEP else "entry.csv")
 K0 = [2, 8, 16, 64] if SWEEP else [1, 4, 32]
-SEEDS = range(1) if SWEEP else range(5)
+SEEDS = range(1) if SWEEP else range(3)
 RULES = [("none", 1.0), ("obs", 1.0), ("pm", 1.0), ("pmfee", 1.0), ("obs", 0.5), ("obs", 1.5)]
-LAMS = np.round(np.arange(0.30, 1.201, 0.05), 2)
+LAMS = np.round(np.concatenate([np.arange(0.02, 0.3, 0.02), np.arange(0.30, 1.201, 0.05)]), 2)
 FIELDS = ["city", "seed", "k0", "N0", "rule", "theta", "N", "N_int", "active", "SW", "CS", "R", "fee_rev", "CC",
           "Pi", "fixed", "Q_total", "neg_share", "err", "resid", "iters", "F_mean", "SW_fb", "SW_opt",
-          "lam_best", "SW_lam_best", "SW_lam1"]
+          "lam_best", "SW_lam_best", "SW_lam1", "N_lam_best", "k"]
 
 
 def done():
@@ -59,12 +59,14 @@ def job(args):
                        N_int=float(np.sum(np.floor(r["k"]))), active=r["active"], SW=r["SW"], CS=r["CS"], R=r["R"],
                        fee_rev=r["fee_rev"], CC=r["CC"], Pi=r["Pi"], fixed=r["fixed"], Q_total=r["Q_total"],
                        neg_share=r["neg_share"], err=r["err"], resid=r["resid"], iters=r["iters"],
-                       F_mean=float(F.mean()), SW_fb=sw_fb, SW_opt=sw_opt, lam_best="", SW_lam_best="", SW_lam1="")
+                       F_mean=float(F.mean()), SW_fb=sw_fb, SW_opt=sw_opt, lam_best="", SW_lam_best="", SW_lam1="",
+                       N_lam_best="", k=" ".join(f"{v:.6g}" for v in r["k"]))
             if rule == "none":
                 base = r
                 sc = planner_scale(g, F, r["k"], LAMS)
                 j = int(np.argmax([v for _, v in sc]))
-                row.update(lam_best=sc[j][0], SW_lam_best=sc[j][1], SW_lam1=dict(sc)[1.0])
+                row.update(lam_best=sc[j][0], SW_lam_best=sc[j][1], SW_lam1=dict(sc)[1.0],
+                           N_lam_best=float(np.sum(np.maximum(sc[j][0] * r["k"], 1.0))))
             rows.append(row)
             print("entry", c, seed, k0, rule, th, f"N={r['N']:.2f} act={r['active']} err={r['err']:.1e}", flush=True)
     return rows

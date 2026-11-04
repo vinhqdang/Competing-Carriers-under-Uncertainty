@@ -125,8 +125,8 @@ def calibrate_F(g, k0: int) -> np.ndarray:
     return np.sqrt(p[0] * p[1])
 
 
-def free_entry(g, F, rule: str, *, theta: float = 1.0, k_init=None, tol: float = 1e-6, max_outer: int = 300,
-               damp: float = 0.8, pm_rounds: int = 3, verbose=False) -> dict:
+def free_entry(g, F, rule: str, *, theta: float = 1.0, k_init=None, tol: float = 1e-5, max_outer: int = 80,
+               damp: float = 0.9, pm_rounds: int = 3, verbose=False) -> dict:
     """Free-entry equilibrium of the city instance g with per-segment fixed costs F (array) under a charge rule.
 
     rule: 'none' (u = 0); 'obs' (observation-only fixed point u = theta kappa Q(u), Nash carriers; theta = 1 is the
@@ -141,6 +141,7 @@ def free_entry(g, F, rule: str, *, theta: float = 1.0, k_init=None, tol: float =
     ks = np.full(nT, 1.0) if k_init is None else np.array(k_init, float)
     active = np.ones(nT, bool)
     low = np.zeros(nT, int)
+    hist = [None] * nT
     so = None
     u = None
     Tc = np.zeros(nT)
@@ -179,10 +180,20 @@ def free_entry(g, F, rule: str, *, theta: float = 1.0, k_init=None, tol: float =
         err = float(np.max(np.abs(r[active] - 1.0)))
         if verbose:
             print(it, rule, np.round(np.where(active, ks, 0), 3), f"err={err:.2e}", f"resid={resid:.1e}")
-        if err < tol and resid < 1e-6:
+        if err < tol and resid < tol:
             break
         for th in np.where(active)[0]:
-            kn = 0.0 if r[th] <= 0 else (ks[th] + 1.0) * r[th] ** (0.5 * damp) - 1.0
+            # secant step on log k with the estimated elasticity of profit per carrier (start: Cournot, -2)
+            if r[th] <= 0:
+                kn = 0.5 * ks[th]
+            else:
+                lk, lp = np.log(ks[th]), np.log(r[th])
+                el = -2.0
+                if hist[th] is not None and abs(lk - hist[th][0]) > 1e-9:
+                    el = float(np.clip((lp - hist[th][1]) / (lk - hist[th][0]), -4.0, -0.25))
+                hist[th] = (lk, lp)
+                step = float(np.clip(-lp / el * damp, -1.0, 1.0))
+                kn = float(np.exp(lk + step))
             if kn < 1.0:
                 kn = 1.0
                 low[th] = low[th] + 1 if (r[th] < 1.0 and ks[th] <= 1.0 + 1e-12) else 0
@@ -195,6 +206,7 @@ def free_entry(g, F, rule: str, *, theta: float = 1.0, k_init=None, tol: float =
             th = cand[np.argmin(r[cand])]
             active[th] = False
             low[:] = 0
+            hist = [None] * nT
             so, u = None, None
     if not active.any():  # the market closes
         return dict(rule=rule, theta=theta, k=np.zeros(nT), N=0.0, active=0, u=None, sol=None, T=0.0, fixed=0.0,

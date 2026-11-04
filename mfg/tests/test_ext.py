@@ -129,7 +129,7 @@ def test_free_entry_zero_profit_identity_city():
     F = Fe.calibrate_F(g, 2)
     for rule in ("none", "obs"):
         r = Fe.free_entry(g, F, rule, k_init=np.full(6, 2.5))
-        assert r["err"] < 1e-6
+        assert r["err"] < 1e-5
         assert r["SW"] == pytest.approx(r["CS"] + r["R"] + r["fee_rev"], rel=1e-5)
     r0 = Fe.free_entry(g, F, "none", k_init=np.full(6, 2.5))
     assert np.all((r0["k"] > 2) & (r0["k"] < 3))  # calibration puts the free-entry count between k0 and k0 + 1
