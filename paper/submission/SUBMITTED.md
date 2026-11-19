@@ -39,3 +39,9 @@
 - Manuscript number: NOT YET RECORDED (author has not supplied it); add here.
 - Related manuscript: the Omega paper (OMEGA resubmission of 2026-10-29), cited in the TR-B paper as under review.
 - Open: references have no DOIs; repository has no archival DOI (consider Zenodo); three figures are 1950 px wide (below the 2244 px full-page minimum).
+
+## Outcome at Transportation Research Part B (2026-11-19)
+- Decision: not advanced to full review (initial-review stage), signed by the Senior Associate Editor, Yafeng Yin.
+- Reason given: the contributions are approximation bounds for a class of aggregative games; the paper does not sufficiently show their significance for transportation research or new insight on delivery operations and policy; the numerical studies are stylised and give limited extra support. Not a quality judgement on the mathematics.
+- Editor suggestions: a venue closer to the theoretical focus; since the paper builds on the companion paper and reuses its model and application setting, the journal handling that work (Omega), subject to its scope.
+- Status: free to submit elsewhere; no revision requested.
