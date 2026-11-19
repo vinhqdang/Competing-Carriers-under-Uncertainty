@@ -45,3 +45,14 @@
 - Reason given: the contributions are approximation bounds for a class of aggregative games; the paper does not sufficiently show their significance for transportation research or new insight on delivery operations and policy; the numerical studies are stylised and give limited extra support. Not a quality judgement on the mathematics.
 - Editor suggestions: a venue closer to the theoretical focus; since the paper builds on the companion paper and reuses its model and application setting, the journal handling that work (Omega), subject to its scope.
 - Status: free to submit elsewhere; no revision requested.
+
+## Mean-field paper submitted to Transportation Research Interdisciplinary Perspectives (TRIP)
+- Title: Many small carriers: the mean-field limit of competitive urban delivery under zone-time charges
+- Authors: Quang-Vinh Dang, Dat Le, Minh-Ngoc Dinh (corresponding author); submitted by Dang.
+- Journal: Transportation Research Interdisciplinary Perspectives (Elsevier, open access, single anonymized review).
+- Earlier attempt: Transportation Research Part B declined at initial review (fit and transport significance), 2026-11-19.
+- Package: mfg/submission/trip/ (author-named and anonymous manuscripts, one-.tex ZIPs, title page, CRediT, declarations, highlights, graphical abstract, cover letter).
+- Data: Zenodo DOI 10.5281/zenodo.24357664 (reserved; publish after uploading the final ZIP if not already done). Code licence differs between the Zenodo ZIP (MIT) and the GitHub repository (Apache-2.0); to be aligned.
+- Manuscript number: NOT YET RECORDED (author has not supplied it); add here.
+- Related manuscript: the Omega paper (resubmitted 2026-10-29), cited as under review.
+- Open: APC for open access if accepted; references have no DOIs; suggested reviewers have no names; generative-AI declaration is in the manuscript (plural, covers writing support).
