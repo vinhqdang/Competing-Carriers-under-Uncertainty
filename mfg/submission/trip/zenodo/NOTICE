@@ -1,0 +1,22 @@
+NOTICE: third-party data in data/processed/
+
+The files in data/processed/<City>/ (zones.csv, zone_bounds.npy, major_graph.npz, travel_time_matrix.npy, meta.json) are
+derived from two sources.
+
+1. OpenStreetMap. Contains information from OpenStreetMap, (c) OpenStreetMap contributors, available under the Open Database
+   Licence (ODbL) 1.0, https://www.openstreetmap.org/copyright and https://opendatacommons.org/licenses/odbl/1-0/.
+   Extracts were obtained from BBBike (https://download.bbbike.org), replication timestamp 2026-10-16T23:00:00Z. The derived
+   files contain road lengths aggregated by zone, a major-road graph with OpenStreetMap node ids, travel times computed on that
+   graph, and counts of mapped depot-like objects per zone. They are a derivative database and are kept under the ODbL 1.0: if you
+   redistribute or publicly use them or a database derived from them, you must credit OpenStreetMap contributors, state that the
+   data are under the ODbL, and offer your derived database under the ODbL (share-alike). The raw .osm.pbf extracts and the
+   per-object point-of-interest lists (pois.csv, which carry OpenStreetMap names and ids) are not included in this archive; get
+   them from the sources above.
+
+2. GHSL. Population per zone is aggregated from GHS-POP R2023A, epoch 2025 (Pesaresi, M., Schiavina, M., Politis, P., et al.;
+   European Commission, Joint Research Centre), CC BY 4.0, https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php.
+   Attribution: "GHS-POP R2023A, European Commission, Joint Research Centre (JRC)". The data were aggregated to zones; no
+   endorsement by the JRC is implied.
+
+Calibration parameters (data/parameters/) are compiled from the public sources listed row by row in data/parameters/SOURCES.md
+and its CSV files; they are released under CC BY 4.0 as a compilation and each value remains subject to the terms of its source.
