@@ -1,3 +1,4 @@
+# Replication package: many small carriers, mean-field limit of competitive urban delivery under zone-time charges
 
 
 Replication package for the manuscript of the same title (Quang-Vinh Dang, Dat Le and Minh-Ngoc Dinh).

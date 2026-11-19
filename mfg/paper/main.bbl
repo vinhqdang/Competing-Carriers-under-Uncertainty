@@ -123,15 +123,16 @@
 \newblock \bibinfo{journal}{Mathematics of Operations Research}
   \bibinfo{volume}{48}, \bibinfo{pages}{784--811}.
 %Type = Unpublished
-\bibitem[{Dang(2026a)}]{Omega2026}
-\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}a.
+\bibitem[{Dang(2026)}]{Omega2026}
+\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}.
 \newblock \bibinfo{title}{City charges for competing delivery carriers: exact
   best responses under probability-box travel times and leader pricing without
   equilibrium search}.
 \newblock \bibinfo{note}{Manuscript under review}.
 %Type = Misc
-\bibitem[{Dang(2026b)}]{Zenodo2026}
-\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}b.
+\bibitem[{Dang et~al.(2026)Dang, Le and Dinh}]{Zenodo2026}
+\bibinfo{author}{Dang, Q.V.}, \bibinfo{author}{Le, D.}, \bibinfo{author}{Dinh,
+  M.N.}, \bibinfo{year}{2026}.
 \newblock \bibinfo{title}{[dataset] replication package for: {Many} small
   carriers: the mean-field limit of competitive urban delivery under zone-time
   charges}.

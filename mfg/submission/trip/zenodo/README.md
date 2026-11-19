@@ -1,6 +1,7 @@
-# Many small carriers: mean-field limit of competitive urban delivery under zone-time charges (code, instances, results)
+# Replication package: many small carriers, mean-field limit of competitive urban delivery under zone-time charges
 
-Replication package for the manuscript of the same title (Quang-Vinh Dang, British University Vietnam).
+
+Replication package for the manuscript of the same title (Quang-Vinh Dang, Dat Le and Minh-Ngoc Dinh).
 Archive date: 2026-11-19. Source repository: https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty (folder `mfg`).
 
 ## Contents

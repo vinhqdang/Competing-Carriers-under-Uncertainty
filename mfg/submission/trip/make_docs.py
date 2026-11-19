@@ -10,7 +10,7 @@ from docx.shared import Pt
 
 CREDIT_DANG = ('Quang-Vinh Dang: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, '
           'Data curation, Writing - original draft, Writing - review & editing, Visualization, Project administration.')
-CREDIT = CREDIT_DANG + ' Dat Le: TO_CONFIRM. Minh-Ngoc Dinh: TO_CONFIRM.'
+CREDIT = CREDIT_DANG + ' Dat Le: Conceptualization, Writing - original draft. Minh-Ngoc Dinh: Supervision, Writing - review & editing.'
 DOI_ = 'The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.'
 FUND = 'This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.'
 ZEN = f'Zenodo DOI: {ZENODO_DOI}' if ZENODO_DOI else 'Zenodo DOI: to be added'
@@ -52,7 +52,7 @@ d.save(f'{H}/cover_letter.docx'); to_pdf(f'{H}/cover_letter.docx')
 
 d = newdoc(); d.add_paragraph().add_run('Declaration of competing interest').bold = True; d.add_paragraph(DOI_)
 d.add_paragraph().add_run('Funding').bold = True; d.add_paragraph(FUND); d.save(f'{H}/declaration_of_interest.docx')
-d = newdoc(); d.add_paragraph().add_run('CRediT authorship contribution statement').bold = True; d.add_paragraph(CREDIT_DANG); d.add_paragraph('Dat Le: TO_CONFIRM'); d.add_paragraph('Minh-Ngoc Dinh: TO_CONFIRM'); d.save(f'{H}/credit_statement.docx')
+d = newdoc(); d.add_paragraph().add_run('CRediT authorship contribution statement').bold = True; d.add_paragraph(CREDIT_DANG); d.add_paragraph('Dat Le: Conceptualization, Writing - original draft.'); d.add_paragraph('Minh-Ngoc Dinh: Supervision, Writing - review & editing.'); d.save(f'{H}/credit_statement.docx')
 open(f'{H}/data_availability_statement.txt', 'w').write(DATA + '\n')
 shutil.copy(f'{H}/templates/suggested_reviewers.md', f'{H}/suggested_reviewers.md')
 
@@ -78,9 +78,7 @@ d.save(f'{H}/title_page.docx'); to_pdf(f'{H}/title_page.docx')
 
 readme = f'''# TRIP submission package (Transportation Research Interdisciplinary Perspectives)
 
-Corresponding author: Minh-Ngoc Dinh; submitting author: Quang-Vinh Dang. CRediT roles of Dat Le and Minh-Ngoc Dinh are the literal text TO_CONFIRM: the author must fill them in (manuscript, title page, credit_statement) before upload; verify_ready.py fails until then.
-
-Requirements applied: Guide for Authors for TRIP as pasted by the author, read 2026-11-19. Single anonymized review: upload the
+Corresponding author: Minh-Ngoc Dinh; submitting author: Quang-Vinh Dang.\n\nRequirements applied: Guide for Authors for TRIP as pasted by the author, read 2026-11-19. Single anonymized review: upload the
 ANONYMOUS manuscript as the main file and the title page separately. The manuscript is {MAIN_PAGES} pages (A4, 11 pt); no page limit is stated.
 
 | Upload slot | File |
@@ -104,7 +102,7 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
     python3 mfg/submission/trip/make_graphical_abstract.py
     python3 mfg/submission/trip/make_docs.py         # highlights, cover letter, declarations, title page
     python3 mfg/submission/trip/build_zenodo.py      # Zenodo archive
-    python3 mfg/submission/trip/verify_trip.py       # all checks, ends with OVERALL PASS
+    python3 mfg/submission/trip/verify_ready.py       # all checks, ends with OVERALL PASS
 
 ## Decisions for the author
 
@@ -112,9 +110,8 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
 2. Licence: the deposit uses MIT for code, CC BY 4.0 for results, and ODbL 1.0 for the derived OpenStreetMap city files; the GitHub repository is Apache-2.0.
 3. The publisher's tool-use declaration section is present in both manuscript versions and on the title page, unchanged from the earlier package.
 4. Names of suggested reviewers, and the DATE_TO_FILL in the cover letter.
-5. CRediT roles for Dat Le and Minh-Ngoc Dinh (replace TO_CONFIRM in `mfg/paper/main.tex`, `make_docs.py`).
-6. Whether the cover letter should name the earlier journal (it does not).
-7. References: DOIs not added (not verifiable here); five arXiv items are marked as preprints.
+5. Whether the cover letter should name the earlier journal (it does not).
+6. References: DOIs not added (not verifiable here); five arXiv items are marked as preprints.
 '''
 open(f'{H}/README.md', 'w').write(readme)
 print('pages', MAIN_PAGES, 'refs', NREFS)

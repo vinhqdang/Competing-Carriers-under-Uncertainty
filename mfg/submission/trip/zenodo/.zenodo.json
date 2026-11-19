@@ -8,17 +8,50 @@
       "name": "Dang, Quang-Vinh",
       "affiliation": "British University Vietnam",
       "orcid": "0000-0002-3877-8024"
+    },
+    {
+      "name": "Le, Dat",
+      "affiliation": "Ho Chi Minh City University of Economics and Finance",
+      "orcid": "0009-0005-5038-8570"
+    },
+    {
+      "name": "Dinh, Minh-Ngoc",
+      "affiliation": "Millennia Education",
+      "orcid": "0000-0003-4026-6068"
     }
   ],
   "description": "<p>Code, instances, result files and Lean 4 sources that reproduce the numbers, tables and figures of the manuscript 'Many small carriers: the mean-field limit of competitive urban delivery under zone-time charges'. The package contains the Python package <code>mfgcc</code> and its tests, the resumable experiment drivers and analysis scripts, all result CSV files for nine cities (Berlin, Buenos Aires, Cairo, London, Mumbai, Moscow, New Delhi, New York, Paris), the LaTeX sources of the paper with the generated number macros and tables, brute-force checks of the theory, the calibration parameter tables with sources and quality grades, and derived zone tables, road graphs and travel-time matrices for the nine cities.</p><p>Licences: code MIT; results, figures, parameter tables and paper sources CC BY 4.0; the derived city data in <code>data/processed</code> contain information from OpenStreetMap (&copy; OpenStreetMap contributors, ODbL 1.0) and GHSL GHS-POP R2023A (CC BY 4.0) and remain under those terms (see <code>NOTICE</code>). Raw OpenStreetMap extracts and point-of-interest lists are not included. See <code>README.md</code> for how to run the tests and regenerate the key tables.</p>",
-  "keywords": ["mean-field games", "Wardrop equilibrium", "Cournot competition", "congestion pricing", "urban logistics", "last-mile delivery", "convergence rates"],
+  "keywords": [
+    "mean-field games",
+    "Wardrop equilibrium",
+    "Cournot competition",
+    "congestion pricing",
+    "urban logistics",
+    "last-mile delivery",
+    "convergence rates"
+  ],
   "license": "mit",
   "access_right": "open",
   "language": "eng",
   "notes": "Mixed licences: code MIT; results, figures, parameter tables and paper sources CC BY 4.0 (file LICENSE-DATA); data/processed derived from OpenStreetMap (ODbL 1.0) and GHSL (CC BY 4.0), see NOTICE.",
   "related_identifiers": [
-    {"relation": "isDerivedFrom", "identifier": "https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty", "resource_type": "software", "scheme": "url"},
-    {"relation": "isDerivedFrom", "identifier": "https://www.openstreetmap.org/copyright", "resource_type": "dataset", "scheme": "url"},
-    {"relation": "isDerivedFrom", "identifier": "https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php", "resource_type": "dataset", "scheme": "url"}
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "https://www.openstreetmap.org/copyright",
+      "resource_type": "dataset",
+      "scheme": "url"
+    },
+    {
+      "relation": "isDerivedFrom",
+      "identifier": "https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php",
+      "resource_type": "dataset",
+      "scheme": "url"
+    }
   ]
 }

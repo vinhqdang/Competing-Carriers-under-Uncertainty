@@ -35,15 +35,15 @@ for variant, sfx in (('author-named', ''), ('anonymous', '_anonymous')):
     used = re.findall(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}', src)
     check('every figure file is in the ZIP', all(u in names for u in used), len(used))
     if sfx:
-        pat = re.compile(r'Quang|Dang|buv\.edu|British University|Hung Yen|0000-0002|github|vinhqdang|zenodo|' + DOI.replace('.', r'\.') + r'|CRediT', re.I)
+        pat = re.compile(r'Quang|Dang|Dat Le|Dinh|Millennia|maeducation|uef\.edu|Ho Chi Minh|0009-0005|0000-0003-4026|buv\.edu|British University|Hung Yen|0000-0002|github|vinhqdang|zenodo|' + DOI.replace('.', r'\.') + r'|CRediT', re.I)
         for nm, t in (('anonymous PDF', txt), ('anonymous main.tex', src)):
             m = set(x.group(0) for x in pat.finditer(t)); check(f'{nm}: no author, affiliation, ORCID, e-mail, repository, DOI or CRediT', not m, sorted(m) or 'none')
         check('anonymous: self-citation is Anonymous (2026)', 'Anonymous (2026)' in txt)
         check('anonymous: repository link withheld statement', 'withheld during peer review' in src)
         check('anonymous PDF metadata has no author', not re.search(r'Author:[ \t]+\S', inf), 'none')
     else:
-        check('author block present', 'Quang-Vinh Dang' in txt and 'British University Vietnam' in txt)
-        check('companion paper cited as Dang (2026a), under review', 'Dang (2026a)' in txt and 'under review' in txt.replace('\n', ' '))
+        check('author block present (three authors, corresponding mark)', all(x in txt for x in ('Quang-Vinh Dang', 'Dat Le', 'Minh-Ngoc Dinh', 'British University Vietnam', 'Millennia Education', 'Corresponding author')))
+        check('companion paper cited as Dang (2026), under review', 'Dang (2026)' in txt and 'under review' in txt.replace('\n', ' '))
         check('Zenodo DOI and [dataset] reference present', DOI in txt and '[dataset]' in txt and 'github.com/vinhqdang' in src)
         check('CRediT section present', 'CRediT authorship contribution statement' in src)
 
@@ -73,7 +73,7 @@ check('implications subsection present', 'Implications for planners and operator
 
 print('== title page and declarations ==')
 tp = '\n'.join(p.text for p in Document(f'{R}/title_page.docx').paragraphs)
-for k in ('British University Vietnam, Hung Yen, Vietnam', 'vinh.dq4@buv.edu.vn', '0000-0002-3877-8024', 'CRediT', 'competing', 'Funding', DOI, 'github.com/vinhqdang', 'Claude'):
+for k in ('British University Vietnam, Hung Yen, Vietnam', 'vinh.dq4@buv.edu.vn', '0000-0002-3877-8024', 'datla@uef.edu.vn', '0009-0005-5038-8570', 'minh.dinh@maeducation.com', '0000-0003-4026-6068', 'Minh-Ngoc Dinh, Millennia Education, Ho Chi Minh City, Vietnam, minh.dinh@maeducation.com', 'Dat Le: Conceptualization, Writing - original draft', 'Minh-Ngoc Dinh: Supervision, Writing - review & editing', 'CRediT', 'competing', 'Funding', DOI, 'github.com/vinhqdang', 'Claude'):
     check(f'title_page.docx contains {k}', k.lower() in tp.lower())
 check('title_page.pdf exists', os.path.exists(f'{R}/title_page.pdf'))
 for f in ('declaration_of_interest.docx', 'credit_statement.docx', 'cover_letter.docx', 'cover_letter.pdf', 'cover_letter.md', 'README.md', 'ZENODO_STEPS.md', 'suggested_reviewers.md'): check(f'{f} exists', os.path.exists(f'{R}/{f}'))
@@ -86,10 +86,25 @@ zn = zipfile.ZipFile(zp).namelist()
 check('zenodo zip: no caches, hidden folders, raw data or pois.csv', not [x for x in zn if re.search(r'__pycache__|\.lake|/\.|raw|pois\.csv|results/geo', x)])
 check('zenodo zip: licence, notice, README', all(any(x.endswith('/' + f) for x in zn) for f in ('LICENSE', 'LICENSE-DATA', 'NOTICE', 'README.md')))
 import json; meta = json.load(open(f'{R}/zenodo/.zenodo.json'))
-check('.zenodo.json: creator ORCID and no DOI field', meta['creators'][0]['orcid'] == '0000-0002-3877-8024' and 'doi' not in meta)
+check('.zenodo.json: creator ORCID and no DOI field', [c['orcid'] for c in meta['creators']] == ['0000-0002-3877-8024', '0009-0005-5038-8570', '0000-0003-4026-6068'] and 'doi' not in meta)
 inzip = zipfile.ZipFile(zp).read('mfg_carriers_replication_v1/mfg/paper/main.tex').decode()
 check('zenodo zip carries the final paper sources', open(f'{MFG}/paper/main.tex').read() == inzip)
 
+print('== placeholders ==')
+left = []
+for root, _, fs in os.walk(R):
+    if 'zenodo' in root.split(os.sep) and root.endswith('zenodo'): pass
+    for f in fs:
+        fp = os.path.join(root, f)
+        if f.endswith(('.pdf',)): t = pdftext(fp)
+        elif f.endswith('.docx'): t = '\n'.join(x.text for x in Document(fp).paragraphs)
+        elif f.endswith('.zip'):
+            if 'zenodo' in fp: continue
+            zz = zipfile.ZipFile(fp); t = ''.join(zz.read(n).decode(errors='ignore') for n in zz.namelist() if n.endswith('.tex'))
+        elif f.endswith(('.tex', '.md', '.txt', '.py')) and f not in ('verify_ready.py', 'make_docs.py'): t = open(fp, errors='ignore').read()
+        else: continue
+        if re.search(r'TO.?_?CONFIRM', t): left.append(os.path.relpath(fp, R))
+check('NO TO_CONFIRM placeholder left anywhere (do not upload while this fails)', not left, left or 'none')
 print('== wording scans (AI / venue names) ==')
 bad = re.compile(r'(?<![A-Za-z\\])AI(?![A-Za-z])|\bLLMs?\b|certif\w*|\bclau' + r'de\b|anthro' + r'pic|chatgpt|generative|copilot|\bGPT|\bOmega\b|\bmemo\b', re.I)
 DECL = re.compile(r'Declaration of generative AI.*?(?=\\bibliographystyle|\\begin\{thebibliography\}|References)', re.S)

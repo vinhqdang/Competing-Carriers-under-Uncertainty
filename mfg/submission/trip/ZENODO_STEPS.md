@@ -11,7 +11,7 @@ I cannot create the DOI (no Zenodo credentials). Everything to upload is in `mfg
 2. Drop `mfg_carriers_replication_v1.zip` into the file area (size is about 70 MB; the Zenodo limit is 50 GB).
 3. Fill the form from `.zenodo.json`:
    - Resource type: Software (the file says `upload_type: software`; choose Dataset instead if you prefer; the files are the same).
-   - Title, Publication date (2026-11-19, or the day you publish), Creators: Dang, Quang-Vinh; affiliation British University Vietnam; ORCID 0000-0002-3877-8024.
+   - Title, Publication date (2026-11-19, or the day you publish), Creators, in this order: Dang, Quang-Vinh (British University Vietnam, 0000-0002-3877-8024); Le, Dat (Ho Chi Minh City University of Economics and Finance, 0009-0005-5038-8570); Dinh, Minh-Ngoc (Millennia Education, 0000-0003-4026-6068).
    - Description: paste the `description` text. Keywords: the seven in the file. Language: English. Version: 1.0.
    - Licence: choose MIT (Zenodo allows one licence; the mixed licences are stated in the description and in `LICENSE-DATA` and `NOTICE`).
    - Related works: add the three links of `related_identifiers` ("is derived from"). Later add the paper (see step 7).
