@@ -1,0 +1,5 @@
+With many small carriers an observation-only charge nears the marginal-cost charge
+With few carriers the same charge lowers welfare; the efficient charge is a subsidy
+Free entry: the subsidy attracts entrants; entry control is the biggest welfare lever
+Through-traffic delay is about 8 times the in-zone congestion the base model prices
+Worst-case rate N^-1/2 needs zone-coupling plans; nine cities fall like N^-0.88
