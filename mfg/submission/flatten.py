@@ -62,7 +62,8 @@ def anonymise(main):
     main = re.sub(r'\\author\{[^}]*\}\n\\ead\{[^}]*\}\n\\address\{[^}]*\}\n', '', main)
     main = re.sub(r'\\section\*\{CRediT authorship contribution statement\}.*?(?=\\section\*\{Declaration of competing)', '', main, flags=re.S)
     main = re.sub(r'(\\section\*\{Data availability\}\n).*?\n', r'\1Code, instances, result files and the Lean development are available in a public repository. The link is withheld during peer review and will be provided to the editor on request and on acceptance.\n', main, count=1)
-    main = re.sub(r'\\bibitem\[\{Dang\(2026\)\}\]\{Omega2026\}.*?(?=\\bibitem|\\end\{thebibliography\})', lambda m: '\\bibitem[{Anonymous(2026)}]{Omega2026}\n\\bibinfo{author}{Anonymous}, \\bibinfo{year}{2026}.\n\\newblock \\bibinfo{title}{Manuscript under review}.\n\n', main, flags=re.S)
+    main = re.sub(r'\\bibitem\[\{Dang\(2026a?\)\}\]\{Omega2026\}.*?(?=\\bibitem|\\end\{thebibliography\})', lambda m: '\\bibitem[{Anonymous(2026)}]{Omega2026}\n\\bibinfo{author}{Anonymous}, \\bibinfo{year}{2026}.\n\\newblock \\bibinfo{title}{Manuscript under review}.\n\n', main, flags=re.S)
+    main = re.sub(r'\\bibitem\[[^\n]*\]\{Zenodo2026\}.*?(?=\\bibitem|\\end\{thebibliography\})', '', main, flags=re.S)
     return main
 
 def build(out, figdir=None, anon=False):

@@ -1,5 +1,8 @@
 # Zenodo steps for the author (TRIP requires data and code in a repository, with a link at submission)
 
+**Reserved DOI: 10.5281/zenodo.24357664** (https://doi.org/10.5281/zenodo.24357664; the record is a draft until published; it is not written in `.zenodo.json` because Zenodo assigns it).
+The DOI is already in the author-named manuscript, `title_page`, `data_availability_statement.txt` and the cover letter; it is NOT in the anonymous manuscript, which says the link is withheld.
+
 I cannot create the DOI (no Zenodo credentials). Everything to upload is in `mfg/submission/trip/zenodo/`:
 `mfg_carriers_replication_v1.zip` (the archive), `.zenodo.json` (metadata; hidden file, use `ls -a`), `README.md`, `NOTICE`,
 `LICENSE`, `LICENSE-DATA` (copies of the files inside the zip).
@@ -19,9 +22,8 @@ I cannot create the DOI (no Zenodo credentials). Everything to upload is in `mfg
    TRIP asks for a link at submission, so publish before submitting if you do not want to explain its absence. The manuscript is
    single anonymized review: publishing exposes your name next to the data, which does not matter in that model; the anonymous manuscript
    itself says the link is withheld. If you prefer, use the draft's private preview link only for the editor.
-6. Put the DOI into: `title_page.docx` data-availability line (replace "Zenodo DOI: to be added"), the Data availability section of the
-   non-anonymous manuscript (rebuild with `mfg/submission/trip/` scripts after editing `ZENODO_DOI` in `trip_config.py`), and the
-   submission-system data field.
+6. Put the DOI into: `title_page.docx` data-availability line (already filled with the reserved DOI), the Data availability section of the non-anonymous manuscript (already filled), and the
+   submission-system data field. If the DOI ever changes, edit `ZENODO_DOI` in `trip_config.py` and `mfg/paper/main.tex`/`references.bib`, then rerun the scripts.
 7. After the paper is accepted, edit the Zenodo record (published records can be edited without a new DOI for metadata) and add a related
    identifier "is supplement to" with the article DOI.
 8. Check `NOTICE`: if you do not wish to redistribute the OpenStreetMap-derived city files, delete `data/processed` from the zip before

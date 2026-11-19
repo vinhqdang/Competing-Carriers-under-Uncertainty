@@ -1,4 +1,4 @@
-\begin{thebibliography}{52}
+\begin{thebibliography}{53}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -123,12 +123,20 @@
 \newblock \bibinfo{journal}{Mathematics of Operations Research}
   \bibinfo{volume}{48}, \bibinfo{pages}{784--811}.
 %Type = Unpublished
-\bibitem[{Dang(2026)}]{Omega2026}
-\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}.
+\bibitem[{Dang(2026a)}]{Omega2026}
+\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}a.
 \newblock \bibinfo{title}{City charges for competing delivery carriers: exact
   best responses under probability-box travel times and leader pricing without
   equilibrium search}.
 \newblock \bibinfo{note}{Manuscript under review}.
+%Type = Misc
+\bibitem[{Dang(2026b)}]{Zenodo2026}
+\bibinfo{author}{Dang, Q.V.}, \bibinfo{year}{2026}b.
+\newblock \bibinfo{title}{[dataset] replication package for: {Many} small
+  carriers: the mean-field limit of competitive urban delivery under zone-time
+  charges}.
+\newblock \bibinfo{howpublished}{Zenodo, version 1.0}.
+\newblock \DOIprefix\doi{10.5281/zenodo.24357664}.
 %Type = Article
 \bibitem[{Doncel et~al.(2019)Doncel, Gast and Gaujal}]{DoncelGastGaujal2019}
 \bibinfo{author}{Doncel, J.}, \bibinfo{author}{Gast, N.},
