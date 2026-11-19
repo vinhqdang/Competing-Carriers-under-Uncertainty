@@ -8,15 +8,19 @@ from build_trip import pages
 from docx import Document
 from docx.shared import Pt
 
-CREDIT = ('Quang-Vinh Dang: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, '
+CREDIT_DANG = ('Quang-Vinh Dang: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, '
           'Data curation, Writing - original draft, Writing - review & editing, Visualization, Project administration.')
-DOI_ = 'The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.'
+CREDIT = CREDIT_DANG + ' Dat Le: TO_CONFIRM. Minh-Ngoc Dinh: TO_CONFIRM.'
+DOI_ = 'The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.'
 FUND = 'This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.'
 ZEN = f'Zenodo DOI: {ZENODO_DOI}' if ZENODO_DOI else 'Zenodo DOI: to be added'
 DATA = (f'Code, instances, result files and the Lean development are available at {GITHUB} (folder mfg); the city data are the '
         f'processed data of the companion paper. {ZEN}.')
-AI = ('During the preparation of this work the author used Claude (Anthropic) to support the writing of the manuscript. After using this tool, '
-      'the author reviewed and edited the content as needed and takes full responsibility for the content of the published article.')
+AI = ('During the preparation of this work the authors used Claude (Anthropic) to support the writing of the manuscript. After using this tool, '
+      'the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.')
+AUTHORS = [('Quang-Vinh Dang', 'British University Vietnam, Hung Yen, Vietnam', 'vinh.dq4@buv.edu.vn', '0000-0002-3877-8024'),
+           ('Dat Le', 'Department of Science, Technology, and International Projects, Ho Chi Minh City University of Economics and Finance, Ho Chi Minh City, 700000, Vietnam', 'datla@uef.edu.vn', '0009-0005-5038-8570'),
+           ('Minh-Ngoc Dinh (corresponding author)', 'Millennia Education, Ho Chi Minh City, Vietnam', 'minh.dinh@maeducation.com', '0000-0003-4026-6068')]
 MAIN_PAGES = pages(f'{H}/manuscript.pdf')
 flat = zipfile.ZipFile(f'{H}/latex_source.zip').read('main.tex').decode()
 NREFS = flat.count('\\bibitem')
@@ -48,7 +52,7 @@ d.save(f'{H}/cover_letter.docx'); to_pdf(f'{H}/cover_letter.docx')
 
 d = newdoc(); d.add_paragraph().add_run('Declaration of competing interest').bold = True; d.add_paragraph(DOI_)
 d.add_paragraph().add_run('Funding').bold = True; d.add_paragraph(FUND); d.save(f'{H}/declaration_of_interest.docx')
-d = newdoc(); d.add_paragraph().add_run('CRediT authorship contribution statement').bold = True; d.add_paragraph(CREDIT); d.save(f'{H}/credit_statement.docx')
+d = newdoc(); d.add_paragraph().add_run('CRediT authorship contribution statement').bold = True; d.add_paragraph(CREDIT_DANG); d.add_paragraph('Dat Le: TO_CONFIRM'); d.add_paragraph('Minh-Ngoc Dinh: TO_CONFIRM'); d.save(f'{H}/credit_statement.docx')
 open(f'{H}/data_availability_statement.txt', 'w').write(DATA + '\n')
 shutil.copy(f'{H}/templates/suggested_reviewers.md', f'{H}/suggested_reviewers.md')
 
@@ -59,20 +63,22 @@ kw = [k.strip() for k in re.search(r'\\begin\{keyword\}(.*?)\\end\{keyword\}', f
 d = newdoc(); d.add_paragraph().add_run('Title page').bold = True
 def head(t): d.add_paragraph().add_run(t).bold = True
 head('Title'); d.add_paragraph(title)
-head('Author'); d.add_paragraph('Quang-Vinh Dang')
-head('Affiliation'); d.add_paragraph('British University Vietnam, Hung Yen, Vietnam')
-head('Corresponding author'); d.add_paragraph('Quang-Vinh Dang, vinh.dq4@buv.edu.vn')
-head('ORCID'); d.add_paragraph('0000-0002-3877-8024')
+head('Authors')
+for n, aff, em, orc in AUTHORS:
+    d.add_paragraph(f'{n}. {aff}. E-mail: {em}. ORCID: {orc}.')
+head('Corresponding author'); d.add_paragraph('Minh-Ngoc Dinh, Millennia Education, Ho Chi Minh City, Vietnam, minh.dinh@maeducation.com. (Submitting author: Quang-Vinh Dang.)')
 head('Keywords'); d.add_paragraph('; '.join(kw))
 head('Author contributions (CRediT)'); d.add_paragraph(CREDIT)
 head('Declaration of competing interest'); d.add_paragraph(DOI_)
 head('Funding'); d.add_paragraph(FUND)
 head('Data availability'); d.add_paragraph(DATA)
 head('Declaration of generative AI and AI-assisted technologies in the manuscript preparation process'); d.add_paragraph(AI)
-head('Related manuscript'); d.add_paragraph('A companion paper by the same author is under review at another journal and is cited in the manuscript as Anonymous (2026) in the anonymous version and as Dang (2026a) in the non-anonymous version. An earlier version of this manuscript was assessed at initial review by another Transportation Research journal and was not advanced to full review.')
+head('Related manuscript'); d.add_paragraph('A companion paper by the first author is under review at another journal and is cited in the manuscript as Anonymous (2026) in the anonymous version and as Dang (2026) in the non-anonymous version. An earlier version of this manuscript was assessed at initial review by another Transportation Research journal and was not advanced to full review.')
 d.save(f'{H}/title_page.docx'); to_pdf(f'{H}/title_page.docx')
 
 readme = f'''# TRIP submission package (Transportation Research Interdisciplinary Perspectives)
+
+Corresponding author: Minh-Ngoc Dinh; submitting author: Quang-Vinh Dang. CRediT roles of Dat Le and Minh-Ngoc Dinh are the literal text TO_CONFIRM: the author must fill them in (manuscript, title page, credit_statement) before upload; verify_ready.py fails until then.
 
 Requirements applied: Guide for Authors for TRIP as pasted by the author, read 2026-11-19. Single anonymized review: upload the
 ANONYMOUS manuscript as the main file and the title page separately. The manuscript is {MAIN_PAGES} pages (A4, 11 pt); no page limit is stated.
@@ -81,7 +87,7 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
 |---|---|
 | Manuscript, editable source (anonymous) | `latex_source_anonymous.zip` (one `main.tex` plus `Figure_k.png`; plain pdflatex, run twice) |
 | Manuscript, reading copy (anonymous) | `manuscript_anonymous.pdf` (a PDF is not accepted as the source file) |
-| Title page (author, address, ORCID, CRediT, declarations, data, AI statement) | `title_page.docx` (and `title_page.pdf`) |
+| Title page (authors, addresses, ORCIDs, corresponding author, CRediT, declarations, data, tool-use statement) | `title_page.docx` (and `title_page.pdf`) |
 | Figures, one file each | `figures/Figure_1.png` ... (300 dpi) and `figures/Figure_1.pdf` ... (vector) |
 | Highlights (3 to 5, at most 85 characters) | `highlights.docx`, `highlights.txt` |
 | Graphical abstract | `graphical_abstract.pdf`, `graphical_abstract.png` (3240 x 1320 px) |
@@ -90,7 +96,7 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
 | Cover letter | `cover_letter.docx`, `.pdf`, `.md` (date left as DATE_TO_FILL) |
 | Research data (Option C, required) | Zenodo deposit in `zenodo/` (see `ZENODO_STEPS.md`); data statement in `data_availability_statement.txt` |
 | Suggested reviewers (areas only) | `suggested_reviewers.md` |
-| Non-anonymous copies (for the editor, or if the system asks for them) | `manuscript.pdf`, `latex_source.zip` (author name included) |
+| Non-anonymous copies (for the editor, or if the system asks for them) | `manuscript.pdf`, `latex_source.zip` (author names included) |
 
 ## Rebuild and checks
 
@@ -106,8 +112,9 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
 2. Licence: the deposit uses MIT for code, CC BY 4.0 for results, and ODbL 1.0 for the derived OpenStreetMap city files; the GitHub repository is Apache-2.0.
 3. The publisher's tool-use declaration section is present in both manuscript versions and on the title page, unchanged from the earlier package.
 4. Names of suggested reviewers, and the DATE_TO_FILL in the cover letter.
-5. Whether the cover letter should name the earlier journal (it does not).
-6. References: DOIs not added (not verifiable here); five arXiv items are marked as preprints.
+5. CRediT roles for Dat Le and Minh-Ngoc Dinh (replace TO_CONFIRM in `mfg/paper/main.tex`, `make_docs.py`).
+6. Whether the cover letter should name the earlier journal (it does not).
+7. References: DOIs not added (not verifiable here); five arXiv items are marked as preprints.
 '''
 open(f'{H}/README.md', 'w').write(readme)
 print('pages', MAIN_PAGES, 'refs', NREFS)

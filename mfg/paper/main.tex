@@ -33,9 +33,16 @@
 \begin{frontmatter}
 \title{Many small carriers: the mean-field limit of competitive urban delivery under zone-time charges}
 
-\author{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
+\author[a]{Quang-Vinh Dang\,\orcidlink{0000-0002-3877-8024}}
 \ead{vinh.dq4@buv.edu.vn}
-\address{British University Vietnam, Hung Yen, Vietnam}
+\author[b]{Dat Le\,\orcidlink{0009-0005-5038-8570}}
+\ead{datla@uef.edu.vn}
+\author[c]{Minh-Ngoc Dinh\,\orcidlink{0000-0003-4026-6068}\corref{cor1}}
+\ead{minh.dinh@maeducation.com}
+\cortext[cor1]{Corresponding author}
+\address[a]{British University Vietnam, Hung Yen, Vietnam}
+\address[b]{Department of Science, Technology, and International Projects, Ho Chi Minh City University of Economics and Finance, Ho Chi Minh City, 700000, Vietnam}
+\address[c]{Millennia Education, Ho Chi Minh City, Vietnam}
 
 \begin{abstract}
 Urban parcel delivery is supplied by many small operators, yet charging advice is usually derived for a few large ones. We study a city that charges delivery carriers by zone and hour and compute it on nine cities with a stylised hourly profile. With many carriers, a simple charge that uses only observed zone-hour totals approaches the marginal-cost charge, and its welfare loss shrinks in proportion to the largest carrier's share for every instance. On the nine cities the gap to the competitive limit falls like $N^{\SlopeGap}$ between 24 and 1536 carriers. With few carriers the same charge lowers welfare; the efficient charge is a subsidy that lump-sum fees can fund only with carrier-specific terms. With free entry the subsidy attracts entrants and lowers welfare net of fixed costs, and limiting entry is the largest welfare lever we found. Delay that delivery vehicles impose on through traffic is \ExtRatioKQ{} times the in-zone congestion priced in the base model, a result that rests on a weak value-of-time input. We also report who gains and who loses, and the exposure per resident. Theory: the worst-case convergence rate is the square root of the largest share and is attained when plans couple zones, so planners cannot rely on an instance-free $O(1/N)$ bound; for carriers that separate by zone-hour the gap is at most one carrier's delivery. Limitations: stylised hourly profile, deterministic travel times, weak congestion calibration, grade-C parameters and a modest number of carriers per segment.
@@ -360,10 +367,10 @@ The Lean~4 file \texttt{mfg/lean/MFG/Core.lean} (Mathlib; no \texttt{sorry}; axi
 \end{figure}
 
 \section*{CRediT authorship contribution statement}
-Quang-Vinh Dang: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, Data curation, Writing -- original draft, Writing -- review \& editing, Visualization, Project administration.
+Quang-Vinh Dang: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Resources, Data curation, Writing -- original draft, Writing -- review \& editing, Visualization, Project administration. Dat Le: TO\_CONFIRM. Minh-Ngoc Dinh: TO\_CONFIRM.
 
 \section*{Declaration of competing interest}
-The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
 
 \section*{Funding}
 This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.
@@ -372,7 +379,7 @@ This research did not receive any specific grant from funding agencies in the pu
 Code, instances, result files and the Lean development are available at \url{https://github.com/vinhqdang/Competing-Carriers-under-Uncertainty} (folder \texttt{mfg}); the city data are the processed data of the companion paper. The same files are archived on Zenodo \citep{Zenodo2026}, DOI \href{https://doi.org/10.5281/zenodo.24357664}{10.5281/zenodo.24357664}.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
-During the preparation of this work the author used Claude (Anthropic) to support the writing of the manuscript. After using this tool, the author reviewed and edited the content as needed and takes full responsibility for the content of the published article.
+During the preparation of this work the authors used Claude (Anthropic) to support the writing of the manuscript. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
 
 \bibliographystyle{elsarticle-harv}
 \renewcommand{\bibfont}{\small}\setlength{\bibsep}{0pt plus 0.3pt}

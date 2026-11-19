@@ -59,7 +59,7 @@ def strip_comments(t):
 
 def anonymise(main):
     """Author-free manuscript: no name, affiliation, e-mail, ORCID, repository link, CRediT; self-citation anonymised."""
-    main = re.sub(r'\\author\{[^}]*\}\n\\ead\{[^}]*\}\n\\address\{[^}]*\}\n', '', main)
+    main = re.sub(r'^\\(?:author|ead|address|cortext)(?:\[[^\]]*\])?\{.*\}\n', '', main, flags=re.M)
     main = re.sub(r'\\section\*\{CRediT authorship contribution statement\}.*?(?=\\section\*\{Declaration of competing)', '', main, flags=re.S)
     main = re.sub(r'(\\section\*\{Data availability\}\n).*?\n', r'\1Code, instances, result files and the Lean development are available in a public repository. The link is withheld during peer review and will be provided to the editor on request and on acceptance.\n', main, count=1)
     main = re.sub(r'\\bibitem\[\{Dang\(2026a?\)\}\]\{Omega2026\}.*?(?=\\bibitem|\\end\{thebibliography\})', lambda m: '\\bibitem[{Anonymous(2026)}]{Omega2026}\n\\bibinfo{author}{Anonymous}, \\bibinfo{year}{2026}.\n\\newblock \\bibinfo{title}{Manuscript under review}.\n\n', main, flags=re.S)
@@ -86,8 +86,7 @@ def build(out, figdir=None, anon=False):
     for _ in range(3):
         main = re.sub(r'\\input\{([^}]+)\}', inl, main)
     main = main.replace('\\usepackage{orcidlink}\n', '').replace('\\graphicspath{{../figures/}}\n', '')
-    main = re.sub(r'\\,\\orcidlink\{[^}]*\}', '', main)
-    main = main.replace('\\address{British University Vietnam, Hung Yen, Vietnam}', '\\address{British University Vietnam, Hung Yen, Vietnam. ORCID: 0000-0002-3877-8024}')
+    main = re.sub(r'\\,\\orcidlink\{([^}]*)\}', r' (ORCID: \1)', main)
     bbl = open(f'{PAPER}/main.bbl').read()
     main = main.replace('\\bibliographystyle{elsarticle-harv}\n', '').replace('\\bibliography{references}', bbl)
     if anon:

@@ -30,7 +30,7 @@ ANONYMOUS manuscript as the main file and the title page separately. The manuscr
 
 1. Zenodo: create the deposit (`ZENODO_STEPS.md`), then set `ZENODO_DOI` in `trip_config.py` and run `make_docs.py` to put the DOI into the title page and data statement; it is never written into the anonymous manuscript.
 2. Licence: the deposit uses MIT for code, CC BY 4.0 for results, and ODbL 1.0 for the derived OpenStreetMap city files; the GitHub repository is Apache-2.0.
-3. Generative-AI declaration: present in the manuscript (both versions) and on the title page, unchanged from the earlier package.
+3. The publisher's tool-use declaration section is present in both manuscript versions and on the title page, unchanged from the earlier package.
 4. Names of suggested reviewers, and the DATE_TO_FILL in the cover letter.
 5. Whether the cover letter should name the earlier journal (it does not).
 6. References: DOIs not added (not verifiable here); five arXiv items are marked as preprints.
